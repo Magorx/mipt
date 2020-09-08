@@ -10,9 +10,9 @@ const char ERROR = -1;
 
 int compare_strings(const void **elem1, const void **elem2);
 int reverse_compare_strings(const void **elem1, const void **elem2);
-void free_lines_memory(unsigned char **lines);
+void free_memory(unsigned char **lines, char *fin_name, char *fout_name);
 int read_lines(char *file_name, unsigned char **lines);
-int print_lines(char *file_names, unsigned char **lines, int lines_cnt);
+void print_lines(char *file_names, unsigned char **lines, int lines_cnt);
 
 int main(const int argc, const char **argv) {
     setlocale(LC_ALL,"Russian");
@@ -24,8 +24,10 @@ int main(const int argc, const char **argv) {
         ++lines_ptr;
     }
 
-    char *fin_name = "onegin.txt";
-    char *fout_name = "oneginized.txt";
+    char *fin_name = calloc(MAXSTRLEN, sizeof(char*));
+    strcpy(fin_name, "onegin.txt");
+    char *fout_name = calloc(MAXSTRLEN, sizeof(char*));
+    strcpy(fout_name, "oneginized.txt");
     if (argc > 1) {
         fin_name = argv[1];
     }
@@ -35,15 +37,15 @@ int main(const int argc, const char **argv) {
 
     int lines_cnt = read_lines(fin_name, lines);
     if (lines_cnt == ERROR) {
+        free_memory(lines, fin_name, fout_name);
         return 0;
     }
 
     qsort(lines, lines_cnt, sizeof(char*), compare_strings);
     printf("%d lines are sorted!\n", lines_cnt);
-
     print_lines(fout_name, lines, lines_cnt);
 
-    free_lines_memory(lines);
+    free_memory(lines, fin_name, fout_name);
 
     return 0;
 
@@ -85,20 +87,21 @@ int reverse_compare_strings(const void **elem1, const void **elem2) {
     return -compare_strings(elem1, elem2);
 }
 
-void free_lines_memory(unsigned char **lines) {
+void free_memory(unsigned char **lines, char *fin_name, char *fout_name) {
     unsigned char **lines_ptr = lines;
     for (int i = 0; i < MAXSTRS; ++i) {
         free(*lines_ptr);
         ++lines_ptr;
     }
     free(lines);
+    free(fin_name);
+    free(fout_name);
 }
 
 int read_lines(char *file_name, unsigned char **lines) {
     FILE *fin = fopen(file_name, "r");
     if (!fin) {
         printf("File '%s' not found!\n", file_name);
-        free_lines_memory(lines);
         return ERROR;
     }
 
@@ -108,7 +111,6 @@ int read_lines(char *file_name, unsigned char **lines) {
         lines_cnt += 1;
         if (lines_cnt == MAXSTRS - 1) {
             printf("Can't handle such a big file!\n");
-            free_lines_memory(lines);
             return ERROR;
         }
     }
@@ -116,7 +118,7 @@ int read_lines(char *file_name, unsigned char **lines) {
     return lines_cnt;
 }
 
-int print_lines(char *file_name, unsigned char **lines, int lines_cnt) {
+void print_lines(char *file_name, unsigned char **lines, int lines_cnt) {
     FILE *fout = fopen(file_name, "w");
     for (int i = 0; i < lines_cnt; ++i) {
         fprintf(fout, "%s", lines[i]);
