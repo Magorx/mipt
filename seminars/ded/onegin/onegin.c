@@ -38,6 +38,10 @@ int compare_strings(const void **elem1, const void **elem2) {
     return str1[i] - str2[j];
 }
 
+int reverse_compare_strings(const void **elem1, const void **elem2) {
+    return -compare_strings(elem1, elem2);
+}
+
 void char_test(unsigned char x) {
     printf("%c %d\n", x, x);
 }
