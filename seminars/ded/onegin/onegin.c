@@ -7,8 +7,10 @@
 const int MAXSTRLEN = 99;
 const int MAXSTRS   = 10000;
 
-const int STROFA_SIZE = 14;
-const int RYTHM_DEPTH = 4;
+enum SETTINGS{
+    STROFA_SIZE = 14,
+    RYTHM_DEPTH = 4
+};
 
 enum ERRORS {
     ERROR_FILE_NOT_FOUND = -10,
@@ -18,7 +20,7 @@ enum ERRORS {
 struct Line {
     unsigned char *string;
     int len;
-    unsigned char ending[5];
+    unsigned char ending[RYTHM_DEPTH + 1];
     int strofa_index;
 };
 
@@ -27,7 +29,7 @@ typedef struct Line Line_t;
 void qqh_sort(void *arr, int elem_cnt, size_t elem_size, int (*comp)(void *elem1, void *elem2));
 int compare_lines(const void **elem1, const void **elem2);
 int reverse_compare_lines(const void **elem1, const void **elem2);
-int rythm_compare_lines(const void **elem1, const void **elem2);
+int rythm_compare_lines(const void **elem1, const void **elem2);                                     // DOCUMENTATION
 
 void free_memory(unsigned char **lines, char *fin_name, char *fout_name);
 int read_lines(char *file_name, Line_t **lines);
@@ -35,23 +37,21 @@ void print_lines(char *file_names, Line_t **lines, int lines_cnt);
 
 void calculate_eding(Line_t *line);
 char rythming_lines(Line_t *first, Line_t *second, int depth);
-int gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_depth);
+void gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_depth);
 
 int main(const int argc, const char **argv) {
     setlocale(LC_ALL,"Russian");
 
-    Line_t **lines = calloc(MAXSTRS, sizeof(Line_t));
-    Line_t **lines_ptr = lines;
+    Line_t **lines = calloc(MAXSTRS, sizeof(Line_t*));         // V ODNU STROKY
+    Line_t **lines_ptr = lines;                                // V OTDELNIY FILE
     for (int i = 0; i < MAXSTRS; ++i) {
         *lines_ptr = calloc(1, sizeof(Line_t));
         (*lines_ptr)->string = calloc(MAXSTRLEN, sizeof(char));
         ++lines_ptr;
     }
 
-    char *fin_name = calloc(MAXSTRLEN, sizeof(char));
-    strcpy(fin_name, "onegin.txt");
-    char *fout_name = calloc(MAXSTRLEN, sizeof(char));
-    strcpy(fout_name, "oneginized.txt");
+    char *fin_name  = "onegin.txt";
+    char *fout_name = "oneginized.txt";
     if (argc > 1) {
         fin_name = argv[1];
     }
@@ -65,7 +65,7 @@ int main(const int argc, const char **argv) {
         return 0;
     }
 
-    qsort(lines, lines_cnt, sizeof(char*), rythm_compare_lines);
+    //qsort(lines, lines_cnt, sizeof(char*), rythm_compare_lines);
     printf("%d lines are sorted!\n", lines_cnt);
     print_lines(fout_name, lines, lines_cnt);
 
@@ -173,19 +173,18 @@ void free_memory(unsigned char **lines, char *fin_name, char *fout_name) {
 int read_lines(char *file_name, Line_t **lines) {
     FILE *fin = fopen(file_name, "r");
     if (!fin) {
-        printf("File '%s' not found!\n", file_name);
+        printf("File '%s' not found!\n", file_name); // V MAIN I FUNC
         return ERROR_FILE_NOT_FOUND;
     }
 
-    Line_t **lines_ptr = lines;
-    Line_t **itterable_ptr = lines_ptr;
-    Line_t *line_ptr = *itterable_ptr;
+    Line_t **itterable_ptr = lines;
+    Line_t *line_ptr = itterable_ptr[0];
     char *string_ptr = line_ptr->string;
     int lines_cnt = 0;
     while (fgets(string_ptr, sizeof(char) * MAXSTRLEN, fin)) {
         lines_cnt += 1;
         if (lines_cnt == MAXSTRS - 1) {
-            printf("Can't handle such a big file!\n");
+            printf("Can't handle such a big file!\n"); // V MAIN I FUNC
             return ERROR_BIG_FILE;
         }
 
@@ -193,8 +192,7 @@ int read_lines(char *file_name, Line_t **lines) {
         calculate_ending(line_ptr);
         line_ptr->strofa_index = lines_cnt % STROFA_SIZE;
 
-        ++itterable_ptr;
-        line_ptr = *itterable_ptr;
+        line_ptr = *(++itterable_ptr);
         string_ptr = line_ptr->string;
     }
 
@@ -220,7 +218,7 @@ void calculate_ending(Line_t *line) {
     }
 
     for (int j = 0; j < RYTHM_DEPTH; ++j) {
-        line->ending[j] = line->string[i-RYTHM_DEPTH+j+1];
+        line->ending[j] = line->string[i - RYTHM_DEPTH + j + 1];
     }
 }
 
@@ -232,15 +230,14 @@ char rythming_lines(Line_t *first, Line_t *second, int depth) {
     char *str1 = first->string;
     char *str2 = second->string;
 
-    if (strcmp(first->ending+1, second->ending+1)) {
+    if (strcmp(first->ending + 1, second->ending + 1) || first->ending[0] == second->ending[0]) {
         return 0;
     }
     return 1;
 }
 
-int gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_depth) {
+void gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_depth) {
     srand(time(NULL));
-    int lens[STROFA_SIZE];
     for (int i = 0; i < STROFA_SIZE; ++i) {
         int itter = 0;
         while (1) {
@@ -249,33 +246,29 @@ int gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_de
                 i = 0;
                 continue;
             }
-            int line_index = ((((int) rand()) % (lines_cnt / 14)) * 14 + i) % lines_cnt;
+
+            int line_index = (((int) rand()) % (lines_cnt / 14)) * 14 + i;
             Line_t *line = lines[line_index];
-            int len = line->len;
-            if (i == 0 || i == 1 || i == 4 || i == 6 || i == 8 || i == 9 || i == 12) {
+            if (i == 0 || i == 1 || i == 4 || i == 6 || i == 8 || i == 9 || i == 12) {  // KOMMENTI
                 buffer[i] = line_index;
-                lens[i] = len;
                 break;
-            } else if (i == 2 || i == 3) {
-                if (rythming_lines(line, lines[buffer[i - 2]], rythm_depth)) {
-                    buffer[i] = line_index;
-                    lens[i] = len;
-                    break;
-                }
             } else if (i == 5 || i == 7 || i == 10 || i == 13) {
                 if (rythming_lines(line, lines[buffer[i - 1]], rythm_depth)) {
                     buffer[i] = line_index;
-                    lens[i] = len;
+                    break;
+                }
+            } else if (i == 2 || i == 3) {
+                if (rythming_lines(line, lines[buffer[i - 2]], rythm_depth)) {
+                    buffer[i] = line_index;
                     break;
                 }
             } else {
                 if (rythming_lines(line, lines[buffer[i - 3]], rythm_depth)) {
                     buffer[i] = line_index;
-                    lens[i] = len;
                     break;
                 }
             }
         }
     }
-    return 0;
 }
+
