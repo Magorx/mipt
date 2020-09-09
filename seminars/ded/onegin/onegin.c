@@ -2,6 +2,7 @@
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 const int MAXSTRLEN = 100;
 const int MAXSTRS   = 10000;
@@ -10,9 +11,13 @@ const char ERROR = -1;
 
 int compare_strings(const void **elem1, const void **elem2);
 int reverse_compare_strings(const void **elem1, const void **elem2);
+int rythm_compare_strings(const void **elem1, const void **elem2);
 void free_memory(unsigned char **lines, char *fin_name, char *fout_name);
+
 int read_lines(char *file_name, unsigned char **lines);
 void print_lines(char *file_names, unsigned char **lines, int lines_cnt);
+
+void qqh_sort(void *arr, int elem_cnt, size_t elem_size, int (*comp)(void *elem1, void *elem2));
 
 int main(const int argc, const char **argv) {
     setlocale(LC_ALL,"Russian");
@@ -41,7 +46,7 @@ int main(const int argc, const char **argv) {
         return 0;
     }
 
-    qsort(lines, lines_cnt, sizeof(char*), compare_strings);
+    qsort(lines, lines_cnt, sizeof(char*), rythm_compare_strings);
     printf("%d lines are sorted!\n", lines_cnt);
     print_lines(fout_name, lines, lines_cnt);
 
@@ -67,24 +72,48 @@ int compare_strings(const void **elem1, const void **elem2) {
     int j = 0;
     while (str1[i] && str2[j]) {
         while (!is_letter(str1[i]) && str1[i]) {
-            i++;
+            ++i;
         }
         while (!is_letter(str2[j]) && str2[j]) {
-            j++;
+            ++j;
         }
 
         if (str1[i] != str2[i] || str1[i] * str2[i] == 0) {
             return str1[i] - str2[j];
         }
 
-        i++;
-        j++;
+        ++i;
+        ++j;
     }
     return str1[i] - str2[j];
 }
 
 int reverse_compare_strings(const void **elem1, const void **elem2) {
     return -compare_strings(elem1, elem2);
+}
+
+int rythm_compare_strings(const void **elem1, const void **elem2) {
+    unsigned char* str1 = *elem1;
+    unsigned char* str2 = *elem2;
+
+    int i = strlen(str1) - 1;
+    int j = strlen(str2) - 1;
+    while (i >= 0 && j >= 0) {
+        while (!is_letter(str1[i]) && str1[i]) {
+            --i;
+        }
+        while (!is_letter(str2[j]) && str2[j]) {
+            --j;
+        }
+
+        if (str1[i] != str2[i] || i * j == 0) {
+            return str1[i] - str2[j];
+        }
+
+        --i;
+        --j;
+    }
+    return str1[i] - str2[j];
 }
 
 void free_memory(unsigned char **lines, char *fin_name, char *fout_name) {
@@ -125,4 +154,22 @@ void print_lines(char *file_name, unsigned char **lines, int lines_cnt) {
     }
 
     fclose(fout);
+}
+
+void swap_ptrs(void **first, void **second) {
+    void *tmp = *second;
+    *second = *first;
+    *first = tmp;
+}
+
+void qqh_sort(void *arr, int elem_cnt, size_t elem_size, int (*comp)(void *elem1, void *elem2)) {
+    for (int i = 0; i < elem_cnt; ++i) {
+        for (int j = 0; j < elem_cnt - 1; ++j) {
+            void *first = arr + j * elem_size;
+            void *second = arr + (j + 1) * elem_size;
+            if (comp(first, second) > 0) {
+                swap_ptrs(first, second);
+            }
+        }
+    }
 }
