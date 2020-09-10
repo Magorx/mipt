@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys\stat.h>
 
 const int MAXSTRLEN = 99;
 const int MAXSTRS   = 10000;
@@ -26,13 +27,25 @@ struct Line {
 
 typedef struct Line Line_t;
 
+struct File {
+    char *name;
+    FILE *file_ptr;
+    struct stat info;
+    char *text;
+    int lines_cnt;
+    Line_t **lines;
+};
+
+typedef struct File File_t;
+
 void qqh_sort(void *arr, int elem_cnt, size_t elem_size, int (*comp)(void *elem1, void *elem2));
 int compare_lines(const void **elem1, const void **elem2);
 int reverse_compare_lines(const void **elem1, const void **elem2);
-int rythm_compare_lines(const void **elem1, const void **elem2);                                     // DOCUMENTATION
+int rythm_compare_lines(const void **elem1, const void **elem2);
 
-void free_memory(Line_t **lines, char *file_lines);
-int read_lines(char *file_name, Line_t **lines, char *file_lines);
+void free_memory(Line_t **lines, char *file_text);
+int read_file(File_t *file, char *name);
+int read_lines(File_t *file);
 void print_lines(char *file_names, Line_t **lines, int lines_cnt);
 
 void calculate_eding(Line_t *line);
@@ -54,26 +67,29 @@ int main(const int argc, const char **argv) {
         fout_name = argv[2];
     }
 
-    Line_t **lines = calloc(MAXSTRS, sizeof(Line_t*));
-    char *file_lines = calloc(MAXSTRS * MAXSTRLEN, sizeof(char));
-    int lines_cnt = read_lines(fin_name, lines, file_lines);
-    if (lines_cnt < 0) {
-        print_error(lines_cnt);
-        free_memory(lines, file_lines);
+    File_t fin;
+    int ret = read_file(&fin, fin_name);
+    if (ret < 0) {
+        print_error(ret);
+        free_memory(fin.lines, fin.text);
+    }
+    if (fin.lines_cnt < 0) {
+        print_error(fin.lines_cnt);
+        free_memory(fin.lines, fin.text);
         return 0;
     }
 
-    //qsort(lines, lines_cnt, sizeof(char*), rythm_compare_lines);
-    printf("%d lines are read!\n", lines_cnt);
-    print_lines(fout_name, lines, lines_cnt);
+    qsort(fin.lines, fin.lines_cnt, sizeof(Line_t*), rythm_compare_lines);
+    printf("%d lines are read!\n", fin.lines_cnt);
+    print_lines(fout_name, fin.lines, fin.lines_cnt);
 
     int buffer[STROFA_SIZE];
-    gen_strofa(lines, lines_cnt, buffer, RYTHM_DEPTH);
+    gen_strofa(fin.lines, fin.lines_cnt, buffer, RYTHM_DEPTH);
     for (int i = 0; i < STROFA_SIZE; ++i) {
-        printf("%s\n", lines[buffer[i]]->string);
+        printf("%s\n", fin.lines[buffer[i]]->string);
     }
 
-    free_memory(lines, file_lines);
+    free_memory(fin.lines, fin.text);
 
     return 0;
 
@@ -134,13 +150,13 @@ int reverse_compare_lines(const void **elem1, const void **elem2) {
 }
 
 int rythm_compare_lines(const void **elem1, const void **elem2) {
-    Line_t *line1 = elem1;
-    Line_t *line2 = elem2;
+    Line_t *line1 = *elem1;
+    Line_t *line2 = *elem2;
     unsigned char* str1 = line1->string;
     unsigned char* str2 = line2->string;
 
     int i = line1->len - 1;
-    int j = line2->len - 1;
+    int j = strlen(line2->string) - 1;
     while (i >= 0 && j >= 0) {
         while (!is_letter(str1[i]) && str1[i]) {
             --i;
@@ -159,25 +175,35 @@ int rythm_compare_lines(const void **elem1, const void **elem2) {
     return str1[i] - str2[j];
 }
 
-void free_memory(Line_t **lines, char *file_lines) {
+void free_memory(Line_t **lines, char *file_text) {
     Line_t **lines_ptr = lines;
     for (int i = 0; i < MAXSTRS; ++i) {
         free(*lines_ptr);
         ++lines_ptr;
     }
     free(lines);
-    free(file_lines);
+    free(file_text);
 }
 
-int read_lines(char *file_name, Line_t **lines, char *file_lines) {
-    FILE *fin = fopen(file_name, "r");
-    if (!fin) {
+int read_file(File_t *file, char *name) {
+    file->name = name;
+    stat(name, &(file->info));
+
+    file->lines = calloc(MAXSTRS, sizeof(Line_t*));
+    file->text = calloc(file->info.st_size, sizeof(char));
+    file->lines_cnt = read_lines(file);
+}
+
+int read_lines(File_t *file) {
+    printf("%s\n", file->name);
+    file->file_ptr = fopen(file->name, "r");
+    if (!file->file_ptr) {
         return ERROR_FILE_NOT_FOUND;
     }
 
-    fread(file_lines, sizeof(char), MAXSTRS * MAXSTRLEN, fin);
+    fread(file->text, sizeof(char), file->info.st_size + 1, file->file_ptr);
 
-    char *c = file_lines;
+    char *c = file->text;
     int lines_cnt = -1;
     int line_len = 0;
     while (*c) {
@@ -186,8 +212,8 @@ int read_lines(char *file_name, Line_t **lines, char *file_lines) {
             return ERROR_BIG_FILE;
         }
 
-        lines[lines_cnt] = calloc(1, sizeof(Line_t));
-        Line_t *line_ptr = lines[lines_cnt];
+        file->lines[lines_cnt] = calloc(1, sizeof(Line_t));
+        Line_t *line_ptr = file->lines[lines_cnt];
         line_ptr->string = c;
 
         while(*c != '\n') {
@@ -197,12 +223,13 @@ int read_lines(char *file_name, Line_t **lines, char *file_lines) {
         *c = '\0';
         ++c;
 
-        line_ptr->len = line_len;
+        line_ptr->len = strlen(line_ptr->string);
         line_len = 0;
 
         calculate_ending(line_ptr);
         line_ptr->strofa_index = lines_cnt % STROFA_SIZE;
     }
+    file->lines_cnt = lines_cnt;
 
     return lines_cnt + 1;
 }
