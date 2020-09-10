@@ -31,24 +31,19 @@ int compare_lines(const void **elem1, const void **elem2);
 int reverse_compare_lines(const void **elem1, const void **elem2);
 int rythm_compare_lines(const void **elem1, const void **elem2);                                     // DOCUMENTATION
 
-void free_memory(unsigned char **lines, char *fin_name, char *fout_name);
-int read_lines(char *file_name, Line_t **lines);
+void free_memory(Line_t **lines, char *file_lines);
+int read_lines(char *file_name, Line_t **lines, char *file_lines);
 void print_lines(char *file_names, Line_t **lines, int lines_cnt);
 
 void calculate_eding(Line_t *line);
 char rythming_lines(Line_t *first, Line_t *second, int depth);
 void gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_depth);
 
+void print_error(int error);
+
 int main(const int argc, const char **argv) {
     setlocale(LC_ALL,"Russian");
 
-    Line_t **lines = calloc(MAXSTRS, sizeof(Line_t*));         // V ODNU STROKY
-    Line_t **lines_ptr = lines;                                // V OTDELNIY FILE
-    for (int i = 0; i < MAXSTRS; ++i) {
-        *lines_ptr = calloc(1, sizeof(Line_t));
-        (*lines_ptr)->string = calloc(MAXSTRLEN, sizeof(char));
-        ++lines_ptr;
-    }
 
     char *fin_name  = "onegin.txt";
     char *fout_name = "oneginized.txt";
@@ -59,23 +54,26 @@ int main(const int argc, const char **argv) {
         fout_name = argv[2];
     }
 
-    int lines_cnt = read_lines(fin_name, lines);
+    Line_t **lines = calloc(MAXSTRS, sizeof(Line_t*));
+    char *file_lines = calloc(MAXSTRS * MAXSTRLEN, sizeof(char));
+    int lines_cnt = read_lines(fin_name, lines, file_lines);
     if (lines_cnt < 0) {
-        free_memory(lines, fin_name, fout_name);
+        print_error(lines_cnt);
+        free_memory(lines, file_lines);
         return 0;
     }
 
     //qsort(lines, lines_cnt, sizeof(char*), rythm_compare_lines);
-    printf("%d lines are sorted!\n", lines_cnt);
+    printf("%d lines are read!\n", lines_cnt);
     print_lines(fout_name, lines, lines_cnt);
 
     int buffer[STROFA_SIZE];
     gen_strofa(lines, lines_cnt, buffer, RYTHM_DEPTH);
     for (int i = 0; i < STROFA_SIZE; ++i) {
-        printf("%s", lines[buffer[i]]->string);
+        printf("%s\n", lines[buffer[i]]->string);
     }
 
-    free_memory(lines, fin_name, fout_name);
+    free_memory(lines, file_lines);
 
     return 0;
 
@@ -136,11 +134,13 @@ int reverse_compare_lines(const void **elem1, const void **elem2) {
 }
 
 int rythm_compare_lines(const void **elem1, const void **elem2) {
-    unsigned char* str1 = ((Line_t*)(*elem1))->string;
-    unsigned char* str2 = ((Line_t*)(*elem2))->string;
+    Line_t *line1 = elem1;
+    Line_t *line2 = elem2;
+    unsigned char* str1 = line1->string;
+    unsigned char* str2 = line2->string;
 
-    int i = strlen(str1) - 1;
-    int j = strlen(str2) - 1;
+    int i = line1->len - 1;
+    int j = line2->len - 1;
     while (i >= 0 && j >= 0) {
         while (!is_letter(str1[i]) && str1[i]) {
             --i;
@@ -159,50 +159,58 @@ int rythm_compare_lines(const void **elem1, const void **elem2) {
     return str1[i] - str2[j];
 }
 
-void free_memory(unsigned char **lines, char *fin_name, char *fout_name) {
-    unsigned char **lines_ptr = lines;
+void free_memory(Line_t **lines, char *file_lines) {
+    Line_t **lines_ptr = lines;
     for (int i = 0; i < MAXSTRS; ++i) {
         free(*lines_ptr);
         ++lines_ptr;
     }
     free(lines);
-    free(fin_name);
-    free(fout_name);
+    free(file_lines);
 }
 
-int read_lines(char *file_name, Line_t **lines) {
+int read_lines(char *file_name, Line_t **lines, char *file_lines) {
     FILE *fin = fopen(file_name, "r");
     if (!fin) {
-        printf("File '%s' not found!\n", file_name); // V MAIN I FUNC
         return ERROR_FILE_NOT_FOUND;
     }
 
-    Line_t **itterable_ptr = lines;
-    Line_t *line_ptr = itterable_ptr[0];
-    char *string_ptr = line_ptr->string;
-    int lines_cnt = 0;
-    while (fgets(string_ptr, sizeof(char) * MAXSTRLEN, fin)) {
-        lines_cnt += 1;
+    fread(file_lines, sizeof(char), MAXSTRS * MAXSTRLEN, fin);
+
+    char *c = file_lines;
+    int lines_cnt = -1;
+    int line_len = 0;
+    while (*c) {
+        ++lines_cnt;
         if (lines_cnt == MAXSTRS - 1) {
-            printf("Can't handle such a big file!\n"); // V MAIN I FUNC
             return ERROR_BIG_FILE;
         }
 
-        line_ptr->len = strlen(string_ptr);
+        lines[lines_cnt] = calloc(1, sizeof(Line_t));
+        Line_t *line_ptr = lines[lines_cnt];
+        line_ptr->string = c;
+
+        while(*c != '\n') {
+            ++line_len;
+            ++c;
+        }
+        *c = '\0';
+        ++c;
+
+        line_ptr->len = line_len;
+        line_len = 0;
+
         calculate_ending(line_ptr);
         line_ptr->strofa_index = lines_cnt % STROFA_SIZE;
-
-        line_ptr = *(++itterable_ptr);
-        string_ptr = line_ptr->string;
     }
 
-    return lines_cnt;
+    return lines_cnt + 1;
 }
 
 void print_lines(char *file_name, Line_t **lines, int lines_cnt) {
     FILE *fout = fopen(file_name, "w");
     for (int i = 0; i < lines_cnt; ++i) {
-        fprintf(fout, "%s", lines[i]->string);
+        fprintf(fout, "%s\n", lines[i]->string);
     }
 
     fclose(fout);
@@ -249,7 +257,7 @@ void gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_d
 
             int line_index = (((int) rand()) % (lines_cnt / 14)) * 14 + i;
             Line_t *line = lines[line_index];
-            if (i == 0 || i == 1 || i == 4 || i == 6 || i == 8 || i == 9 || i == 12) {  // KOMMENTI
+            if (i == 0 || i == 1 || i == 4 || i == 6 || i == 8 || i == 9 || i == 12) {  // COMMENTS
                 buffer[i] = line_index;
                 break;
             } else if (i == 5 || i == 7 || i == 10 || i == 13) {
@@ -269,6 +277,16 @@ void gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_d
                 }
             }
         }
+    }
+}
+
+void print_error(int error) {
+    if (error == ERROR_FILE_NOT_FOUND) {
+        printf("File not found!\n");
+    } else if (error == ERROR_BIG_FILE) {
+        printf("Can't handle such a big file!\n");
+    } else {
+        printf("[ERR](~!~)WERROREHUTGEERRORF(~!~)[ERR]\n");
     }
 }
 

@@ -29,26 +29,21 @@ typedef struct Line Line_t;
 void qqh_sort(void *arr, int elem_cnt, size_t elem_size, int (*comp)(void *elem1, void *elem2));
 int compare_lines(const void **elem1, const void **elem2);
 int reverse_compare_lines(const void **elem1, const void **elem2);
-int rythm_compare_lines(const void **elem1, const void **elem2);
+int rythm_compare_lines(const void **elem1, const void **elem2);                                     // DOCUMENTATION
 
-void free_memory(unsigned char **lines, char *fin_name, char *fout_name);
+void free_memory(Line_t **lines, char *fin_name, char *fout_name);
 int read_lines(char *file_name, Line_t **lines);
 void print_lines(char *file_names, Line_t **lines, int lines_cnt);
 
 void calculate_eding(Line_t *line);
 char rythming_lines(Line_t *first, Line_t *second, int depth);
-int gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_depth);
+void gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_depth);
+
+void print_error(int error);
 
 int main(const int argc, const char **argv) {
     setlocale(LC_ALL,"Russian");
 
-    Line_t **lines = calloc(MAXSTRS, sizeof(Line_t*));
-    Line_t **lines_ptr = lines;
-    for (int i = 0; i < MAXSTRS; ++i) {
-        *lines_ptr = calloc(1, sizeof(Line_t));
-        (*lines_ptr)->string = calloc(MAXSTRLEN, sizeof(char));
-        ++lines_ptr;
-    }
 
     char *fin_name  = "onegin.txt";
     char *fout_name = "oneginized.txt";
@@ -59,13 +54,15 @@ int main(const int argc, const char **argv) {
         fout_name = argv[2];
     }
 
+    Line_t **lines = calloc(MAXSTRS, sizeof(Line_t*));
     int lines_cnt = read_lines(fin_name, lines);
     if (lines_cnt < 0) {
+        print_error(lines_cnt);
         free_memory(lines, fin_name, fout_name);
         return 0;
     }
 
-    qsort(lines, lines_cnt, sizeof(char*), rythm_compare_lines);
+    //qsort(lines, lines_cnt, sizeof(char*), rythm_compare_lines);
     printf("%d lines are sorted!\n", lines_cnt);
     print_lines(fout_name, lines, lines_cnt);
 
@@ -136,11 +133,13 @@ int reverse_compare_lines(const void **elem1, const void **elem2) {
 }
 
 int rythm_compare_lines(const void **elem1, const void **elem2) {
-    unsigned char* str1 = ((Line_t*)(*elem1))->string;
-    unsigned char* str2 = ((Line_t*)(*elem2))->string;
+    Line_t *line1 = elem1;
+    Line_t *line2 = elem2;
+    unsigned char* str1 = line1->string;
+    unsigned char* str2 = line2->string;
 
-    int i = strlen(str1) - 1;
-    int j = strlen(str2) - 1;
+    int i = line1->len - 1;
+    int j = line2->len - 1;
     while (i >= 0 && j >= 0) {
         while (!is_letter(str1[i]) && str1[i]) {
             --i;
@@ -159,45 +158,53 @@ int rythm_compare_lines(const void **elem1, const void **elem2) {
     return str1[i] - str2[j];
 }
 
-void free_memory(unsigned char **lines, char *fin_name, char *fout_name) {
-    unsigned char **lines_ptr = lines;
+void free_memory(Line_t **lines, char *fin_name, char *fout_name) {
+    Line_t **lines_ptr = lines;
     for (int i = 0; i < MAXSTRS; ++i) {
         free(*lines_ptr);
         ++lines_ptr;
     }
     free(lines);
-    free(fin_name);
-    free(fout_name);
 }
 
 int read_lines(char *file_name, Line_t **lines) {
     FILE *fin = fopen(file_name, "r");
     if (!fin) {
-        printf("File '%s' not found!\n", file_name);
         return ERROR_FILE_NOT_FOUND;
     }
 
-    Line_t **itterable_ptr = lines;
-    Line_t *line_ptr = itterable_ptr[0];
-    char *string_ptr = line_ptr->string;
-    int lines_cnt = 0;
-    while (fgets(string_ptr, sizeof(char) * MAXSTRLEN, fin)) {
-        lines_cnt += 1;
+    char *file_lines = calloc(MAXSTRS * MAXSTRLEN, sizeof(char));
+    fread(file_lines, sizeof(char), MAXSTRS * MAXSTRLEN, fin);
+
+    char *c = file_lines;
+    int lines_cnt = -1;
+    int line_len = 0;
+    while (*c) {
+        printf("QQ\n");
+        ++lines_cnt;
         if (lines_cnt == MAXSTRS - 1) {
-            printf("Can't handle such a big file!\n"); // V M
             return ERROR_BIG_FILE;
         }
+    
+        lines[lines_cnt] = calloc(1, )
+        Line_t *line_ptr = lines[lines_cnt];
+        line_ptr->string = c;
 
-        line_ptr->len = strlen(string_ptr);
+        while(*c != '\n') {
+            ++line_len;
+            ++c;
+        }
+        *c = '\0';
+        ++c;
+
+        line_ptr->len = line_len;
+        line_len = 0;
+
         calculate_ending(line_ptr);
         line_ptr->strofa_index = lines_cnt % STROFA_SIZE;
-
-        ++itterable_ptr;
-        line_ptr = *itterable_ptr;
-        string_ptr = line_ptr->string;
     }
 
-    return lines_cnt;
+    return lines_cnt + 1;
 }
 
 void print_lines(char *file_name, Line_t **lines, int lines_cnt) {
@@ -219,7 +226,7 @@ void calculate_ending(Line_t *line) {
     }
 
     for (int j = 0; j < RYTHM_DEPTH; ++j) {
-        line->ending[j] = line->string[i-RYTHM_DEPTH+j+1];
+        line->ending[j] = line->string[i - RYTHM_DEPTH + j + 1];
     }
 }
 
@@ -231,15 +238,14 @@ char rythming_lines(Line_t *first, Line_t *second, int depth) {
     char *str1 = first->string;
     char *str2 = second->string;
 
-    if (strcmp(first->ending+1, second->ending+1)) {
+    if (strcmp(first->ending + 1, second->ending + 1) || first->ending[0] == second->ending[0]) {
         return 0;
     }
     return 1;
 }
 
-int gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_depth) {
+void gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_depth) {
     srand(time(NULL));
-    int lens[STROFA_SIZE];
     for (int i = 0; i < STROFA_SIZE; ++i) {
         int itter = 0;
         while (1) {
@@ -248,33 +254,39 @@ int gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_de
                 i = 0;
                 continue;
             }
-            int line_index = ((((int) rand()) % (lines_cnt / 14)) * 14 + i) % lines_cnt;
+
+            int line_index = (((int) rand()) % (lines_cnt / 14)) * 14 + i;
             Line_t *line = lines[line_index];
-            int len = line->len;
-            if (i == 0 || i == 1 || i == 4 || i == 6 || i == 8 || i == 9 || i == 12) {
+            if (i == 0 || i == 1 || i == 4 || i == 6 || i == 8 || i == 9 || i == 12) {  // KOMMENTI
                 buffer[i] = line_index;
-                lens[i] = len;
                 break;
-            } else if (i == 2 || i == 3) {
-                if (rythming_lines(line, lines[buffer[i - 2]], rythm_depth)) {
-                    buffer[i] = line_index;
-                    lens[i] = len;
-                    break;
-                }
             } else if (i == 5 || i == 7 || i == 10 || i == 13) {
                 if (rythming_lines(line, lines[buffer[i - 1]], rythm_depth)) {
                     buffer[i] = line_index;
-                    lens[i] = len;
+                    break;
+                }
+            } else if (i == 2 || i == 3) {
+                if (rythming_lines(line, lines[buffer[i - 2]], rythm_depth)) {
+                    buffer[i] = line_index;
                     break;
                 }
             } else {
                 if (rythming_lines(line, lines[buffer[i - 3]], rythm_depth)) {
                     buffer[i] = line_index;
-                    lens[i] = len;
                     break;
                 }
             }
         }
     }
-    return 0;
 }
+
+void print_error(int error) {
+    if (error == ERROR_FILE_NOT_FOUND) {
+        printf("File not found!\n");
+    } else if (error == ERROR_BIG_FILE) {
+        printf("Can't handle such a big file!\n");
+    } else {
+        printf("[ERR](~!~)WERROREHUTGEERRORF(~!~)[ERR]\n");
+    }
+}
+
