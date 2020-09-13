@@ -23,8 +23,7 @@ void solver_test();
     \brief Main function
 */
 int main() {
-
-    solver_test();
+    solver_interface();
 
     return 0;
 }

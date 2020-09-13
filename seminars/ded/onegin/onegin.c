@@ -1,4 +1,7 @@
+#include <assert.h>
 #include <ctype.h>
+#include<fcntl.h>
+#include <io.h>
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,7 +18,8 @@ enum SETTINGS{
 
 enum ERRORS {
     ERROR_FILE_NOT_FOUND = -10,
-    ERROR_BIG_FILE
+    ERROR_BIG_FILE,
+    ERROR_MALLOC_FAIL
 };
 
 struct Line {
@@ -79,7 +83,7 @@ int main(const int argc, const char **argv) {
         return 0;
     }
 
-    qsort(fin.lines, fin.lines_cnt, sizeof(Line_t*), rythm_compare_lines);
+    qsort(fin.lines, fin.lines_cnt, sizeof(Line_t*), compare_lines);
     printf("%d lines are read!\n", fin.lines_cnt);
     print_lines(fout_name, fin.lines, fin.lines_cnt);
 
@@ -110,6 +114,8 @@ void swap_ptrs(void **first, void **second) {
 }
 
 void qqh_sort(void *arr, int elem_cnt, size_t elem_size, int (*comp)(void *elem1, void *elem2)) {
+    assert(arr);
+
     for (int i = 0; i < elem_cnt; ++i) {
         for (int j = 0; j < elem_cnt - 1; ++j) {
             void *first = arr + j * elem_size;
@@ -176,6 +182,9 @@ int rythm_compare_lines(const void **elem1, const void **elem2) {
 }
 
 void free_memory(Line_t **lines, char *file_text) {
+    assert(lines);
+    assert(file_text);
+
     Line_t **lines_ptr = lines;
     for (int i = 0; i < MAXSTRS; ++i) {
         free(*lines_ptr);
@@ -186,22 +195,34 @@ void free_memory(Line_t **lines, char *file_text) {
 }
 
 int read_file(File_t *file, char *name) {
+    assert(file);
+    assert(name);
+
     file->name = name;
     stat(name, &(file->info));
 
-    file->lines = calloc(MAXSTRS, sizeof(Line_t*));
-    file->text = calloc(file->info.st_size, sizeof(char));
-    file->lines_cnt = read_lines(file);
+    //file->lines = calloc(MAXSTRS, sizeof(Line_t*));
+    file->text = calloc(file->info.st_size + 1, sizeof(char));
+    if (!file->text) {
+        return ERROR_MALLOC_FAIL;
+    }
+    return file->lines_cnt = read_lines(file);
 }
 
 int read_lines(File_t *file) {
+    assert(file);
+
     printf("%s\n", file->name);
-    file->file_ptr = fopen(file->name, "r");
+    file->file_ptr = open(file->name, O_BINARY);
     if (!file->file_ptr) {
         return ERROR_FILE_NOT_FOUND;
     }
 
-    fread(file->text, sizeof(char), file->info.st_size + 1, file->file_ptr);
+    read(file->file_ptr, file->text, file->info.st_size);
+    file->lines = calloc(MAXSTRS, sizeof(Line_t*));
+    if (!file->lines) {
+        return ERROR_MALLOC_FAIL;
+    }
 
     char *c = file->text;
     int lines_cnt = -1;
@@ -213,6 +234,9 @@ int read_lines(File_t *file) {
         }
 
         file->lines[lines_cnt] = calloc(1, sizeof(Line_t));
+        if (!file->lines[lines_cnt]) {
+            return ERROR_MALLOC_FAIL;
+        }
         Line_t *line_ptr = file->lines[lines_cnt];
         line_ptr->string = c;
 
@@ -225,7 +249,6 @@ int read_lines(File_t *file) {
 
         line_ptr->len = strlen(line_ptr->string);
         line_len = 0;
-
         calculate_ending(line_ptr);
         line_ptr->strofa_index = lines_cnt % STROFA_SIZE;
     }
@@ -237,7 +260,7 @@ int read_lines(File_t *file) {
 void print_lines(char *file_name, Line_t **lines, int lines_cnt) {
     FILE *fout = fopen(file_name, "w");
     for (int i = 0; i < lines_cnt; ++i) {
-        fprintf(fout, "%s\n", lines[i]->string);
+        fprintf(fout, "%s", lines[i]->string);
     }
 
     fclose(fout);
@@ -272,6 +295,9 @@ char rythming_lines(Line_t *first, Line_t *second, int depth) {
 }
 
 void gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_depth) {
+    assert(lines);
+    assert(buffer);
+
     srand(time(NULL));
     for (int i = 0; i < STROFA_SIZE; ++i) {
         int itter = 0;
@@ -309,9 +335,11 @@ void gen_strofa(Line_t **lines, int lines_cnt, unsigned int *buffer, int rythm_d
 
 void print_error(int error) {
     if (error == ERROR_FILE_NOT_FOUND) {
-        printf("File not found!\n");
+        printf("[ERR] File not found!\n");
     } else if (error == ERROR_BIG_FILE) {
-        printf("Can't handle such a big file!\n");
+        printf("[ERR] Can't handle such a big file!\n");
+    } else if (error == ERROR_MALLOC_FAIL) {
+        printf("[ERR] Can't allocate memory\n");
     } else {
         printf("[ERR](~!~)WERROREHUTGEERRORF(~!~)[ERR]\n");
     }
