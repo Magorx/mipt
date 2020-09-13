@@ -243,6 +243,9 @@ int read_lines(File_t *file) {
         while(*c != '\n') {
             ++line_len;
             ++c;
+            if (*c == '\r') {
+                *c = '\0';
+            }
         }
         *c = '\0';
         ++c;
@@ -260,7 +263,7 @@ int read_lines(File_t *file) {
 void print_lines(char *file_name, Line_t **lines, int lines_cnt) {
     FILE *fout = fopen(file_name, "w");
     for (int i = 0; i < lines_cnt; ++i) {
-        fprintf(fout, "%s", lines[i]->string);
+        fprintf(fout, "%s\n", lines[i]->string);
     }
 
     fclose(fout);
