@@ -1,0 +1,309 @@
+\hypertarget{general_8h}{}\doxysection{C\+:/\+Users/maxim/\+Desktop/mipt/seminars/ded/onegin/general.h File Reference}
+\label{general_8h}\index{C:/Users/maxim/Desktop/mipt/seminars/ded/onegin/general.h@{C:/Users/maxim/Desktop/mipt/seminars/ded/onegin/general.h}}
+
+
+General functions to be used in all projects.  
+
+
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_line}{Line}}
+\begin{DoxyCompactList}\small\item\em Handmade stringview. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_file}{File}}
+\begin{DoxyCompactList}\small\item\em Struct to store file\textquotesingle{}s information into. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{general_8h_abf44569976a0bab3e502f04e43fbd624}\label{general_8h_abf44569976a0bab3e502f04e43fbd624}} 
+\#define {\bfseries D\+E\+B\+U\+G\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+P\+R\+I\+NT}()~printf(\char`\"{}\mbox{[}deb\mbox{]} \%d \mbox{[}deb\mbox{]}\textbackslash{}n\char`\"{}, D\+E\+B\+U\+G\+\_\+\+N\+U\+M\+B\+ER++);
+\item 
+\mbox{\Hypertarget{general_8h_ac050709c570fd0973c4aee4b22c6c7c0}\label{general_8h_ac050709c570fd0973c4aee4b22c6c7c0}} 
+\#define {\bfseries D\+E\+B\+U\+G\+\_\+\+L\+E\+T\+T\+E\+R\+\_\+\+P\+R\+I\+NT}()~printf(\char`\"{}\mbox{[}deb\mbox{]} \%c \mbox{[}deb\mbox{]}\textbackslash{}n\char`\"{}, D\+E\+B\+U\+G\+\_\+\+L\+E\+T\+T\+ER++);
+\item 
+\mbox{\Hypertarget{general_8h_a569e3072876c0fa51714b48031bc04f6}\label{general_8h_a569e3072876c0fa51714b48031bc04f6}} 
+\#define {\bfseries D\+E\+B\+U\+G\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+I\+N\+CR}()~\mbox{\hyperlink{general_8h_ab2e292d5fd5d66223bc2fad598703efe}{D\+E\+B\+U\+G\+\_\+\+N\+U\+M\+B\+ER}}++;
+\item 
+\mbox{\Hypertarget{general_8h_afd01b088b2364eaf9c9ebda754e04767}\label{general_8h_afd01b088b2364eaf9c9ebda754e04767}} 
+\#define {\bfseries D\+E\+B\+U\+G\+\_\+\+L\+E\+T\+T\+E\+R\+\_\+\+I\+N\+CR}()~\mbox{\hyperlink{general_8h_a4ceaefa5b445845398bfae26ea1e13c4}{D\+E\+B\+U\+G\+\_\+\+L\+E\+T\+T\+ER}}++;
+\item 
+\mbox{\Hypertarget{general_8h_ad72dbcf6d0153db1b8d8a58001feed83}\label{general_8h_ad72dbcf6d0153db1b8d8a58001feed83}} 
+\#define {\bfseries D\+E\+B\+UG}~if(\mbox{\hyperlink{general_8h_a11263a94441c4a25e79ffe6bbb32efa3}{K\+C\+T\+F\+\_\+\+D\+E\+B\+U\+G\+\_\+\+M\+O\+DE}})
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}\label{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}} 
+typedef struct \mbox{\hyperlink{struct_line}{Line}} \mbox{\hyperlink{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}{Line\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Typedef for \mbox{\hyperlink{struct_line}{Line}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{general_8h_a444fde8613abc7a5d67801e1bbc82394}\label{general_8h_a444fde8613abc7a5d67801e1bbc82394}} 
+typedef struct \mbox{\hyperlink{struct_file}{File}} \mbox{\hyperlink{general_8h_a444fde8613abc7a5d67801e1bbc82394}{File\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Typedef for \mbox{\hyperlink{struct_file}{File}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{general_8h_a13eddf75a7a1d8d6753cc724a7ebe9de}\label{general_8h_a13eddf75a7a1d8d6753cc724a7ebe9de}} 
+enum \mbox{\hyperlink{general_8h_a13eddf75a7a1d8d6753cc724a7ebe9de}{C\+U\+R\+R\+E\+N\+T\+\_\+\+P\+R\+O\+J\+E\+C\+T\+\_\+\+S\+E\+T\+T\+I\+N\+GS}} \{ {\bfseries S\+T\+R\+O\+F\+A\+\_\+\+S\+I\+ZE} = 14, 
+{\bfseries R\+H\+Y\+M\+E\+\_\+\+D\+E\+P\+TH} = 4
+ \}
+\begin{DoxyCompactList}\small\item\em Current project\textquotesingle{}s setting. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{general_8h_a622ccac4bed4b5ffcfd1acea83629286}\label{general_8h_a622ccac4bed4b5ffcfd1acea83629286}} 
+enum \mbox{\hyperlink{general_8h_a622ccac4bed4b5ffcfd1acea83629286}{E\+R\+R\+O\+RS}} \{ {\bfseries E\+R\+R\+O\+R\+\_\+\+F\+I\+L\+E\+\_\+\+N\+O\+T\+\_\+\+F\+O\+U\+ND} = -\/10, 
+{\bfseries E\+R\+R\+O\+R\+\_\+\+B\+I\+G\+\_\+\+F\+I\+LE}, 
+{\bfseries E\+R\+R\+O\+R\+\_\+\+M\+A\+L\+L\+O\+C\+\_\+\+F\+A\+IL}
+ \}
+\begin{DoxyCompactList}\small\item\em Errors codes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{general_8h_a93ccd6d829efde50dca30db20e32d800}{qqh\+\_\+sort}} (const void $\ast$arr, const size\+\_\+t elem\+\_\+cnt, const size\+\_\+t elem\+\_\+size, int($\ast$comp)(void $\ast$elem1, void $\ast$elem2))
+\begin{DoxyCompactList}\small\item\em Quadratic sort. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{general_8h_aa5d6429086b21a550354662e13e71ed0}{compare\+\_\+lines\+\_\+letters}} (const void $\ast$$\ast$elem1, const void $\ast$$\ast$elem2)
+\begin{DoxyCompactList}\small\item\em Comparator for two lines. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{general_8h_a5d2b3475248b69090c50fb633dadb01e}{reverse\+\_\+compare\+\_\+lines\+\_\+letters}} (const void $\ast$$\ast$elem1, const void $\ast$$\ast$elem2)
+\begin{DoxyCompactList}\small\item\em Reversed comparator for two lines. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{general_8h_a1055de61d50fcfbb0213c024835faf82}{free\+\_\+memory\+\_\+file}} (const \mbox{\hyperlink{general_8h_a444fde8613abc7a5d67801e1bbc82394}{File\+\_\+t}} $\ast$file)
+\begin{DoxyCompactList}\small\item\em Calls all necessary free\textquotesingle{}s. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{general_8h_a0961f50e15b1235c5da18b1a5c175600}{read\+\_\+file}} (\mbox{\hyperlink{general_8h_a444fde8613abc7a5d67801e1bbc82394}{File\+\_\+t}} $\ast$file, const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em Reads file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{general_8h_a9548f80c4a93e1aec9e27661d200376f}{read\+\_\+lines}} (\mbox{\hyperlink{general_8h_a444fde8613abc7a5d67801e1bbc82394}{File\+\_\+t}} $\ast$file)
+\begin{DoxyCompactList}\small\item\em Reads lines from file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{general_8h_ac206af286037817cd128b36f82f10312}{print\+\_\+file}} (const \mbox{\hyperlink{general_8h_a444fde8613abc7a5d67801e1bbc82394}{File\+\_\+t}} $\ast$file, const char $\ast$fout)
+\begin{DoxyCompactList}\small\item\em Prints file into given file. \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{general_8h_ac2b1eeb8b514292f389cf16fd2520d78}{is\+\_\+russian\+\_\+letter}} (const unsigned char c)
+\begin{DoxyCompactList}\small\item\em Checks if c is a Russian letter. \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{general_8h_a912ea3055abb902b7630b8a165e25be8}{is\+\_\+letter}} (const unsigned char c)
+\begin{DoxyCompactList}\small\item\em Checks if c is a Russian or an English letter. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{general_8h_a079d476a58502e55b3433652298c2a7b}{swap\+\_\+ptrs}} (void $\ast$$\ast$first, void $\ast$$\ast$second)
+\begin{DoxyCompactList}\small\item\em Swaps contains of two ptrs. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{general_8h_a968801b6df4daa98b46851157bfbacab}{print\+\_\+error}} (int error)
+\begin{DoxyCompactList}\small\item\em Prints text error message to standard output. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{general_8h_a11263a94441c4a25e79ffe6bbb32efa3}\label{general_8h_a11263a94441c4a25e79ffe6bbb32efa3}} 
+const int \mbox{\hyperlink{general_8h_a11263a94441c4a25e79ffe6bbb32efa3}{K\+C\+T\+F\+\_\+\+D\+E\+B\+U\+G\+\_\+\+M\+O\+DE}} = 1
+\begin{DoxyCompactList}\small\item\em Just a mode for debugging. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{general_8h_ab2e292d5fd5d66223bc2fad598703efe}\label{general_8h_ab2e292d5fd5d66223bc2fad598703efe}} 
+int \mbox{\hyperlink{general_8h_ab2e292d5fd5d66223bc2fad598703efe}{D\+E\+B\+U\+G\+\_\+\+N\+U\+M\+B\+ER}} = 1
+\begin{DoxyCompactList}\small\item\em Just an int for debugging. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{general_8h_a4ceaefa5b445845398bfae26ea1e13c4}\label{general_8h_a4ceaefa5b445845398bfae26ea1e13c4}} 
+unsigned char \mbox{\hyperlink{general_8h_a4ceaefa5b445845398bfae26ea1e13c4}{D\+E\+B\+U\+G\+\_\+\+L\+E\+T\+T\+ER}} = \textquotesingle{}a\textquotesingle{}
+\begin{DoxyCompactList}\small\item\em Just a char for debugging. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+General functions to be used in all projects. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{general_8h_aa5d6429086b21a550354662e13e71ed0}\label{general_8h_aa5d6429086b21a550354662e13e71ed0}} 
+\index{general.h@{general.h}!compare\_lines\_letters@{compare\_lines\_letters}}
+\index{compare\_lines\_letters@{compare\_lines\_letters}!general.h@{general.h}}
+\doxysubsubsection{\texorpdfstring{compare\_lines\_letters()}{compare\_lines\_letters()}}
+{\footnotesize\ttfamily int compare\+\_\+lines\+\_\+letters (\begin{DoxyParamCaption}\item[{const void $\ast$$\ast$}]{elem1,  }\item[{const void $\ast$$\ast$}]{elem2 }\end{DoxyParamCaption})}
+
+
+
+Comparator for two lines. 
+
+Ignores everything that is not a Russian or English letter
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em elem1,elem2} & elements to compare \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+an int $<$0 if elem1$<$elem2, 0 if elem1=elem2, $>$0 if elem1$>$elem2 
+\end{DoxyReturn}
+\mbox{\Hypertarget{general_8h_a1055de61d50fcfbb0213c024835faf82}\label{general_8h_a1055de61d50fcfbb0213c024835faf82}} 
+\index{general.h@{general.h}!free\_memory\_file@{free\_memory\_file}}
+\index{free\_memory\_file@{free\_memory\_file}!general.h@{general.h}}
+\doxysubsubsection{\texorpdfstring{free\_memory\_file()}{free\_memory\_file()}}
+{\footnotesize\ttfamily void free\+\_\+memory\+\_\+file (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{general_8h_a444fde8613abc7a5d67801e1bbc82394}{File\+\_\+t}} $\ast$}]{file }\end{DoxyParamCaption})}
+
+
+
+Calls all necessary free\textquotesingle{}s. 
+
+Kind of destructor for the \mbox{\hyperlink{struct_file}{File}} structure
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em file} & object to be destroyed \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{general_8h_a912ea3055abb902b7630b8a165e25be8}\label{general_8h_a912ea3055abb902b7630b8a165e25be8}} 
+\index{general.h@{general.h}!is\_letter@{is\_letter}}
+\index{is\_letter@{is\_letter}!general.h@{general.h}}
+\doxysubsubsection{\texorpdfstring{is\_letter()}{is\_letter()}}
+{\footnotesize\ttfamily char is\+\_\+letter (\begin{DoxyParamCaption}\item[{const unsigned char}]{c }\end{DoxyParamCaption})}
+
+
+
+Checks if c is a Russian or an English letter. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em c} & char to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if c is a Russian or an English letter, else false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{general_8h_ac2b1eeb8b514292f389cf16fd2520d78}\label{general_8h_ac2b1eeb8b514292f389cf16fd2520d78}} 
+\index{general.h@{general.h}!is\_russian\_letter@{is\_russian\_letter}}
+\index{is\_russian\_letter@{is\_russian\_letter}!general.h@{general.h}}
+\doxysubsubsection{\texorpdfstring{is\_russian\_letter()}{is\_russian\_letter()}}
+{\footnotesize\ttfamily char is\+\_\+russian\+\_\+letter (\begin{DoxyParamCaption}\item[{const unsigned char}]{c }\end{DoxyParamCaption})}
+
+
+
+Checks if c is a Russian letter. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em c} & char to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if c is a Russian letter, else false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{general_8h_a968801b6df4daa98b46851157bfbacab}\label{general_8h_a968801b6df4daa98b46851157bfbacab}} 
+\index{general.h@{general.h}!print\_error@{print\_error}}
+\index{print\_error@{print\_error}!general.h@{general.h}}
+\doxysubsubsection{\texorpdfstring{print\_error()}{print\_error()}}
+{\footnotesize\ttfamily void print\+\_\+error (\begin{DoxyParamCaption}\item[{int}]{error }\end{DoxyParamCaption})}
+
+
+
+Prints text error message to standard output. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em error} & code of error to print \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{general_8h_ac206af286037817cd128b36f82f10312}\label{general_8h_ac206af286037817cd128b36f82f10312}} 
+\index{general.h@{general.h}!print\_file@{print\_file}}
+\index{print\_file@{print\_file}!general.h@{general.h}}
+\doxysubsubsection{\texorpdfstring{print\_file()}{print\_file()}}
+{\footnotesize\ttfamily void print\+\_\+file (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{general_8h_a444fde8613abc7a5d67801e1bbc82394}{File\+\_\+t}} $\ast$}]{file,  }\item[{const char $\ast$}]{fout }\end{DoxyParamCaption})}
+
+
+
+Prints file into given file. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em file} & file containing text to write \\
+\hline
+\mbox{\texttt{ in}}  & {\em output} & file name \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{general_8h_a93ccd6d829efde50dca30db20e32d800}\label{general_8h_a93ccd6d829efde50dca30db20e32d800}} 
+\index{general.h@{general.h}!qqh\_sort@{qqh\_sort}}
+\index{qqh\_sort@{qqh\_sort}!general.h@{general.h}}
+\doxysubsubsection{\texorpdfstring{qqh\_sort()}{qqh\_sort()}}
+{\footnotesize\ttfamily void qqh\+\_\+sort (\begin{DoxyParamCaption}\item[{const void $\ast$}]{arr,  }\item[{const size\+\_\+t}]{elem\+\_\+cnt,  }\item[{const size\+\_\+t}]{elem\+\_\+size,  }\item[{int($\ast$)(void $\ast$elem1, void $\ast$elem2)}]{comp }\end{DoxyParamCaption})}
+
+
+
+Quadratic sort. 
+
+Sorts array on-\/place with given comparator
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em arr} & array which needs to be sorted \\
+\hline
+\mbox{\texttt{ in}}  & {\em elem\+\_\+cnt} & count of elements, \mbox{[}0, elem\+\_\+cnt) will be sorted \\
+\hline
+\mbox{\texttt{ in}}  & {\em elem\+\_\+size} & size of each element in bytes \\
+\hline
+\mbox{\texttt{ in}}  & {\em comp} & comparator returning an int $<$0 of elem1$<$elem2, 0 if elem1=elem2, $>$0 if elem1$>$elem2 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{general_8h_a0961f50e15b1235c5da18b1a5c175600}\label{general_8h_a0961f50e15b1235c5da18b1a5c175600}} 
+\index{general.h@{general.h}!read\_file@{read\_file}}
+\index{read\_file@{read\_file}!general.h@{general.h}}
+\doxysubsubsection{\texorpdfstring{read\_file()}{read\_file()}}
+{\footnotesize\ttfamily int read\+\_\+file (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{general_8h_a444fde8613abc7a5d67801e1bbc82394}{File\+\_\+t}} $\ast$}]{file,  }\item[{const char $\ast$}]{name }\end{DoxyParamCaption})}
+
+
+
+Reads file. 
+
+Estimates file\textquotesingle{}s size and allocates just enough memory + 1 byte for \textbackslash{}0, then calls read\+\_\+lines to fill buffer \textquotesingle{}text\textquotesingle{} and index \textquotesingle{}lines\textquotesingle{}
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em file} & object to be read to \\
+\hline
+\mbox{\texttt{ in}}  & {\em name} & -\/ filename to be read from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if file is read successfully, else error code $<$0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{general_8h_a9548f80c4a93e1aec9e27661d200376f}\label{general_8h_a9548f80c4a93e1aec9e27661d200376f}} 
+\index{general.h@{general.h}!read\_lines@{read\_lines}}
+\index{read\_lines@{read\_lines}!general.h@{general.h}}
+\doxysubsubsection{\texorpdfstring{read\_lines()}{read\_lines()}}
+{\footnotesize\ttfamily int read\+\_\+lines (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{general_8h_a444fde8613abc7a5d67801e1bbc82394}{File\+\_\+t}} $\ast$}]{file }\end{DoxyParamCaption})}
+
+
+
+Reads lines from file. 
+
+Stores them into given File\+\_\+t object
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em file} & an object to write into, contains input file name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if file is read successfully, else error code $<$0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{general_8h_a5d2b3475248b69090c50fb633dadb01e}\label{general_8h_a5d2b3475248b69090c50fb633dadb01e}} 
+\index{general.h@{general.h}!reverse\_compare\_lines\_letters@{reverse\_compare\_lines\_letters}}
+\index{reverse\_compare\_lines\_letters@{reverse\_compare\_lines\_letters}!general.h@{general.h}}
+\doxysubsubsection{\texorpdfstring{reverse\_compare\_lines\_letters()}{reverse\_compare\_lines\_letters()}}
+{\footnotesize\ttfamily int reverse\+\_\+compare\+\_\+lines\+\_\+letters (\begin{DoxyParamCaption}\item[{const void $\ast$$\ast$}]{elem1,  }\item[{const void $\ast$$\ast$}]{elem2 }\end{DoxyParamCaption})}
+
+
+
+Reversed comparator for two lines. 
+
+Ignores everything that is not a Russian or English letter
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em elem1,elem2} & elements to compare \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+an int $>$0 if elem1$<$elem2, 0 if elem1=elem2, 0 if elem1$>$elem2 
+\end{DoxyReturn}
+\mbox{\Hypertarget{general_8h_a079d476a58502e55b3433652298c2a7b}\label{general_8h_a079d476a58502e55b3433652298c2a7b}} 
+\index{general.h@{general.h}!swap\_ptrs@{swap\_ptrs}}
+\index{swap\_ptrs@{swap\_ptrs}!general.h@{general.h}}
+\doxysubsubsection{\texorpdfstring{swap\_ptrs()}{swap\_ptrs()}}
+{\footnotesize\ttfamily void swap\+\_\+ptrs (\begin{DoxyParamCaption}\item[{void $\ast$$\ast$}]{first,  }\item[{void $\ast$$\ast$}]{second }\end{DoxyParamCaption})}
+
+
+
+Swaps contains of two ptrs. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em first,second} & prts to swap \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}

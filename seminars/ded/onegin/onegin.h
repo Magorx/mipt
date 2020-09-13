@@ -1,3 +1,8 @@
+/**
+    \file
+    \brief Main library for Onegin to work
+*/
+
 #ifndef ONEGIN_H
 #define ONEGIN_H
 

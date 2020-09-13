@@ -1,0 +1,108 @@
+\hypertarget{onegin_8h}{}\doxysection{C\+:/\+Users/maxim/\+Desktop/mipt/seminars/ded/onegin/onegin.h File Reference}
+\label{onegin_8h}\index{C:/Users/maxim/Desktop/mipt/seminars/ded/onegin/onegin.h@{C:/Users/maxim/Desktop/mipt/seminars/ded/onegin/onegin.h}}
+
+
+Main library for Onegin to work.  
+
+
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}general.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{onegin_8h_a45d88f30d901015b1751d24168912c1c}{calculate\+\_\+ending}} (\mbox{\hyperlink{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}{Line\+\_\+t}} $\ast$line, const size\+\_\+t rhyme\+\_\+depth)
+\begin{DoxyCompactList}\small\item\em Calculates an ending of a line. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{onegin_8h_a2816dad1604297801ae0f5b33ee44be6}{rhyme\+\_\+compare\+\_\+lines}} (const void $\ast$$\ast$elem1, const void $\ast$$\ast$elem2)
+\begin{DoxyCompactList}\small\item\em End-\/starting comparator for two lines. \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{onegin_8h_a06f615e9c314226964c9dccb59ca5c55}{rhymeing\+\_\+lines}} (const \mbox{\hyperlink{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}{Line\+\_\+t}} $\ast$first, const \mbox{\hyperlink{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}{Line\+\_\+t}} $\ast$second, const size\+\_\+t depth)
+\begin{DoxyCompactList}\small\item\em Checks if lines are rhymic. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{onegin_8h_a57decb75338e2619a6b0a124c656fb1e}{gen\+\_\+strofa}} (const \mbox{\hyperlink{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}{Line\+\_\+t}} $\ast$$\ast$lines, const size\+\_\+t lines\+\_\+cnt, unsigned int $\ast$buffer, const size\+\_\+t rhyme\+\_\+depth)
+\begin{DoxyCompactList}\small\item\em Generates new strofa from random strings. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main library for Onegin to work. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{onegin_8h_a45d88f30d901015b1751d24168912c1c}\label{onegin_8h_a45d88f30d901015b1751d24168912c1c}} 
+\index{onegin.h@{onegin.h}!calculate\_ending@{calculate\_ending}}
+\index{calculate\_ending@{calculate\_ending}!onegin.h@{onegin.h}}
+\doxysubsubsection{\texorpdfstring{calculate\_ending()}{calculate\_ending()}}
+{\footnotesize\ttfamily void calculate\+\_\+ending (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}{Line\+\_\+t}} $\ast$}]{line,  }\item[{const size\+\_\+t}]{rhyme\+\_\+depth }\end{DoxyParamCaption})}
+
+
+
+Calculates an ending of a line. 
+
+Ignores all symbols that are not letters in the end of string takes last R\+H\+Y\+M\+E\+\_\+\+D\+E\+P\+TH chars Stores output into given line. Works for rhyming purposes
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em line} & line to be process \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{onegin_8h_a57decb75338e2619a6b0a124c656fb1e}\label{onegin_8h_a57decb75338e2619a6b0a124c656fb1e}} 
+\index{onegin.h@{onegin.h}!gen\_strofa@{gen\_strofa}}
+\index{gen\_strofa@{gen\_strofa}!onegin.h@{onegin.h}}
+\doxysubsubsection{\texorpdfstring{gen\_strofa()}{gen\_strofa()}}
+{\footnotesize\ttfamily void gen\+\_\+strofa (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}{Line\+\_\+t}} $\ast$$\ast$}]{lines,  }\item[{const size\+\_\+t}]{lines\+\_\+cnt,  }\item[{unsigned int $\ast$}]{buffer,  }\item[{const size\+\_\+t}]{rhyme\+\_\+depth }\end{DoxyParamCaption})}
+
+
+
+Generates new strofa from random strings. 
+
+Given N\+OT M\+E\+S\+S\+ED UP lines of Onegin generates indexes of strings to be used in new strofa
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em lines} & stringview over text of Onegin \\
+\hline
+\mbox{\texttt{ in}}  & {\em lines\+\_\+cnt} & number of lines in text \\
+\hline
+\mbox{\texttt{ out}}  & {\em buffer} & array of size\+\_\+t to store output into \\
+\hline
+\mbox{\texttt{ in}}  & {\em R\+H\+Y\+M\+E\+\_\+\+D\+E\+P\+TH} & depth of rhyme to check (look at rhymeing\+\_\+lines for desription) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{onegin_8h_a2816dad1604297801ae0f5b33ee44be6}\label{onegin_8h_a2816dad1604297801ae0f5b33ee44be6}} 
+\index{onegin.h@{onegin.h}!rhyme\_compare\_lines@{rhyme\_compare\_lines}}
+\index{rhyme\_compare\_lines@{rhyme\_compare\_lines}!onegin.h@{onegin.h}}
+\doxysubsubsection{\texorpdfstring{rhyme\_compare\_lines()}{rhyme\_compare\_lines()}}
+{\footnotesize\ttfamily int rhyme\+\_\+compare\+\_\+lines (\begin{DoxyParamCaption}\item[{const void $\ast$$\ast$}]{elem1,  }\item[{const void $\ast$$\ast$}]{elem2 }\end{DoxyParamCaption})}
+
+
+
+End-\/starting comparator for two lines. 
+
+Compares two lines representing them as reversed without manually doing this
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em elem1,elem2} & lines to compare \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+an int $<$0 if elem1$<$elem2, 0 if elem1=elem2, $>$0 if elem1$>$elem2 
+\end{DoxyReturn}
+\mbox{\Hypertarget{onegin_8h_a06f615e9c314226964c9dccb59ca5c55}\label{onegin_8h_a06f615e9c314226964c9dccb59ca5c55}} 
+\index{onegin.h@{onegin.h}!rhymeing\_lines@{rhymeing\_lines}}
+\index{rhymeing\_lines@{rhymeing\_lines}!onegin.h@{onegin.h}}
+\doxysubsubsection{\texorpdfstring{rhymeing\_lines()}{rhymeing\_lines()}}
+{\footnotesize\ttfamily char rhymeing\+\_\+lines (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}{Line\+\_\+t}} $\ast$}]{first,  }\item[{const \mbox{\hyperlink{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}{Line\+\_\+t}} $\ast$}]{second,  }\item[{const size\+\_\+t}]{depth }\end{DoxyParamCaption})}
+
+
+
+Checks if lines are rhymic. 
+
+Compares endings of the lines that are calculated by calculate\+\_\+ending function rhyming strings are those having R\+H\+Y\+M\+E\+\_\+\+D\+E\+P\+T\+H-\/1 symbols same in the end and difference in R\+H\+Y\+M\+E\+\_\+\+D\+E\+P\+TH symbol from the end
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em first,second} & given string to check rhyming \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if lines are rhymic, else false 
+\end{DoxyReturn}
