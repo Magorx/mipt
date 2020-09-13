@@ -1,0 +1,25 @@
+var NAVTREEINDEX0 =
+{
+"annotated.html":[0,0],
+"classes.html":[0,1],
+"files.html":[1,0],
+"general_8h_source.html":[1,0,0],
+"index.html":[],
+"onegin_8h_source.html":[1,0,1],
+"pages.html":[],
+"struct_file.html":[0,0,0],
+"struct_file.html#a01a07beedea550df6e344cdbd7ba8dcb":[0,0,0,3],
+"struct_file.html#a4e5ad41dab32415fbf687fae7e897bf5":[0,0,0,4],
+"struct_file.html#a64c46eb1bbda139bb77787ab91abeb79":[0,0,0,1],
+"struct_file.html#a660d32ad247f97944b09f34740c5a419":[0,0,0,0],
+"struct_file.html#abefba01fa3314b19b82e95b8d8dfe884":[0,0,0,5],
+"struct_file.html#adea76cb2f293b2d8e8ba54cb0f77b543":[0,0,0,2],
+"struct_line.html":[0,0,1],
+"struct_line.html#ad081955d87f3cc679c0fec87ed8b024f":[0,0,1,2],
+"struct_line.html#af469f686717985609006257cc80f9fe2":[0,0,1,1],
+"struct_line.html#afa71332d5025991bf16b543969062d30":[0,0,1,0],
+"struct_node.html":[0,0,2],
+"struct_node.html#a32a17ef7feab3b96e1244f65b754abc3":[0,0,2,0],
+"struct_node.html#a7328862eaa6dea28018326549b3294d3":[0,0,2,2],
+"struct_node.html#ab8c667ac8fdb120ed4c031682a9cdaee":[0,0,2,1]
+};
