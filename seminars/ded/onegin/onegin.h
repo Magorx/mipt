@@ -30,15 +30,15 @@ void calculate_ending(Line_t *line, const size_t rhyme_depth);
 int rhyme_compare_lines(const void **elem1, const void **elem2);
 
 /**
-    @brief Checks if lines are rhymic
+    @brief Checks if lines are rhyming
 
     Compares endings of the lines that are calculated by calculate_ending function
     rhyming strings are those having RHYME_DEPTH-1 symbols same in the end and difference in RHYME_DEPTH symbol from the end
 
     @param[in] first,second given string to check rhyming
-    @return true if lines are rhymic, else false
+    @return true if lines are rhyming, else false
 */
-char rhymeing_lines(const Line_t *first, const Line_t *second, const size_t depth);
+char rhyming_lines(const Line_t *first, const Line_t *second, const size_t depth);
 
 /**
     @brief Generates new strofa from random strings
@@ -48,7 +48,7 @@ char rhymeing_lines(const Line_t *first, const Line_t *second, const size_t dept
     @param[in] lines stringview over text of Onegin
     @param[in] lines_cnt number of lines in text
     @param[out] buffer array of size_t to store output into
-    @param[in] RHYME_DEPTH depth of rhyme to check (look at rhymeing_lines for desription)
+    @param[in] RHYME_DEPTH depth of rhyme to check (look at rhyming_lines for desription)
 */
 void gen_strofa(const Line_t **lines, const size_t lines_cnt, unsigned int *buffer, const size_t rhyme_depth);
 
@@ -96,7 +96,7 @@ int rhyme_compare_lines(const void **elem1, const void **elem2) {
     return str1[i] - str2[j];
 }
 
-char rhymeing_lines(const Line_t *first, const Line_t *second, const size_t depth) {
+char rhyming_lines(const Line_t *first, const Line_t *second, const size_t depth) {
     if (first == second) {
         return 0;
     }
@@ -127,17 +127,17 @@ void gen_strofa(const Line_t **lines, const size_t lines_cnt, unsigned int *buff
                 buffer[i] = line_index;
                 break;
             } else if (i == 5 || i == 7 || i == 10 || i == 13) {
-                if (rhymeing_lines(line, lines[buffer[i - 1]], rhyme_depth)) {
+                if (rhyming_lines(line, lines[buffer[i - 1]], rhyme_depth)) {
                     buffer[i] = line_index;
                     break;
                 }
             } else if (i == 2 || i == 3) {
-                if (rhymeing_lines(line, lines[buffer[i - 2]], rhyme_depth)) {
+                if (rhyming_lines(line, lines[buffer[i - 2]], rhyme_depth)) {
                     buffer[i] = line_index;
                     break;
                 }
             } else {
-                if (rhymeing_lines(line, lines[buffer[i - 3]], rhyme_depth)) {
+                if (rhyming_lines(line, lines[buffer[i - 3]], rhyme_depth)) {
                     buffer[i] = line_index;
                     break;
                 }
