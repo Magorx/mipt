@@ -46,11 +46,11 @@ typedef struct Line Line_t;
 
 /// Struct to store file's information into
 struct File {
-    const char *name;
-    size_t file_dscr;
+    char *name;
+    int file_ptr;
     struct stat info;
     unsigned char *text;
-    size_t lines_cnt;
+    int lines_cnt;
     Line_t **lines;
 };
 
@@ -67,7 +67,7 @@ typedef struct File File_t;
     \param[in] elem_size size of each element in bytes
     \param[in] comp comparator returning an int <0 of elem1<elem2, 0 if elem1=elem2, >0 if elem1>elem2
 */
-void qqh_sort(void *arr, const size_t elem_cnt, const size_t elem_size, int (*comp)(void *elem1, void *elem2));
+void qqh_sort(const void *arr, const size_t elem_cnt, const size_t elem_size, int (*comp)(void *elem1, void *elem2));
 
 /**
     \brief Comparator for two lines
@@ -77,7 +77,7 @@ void qqh_sort(void *arr, const size_t elem_cnt, const size_t elem_size, int (*co
     \param[in] elem1,elem2 elements to compare
     \return an int <0 if elem1<elem2, 0 if elem1=elem2, >0 if elem1>elem2
 */
-int compare_lines_letters(const void *elem1, const void *elem2);
+int compare_lines_letters(const void **elem1, const void **elem2);
 
 /**
     \brief Reversed comparator for two lines
@@ -170,16 +170,16 @@ void print_error(int error);
 
 
 //=============================================================================
-//============================ IMPLEMENTATION =================================
+//========================== REALISATON =======================================
 //=============================================================================
 
 
-char __costyle__is_russian_letter(const unsigned char c) {
+char is_russian_letter(const unsigned char c) {
     return (c >= (unsigned char) 'À' && c <= (unsigned char) 'ß') || (c >= (unsigned char) 'à' && c <= (unsigned char) 'ÿ');
 }
 
 char is_letter(const unsigned char c) {
-    return isalpha(c);
+    return isalpha(c) || is_russian_letter(c);
 }
 
 void swap_ptrs(void **first, void **second) {
@@ -188,7 +188,7 @@ void swap_ptrs(void **first, void **second) {
     *first = tmp;
 }
 
-void qqh_sort(void *arr, const size_t elem_cnt, const size_t elem_size, int (*comp)(void *elem1, void *elem2)) {
+void qqh_sort(const void *arr, const size_t elem_cnt, const size_t elem_size, int (*comp)(void *elem1, void *elem2)) {
     assert(arr);
 
     for (int i = 0; i < elem_cnt; ++i) {
@@ -202,9 +202,9 @@ void qqh_sort(void *arr, const size_t elem_cnt, const size_t elem_size, int (*co
     }
 }
 
-int compare_lines_letters(const void *elem1, const void *elem2) {
-    const unsigned char* str1 = (**(Line_t**)elem1).string;
-    const unsigned char* str2 = (**(Line_t**)elem2).string;
+int compare_lines_letters(const void **elem1, const void **elem2) {
+    const unsigned char* str1 = ((Line_t*)(*elem1))->string;
+    const unsigned char* str2 = ((Line_t*)(*elem2))->string;
 
     int i = 0;
     int j = 0;
@@ -261,12 +261,12 @@ int read_lines(File_t *file) {
 
     DEBUG {printf("Working with [%s] file\n", file->name);}
 
-    file->file_dscr = open(file->name, O_BINARY);
-    if (!file->file_dscr) {
+    file->file_ptr = open(file->name, O_BINARY);
+    if (!file->file_ptr) {
         return ERROR_FILE_NOT_FOUND;
     }
 
-    read(file->file_dscr, file->text, file->info.st_size);
+    read(file->file_ptr, file->text, file->info.st_size);
     int lines_cnt = 0;
     for (unsigned char *c = file->text; *c; ++c) {
         lines_cnt += *c == '\n';
@@ -321,6 +321,7 @@ void print_file(const File_t *file, const char *fout_name) {
 
 void print_error(int error) {
     if (error == 0) {
+        printf(""); // wtf?
         return;
     }
 
@@ -331,7 +332,7 @@ void print_error(int error) {
     } else if (error == ERROR_MALLOC_FAIL) {
         printf("[ERR] Can't allocate memory\n");
     } else {
-        printf("[ERR](~!~)WERRORHUTGEERRORF(~!~)[ERR]\n");
+        printf("[ERR](~!~)WERROREHUTGEERRORF(~!~)[ERR]\n");
     }
 }
 

@@ -24,7 +24,7 @@ int main(const int argc, char **argv) {
         fout_name = argv[2];
     }
 
-    File_t fin = {};
+    File_t fin =;
     int ret = read_file(&fin, fin_name);
     if (ret < 0) {
         print_error(ret);

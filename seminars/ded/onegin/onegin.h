@@ -53,7 +53,7 @@ char rhyming_lines(const Line_t *first, const Line_t *second, const size_t depth
 void gen_strofa(const Line_t **lines, const size_t lines_cnt, unsigned int *buffer, const size_t rhyme_depth);
 
 //=============================================================================
-//========================== REALISATON =======================================
+//========================== REALISATION ======================================
 //=============================================================================
 
 void calculate_ending(Line_t *line, const size_t rhyme_depth) {
@@ -122,7 +122,7 @@ void gen_strofa(const Line_t **lines, const size_t lines_cnt, unsigned int *buff
             }
 
             int line_index = (((int) rand()) % (lines_cnt / 14)) * 14 + i;
-            Line_t *line = lines[line_index];
+            const Line_t *line = lines[line_index];
             if (i == 0 || i == 1 || i == 4 || i == 6 || i == 8 || i == 9 || i == 12) {  // COMMENTS
                 buffer[i] = line_index;
                 break;
