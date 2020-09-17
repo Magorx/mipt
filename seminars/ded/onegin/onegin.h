@@ -58,7 +58,7 @@ void gen_strofa(const Line_t **lines, const size_t lines_cnt, unsigned int *buff
 
 void calculate_ending(Line_t *line, const size_t rhyme_depth) {
     int i = line->len - 1;
-    while(!is_letter(line->string[i]) && i) {
+    while(!is_countable(line->string[i]) && i) {
         --i;
     }
     if (!i) {
@@ -79,14 +79,14 @@ int rhyme_compare_lines(const void **elem1, const void **elem2) {
     int i = line1->len - 1;
     int j = line2->len - 1;
     while (i >= 0 && j >= 0) {
-        while (!is_letter(str1[i]) && str1[i]) {
+        while (!is_countable(str1[i]) && str1[i]) {
             --i;
         }
-        while (!is_letter(str2[j]) && str2[j]) {
+        while (!is_countable(str2[j]) && str2[j]) {
             --j;
         }
 
-        if (str1[i] != str2[i] || i * j == 0) {
+        if (str1[i] != str2[j] || i * j == 0) {
             return str1[i] - str2[j];
         }
 

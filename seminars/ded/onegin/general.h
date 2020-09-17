@@ -8,7 +8,7 @@
 
 #include <assert.h>
 
-const int KCTF_DEBUG_MODE = 1; /// Just a mode for debugging
+const int KCTF_DEBUG_LEVEL = 2; /// Just a mode for debugging
 
 int           DEBUG_NUMBER = 1;   ///< Just an int for debugging
 unsigned char DEBUG_LETTER = 'a'; ///< Just a char for debugging
@@ -19,7 +19,7 @@ unsigned char DEBUG_LETTER = 'a'; ///< Just a char for debugging
 #define DEBUG_NUMBER_INCR() DEBUG_NUMBER++;
 #define DEBUG_LETTER_INCR() DEBUG_LETTER++;
 
-#define DEBUG if(KCTF_DEBUG_MODE)
+#define DEBUG(LEVEL) if (LEVEL <= KCTF_DEBUG_LEVEL)
 
 /// Current project's setting
 enum CURRENT_PROJECT_SETTINGS { // special for Onegin
@@ -38,6 +38,7 @@ enum ERRORS {
 struct Line {
     unsigned char *string;
     size_t len;
+    int index;
     unsigned char ending[RHYME_DEPTH + 1]; // special for Onegin
 };
 
@@ -129,15 +130,6 @@ int read_lines(File_t *file);
 */
 void print_file(const File_t *file, const char *fout);
 
-/**
-    \brief Checks if c is a Russian letter
-
-    .
-
-    \param[in] c char to check
-    \return true if c is a Russian letter, else false
-*/
-char is_russian_letter(const unsigned char c);
 
 /**
     \brief Checks if c is a Russian or an English letter
@@ -147,7 +139,7 @@ char is_russian_letter(const unsigned char c);
     \param[in] c char to check
     \return true if c is a Russian or an English letter, else false
 */
-char is_letter(const unsigned char c);
+int is_countable(const unsigned char c);
 
 /**
     \brief Swaps contains of two ptrs
@@ -173,13 +165,8 @@ void print_error(int error);
 //============================ IMPLEMENTATION =================================
 //=============================================================================
 
-
-char __costyle__is_russian_letter(const unsigned char c) {
-    return (c >= (unsigned char) 'À' && c <= (unsigned char) 'ß') || (c >= (unsigned char) 'à' && c <= (unsigned char) 'ÿ');
-}
-
-char is_letter(const unsigned char c) {
-    return isalpha(c);
+int is_countable(const unsigned char c) {
+    return isalnum(c);
 }
 
 void swap_ptrs(void **first, void **second) {
@@ -202,28 +189,32 @@ void qqh_sort(void *arr, const size_t elem_cnt, const size_t elem_size, int (*co
     }
 }
 
-int compare_lines_letters(const void *elem1, const void *elem2) {
-    const unsigned char* str1 = (**(Line_t**)elem1).string;
-    const unsigned char* str2 = (**(Line_t**)elem2).string;
-
-    int i = 0;
-    int j = 0;
-    while (str1[i] && str2[j]) {
-        while (!is_letter(str1[i]) && str1[i]) {
-            ++i;
-        }
-        while (!is_letter(str2[j]) && str2[j]) {
-            ++j;
-        }
-
-        if (str1[i] != str2[i] || str1[i] * str2[i] == 0) {
-            return str1[i] - str2[j];
-        }
-
-        ++i;
-        ++j;
+void get_next_letter(unsigned char **c) {
+    char *cur_c = *c;
+    while(!is_countable(*cur_c) && *cur_c) {
+        ++cur_c;
     }
-    return str1[i] - str2[j];
+    *c = cur_c;
+}
+
+int compare_lines_letters(const void *elem1, const void *elem2) {
+    unsigned char *first_c  = ((**(Line_t**)elem1).string);
+    unsigned char *second_c = ((**(Line_t**)elem2).string);
+
+    while (*first_c && *second_c) {
+        get_next_letter(&first_c);
+        get_next_letter(&second_c);
+
+        if (*first_c != *second_c || (*first_c) * (*second_c) == 0) {
+            return (int) *first_c - (int) *second_c;
+        }
+
+        ++first_c;
+        ++second_c;
+    }
+    get_next_letter(&first_c);
+    get_next_letter(&second_c);
+    return (int) *first_c - (int) *second_c;
 }
 
 int reverse_compare_lines_letters(const void **elem1, const void **elem2) {
@@ -259,12 +250,9 @@ int read_file(File_t *file, const char *name) {
 int read_lines(File_t *file) {
     assert(file);
 
-    DEBUG {printf("Working with [%s] file\n", file->name);}
+    DEBUG(1) {printf("Working with [%s] file\n", file->name);}
 
     file->file_dscr = open(file->name, O_BINARY);
-    if (!file->file_dscr) {
-        return ERROR_FILE_NOT_FOUND;
-    }
 
     read(file->file_dscr, file->text, file->info.st_size);
     int lines_cnt = 0;
@@ -272,7 +260,7 @@ int read_lines(File_t *file) {
         lines_cnt += *c == '\n';
     }
     file->lines = calloc(lines_cnt, sizeof(Line_t*));
-    if (!file->lines) {
+    if (file->lines == NULL) {
         return ERROR_MALLOC_FAIL;
     }
 
@@ -283,11 +271,12 @@ int read_lines(File_t *file) {
         ++lines_cnt;
 
         file->lines[lines_cnt] = calloc(1, sizeof(Line_t));
-        if (!file->lines[lines_cnt]) {
+        Line_t *line_ptr = file->lines[lines_cnt];
+        if (line_ptr == NULL) {
             return ERROR_MALLOC_FAIL;
         }
-        Line_t *line_ptr = file->lines[lines_cnt];
         line_ptr->string = c;
+        line_ptr->index = lines_cnt;
 
         while(*c != '\n') {
             ++line_len;
@@ -302,7 +291,7 @@ int read_lines(File_t *file) {
         line_ptr->len = line_len;
         line_len = 0;
     }
-    file->lines_cnt = lines_cnt;
+    file->lines_cnt = lines_cnt + 1;
 
     return lines_cnt + 1;
 }
@@ -332,6 +321,39 @@ void print_error(int error) {
         printf("[ERR] Can't allocate memory\n");
     } else {
         printf("[ERR](~!~)WERRORHUTGEERRORF(~!~)[ERR]\n");
+    }
+}
+
+
+// UNIT TESTS
+
+int utest_compare_lines_letters() {
+    srand(time(NULL));
+    File_t file = {};
+    read_file(&file, "utest_compare_lines_letters.txt");
+    for (size_t itter = 0; itter < 1000; ++itter) {
+        for (size_t i = 0; i < file.lines_cnt / 2; ++i) {
+            const size_t x = rand() % file.lines_cnt;
+            const size_t y = rand() % file.lines_cnt;
+            Line_t *tmp = file.lines[x];
+            file.lines[x] = file.lines[y];
+            file.lines[y] = tmp;
+        }
+
+        qsort(file.lines, file.lines_cnt, sizeof(Line_t*), compare_lines_letters);
+
+        for (int i = 0; i < file.lines_cnt - 1; ++i) {
+            if (file.lines[i]->index > file.lines[i + 1]->index && compare_lines_letters(&file.lines[i], &file.lines[i + 1])) {
+                printf("[ERR] \"%s\" > \"%s\"\n", file.lines[i]->string, file.lines[i + 1]->string);
+                printf("[ ! ] indexes: %d > %d\n", file.lines[i]->index, file.lines[i + 1]->index);
+                DEBUG(2) {
+                    printf("====\n");
+                    for (int i = 0; i < file.lines_cnt; ++i) {
+                        printf("%s\n", file.lines[i]->string);
+                    }
+                }
+            }
+        }
     }
 }
 

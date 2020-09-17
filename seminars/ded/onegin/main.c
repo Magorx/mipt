@@ -12,8 +12,14 @@
 #include "general.h"
 #include "onegin.h"
 
+#define TEST
+
 int main(const int argc, char **argv) {
     setlocale(LC_CTYPE,"Russian");
+
+    #ifdef TEST
+        utest_compare_lines_letters();
+    #else
 
     char *fin_name  = "onegin.txt";
     char *fout_name = "oneginized.txt";
@@ -41,6 +47,7 @@ int main(const int argc, char **argv) {
 
     qsort(fin.lines, fin.lines_cnt, sizeof(Line_t*), compare_lines_letters);
 
+    #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wformat" // Ignoring unexistance of %z in older versions of compiler
     #pragma GCC diagnostic ignored "-Wformat-extra-args" // Ignoring printf warning
     printf("%zu lines are read!\n", fin.lines_cnt);
@@ -56,6 +63,7 @@ int main(const int argc, char **argv) {
     }
 
     free_memory_file(&fin);
+    #endif
 
     return 0;
 
