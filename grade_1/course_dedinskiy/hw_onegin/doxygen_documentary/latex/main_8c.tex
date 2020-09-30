@@ -1,5 +1,5 @@
-\hypertarget{main_8c}{}\doxysection{C\+:/\+Users/maxim/\+Desktop/mipt/seminars/ded/onegin/main.c File Reference}
-\label{main_8c}\index{C:/Users/maxim/Desktop/mipt/seminars/ded/onegin/main.c@{C:/Users/maxim/Desktop/mipt/seminars/ded/onegin/main.c}}
+\hypertarget{main_8c}{}\doxysection{C\+:/\+Users/maxim/\+Desktop/mipt/grade\+\_\+1/course\+\_\+dedinskiy/hw\+\_\+onegin/main.c File Reference}
+\label{main_8c}\index{C:/Users/maxim/Desktop/mipt/grade\_1/course\_dedinskiy/hw\_onegin/main.c@{C:/Users/maxim/Desktop/mipt/grade\_1/course\_dedinskiy/hw\_onegin/main.c}}
 {\ttfamily \#include $<$assert.\+h$>$}\newline
 {\ttfamily \#include $<$ctype.\+h$>$}\newline
 {\ttfamily \#include $<$fcntl.\+h$>$}\newline
@@ -15,14 +15,87 @@
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \mbox{\hyperlink{main_8c_aa06f5fbe915d0bf149dcf793acea47a1}{main}} (const int argc, char $\ast$$\ast$argv)
+int \mbox{\hyperlink{main_8c_ac762d48b889bd832ec0d42abcbc50624}{main}} (const int argc, const char $\ast$$\ast$argv)
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Function Documentation}
-\mbox{\Hypertarget{main_8c_aa06f5fbe915d0bf149dcf793acea47a1}\label{main_8c_aa06f5fbe915d0bf149dcf793acea47a1}} 
+\mbox{\Hypertarget{main_8c_ac762d48b889bd832ec0d42abcbc50624}\label{main_8c_ac762d48b889bd832ec0d42abcbc50624}} 
 \index{main.c@{main.c}!main@{main}}
 \index{main@{main}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{main()}{main()}}
-{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{const int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{const int}]{argc,  }\item[{const char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+
+
+Definition at line 17 of file main.\+c.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{17                                             \{   \textcolor{comment}{//-\/-\/locale=  -\/-\/test}}
+\DoxyCodeLine{18     setlocale(LC\_CTYPE,\textcolor{stringliteral}{"{}Russian"{}});}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{preprocessor}{    \#ifdef TEST}}
+\DoxyCodeLine{21         \mbox{\hyperlink{general_8h_a3bb4c5d8fe0510d2ff3927d5df0cb77d}{utest\_compare\_lines\_letters}}();}
+\DoxyCodeLine{22 \textcolor{preprocessor}{    \#else}}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *fin\_name  = \textcolor{stringliteral}{"{}onegin.txt"{}};}
+\DoxyCodeLine{25     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *fout\_name = \textcolor{stringliteral}{"{}oneginized.txt"{}};}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27     \textcolor{keywordflow}{if} (argc > 1) \{}
+\DoxyCodeLine{28         fin\_name = argv[1];}
+\DoxyCodeLine{29     \}}
+\DoxyCodeLine{30     \textcolor{keywordflow}{if} (argc > 2) \{}
+\DoxyCodeLine{31         fout\_name = argv[2];}
+\DoxyCodeLine{32     \}}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34     \mbox{\hyperlink{struct_file}{File\_t}} fin = \{\};}
+\DoxyCodeLine{35     \textcolor{keywordtype}{int} ret = \mbox{\hyperlink{general_8h_a0961f50e15b1235c5da18b1a5c175600}{read\_file}}(\&fin, fin\_name);}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37     \textcolor{keywordflow}{if} (ret < 0) \{}
+\DoxyCodeLine{38         \mbox{\hyperlink{general_8h_a968801b6df4daa98b46851157bfbacab}{print\_error}}(ret);}
+\DoxyCodeLine{39         \mbox{\hyperlink{general_8h_a1055de61d50fcfbb0213c024835faf82}{free\_memory\_file}}(\&fin);}
+\DoxyCodeLine{40         \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{41     \}}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43     \textcolor{keywordflow}{if} (fin.\mbox{\hyperlink{struct_file_a85f126080299822a269dc997380bc82d}{lines\_cnt}} < 0) \{}
+\DoxyCodeLine{44         \mbox{\hyperlink{general_8h_a968801b6df4daa98b46851157bfbacab}{print\_error}}(fin.\mbox{\hyperlink{struct_file_a85f126080299822a269dc997380bc82d}{lines\_cnt}});}
+\DoxyCodeLine{45         \mbox{\hyperlink{general_8h_a1055de61d50fcfbb0213c024835faf82}{free\_memory\_file}}(\&fin);}
+\DoxyCodeLine{46         \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{47     \}}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < fin.\mbox{\hyperlink{struct_file_a85f126080299822a269dc997380bc82d}{lines\_cnt}}; ++i) \{}
+\DoxyCodeLine{50         \mbox{\hyperlink{onegin_8h_a45d88f30d901015b1751d24168912c1c}{calculate\_ending}}(fin.\mbox{\hyperlink{struct_file_adea76cb2f293b2d8e8ba54cb0f77b543}{lines}}[i], \mbox{\hyperlink{general_8h_a13eddf75a7a1d8d6753cc724a7ebe9dea5f0c81b484e3946f1b9c3be896877e5d}{RHYME\_DEPTH}});}
+\DoxyCodeLine{51     \}}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{53     qsort(fin.\mbox{\hyperlink{struct_file_adea76cb2f293b2d8e8ba54cb0f77b543}{lines}}, fin.\mbox{\hyperlink{struct_file_a85f126080299822a269dc997380bc82d}{lines\_cnt}}, \textcolor{keyword}{sizeof}(\mbox{\hyperlink{struct_line}{Line\_t}}*), \mbox{\hyperlink{general_8h_a9e4178e0b6b2d0d0a4d4defdb7e6fb0c}{compare\_lines\_letters}});}
+\DoxyCodeLine{54 }
+\DoxyCodeLine{55 \textcolor{preprocessor}{    \#pragma GCC diagnostic push}}
+\DoxyCodeLine{56 \textcolor{preprocessor}{    \#pragma GCC diagnostic ignored "{}-\/Wformat"{}            // Ignoring unexistance of \%z in older versions of compiler}}
+\DoxyCodeLine{57 \textcolor{preprocessor}{    \#pragma GCC diagnostic ignored "{}-\/Wformat-\/extra-\/args"{} // Ignoring printf warning if \%z is not included in current version}}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{59     printf(\textcolor{stringliteral}{"{}\%zu lines are read!\(\backslash\)n"{}}, fin.\mbox{\hyperlink{struct_file_a85f126080299822a269dc997380bc82d}{lines\_cnt}});}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{61 \textcolor{preprocessor}{    \#pragma GCC diagnostic pop}}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{63     \mbox{\hyperlink{general_8h_a08fbef9186d83138dd735b07dcadc418}{print\_file}}(\&fin, fout\_name, \textcolor{stringliteral}{"{}w"{}});}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} buffer[\mbox{\hyperlink{general_8h_a13eddf75a7a1d8d6753cc724a7ebe9dea8e734a16d0cec75737e2672777b7eb59}{STROFA\_SIZE}}] = \{\};}
+\DoxyCodeLine{66     \mbox{\hyperlink{onegin_8h_a57decb75338e2619a6b0a124c656fb1e}{gen\_strofa}}((\textcolor{keyword}{const} \mbox{\hyperlink{struct_line}{Line\_t}}**)fin.\mbox{\hyperlink{struct_file_adea76cb2f293b2d8e8ba54cb0f77b543}{lines}}, fin.\mbox{\hyperlink{struct_file_a85f126080299822a269dc997380bc82d}{lines\_cnt}}, buffer, \mbox{\hyperlink{general_8h_a13eddf75a7a1d8d6753cc724a7ebe9dea5f0c81b484e3946f1b9c3be896877e5d}{RHYME\_DEPTH}});}
+\DoxyCodeLine{67     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < \mbox{\hyperlink{general_8h_a13eddf75a7a1d8d6753cc724a7ebe9dea8e734a16d0cec75737e2672777b7eb59}{STROFA\_SIZE}}; ++i) \{}
+\DoxyCodeLine{68         printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}}, fin.\mbox{\hyperlink{struct_file_adea76cb2f293b2d8e8ba54cb0f77b543}{lines}}[buffer[i]]-\/>\mbox{\hyperlink{struct_line_ad081955d87f3cc679c0fec87ed8b024f}{string}});}
+\DoxyCodeLine{69     \}}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{71     \mbox{\hyperlink{general_8h_a1055de61d50fcfbb0213c024835faf82}{free\_memory\_file}}(\&fin);}
+\DoxyCodeLine{72 }
+\DoxyCodeLine{73 \textcolor{preprocessor}{    \#endif}}
+\DoxyCodeLine{74 }
+\DoxyCodeLine{75     \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77 \}}
+
+\end{DoxyCode}
+
+
+References calculate\+\_\+ending(), compare\+\_\+lines\+\_\+letters(), free\+\_\+memory\+\_\+file(), gen\+\_\+strofa(), File\+::lines, File\+::lines\+\_\+cnt, print\+\_\+error(), print\+\_\+file(), read\+\_\+file(), R\+H\+Y\+M\+E\+\_\+\+D\+E\+P\+TH, Line\+::string, S\+T\+R\+O\+F\+A\+\_\+\+S\+I\+ZE, and utest\+\_\+compare\+\_\+lines\+\_\+letters().
 

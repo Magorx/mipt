@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['print_5ferror_17',['print_error',['../general_8h.html#a968801b6df4daa98b46851157bfbacab',1,'general.h']]],
-  ['print_5ffile_18',['print_file',['../general_8h.html#ac206af286037817cd128b36f82f10312',1,'general.h']]]
+  ['name_33',['name',['../struct_file.html#ad163532bb70e18dd6492c040cac53d1d',1,'File']]]
 ];

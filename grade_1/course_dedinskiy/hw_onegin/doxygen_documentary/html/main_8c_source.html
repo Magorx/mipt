@@ -5,10 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.20"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Onegin: C:/Users/maxim/Desktop/mipt/seminars/ded/onegin/main.c Source File</title>
+<title>Onegin: C:/Users/maxim/Desktop/mipt/grade_1/course_dedinskiy/hw_onegin/main.c Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -47,6 +51,22 @@ $(function() {
 /* @license-end */</script>
 <div id="main-nav"></div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('main_8c_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -63,12 +83,12 @@ $(function() {
 
 <div class="header">
   <div class="headertitle">
-<div class="title">C:/Users/maxim/Desktop/mipt/seminars/ded/onegin/main.c</div>  </div>
+<div class="title">C:/Users/maxim/Desktop/mipt/grade_1/course_dedinskiy/hw_onegin/main.c</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &lt;assert.h&gt;</span></div>
+<a href="main_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &lt;assert.h&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &lt;ctype.h&gt;</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include&lt;fcntl.h&gt;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;fcntl.h&gt;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;io.h&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;locale.h&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
@@ -78,63 +98,97 @@ $(function() {
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;time.h&gt;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="general_8h.html">general.h</a>&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;onegin.h&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="onegin_8h.html">onegin.h</a>&quot;</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keywordtype">int</span> main(<span class="keyword">const</span> <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv) {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    setlocale(LC_ALL,<span class="stringliteral">&quot;Russian&quot;</span>);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keywordtype">char</span> *fin_name  = <span class="stringliteral">&quot;onegin.txt&quot;</span>;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keywordtype">char</span> *fout_name = <span class="stringliteral">&quot;oneginized.txt&quot;</span>;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keywordflow">if</span> (argc &gt; 1) {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        fin_name = argv[1];</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    }</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordflow">if</span> (argc &gt; 2) {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        fout_name = argv[2];</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    }</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="struct_file.html">File_t</a> fin;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keywordtype">int</span> ret = <a class="code" href="general_8h.html#a0961f50e15b1235c5da18b1a5c175600">read_file</a>(&amp;fin, fin_name);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordflow">if</span> (ret &lt; 0) {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <a class="code" href="general_8h.html#a968801b6df4daa98b46851157bfbacab">print_error</a>(ret);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <a class="code" href="general_8h.html#a1055de61d50fcfbb0213c024835faf82">free_memory_file</a>(&amp;fin);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    }</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordflow">if</span> (fin.lines_cnt &lt; 0) {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <a class="code" href="general_8h.html#a968801b6df4daa98b46851157bfbacab">print_error</a>(fin.lines_cnt);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="code" href="general_8h.html#a1055de61d50fcfbb0213c024835faf82">free_memory_file</a>(&amp;fin);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    }</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; fin.lines_cnt; ++i) {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        calculate_ending(fin.lines[i], RHYME_DEPTH);</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//#define TEST</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="main_8c.html#ac762d48b889bd832ec0d42abcbc50624">   17</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="main_8c.html#ac762d48b889bd832ec0d42abcbc50624">main</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span> **argv) {   <span class="comment">//--locale=  --test</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    setlocale(LC_CTYPE,<span class="stringliteral">&quot;Russian&quot;</span>);</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">    #ifdef TEST</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <a class="code" href="general_8h.html#a3bb4c5d8fe0510d2ff3927d5df0cb77d">utest_compare_lines_letters</a>();</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">    #else</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *fin_name  = <span class="stringliteral">&quot;onegin.txt&quot;</span>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *fout_name = <span class="stringliteral">&quot;oneginized.txt&quot;</span>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordflow">if</span> (argc &gt; 1) {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        fin_name = argv[1];</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    }</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordflow">if</span> (argc &gt; 2) {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        fout_name = argv[2];</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    }</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="struct_file.html">File_t</a> fin = {};</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">int</span> ret = <a class="code" href="general_8h.html#a0961f50e15b1235c5da18b1a5c175600">read_file</a>(&amp;fin, fin_name);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordflow">if</span> (ret &lt; 0) {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="code" href="general_8h.html#a968801b6df4daa98b46851157bfbacab">print_error</a>(ret);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="code" href="general_8h.html#a1055de61d50fcfbb0213c024835faf82">free_memory_file</a>(&amp;fin);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    qsort(fin.lines, fin.lines_cnt, <span class="keyword">sizeof</span>(<a class="code" href="struct_line.html">Line_t</a>*), <a class="code" href="general_8h.html#aa5d6429086b21a550354662e13e71ed0">compare_lines_letters</a>);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    printf(<span class="stringliteral">&quot;%d lines are read!\n&quot;</span>, fin.lines_cnt);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="general_8h.html#ac206af286037817cd128b36f82f10312">print_file</a>(&amp;fin, fout_name);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> buffer[STROFA_SIZE];</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    gen_strofa(fin.lines, fin.lines_cnt, buffer, RHYME_DEPTH);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; STROFA_SIZE; ++i) {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        printf(<span class="stringliteral">&quot;%s\n&quot;</span>, fin.lines[buffer[i]]-&gt;string);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">if</span> (fin.<a class="code" href="struct_file.html#a85f126080299822a269dc997380bc82d">lines_cnt</a> &lt; 0) {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="general_8h.html#a968801b6df4daa98b46851157bfbacab">print_error</a>(fin.<a class="code" href="struct_file.html#a85f126080299822a269dc997380bc82d">lines_cnt</a>);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="general_8h.html#a1055de61d50fcfbb0213c024835faf82">free_memory_file</a>(&amp;fin);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; fin.<a class="code" href="struct_file.html#a85f126080299822a269dc997380bc82d">lines_cnt</a>; ++i) {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="code" href="onegin_8h.html#a45d88f30d901015b1751d24168912c1c">calculate_ending</a>(fin.<a class="code" href="struct_file.html#adea76cb2f293b2d8e8ba54cb0f77b543">lines</a>[i], <a class="code" href="general_8h.html#a13eddf75a7a1d8d6753cc724a7ebe9dea5f0c81b484e3946f1b9c3be896877e5d">RHYME_DEPTH</a>);</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <a class="code" href="general_8h.html#a1055de61d50fcfbb0213c024835faf82">free_memory_file</a>(&amp;fin);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    qsort(fin.<a class="code" href="struct_file.html#adea76cb2f293b2d8e8ba54cb0f77b543">lines</a>, fin.<a class="code" href="struct_file.html#a85f126080299822a269dc997380bc82d">lines_cnt</a>, <span class="keyword">sizeof</span>(<a class="code" href="struct_line.html">Line_t</a>*), <a class="code" href="general_8h.html#a9e4178e0b6b2d0d0a4d4defdb7e6fb0c">compare_lines_letters</a>);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;}</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">    #pragma GCC diagnostic push</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">    #pragma GCC diagnostic ignored &quot;-Wformat&quot;            // Ignoring unexistance of %z in older versions of compiler</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">    #pragma GCC diagnostic ignored &quot;-Wformat-extra-args&quot; // Ignoring printf warning if %z is not included in current version</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    printf(<span class="stringliteral">&quot;%zu lines are read!\n&quot;</span>, fin.<a class="code" href="struct_file.html#a85f126080299822a269dc997380bc82d">lines_cnt</a>);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">    #pragma GCC diagnostic pop</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <a class="code" href="general_8h.html#a08fbef9186d83138dd735b07dcadc418">print_file</a>(&amp;fin, fout_name, <span class="stringliteral">&quot;w&quot;</span>);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> buffer[<a class="code" href="general_8h.html#a13eddf75a7a1d8d6753cc724a7ebe9dea8e734a16d0cec75737e2672777b7eb59">STROFA_SIZE</a>] = {};</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <a class="code" href="onegin_8h.html#a57decb75338e2619a6b0a124c656fb1e">gen_strofa</a>((<span class="keyword">const</span> <a class="code" href="struct_line.html">Line_t</a>**)fin.<a class="code" href="struct_file.html#adea76cb2f293b2d8e8ba54cb0f77b543">lines</a>, fin.<a class="code" href="struct_file.html#a85f126080299822a269dc997380bc82d">lines_cnt</a>, buffer, <a class="code" href="general_8h.html#a13eddf75a7a1d8d6753cc724a7ebe9dea5f0c81b484e3946f1b9c3be896877e5d">RHYME_DEPTH</a>);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; <a class="code" href="general_8h.html#a13eddf75a7a1d8d6753cc724a7ebe9dea8e734a16d0cec75737e2672777b7eb59">STROFA_SIZE</a>; ++i) {</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        printf(<span class="stringliteral">&quot;%s\n&quot;</span>, fin.<a class="code" href="struct_file.html#adea76cb2f293b2d8e8ba54cb0f77b543">lines</a>[buffer[i]]-&gt;<a class="code" href="struct_line.html#ad081955d87f3cc679c0fec87ed8b024f">string</a>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <a class="code" href="general_8h.html#a1055de61d50fcfbb0213c024835faf82">free_memory_file</a>(&amp;fin);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">    #endif</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="ageneral_8h_html"><div class="ttname"><a href="general_8h.html">general.h</a></div><div class="ttdoc">Заголовочный файл с описанием классов</div></div>
-<div class="ttc" id="ageneral_8h_html_aa5d6429086b21a550354662e13e71ed0"><div class="ttname"><a href="general_8h.html#aa5d6429086b21a550354662e13e71ed0">compare_lines_letters</a></div><div class="ttdeci">int compare_lines_letters(const void **elem1, const void **elem2)</div><div class="ttdoc">Comparator for two lines.</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00206">general.h:206</a></div></div>
-<div class="ttc" id="ageneral_8h_html_a0961f50e15b1235c5da18b1a5c175600"><div class="ttname"><a href="general_8h.html#a0961f50e15b1235c5da18b1a5c175600">read_file</a></div><div class="ttdeci">int read_file(File_t *file, const char *name)</div><div class="ttdoc">Reads file.</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00246">general.h:246</a></div></div>
-<div class="ttc" id="ageneral_8h_html_a1055de61d50fcfbb0213c024835faf82"><div class="ttname"><a href="general_8h.html#a1055de61d50fcfbb0213c024835faf82">free_memory_file</a></div><div class="ttdeci">void free_memory_file(const File_t *file)</div><div class="ttdoc">Calls all necessary free's.</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00234">general.h:234</a></div></div>
-<div class="ttc" id="astruct_line_html"><div class="ttname"><a href="struct_line.html">Line</a></div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00041">general.h:41</a></div></div>
-<div class="ttc" id="ageneral_8h_html_ac206af286037817cd128b36f82f10312"><div class="ttname"><a href="general_8h.html#ac206af286037817cd128b36f82f10312">print_file</a></div><div class="ttdeci">void print_file(const File_t *file, const char *fout)</div><div class="ttdoc">Prints file into given file.</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00311">general.h:311</a></div></div>
-<div class="ttc" id="astruct_file_html"><div class="ttname"><a href="struct_file.html">File</a></div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00050">general.h:50</a></div></div>
-<div class="ttc" id="ageneral_8h_html_a968801b6df4daa98b46851157bfbacab"><div class="ttname"><a href="general_8h.html#a968801b6df4daa98b46851157bfbacab">print_error</a></div><div class="ttdeci">void print_error(int error)</div><div class="ttdoc">Prints text error message to standard output.</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00323">general.h:323</a></div></div>
+</div><!-- doc-content -->
+<div class="ttc" id="ageneral_8h_html"><div class="ttname"><a href="general_8h.html">general.h</a></div><div class="ttdoc">General functions to be used in all projects.</div></div>
+<div class="ttc" id="ageneral_8h_html_a0961f50e15b1235c5da18b1a5c175600"><div class="ttname"><a href="general_8h.html#a0961f50e15b1235c5da18b1a5c175600">read_file</a></div><div class="ttdeci">int read_file(File_t *file, const char *name)</div><div class="ttdoc">Reads file.</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00236">general.h:236</a></div></div>
+<div class="ttc" id="ageneral_8h_html_a1055de61d50fcfbb0213c024835faf82"><div class="ttname"><a href="general_8h.html#a1055de61d50fcfbb0213c024835faf82">free_memory_file</a></div><div class="ttdeci">void free_memory_file(const File_t *file)</div><div class="ttdoc">Calls all necessary free's.</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00224">general.h:224</a></div></div>
+<div class="ttc" id="aonegin_8h_html_a57decb75338e2619a6b0a124c656fb1e"><div class="ttname"><a href="onegin_8h.html#a57decb75338e2619a6b0a124c656fb1e">gen_strofa</a></div><div class="ttdeci">void gen_strofa(const Line_t **lines, const size_t lines_cnt, unsigned int *buffer, const size_t rhyme_depth)</div><div class="ttdoc">Generates new strofa from random strings.</div><div class="ttdef"><b>Definition:</b> <a href="onegin_8h_source.html#l00110">onegin.h:110</a></div></div>
+<div class="ttc" id="astruct_line_html"><div class="ttname"><a href="struct_line.html">Line</a></div><div class="ttdoc">Handmade stringview.</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00038">general.h:38</a></div></div>
+<div class="ttc" id="ageneral_8h_html_a13eddf75a7a1d8d6753cc724a7ebe9dea5f0c81b484e3946f1b9c3be896877e5d"><div class="ttname"><a href="general_8h.html#a13eddf75a7a1d8d6753cc724a7ebe9dea5f0c81b484e3946f1b9c3be896877e5d">RHYME_DEPTH</a></div><div class="ttdeci">@ RHYME_DEPTH</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00028">general.h:27</a></div></div>
+<div class="ttc" id="astruct_file_html_adea76cb2f293b2d8e8ba54cb0f77b543"><div class="ttname"><a href="struct_file.html#adea76cb2f293b2d8e8ba54cb0f77b543">File::lines</a></div><div class="ttdeci">Line_t ** lines</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00055">general.h:55</a></div></div>
+<div class="ttc" id="astruct_file_html_a85f126080299822a269dc997380bc82d"><div class="ttname"><a href="struct_file.html#a85f126080299822a269dc997380bc82d">File::lines_cnt</a></div><div class="ttdeci">size_t lines_cnt</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00054">general.h:54</a></div></div>
+<div class="ttc" id="aonegin_8h_html_a45d88f30d901015b1751d24168912c1c"><div class="ttname"><a href="onegin_8h.html#a45d88f30d901015b1751d24168912c1c">calculate_ending</a></div><div class="ttdeci">void calculate_ending(Line_t *line, const size_t rhyme_depth)</div><div class="ttdoc">Calculates an ending of a line.</div><div class="ttdef"><b>Definition:</b> <a href="onegin_8h_source.html#l00059">onegin.h:59</a></div></div>
+<div class="ttc" id="ageneral_8h_html_a13eddf75a7a1d8d6753cc724a7ebe9dea8e734a16d0cec75737e2672777b7eb59"><div class="ttname"><a href="general_8h.html#a13eddf75a7a1d8d6753cc724a7ebe9dea8e734a16d0cec75737e2672777b7eb59">STROFA_SIZE</a></div><div class="ttdeci">@ STROFA_SIZE</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00026">general.h:26</a></div></div>
+<div class="ttc" id="ageneral_8h_html_a3bb4c5d8fe0510d2ff3927d5df0cb77d"><div class="ttname"><a href="general_8h.html#a3bb4c5d8fe0510d2ff3927d5df0cb77d">utest_compare_lines_letters</a></div><div class="ttdeci">int utest_compare_lines_letters()</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00330">general.h:330</a></div></div>
+<div class="ttc" id="aonegin_8h_html"><div class="ttname"><a href="onegin_8h.html">onegin.h</a></div><div class="ttdoc">Main library for Onegin to work.</div></div>
+<div class="ttc" id="astruct_file_html"><div class="ttname"><a href="struct_file.html">File</a></div><div class="ttdoc">Struct to store file's information into.</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00049">general.h:49</a></div></div>
+<div class="ttc" id="astruct_line_html_ad081955d87f3cc679c0fec87ed8b024f"><div class="ttname"><a href="struct_line.html#ad081955d87f3cc679c0fec87ed8b024f">Line::string</a></div><div class="ttdeci">unsigned char * string</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00039">general.h:39</a></div></div>
+<div class="ttc" id="amain_8c_html_ac762d48b889bd832ec0d42abcbc50624"><div class="ttname"><a href="main_8c.html#ac762d48b889bd832ec0d42abcbc50624">main</a></div><div class="ttdeci">int main(const int argc, const char **argv)</div><div class="ttdef"><b>Definition:</b> <a href="main_8c_source.html#l00017">main.c:17</a></div></div>
+<div class="ttc" id="ageneral_8h_html_a08fbef9186d83138dd735b07dcadc418"><div class="ttname"><a href="general_8h.html#a08fbef9186d83138dd735b07dcadc418">print_file</a></div><div class="ttdeci">void print_file(const File_t *file, const char *fout_name, const char *mode)</div><div class="ttdoc">Prints file into given file.</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00299">general.h:299</a></div></div>
+<div class="ttc" id="ageneral_8h_html_a9e4178e0b6b2d0d0a4d4defdb7e6fb0c"><div class="ttname"><a href="general_8h.html#a9e4178e0b6b2d0d0a4d4defdb7e6fb0c">compare_lines_letters</a></div><div class="ttdeci">int compare_lines_letters(const void *elem1, const void *elem2)</div><div class="ttdoc">Comparator for two lines.</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00200">general.h:200</a></div></div>
+<div class="ttc" id="ageneral_8h_html_a968801b6df4daa98b46851157bfbacab"><div class="ttname"><a href="general_8h.html#a968801b6df4daa98b46851157bfbacab">print_error</a></div><div class="ttdeci">void print_error(int error)</div><div class="ttdoc">Prints text error message to standard output.</div><div class="ttdef"><b>Definition:</b> <a href="general_8h_source.html#l00311">general.h:311</a></div></div>
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by&#160;<a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="main_8c.html">main.c</a></li>
+    <li class="footer">Generated by <a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20 </li>
+  </ul>
+</div>
 </body>
 </html>

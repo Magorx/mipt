@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kctf_5fdebug_5fmode_47',['KCTF_DEBUG_MODE',['../general_8h.html#a11263a94441c4a25e79ffe6bbb32efa3',1,'general.h']]]
+  ['ending_73',['ending',['../struct_line.html#afa71332d5025991bf16b543969062d30',1,'Line']]]
 ];

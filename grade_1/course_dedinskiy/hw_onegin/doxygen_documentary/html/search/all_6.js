@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kctf_5fdebug_5fmode_13',['KCTF_DEBUG_MODE',['../general_8h.html#a11263a94441c4a25e79ffe6bbb32efa3',1,'general.h']]]
+  ['kctf_5fdebug_5flevel_25',['KCTF_DEBUG_LEVEL',['../general_8h.html#ab4e1ec286762a01aec76e815a04eb590',1,'general.h']]]
 ];

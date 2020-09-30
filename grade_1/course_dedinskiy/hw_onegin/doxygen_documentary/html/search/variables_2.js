@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['file_5fptr_79',['file_ptr',['../struct_file.html#a660d32ad247f97944b09f34740c5a419',1,'File']]]
+  ['file_5fdscr_74',['file_dscr',['../struct_file.html#aff18202516eb85545d62633587ab50a4',1,'File']]]
 ];

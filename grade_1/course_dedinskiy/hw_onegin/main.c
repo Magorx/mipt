@@ -1,6 +1,18 @@
+//TODO Header
+
+/*
+Name:
+
+Abstract:
+
+Last Edit:
+
+
+*/
+
 #include <assert.h>
 #include <ctype.h>
-#include<fcntl.h>
+#include <fcntl.h>
 #include <io.h>
 #include <locale.h>
 #include <stdio.h>
@@ -12,17 +24,18 @@
 #include "general.h"
 #include "onegin.h"
 
-#define TEST
+//#define TEST
 
-int main(const int argc, char **argv) {
+int main(const int argc, const char **argv) {   //--locale=  --test
     setlocale(LC_CTYPE,"Russian");
 
     #ifdef TEST
         utest_compare_lines_letters();
     #else
 
-    char *fin_name  = "onegin.txt";
-    char *fout_name = "oneginized.txt";
+    const char *fin_name  = "onegin.txt";
+    const char *fout_name = "oneginized.txt";
+
     if (argc > 1) {
         fin_name = argv[1];
     }
@@ -32,15 +45,19 @@ int main(const int argc, char **argv) {
 
     File_t fin = {};
     int ret = read_file(&fin, fin_name);
+
     if (ret < 0) {
         print_error(ret);
         free_memory_file(&fin);
+        return 0;
     }
+
     if (fin.lines_cnt < 0) {
         print_error(fin.lines_cnt);
         free_memory_file(&fin);
         return 0;
     }
+
     for (int i = 0; i < fin.lines_cnt; ++i) {
         calculate_ending(fin.lines[i], RHYME_DEPTH);
     }
@@ -48,21 +65,23 @@ int main(const int argc, char **argv) {
     qsort(fin.lines, fin.lines_cnt, sizeof(Line_t*), compare_lines_letters);
 
     #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wformat" // Ignoring unexistance of %z in older versions of compiler
-    #pragma GCC diagnostic ignored "-Wformat-extra-args" // Ignoring printf warning
+    #pragma GCC diagnostic ignored "-Wformat"            // Ignoring unexistance of %z in older versions of compiler
+    #pragma GCC diagnostic ignored "-Wformat-extra-args" // Ignoring printf warning if %z is not included in current version
+
     printf("%zu lines are read!\n", fin.lines_cnt);
-    #pragma GCC diagnostic pop
+
     #pragma GCC diagnostic pop
 
-    print_file(&fin, fout_name);
+    print_file(&fin, fout_name, "w");
 
-    unsigned int buffer[STROFA_SIZE];
+    unsigned int buffer[STROFA_SIZE] = {};
     gen_strofa((const Line_t**)fin.lines, fin.lines_cnt, buffer, RHYME_DEPTH);
     for (int i = 0; i < STROFA_SIZE; ++i) {
         printf("%s\n", fin.lines[buffer[i]]->string);
     }
 
     free_memory_file(&fin);
+
     #endif
 
     return 0;

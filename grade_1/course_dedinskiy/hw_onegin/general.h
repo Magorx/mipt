@@ -3,15 +3,29 @@
     \brief General functions to be used in all projects
 */
 
+
+/*
+NOTES:
+    +1) Неизвестно, что такое get_next_letter (docs), is_countable не говорящее название
+    +2) Гигантские строчки, вьетнамские флешбеки с задач на ДП
+    -) Маловато переносов строки на мой вкус
+    ?4) Если честно, разобраться, что происходит - нетривиальная задача, ХАЧУ КАММЕНТЫ
+    +5) assert ы не везде, А КАК ЖЕ ПЕРФЕКЦИОНИЗМ??
+*/
+
 #ifndef KCTF_GENERAL_H
 #define KCTF_GENERAL_H
 
 #include <assert.h>
 
-const int KCTF_DEBUG_LEVEL = 2; /// Just a mode for debugging
+//<KCTF> Everyday_staff =======================================================
+
+const int KCTF_DEBUG_LEVEL = 2; ///< Just a mode for debugging
 
 int           DEBUG_NUMBER = 1;   ///< Just an int for debugging
 unsigned char DEBUG_LETTER = 'a'; ///< Just a char for debugging
+
+//Just Joking
 
 #define DEBUG_NUMBER_PRINT() printf("[deb] %d [deb]\n", DEBUG_NUMBER++);
 #define DEBUG_LETTER_PRINT() printf("[deb] %c [deb]\n", DEBUG_LETTER++);
@@ -21,24 +35,33 @@ unsigned char DEBUG_LETTER = 'a'; ///< Just a char for debugging
 
 #define DEBUG(LEVEL) if (LEVEL <= KCTF_DEBUG_LEVEL)
 
+const int INT_P = 7777777; /// Poison int
+
+///  Return codes
+enum RETURN_CODES {
+    ERROR_FILE_NOT_FOUND = -10,
+    ERROR_BIG_FILE,
+    ERROR_MALLOC_FAIL,
+    ERROR_NULL_OBJECT,
+    ERROR_NO_RET_CODE,
+    ERROR_BAD_ARGS,
+    NULL_OBJ_OK = 0,
+    RET_OK = 0,
+};
+
+//=============================================================================
+
 /// Current project's setting
 enum CURRENT_PROJECT_SETTINGS { // special for Onegin
     STROFA_SIZE = 14,
     RHYME_DEPTH = 4
 };
 
-///  Errors codes
-enum ERRORS {
-    ERROR_FILE_NOT_FOUND = -10,
-    ERROR_BIG_FILE,
-    ERROR_MALLOC_FAIL
-};
-
 /// Handmade stringview
 struct Line {
     unsigned char *string;
     size_t len;
-    int index;
+    int index; // for debug !#!@#@!#@!#@!#
     unsigned char ending[RHYME_DEPTH + 1]; // special for Onegin
 };
 
@@ -68,7 +91,7 @@ typedef struct File File_t;
     \param[in] elem_size size of each element in bytes
     \param[in] comp comparator returning an int <0 of elem1<elem2, 0 if elem1=elem2, >0 if elem1>elem2
 */
-void qqh_sort(void *arr, const size_t elem_cnt, const size_t elem_size, int (*comp)(void *elem1, void *elem2));
+void qqh_sort(void *arr, const size_t elem_cnt, const size_t elem_size, int (*comp)(const void *elem1, const void *elem2));
 
 /**
     \brief Comparator for two lines
@@ -128,7 +151,7 @@ int read_lines(File_t *file);
     \param[in] file file containing text to write
     \param[in] output file name
 */
-void print_file(const File_t *file, const char *fout);
+void print_file(const File_t *file, const char *fout_name, const char *mode);
 
 
 /**
@@ -162,21 +185,28 @@ void print_error(int error);
 
 
 //=============================================================================
-//============================ IMPLEMENTATION =================================
+/// @name IMPLEMENTATION
 //=============================================================================
+/// @{
 
 int is_countable(const unsigned char c) {
     return isalnum(c);
 }
 
 void swap_ptrs(void **first, void **second) {
+    assert(first);
+    assert(second);
+
     void *tmp = *second;
     *second = *first;
     *first = tmp;
 }
 
-void qqh_sort(void *arr, const size_t elem_cnt, const size_t elem_size, int (*comp)(void *elem1, void *elem2)) {
+void qqh_sort(void *arr, const size_t elem_cnt, const size_t elem_size,
+              int (*comp)(const void *elem1, const void *elem2)) {
+
     assert(arr);
+    //assert(comp) ???
 
     for (int i = 0; i < elem_cnt; ++i) {
         for (int j = 0; j < elem_cnt - 1; ++j) {
@@ -190,7 +220,7 @@ void qqh_sort(void *arr, const size_t elem_cnt, const size_t elem_size, int (*co
 }
 
 void get_next_letter(unsigned char **c) {
-    char *cur_c = *c;
+    unsigned char *cur_c = *c;
     while(!is_countable(*cur_c) && *cur_c) {
         ++cur_c;
     }
@@ -212,6 +242,7 @@ int compare_lines_letters(const void *elem1, const void *elem2) {
         ++first_c;
         ++second_c;
     }
+
     get_next_letter(&first_c);
     get_next_letter(&second_c);
     return (int) *first_c - (int) *second_c;
@@ -259,6 +290,7 @@ int read_lines(File_t *file) {
     for (unsigned char *c = file->text; *c; ++c) {
         lines_cnt += *c == '\n';
     }
+
     file->lines = calloc(lines_cnt, sizeof(Line_t*));
     if (file->lines == NULL) {
         return ERROR_MALLOC_FAIL;
@@ -296,11 +328,11 @@ int read_lines(File_t *file) {
     return lines_cnt + 1;
 }
 
-void print_file(const File_t *file, const char *fout_name) {
+void print_file(const File_t *file, const char *fout_name, const char *mode) {
     assert(file);
     assert(fout_name);
 
-    FILE *fout = fopen(fout_name, "w");
+    FILE *fout = fopen(fout_name, mode);
     for (int i = 0; i < file->lines_cnt; ++i) {
         fprintf(fout, "%s\n", file->lines[i]->string);
     }
@@ -355,6 +387,8 @@ int utest_compare_lines_letters() {
             }
         }
     }
+
+    return 0;
 }
 
 #endif // KCTF_GENERAL_H

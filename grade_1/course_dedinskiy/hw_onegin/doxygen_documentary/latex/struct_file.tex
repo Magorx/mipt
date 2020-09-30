@@ -12,29 +12,114 @@ Struct to store file\textquotesingle{}s information into.
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{struct_file_a4e5ad41dab32415fbf687fae7e897bf5}\label{struct_file_a4e5ad41dab32415fbf687fae7e897bf5}} 
-char $\ast$ {\bfseries name}
+const char $\ast$ \mbox{\hyperlink{struct_file_ad163532bb70e18dd6492c040cac53d1d}{name}}
 \item 
-\mbox{\Hypertarget{struct_file_a660d32ad247f97944b09f34740c5a419}\label{struct_file_a660d32ad247f97944b09f34740c5a419}} 
-int {\bfseries file\+\_\+ptr}
+size\+\_\+t \mbox{\hyperlink{struct_file_aff18202516eb85545d62633587ab50a4}{file\+\_\+dscr}}
 \item 
-\mbox{\Hypertarget{struct_file_a64c46eb1bbda139bb77787ab91abeb79}\label{struct_file_a64c46eb1bbda139bb77787ab91abeb79}} 
-struct stat {\bfseries info}
+struct stat \mbox{\hyperlink{struct_file_a64c46eb1bbda139bb77787ab91abeb79}{info}}
 \item 
-\mbox{\Hypertarget{struct_file_abefba01fa3314b19b82e95b8d8dfe884}\label{struct_file_abefba01fa3314b19b82e95b8d8dfe884}} 
-unsigned char $\ast$ {\bfseries text}
+unsigned char $\ast$ \mbox{\hyperlink{struct_file_abefba01fa3314b19b82e95b8d8dfe884}{text}}
 \item 
-\mbox{\Hypertarget{struct_file_a01a07beedea550df6e344cdbd7ba8dcb}\label{struct_file_a01a07beedea550df6e344cdbd7ba8dcb}} 
-int {\bfseries lines\+\_\+cnt}
+size\+\_\+t \mbox{\hyperlink{struct_file_a85f126080299822a269dc997380bc82d}{lines\+\_\+cnt}}
 \item 
-\mbox{\Hypertarget{struct_file_adea76cb2f293b2d8e8ba54cb0f77b543}\label{struct_file_adea76cb2f293b2d8e8ba54cb0f77b543}} 
-\mbox{\hyperlink{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}{Line\+\_\+t}} $\ast$$\ast$ {\bfseries lines}
+\mbox{\hyperlink{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}{Line\+\_\+t}} $\ast$$\ast$ \mbox{\hyperlink{struct_file_adea76cb2f293b2d8e8ba54cb0f77b543}{lines}}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Struct to store file\textquotesingle{}s information into. 
 
+Definition at line 49 of file general.\+h.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{struct_file_aff18202516eb85545d62633587ab50a4}\label{struct_file_aff18202516eb85545d62633587ab50a4}} 
+\index{File@{File}!file\_dscr@{file\_dscr}}
+\index{file\_dscr@{file\_dscr}!File@{File}}
+\doxysubsubsection{\texorpdfstring{file\_dscr}{file\_dscr}}
+{\footnotesize\ttfamily size\+\_\+t File\+::file\+\_\+dscr}
+
+
+
+Definition at line 51 of file general.\+h.
+
+
+
+Referenced by read\+\_\+lines().
+
+\mbox{\Hypertarget{struct_file_a64c46eb1bbda139bb77787ab91abeb79}\label{struct_file_a64c46eb1bbda139bb77787ab91abeb79}} 
+\index{File@{File}!info@{info}}
+\index{info@{info}!File@{File}}
+\doxysubsubsection{\texorpdfstring{info}{info}}
+{\footnotesize\ttfamily struct stat File\+::info}
+
+
+
+Definition at line 51 of file general.\+h.
+
+
+
+Referenced by read\+\_\+file(), and read\+\_\+lines().
+
+\mbox{\Hypertarget{struct_file_adea76cb2f293b2d8e8ba54cb0f77b543}\label{struct_file_adea76cb2f293b2d8e8ba54cb0f77b543}} 
+\index{File@{File}!lines@{lines}}
+\index{lines@{lines}!File@{File}}
+\doxysubsubsection{\texorpdfstring{lines}{lines}}
+{\footnotesize\ttfamily \mbox{\hyperlink{general_8h_a3b81977bf89d5e7a1c698a42cc0d66b6}{Line\+\_\+t}}$\ast$$\ast$ File\+::lines}
+
+
+
+Definition at line 55 of file general.\+h.
+
+
+
+Referenced by free\+\_\+memory\+\_\+file(), gen\+\_\+strofa(), main(), print\+\_\+file(), read\+\_\+lines(), and utest\+\_\+compare\+\_\+lines\+\_\+letters().
+
+\mbox{\Hypertarget{struct_file_a85f126080299822a269dc997380bc82d}\label{struct_file_a85f126080299822a269dc997380bc82d}} 
+\index{File@{File}!lines\_cnt@{lines\_cnt}}
+\index{lines\_cnt@{lines\_cnt}!File@{File}}
+\doxysubsubsection{\texorpdfstring{lines\_cnt}{lines\_cnt}}
+{\footnotesize\ttfamily size\+\_\+t File\+::lines\+\_\+cnt}
+
+
+
+Definition at line 54 of file general.\+h.
+
+
+
+Referenced by free\+\_\+memory\+\_\+file(), gen\+\_\+strofa(), main(), print\+\_\+file(), read\+\_\+file(), read\+\_\+lines(), and utest\+\_\+compare\+\_\+lines\+\_\+letters().
+
+\mbox{\Hypertarget{struct_file_ad163532bb70e18dd6492c040cac53d1d}\label{struct_file_ad163532bb70e18dd6492c040cac53d1d}} 
+\index{File@{File}!name@{name}}
+\index{name@{name}!File@{File}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily const char$\ast$ File\+::name}
+
+
+
+Definition at line 50 of file general.\+h.
+
+
+
+Referenced by read\+\_\+file(), and read\+\_\+lines().
+
+\mbox{\Hypertarget{struct_file_abefba01fa3314b19b82e95b8d8dfe884}\label{struct_file_abefba01fa3314b19b82e95b8d8dfe884}} 
+\index{File@{File}!text@{text}}
+\index{text@{text}!File@{File}}
+\doxysubsubsection{\texorpdfstring{text}{text}}
+{\footnotesize\ttfamily unsigned char$\ast$ File\+::text}
+
+
+
+Definition at line 53 of file general.\+h.
+
+
+
+Referenced by free\+\_\+memory\+\_\+file(), read\+\_\+file(), and read\+\_\+lines().
+
+
+
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-C\+:/\+Users/maxim/\+Desktop/mipt/seminars/ded/onegin/\mbox{\hyperlink{general_8h}{general.\+h}}\end{DoxyCompactItemize}
+C\+:/\+Users/maxim/\+Desktop/mipt/grade\+\_\+1/course\+\_\+dedinskiy/hw\+\_\+onegin/\mbox{\hyperlink{general_8h}{general.\+h}}\end{DoxyCompactItemize}
