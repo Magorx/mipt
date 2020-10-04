@@ -20,7 +20,7 @@
 
 #define STACK_GENERIC(func) OVERLOAD(Stack_##func, STACK_VALUE_TYPE)
 #define STACK_GENERIC_TYPE OVERLOAD(Stack, STACK_VALUE_TYPE)
-#define STACK_OK(stack) do {CHECK_ERROR_ASSERT(STACK_GENERIC(valid)(stack) == OK);} while(0)
+#define STACK_OK(stack) do {RETURNING_ASSERT_OK(STACK_GENERIC(valid)(stack));} while(0)
 #define STACK_HASH(stack) STACK_GENERIC(hash)(stack)
 
 typedef enum stack_code {
@@ -42,6 +42,7 @@ const double STACK_REALLOC_UP_COEF = 1.5;
 const double STACK_REALLOC_DOWN_COEF = 2;
 #endif // KCTF_STACK_CONSTANTS
 //=============================================================================
+//<KCTF>[STACK_H]==============================================================
 
 struct STACK_GENERIC(t) {
     long long hash_left;
@@ -53,9 +54,35 @@ struct STACK_GENERIC(t) {
 
 typedef struct STACK_GENERIC(t) STACK_GENERIC_TYPE;
 
+long long STACK_GENERIC(hash)(const STACK_GENERIC_TYPE *cake);
+void      STACK_GENERIC(recalculate_hash)(STACK_GENERIC_TYPE *cake);
+
+int       STACK_GENERIC(construct)      (STACK_GENERIC_TYPE *cake);
+int       STACK_GENERIC(destruct)       (STACK_GENERIC_TYPE *cake);
+
+int       STACK_GENERIC(dump)     (const STACK_GENERIC_TYPE *cake);
+int       STACK_GENERIC(valid)    (const STACK_GENERIC_TYPE *cake);
+
+size_t    STACK_GENERIC(size)     (const STACK_GENERIC_TYPE *cake);
+size_t    STACK_GENERIC(capacity) (const STACK_GENERIC_TYPE *cake);
+
+size_t    STACK_GENERIC(is_empty) (const STACK_GENERIC_TYPE *cake);
+size_t    STACK_GENERIC(is_full)  (const STACK_GENERIC_TYPE *cake);
+
+
+
+int STACK_GENERIC(push) (STACK_GENERIC_TYPE *cake, const STACK_VALUE_TYPE val);
+int STACK_GENERIC(pop)  (STACK_GENERIC_TYPE *cake);
+int STACK_GENERIC(clear)(STACK_GENERIC_TYPE *cake);
+
+int STACK_GENERIC(realloc)(STACK_GENERIC_TYPE *cake, const size_t new_capacity);
+
+//=============================================================================
+//<KCTF>[STACK_C]==============================================================
+
 long long STACK_GENERIC(hash)(const STACK_GENERIC_TYPE *cake) {
-    CHECK_ERROR_ASSERT(cake);
-    CHECK_ERROR_ASSERT(cake->buffer);
+    RETURNING_ASSERT(cake != NULL);
+    RETURNING_ASSERT(cake->buffer != NULL);
     return + do_hash((char*)cake + sizeof(long long), sizeof(STACK_GENERIC_TYPE) - 2 * sizeof(long long))
            + do_hash(cake->buffer, cake->capacity * sizeof(STACK_VALUE_TYPE));
 }
@@ -89,7 +116,7 @@ int STACK_GENERIC(recalculate_hash)(STACK_GENERIC_TYPE *cake) {
 }
 
 int STACK_GENERIC(construct)(STACK_GENERIC_TYPE *cake) {
-    CHECK_ERROR_ASSERT(cake != NULL);
+    RETURNING_ASSERT(cake != NULL);
     const int capacity = 32;
     cake->buffer = (STACK_VALUE_TYPE*) calloc(capacity, sizeof(STACK_VALUE_TYPE));
     if (!cake->buffer) {
@@ -114,12 +141,12 @@ int STACK_GENERIC(destruct)(STACK_GENERIC_TYPE *cake) {
 }
 
 size_t STACK_GENERIC(size)(const STACK_GENERIC_TYPE *cake) {
-    CHECK_ERROR_ASSERT(STACK_GENERIC(valid)(cake) == OK);
+    RETURNING_ASSERT_OK(STACK_GENERIC(valid)(cake));
     return cake->size;
 }
 
 size_t STACK_GENERIC(capacity)(const STACK_GENERIC_TYPE *cake) {
-    CHECK_ERROR_ASSERT(STACK_GENERIC(valid)(cake) == OK);
+    RETURNING_ASSERT_OK(STACK_GENERIC(valid)(cake));
     return cake->capacity;
 }
 
@@ -129,7 +156,7 @@ int STACK_GENERIC(dump)(const STACK_GENERIC_TYPE *cake) {
     printf("[   ]<     >: [hash_l](%lld)\n", cake->hash_left);
     printf("[   ]<     >: [hash_r](%lld)\n", cake->hash_right);
     printf("[   ]<     >: [size](%zu) [capacity](%zu)\n", STACK_GENERIC(size)(cake), STACK_GENERIC(capacity)(cake));
-    printf("[   ]<     >: [buffer](%p)\n", (void*) (cake->buffer));
+    printf("[   ]<.buf.>: [buffer](%p)\n", (void*) (cake->buffer));
 
     const size_t print_depth = min(cake->size, STACK_DUMP_DEPTH);
     for (size_t i = 0; i < print_depth; ++i) {
@@ -162,8 +189,8 @@ int STACK_GENERIC(realloc)(STACK_GENERIC_TYPE *cake, const size_t new_capacity) 
 int STACK_GENERIC(push)(STACK_GENERIC_TYPE *cake, const STACK_VALUE_TYPE val) {
     STACK_OK(cake);
 
-    if (cake->size == cake->capacity) {
-        CHECK_ERROR_ASSERT(STACK_GENERIC(realloc)(cake, (double) STACK_GENERIC(capacity)(cake) * STACK_REALLOC_UP_COEF) == OK);
+    if (STACK_GENERIC(is_full)(cake)) {
+        RETURNING_ASSERT_OK(STACK_GENERIC(realloc)(cake, (double) STACK_GENERIC(capacity)(cake) * STACK_REALLOC_UP_COEF));
     }
 
     cake->buffer[cake->size++] = val;
@@ -175,13 +202,13 @@ int STACK_GENERIC(push)(STACK_GENERIC_TYPE *cake, const STACK_VALUE_TYPE val) {
 
 int STACK_GENERIC(pop)(STACK_GENERIC_TYPE *cake) {
     STACK_OK(cake);
-    CHECK_ERROR_ASSERT(cake->size > 0);
+    RETURNING_ASSERT(cake->size > 0);
 
-    cake->buffer[--cake->size] = SVT_P;
+    --cake->size;
     STACK_GENERIC(recalculate_hash)(cake);
 
     if (cake->capacity / (cake->size + 1) > STACK_REALLOC_DOWN_COEF) {
-        CHECK_ERROR_ASSERT(STACK_GENERIC(realloc)(cake, (double) STACK_GENERIC(capacity)(cake) / STACK_REALLOC_DOWN_COEF * 1.5) == 0);
+        RETURNING_ASSERT(STACK_GENERIC(realloc)(cake, (double) STACK_GENERIC(capacity)(cake) / STACK_REALLOC_DOWN_COEF * 1.5) == 0);
     }
 
     STACK_GENERIC(recalculate_hash)(cake);
@@ -195,7 +222,7 @@ int STACK_GENERIC(clear)(STACK_GENERIC_TYPE *cake) {
 
     size_t init_size = STACK_GENERIC(size)(cake);
     for (size_t i = 0; i < init_size; ++i) {
-        CHECK_ERROR_ASSERT(STACK_GENERIC(pop)(cake) == OK);
+        RETURNING_ASSERT_OK(STACK_GENERIC(pop)(cake));
     }
 
     STACK_OK(cake);
@@ -211,5 +238,4 @@ int STACK_GENERIC(is_full)(const STACK_GENERIC_TYPE *cake) {
     STACK_OK(cake);
     return cake->size == cake->capacity;
 }
-
-
+//=============================================================================

@@ -20,20 +20,17 @@ int is_zero(int a) {
 
 int main() {
     Stack_int s = {};
-    ASSERT(Stack_construct_int(&s) == OK);
+    ASSERT_OK(Stack_construct_int(&s));
 
     for (int i = 0; i < 1000; ++i) {
-        Stack_push_int(&s, (double) rand() / rand());
+        ASSERT_OK(Stack_push_int(&s, rand()));
     }
 
-    Stack_dump_int(&s);
+    ASSERT_OK(Stack_dump_int(&s));
 
     for (int i = 0; i < 10000; ++i) {
-        if (rand() % 10 != 0) {
-            Stack_pop_int(&s);
-        }
+        ASSERT_OK(Stack_pop_int(&s));
     }
-
 
     return 0;
 }

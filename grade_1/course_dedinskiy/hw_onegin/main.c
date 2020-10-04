@@ -62,7 +62,7 @@ int main(const int argc, const char **argv) {   //--locale=  --test
         calculate_ending(fin.lines[i], RHYME_DEPTH);
     }
 
-    qsort(fin.lines, fin.lines_cnt, sizeof(Line_t*), compare_lines_letters);
+    qqh_sort(fin.lines, fin.lines_cnt, sizeof(Line_t*), compare_lines_letters);
 
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wformat"            // Ignoring unexistance of %z in older versions of compiler
