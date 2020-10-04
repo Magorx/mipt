@@ -26,15 +26,15 @@ int main() {
         ASSERT(Stack_push_int(&s, (double) rand() / rand()) == OK);
     }
 
-    while (s.size) {
-        ASSERT(Stack_pop_int(&s) == OK);
-    }
+    ASSERT(Stack_clear_int(&s) == OK);
 
     Stack_dump_int(&s);
+
     printf("==========================================================================\n");
     printf("===\nDOUBLES\n===\n");
     printf("==========================================================================\n");
 
+    // USAGE EXAMPLE ==========================================================;
     Stack_double ss = {};
     ASSERT(Stack_construct_double(&ss) == OK);
 

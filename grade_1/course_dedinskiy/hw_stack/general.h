@@ -54,26 +54,24 @@ const int KCTF_ASSERT_LOUDNESS = 1;
 const int FATAL_ERROR = 2;
 const int CHECK_ERROR = 1;
 
-#define FULL_ASSERT(expr, err_name, loudness, cur_loudness, droptable, ERROR)        \
-    do {                                                                             \
-        int ret = (expr);                                                            \
-        if ((ERROR || !ret) && (loudness) >= (cur_loudness)) {                       \
-             if (ret == 0) {                                                         \
-             printf("[ERR]<assert>: [erro_name](%s)\n", "CHECK_UPPER_ASSERT");       \
-             printf("[   ]<      >: [erro_code](%d)\n", ERROR_CHECK_UPPER_ASSERT);   \
-             }                                                                       \
-             else {                                                                  \
-             printf("[ERR]<assert>: [erro_name](%s)\n", err_name);                   \
-             printf("[   ]<      >: [erro_code](%d)\n", ret);                        \
-             }                                                                       \
-             printf("[   ]<      >: [file_name](%s)\n", __FILE__);                   \
-             printf("[   ]<      >: [func_name](%s)\n", __FUNCTION__);               \
-             printf("[   ]<      >: [line_indx](%d)\n", __LINE__);                   \
-        }                                                                            \
-        if (ERROR || !ret) {                                                         \
-            if (droptable) { exit   (ERROR_CHECK_UPPER_ASSERT); }                    \
-            else           { return (ERROR_CHECK_UPPER_ASSERT); }                    \
-        }                                                                            \
+#define FULL_ASSERT(expr, err_name, loudness, cur_loudness, droptable, ERROR)       \
+    do {                                                                            \
+        int ret = (expr);                                                           \
+        if ((ERROR || !ret) && (loudness) >= (cur_loudness)) {                      \
+            printf("[ERR]<assert>: [erro_erro](%s)\n", err_name);                   \
+            if (ret == 0) {                                                         \
+            printf("[   ]<      >: [erro_code](%X)\n", 0xDED);                      \
+            } else {                                                                \
+            printf("[   ]<      >: [erro_code](%d)\n", ret);                        \
+            }                                                                       \
+            printf("[   ]<      >: [file_name](%s)\n", __FILE__);                   \
+            printf("[   ]<      >: [func_name](%s)\n", __FUNCTION__);               \
+            printf("[   ]<      >: [line_indx](%d)\n", __LINE__);                   \
+            }                                                                       \
+        if (ERROR || !ret) {                                                        \
+            if (droptable) { exit   (ERROR_CHECK_UPPER_ASSERT); }                   \
+            else           { return (ERROR_CHECK_UPPER_ASSERT); }                   \
+        }                                                                           \
     } while(0)
 
 #define YESDROP_ASSERT(expr, err_name, loudness, cur_loudness) FULL_ASSERT(expr, err_name, loudness, cur_loudness, 1, 0)
