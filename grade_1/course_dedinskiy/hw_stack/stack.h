@@ -66,7 +66,7 @@ int       STACK_GENERIC(valid)    (const STACK_GENERIC_TYPE *cake);
 size_t    STACK_GENERIC(size)     (const STACK_GENERIC_TYPE *cake);
 size_t    STACK_GENERIC(capacity) (const STACK_GENERIC_TYPE *cake);
 
-size_t       STACK_GENERIC(is_empty) (const STACK_GENERIC_TYPE *cake);
+size_t    STACK_GENERIC(is_empty) (const STACK_GENERIC_TYPE *cake);
 size_t    STACK_GENERIC(is_full)  (const STACK_GENERIC_TYPE *cake);
 
 
