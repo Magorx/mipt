@@ -82,8 +82,14 @@ const int CHECK_ERROR = 1;
 #define ASSERT_OK(expr) ASSERT((expr) == OK)
 
 #define RETURN_ERROR_ASSERT(expr) FULL_ASSERT(expr, #expr, KCTF_ASSERT_LOUDNESS, KCTF_ASSERT_LOUDNESS, 0, 1)
-#define RETURNING_ASSERT(expr)    FULL_ASSERT(expr, #expr, KCTF_ASSERT_LOUDNESS, KCTF_ASSERT_LOUDNESS, 0, 0)
-#define RETURNING_ASSERT_OK(expr) FULL_ASSERT((expr) == OK, #expr, KCTF_ASSERT_LOUDNESS, KCTF_ASSERT_LOUDNESS, 0, 0)
+
+#ifdef ASSERT_BOMB
+#define RETURNING_ASSERT(expr) FULL_ASSERT(expr, #expr, KCTF_ASSERT_LOUDNESS, KCTF_ASSERT_LOUDNESS, 1, 0)
+#else
+#define RETURNING_ASSERT(expr) FULL_ASSERT(expr, #expr, KCTF_ASSERT_LOUDNESS, KCTF_ASSERT_LOUDNESS, 0, 0)
+#endif
+
+#define RETURNING_ASSERT_OK(expr) RETURNING_ASSERT((expr) == OK)
 
 //=============================================================================
 //<KCTF> Handmade_overloads ===================================================
