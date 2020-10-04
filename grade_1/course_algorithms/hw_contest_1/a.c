@@ -307,7 +307,7 @@ int List_push_back(List *l, const LIST_VAL_TYPE val) {
 int main () {
     List *l = List_construct();
 
-    char str[10];
+    char str[10] = {};
     while (1) {
         scanf("%6s", str);
         if (strcmp(str, "push") == 0) {

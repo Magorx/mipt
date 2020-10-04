@@ -36,46 +36,80 @@ const size_t SIZE_T_P = -1; /// Poison size_t
 ///  Return codes
 enum RETURN_CODES {
     ERROR_ERROR = -7777777,
-    ERROR_FILE_NOT_FOUND = -10,
+    ERROR_FILE_NOT_FOUND = -20,
     ERROR_BIG_FILE,
     ERROR_MALLOC_FAIL,
     ERROR_NULL_OBJECT,
     ERROR_NO_RET_CODE,
     ERROR_BAD_ARGS,
+    ERROR_CHECK_UPPER_ASSERT = -1,
+
     NULL_OBJ_OK = 0,
-    RET_OK = 0,
+    RET_OK = 0
 };
 
 //=============================================================================
 //<KCTF> Handmade asserts =====================================================
 const int KCTF_ASSERT_LOUDNESS = 1;
+const int FATAL_ERROR = 2;
+const int CHECK_ERROR = 1;
 
-#define FULL_ASSERT(expr, err_name, loudness, cur_loudness, droptable)         \
-    do {                                                                       \
-        int ret = (expr);                                                      \
-        if (!ret && (loudness) >= (cur_loudness)) {                             \
-             printf("[ERR]<assert>: [erro_name](%s)\n", err_name);             \
-             printf("[   ]<      >: [erro_code](%d)\n", ret);                  \
-             printf("[   ]<      >: [file_name](%s)\n", __FILE__);             \
-             printf("[   ]<      >: [func_name](%s)\n", __FUNCTION__);         \
-             printf("[   ]<      >: [line_indx](%d)\n", __LINE__);             \
-        }                                                                      \
-        if (!ret) {                                                             \
-            if (droptable) { exit  (ret); }                                    \
-            else           { return ret;  }                                    \
-        }                                                                      \
+#define FULL_ASSERT(expr, err_name, loudness, cur_loudness, droptable, ERROR)        \
+    do {                                                                             \
+        int ret = (expr);                                                            \
+        if ((ERROR || !ret) && (loudness) >= (cur_loudness)) {                       \
+             if (ret == 0) {                                                         \
+             printf("[ERR]<assert>: [erro_name](%s)\n", "CHECK_UPPER_ASSERT");       \
+             printf("[   ]<      >: [erro_code](%d)\n", ERROR_CHECK_UPPER_ASSERT);   \
+             }                                                                       \
+             else {                                                                  \
+             printf("[ERR]<assert>: [erro_name](%s)\n", err_name);                   \
+             printf("[   ]<      >: [erro_code](%d)\n", ret);                        \
+             }                                                                       \
+             printf("[   ]<      >: [file_name](%s)\n", __FILE__);                   \
+             printf("[   ]<      >: [func_name](%s)\n", __FUNCTION__);               \
+             printf("[   ]<      >: [line_indx](%d)\n", __LINE__);                   \
+        }                                                                            \
+        if (ERROR || !ret) {                                                         \
+            if (droptable) { exit   (ERROR_CHECK_UPPER_ASSERT); }                    \
+            else           { return (ERROR_CHECK_UPPER_ASSERT); }                    \
+        }                                                                            \
     } while(0)
 
-#define YESDROP_ASSERT(expr, err_name, loudness, cur_loudness) FULL_ASSERT(expr, err_name, loudness, cur_loudness, 1)
+#define YESDROP_ASSERT(expr, err_name, loudness, cur_loudness) FULL_ASSERT(expr, err_name, loudness, cur_loudness, 1, 0)
 #define LOUDSET_ASSERT(expr, err_name, loudness) YESDROP_ASSERT(expr, err_name, loudness, KCTF_ASSERT_LOUDNESS)
 #define ERRCDNM_ASSERT(expr, err_name) LOUDSET_ASSERT(expr, err_name, KCTF_ASSERT_LOUDNESS)
 
 #define         ASSERT(expr) ERRCDNM_ASSERT(expr, #expr)
-#define RETURN_ERROR_ASSERT(expr) FULL_ASSERT(!expr, #expr, KCTF_ASSERT_LOUDNESS, KCTF_ASSERT_LOUDNESS, 0)
+#define RETURN_ERROR_ASSERT(expr) FULL_ASSERT(expr, #expr, KCTF_ASSERT_LOUDNESS, KCTF_ASSERT_LOUDNESS, 0, 1)
+#define CHECK_ERROR_ASSERT(expr) FULL_ASSERT(expr, #expr, KCTF_ASSERT_LOUDNESS, KCTF_ASSERT_LOUDNESS, 0, 0)
 
 //=============================================================================
+//<KCTF> Handmade_overloads ===================================================
 
-/// Handmade stringview
+#define CONCAT(a, c) a ## _ ## c
+#define OVERLOAD(func, type) CONCAT(func, type)
+
+//=============================================================================
+//<KCTF> Handmade_hash ========================================================
+
+const long long HASH_MODULE = 1000000007;
+const long long BASE = 257;
+
+#define get_hash(struct) do_hash(struct, sizeof(struct))
+
+long long do_hash(void *memptr, size_t size_in_bytes) {
+    assert(memptr);
+    long long ret = 1;
+    char *ptr = (char*) memptr;
+    for (size_t i = 0; i < size_in_bytes; ++i) {
+        ret = (ret * BASE + ptr[i]) % HASH_MODULE;
+    }
+    return ret;
+}
+
+//=============================================================================
+/// Handmade stringview =======================================================
 struct Line {
     unsigned char *string;
     size_t len;
@@ -228,16 +262,18 @@ void swap_ptrs(void **first, void **second) {
     *first = tmp;
 }
 
-void qqh_sort(void *arr, const size_t elem_cnt, const size_t elem_size, int (*comp)(const void *elem1, const void *elem2)) {
-    assert(arr);
+void qqh_sort(void *input_arr, const size_t elem_cnt, const size_t elem_size, int (*comp)(const void *elem1, const void *elem2)) {
+    assert(input_arr);
     assert(comp);
 
-    for (int i = 0; i < elem_cnt; ++i) {
-        for (int j = 0; j < elem_cnt - 1; ++j) {
+    char *arr = (char*) input_arr;
+
+    for (size_t i = 0; i < elem_cnt; ++i) {
+        for (size_t j = 0; j < elem_cnt - 1; ++j) {
             void *first = arr + j * elem_size;
             void *second = arr + (j + 1) * elem_size;
             if (comp(first, second) > 0) {
-                swap_ptrs(first, second);
+                swap_ptrs((void**) first, (void**) second);
             }
         }
     }
@@ -282,7 +318,7 @@ void free_memory_file(const File_t *file) {
     assert(file);
 
     Line_t **lines_ptr = file->lines;
-    for (int i = 0; i < file->lines_cnt; ++i) {
+    for (size_t i = 0; i < file->lines_cnt; ++i) {
         free(*lines_ptr);
         ++lines_ptr;
     }
@@ -297,7 +333,7 @@ int read_file(File_t *file, const char *name) {
     file->name = name;
     stat(name, &(file->info));
 
-    file->text = calloc(file->info.st_size + 1, sizeof(char));
+    file->text = (unsigned char*) calloc(file->info.st_size + 1, sizeof(char));
     if (!file->text) {
         return ERROR_MALLOC_FAIL;
     }
@@ -317,7 +353,7 @@ int read_lines(File_t *file) {
         lines_cnt += *c == '\n';
     }
 
-    file->lines = calloc(lines_cnt, sizeof(Line_t*));
+    file->lines = (Line_t**) calloc(lines_cnt, sizeof(Line_t*));
     if (file->lines == NULL) {
         return ERROR_MALLOC_FAIL;
     }
@@ -328,7 +364,7 @@ int read_lines(File_t *file) {
     while (*c) {
         ++lines_cnt;
 
-        file->lines[lines_cnt] = calloc(1, sizeof(Line_t));
+        file->lines[lines_cnt] = (Line_t*) calloc(1, sizeof(Line_t));
         Line_t *line_ptr = file->lines[lines_cnt];
         if (line_ptr == NULL) {
             return ERROR_MALLOC_FAIL;
@@ -359,7 +395,7 @@ void print_file(const File_t *file, const char *fout_name, const char *mode) {
     assert(fout_name);
 
     FILE *fout = fopen(fout_name, mode);
-    for (int i = 0; i < file->lines_cnt; ++i) {
+    for (size_t i = 0; i < file->lines_cnt; ++i) {
         fprintf(fout, "%s\n", file->lines[i]->string);
     }
 
@@ -400,14 +436,14 @@ int utest_compare_lines_letters() {
 
         qsort(file.lines, file.lines_cnt, sizeof(Line_t*), compare_lines_letters);
 
-        for (int i = 0; i < file.lines_cnt - 1; ++i) {
+        for (size_t i = 0; i < file.lines_cnt - 1; ++i) {
             if (file.lines[i]->index > file.lines[i + 1]->index && compare_lines_letters(&file.lines[i], &file.lines[i + 1])) {
                 printf("[ERR] \"%s\" > \"%s\"\n", file.lines[i]->string, file.lines[i + 1]->string);
                 printf("[ ! ] indexes: %d > %d\n", file.lines[i]->index, file.lines[i + 1]->index);
                 DEBUG(2) {
                     printf("====\n");
-                    for (int i = 0; i < file.lines_cnt; ++i) {
-                        printf("%s\n", file.lines[i]->string);
+                    for (size_t j = 0; j < file.lines_cnt; ++j) {
+                        printf("%s\n", file.lines[j]->string);
                     }
                 }
             }

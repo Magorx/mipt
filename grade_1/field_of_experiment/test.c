@@ -62,11 +62,23 @@ void World_print(World *cake) {
 }
 
 //=============================================================================
+void f(char *s) {
+    printf("2) %d\n", &s);
+    printf("%s\n", s);
+}
 
 int main() {
-    World w;
-    World_construct(&w, 20, 80);
-    World_print(&w);
+    const char s[]  = "aaaaa";
+    const char ss[] = "aaaaa";
+    printf("%c\n", s);
+
+    printf("%d\n%d\n", s, ss);
+    printf("s+8 = %s\n", ss);
+    printf("%s %s", s, ss);
+
+    printf("1) %d\n", s);
+    f(s);
 
     return 0;
 }
+
