@@ -21,6 +21,6 @@ Programm WILL NOT be terminated if any stack command fails without using
 ```
 #define ASSERT_BOMB
 ```
-BEFORE including "stack.h"
+BEFORE including ```"stack.h"```
 
-That's why I wraped every command in ASSERT_OK() in example. This way you can see whole traceback of fallen function.
+That's why I wraped every command in ```ASSERT_OK()``` in example. This way you can see whole traceback of fallen function.
