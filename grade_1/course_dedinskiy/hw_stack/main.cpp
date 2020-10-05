@@ -3,15 +3,10 @@
 #include <stdlib.h>
 
 #define STACK_SECURITY_LEVEL 1
+#define STACK_DUMP_DEPTH 15
 
 #define STACK_VALUE_TYPE int
 #define STACK_VALUE_PRINTF_SPEC "%d"
-#include "stack.h"
-#undef STACK_VALUE_TYPE
-#undef STACK_VALUE_PRINTF_SPEC
-
-#define STACK_VALUE_TYPE double
-#define STACK_VALUE_PRINTF_SPEC "%g"
 #include "stack.h"
 #undef STACK_VALUE_TYPE
 #undef STACK_VALUE_PRINTF_SPEC
@@ -33,15 +28,25 @@ int main() {
 
     s.capacity = 5;
     s.size = 10;
-    Stack_dump_int(&s);
+    ASSERT_OK(Stack_dump_int(&s));
 
     return 0;
 }
 
 /* TODO
+printf_formated(what, from_who) with statics
+
+Unit tests
+
+capacity overload
+
+canary to general ??!?!??!?!!?!
+
+Byte poison, dump, etc.
+
 #ifdef XXX -> XXX + 0
 
 ASSERT -> VERIFIE ~~~
 
-
+#define ERRNAME(error, descr) -> sace error: return #error ": " descr
 */

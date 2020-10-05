@@ -54,7 +54,7 @@ typedef enum stack_code {
 } stack_code;
 
 const STACK_VALUE_TYPE SVT_P = -7777777.0;
-const long long STACK_CANARY = 0xDEDEDED;
+const long long STACK_CANARY = 0xDED0C;
 
 const double STACK_REALLOC_UP_COEF = 1.5;
 const double STACK_REALLOC_DOWN_COEF = 2;
@@ -242,7 +242,7 @@ int STACK_GENERIC(dump)(const STACK_GENERIC_TYPE *cake) {
         printf("[   ]<%3zu  >: [](" STACK_VALUE_PRINTF_SPEC ")\n", print_depth - 1 - i, cake->buffer[cake->size - 1 - i]);
     }
 
-    return OK;
+    return validity;
 }
 
 int STACK_GENERIC(realloc)(STACK_GENERIC_TYPE *cake, const size_t new_capacity) {
@@ -287,7 +287,7 @@ int STACK_GENERIC(pop)(STACK_GENERIC_TYPE *cake) {
     STACK_GENERIC(recalcute_security)(cake);
 
     if (cake->capacity / (cake->size + 1) > STACK_REALLOC_DOWN_COEF) {
-        RETURNING_ASSERT(STACK_GENERIC(realloc)(cake, (double) STACK_GENERIC(capacity)(cake) / STACK_REALLOC_DOWN_COEF * 1.5) == 0);
+        RETURNING_ASSERT(STACK_GENERIC(realloc)(cake, (double) STACK_GENERIC(capacity)(cake) / STACK_REALLOC_DOWN_COEF * 1.5) == 0); // MAGIC~~~*
     }
 
     STACK_GENERIC(recalcute_security)(cake);
