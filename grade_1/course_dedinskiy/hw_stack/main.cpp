@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#define STACK_SECURITY_LEVEL 1
+#define STACK_SECURITY_LEVEL 10
 #define STACK_DUMP_DEPTH 15
 
 #define STACK_VALUE_TYPE int
@@ -49,4 +49,15 @@ Byte poison, dump, etc.
 ASSERT -> VERIFIE ~~~
 
 #define ERRNAME(error, descr) -> sace error: return #error ": " descr
+
+reverse dump data
+
+realloc add one more abstract layer
+
+--verbose
+stdlog
+
+poison to buffer in destruct, zeros to buffer
+
+TXlib.h is_good_ptr ===== MACROS $(x)
 */

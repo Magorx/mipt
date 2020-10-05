@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include "general.h"
 
+//[DEFINES]===================================================================
+
 #ifndef STACK_VALUE_TYPE
 #error STACK_VALUE_TYPE must be defined to define the stack properly
 #endif
@@ -233,6 +235,7 @@ int STACK_GENERIC(dump)(const STACK_GENERIC_TYPE *cake) {
 #endif
 
 #endif
+
     printf("[   ]<     >: [size](%zu)\n", cake->capacity);
     printf("[   ]<     >: [capacity](%zu)\n", cake->size);
     printf("[   ]<.buf.>: [buffer](%p)\n", (void*)(cake->buffer));
