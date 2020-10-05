@@ -2,6 +2,8 @@
 
 #include <stdlib.h>
 
+#define STACK_SECURITY_LEVEL 1
+
 #define STACK_VALUE_TYPE int
 #define STACK_VALUE_PRINTF_SPEC "%d"
 #include "stack.h"
@@ -14,10 +16,6 @@
 #undef STACK_VALUE_TYPE
 #undef STACK_VALUE_PRINTF_SPEC
 
-int is_zero(int a) {
-    return a == 0;
-}
-
 int main() {
     Stack_int s = {};
     ASSERT_OK(Stack_construct_int(&s));
@@ -29,9 +27,21 @@ int main() {
     ASSERT_OK(Stack_dump_int(&s));
 
     for (int i = 0; i < 10000; ++i) {
-        ASSERT_OK(Stack_pop_int(&s));
+        if ((Stack_pop_int(&s)) != OK)
+            break;
     }
+
+    s.capacity = 5;
+    s.size = 10;
+    Stack_dump_int(&s);
 
     return 0;
 }
 
+/* TODO
+#ifdef XXX -> XXX + 0
+
+ASSERT -> VERIFIE ~~~
+
+
+*/

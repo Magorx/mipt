@@ -28,6 +28,10 @@
 #define SEC_HASH
 #endif
 
+#ifndef STACK_DUMP_DEPTH
+#define STACK_DUMP_DEPTH 10
+#endif
+
 //=============================================================================
 //[ONCE_INCLUDING_CONSTANTS]===================================================
 
@@ -50,9 +54,7 @@ typedef enum stack_code {
 } stack_code;
 
 const STACK_VALUE_TYPE SVT_P = -7777777.0;
-const long long STACK_CANARY = 77777777777777;
-
-const size_t STACK_DUMP_DEPTH = 10;
+const long long STACK_CANARY = 0xDEDEDED;
 
 const double STACK_REALLOC_UP_COEF = 1.5;
 const double STACK_REALLOC_DOWN_COEF = 2;
@@ -213,18 +215,27 @@ size_t STACK_GENERIC(capacity)(const STACK_GENERIC_TYPE *cake) {
 
 int STACK_GENERIC(dump)(const STACK_GENERIC_TYPE *cake) {
     const int validity = STACK_GENERIC(valid)(cake);
-    printf("[DMP]<stack>: [ptr](%p) [valid](%s)\n", (void*) cake, validity ? "FALSE" : "true");
+
+    if (!validity) {
+        printf("[DMP]<stack>: [ptr](%p) [valid](true)\n", (void*)cake);
+    } else {
+        printf("[DMP]<stack>: [ptr](%p) [valid](FALSE) ^- check last error -^\n", (void*)cake);
+    }
+
 #ifdef SEC_HASH
     printf("[   ]<     >: [hash_l](%lld)\n", cake->hash_left);
     printf("[   ]<     >: [hash_r](%lld)\n", cake->hash_right);
 #else
+
 #ifdef SEC_CANARY
-    printf("[   ]<     >: [canary_l](%lld)\n", cake->canary_left);
-    printf("[   ]<     >: [canary_r](%lld)\n", cake->canary_right);
+    printf("[   ]<     >: [canary_l](%X)\n", cake->canary_left);
+    printf("[   ]<     >: [canary_r](%X)\n", cake->canary_right);
 #endif
+
 #endif
-    printf("[   ]<     >: [size](%zu) [capacity](%zu)\n", STACK_GENERIC(size)(cake), STACK_GENERIC(capacity)(cake));
-    printf("[   ]<.buf.>: [buffer](%p)\n", (void*) (cake->buffer));
+    printf("[   ]<     >: [size](%zu)\n", cake->capacity);
+    printf("[   ]<     >: [capacity](%zu)\n", cake->size);
+    printf("[   ]<.buf.>: [buffer](%p)\n", (void*)(cake->buffer));
 
     const size_t print_depth = min(cake->size, STACK_DUMP_DEPTH);
     for (size_t i = 0; i < print_depth; ++i) {
