@@ -14,7 +14,23 @@
 #error STACK_VALUE_PRINTF_SPEC must be defined to dump the stack properly
 #endif
 
-// THESE CONSTANTS MUST BE INCLUDED ONLY ONCE =================================
+//[SECURITY_SETTINGS]==========================================================
+
+#ifndef STACK_SECURITY_LEVEL
+#define STACK_SECURITY_LEVEL 10
+#endif // STACK_SECURITY_LEVEL
+
+#if STACK_SECURITY_LEVEL > 0
+#define SEC_CANARY
+#endif
+
+#if STACK_SECURITY_LEVEL > 2
+#define SEC_HASH
+#endif
+
+//=============================================================================
+//[ONCE_INCLUDING_CONSTANTS]===================================================
+
 #ifndef KCTF_STACK_CONSTANTS
 #define KCTF_STACK_CONSTANTS
 
@@ -29,33 +45,56 @@ typedef enum stack_code {
     ERR_BUFFER_NOT_EXIST,
     ERR_OVERFLOW,
     ERR_REALLOC_FAILED,
-    ERR_BAD_HASH,
 
     OK = 0,
 } stack_code;
 
 const STACK_VALUE_TYPE SVT_P = -7777777.0;
+const long long STACK_CANARY = 77777777777777;
 
 const size_t STACK_DUMP_DEPTH = 10;
 
 const double STACK_REALLOC_UP_COEF = 1.5;
 const double STACK_REALLOC_DOWN_COEF = 2;
 #endif // KCTF_STACK_CONSTANTS
+
 //=============================================================================
 //<KCTF>[STACK_H]==============================================================
 
 struct STACK_GENERIC(t) {
+//[SOME_AWFUL_SECURITY]========================================================
+#ifdef SEC_HASH
     long long hash_left;
+#else
+#ifdef SEC_CANARY
+    long long canary_left;
+#endif
+#endif
+//=============================================================================
+//[STACK]======================================================================
     size_t capacity;
     size_t size;
     STACK_VALUE_TYPE *buffer;
+//=============================================================================
+//[SOME_AWFUL_SECURITY]========================================================
+#ifdef SEC_HASH
     long long hash_right;
+#else
+#ifdef SEC_CANARY
+    long long canary_right;
+#endif
+#endif
+//=============================================================================
 };
+
+//[DOCUMENTARY]================================================================
 
 typedef struct STACK_GENERIC(t) STACK_GENERIC_TYPE;
 
 long long STACK_GENERIC(hash)(const STACK_GENERIC_TYPE *cake);
-void      STACK_GENERIC(recalculate_hash)(STACK_GENERIC_TYPE *cake);
+
+void      STACK_GENERIC(recalculate_hash)   (STACK_GENERIC_TYPE *cake);
+int       STACK_GENERIC(recalcute_security) (STACK_GENERIC_TYPE *cake);
 
 int       STACK_GENERIC(construct)      (STACK_GENERIC_TYPE *cake);
 int       STACK_GENERIC(destruct)       (STACK_GENERIC_TYPE *cake);
@@ -69,14 +108,13 @@ size_t    STACK_GENERIC(capacity) (const STACK_GENERIC_TYPE *cake);
 size_t    STACK_GENERIC(is_empty) (const STACK_GENERIC_TYPE *cake);
 size_t    STACK_GENERIC(is_full)  (const STACK_GENERIC_TYPE *cake);
 
-
-
 int STACK_GENERIC(push) (STACK_GENERIC_TYPE *cake, const STACK_VALUE_TYPE val);
 int STACK_GENERIC(pop)  (STACK_GENERIC_TYPE *cake);
 int STACK_GENERIC(clear)(STACK_GENERIC_TYPE *cake);
 
 int STACK_GENERIC(realloc)(STACK_GENERIC_TYPE *cake, const size_t new_capacity);
 
+//=============================================================================
 //=============================================================================
 //<KCTF>[STACK_C]==============================================================
 
@@ -87,11 +125,13 @@ long long STACK_GENERIC(hash)(const STACK_GENERIC_TYPE *cake) {
            + do_hash(cake->buffer, cake->capacity * sizeof(STACK_VALUE_TYPE));
 }
 
+#ifdef SEC_HASH
 void STACK_GENERIC(recalculate_hash)(STACK_GENERIC_TYPE *cake) {
     long long int new_hash = STACK_HASH(cake);
     cake->hash_left = new_hash;
     cake->hash_right = new_hash;
 }
+#endif
 
 int STACK_GENERIC(valid)(const STACK_GENERIC_TYPE *cake) {
     if (!cake) {
@@ -106,24 +146,47 @@ int STACK_GENERIC(valid)(const STACK_GENERIC_TYPE *cake) {
         RETURN_ERROR_ASSERT(ERR_OVERFLOW);
     }
 
+#ifdef SEC_HASH
     if (cake->hash_left != STACK_HASH(cake) || cake->hash_left != cake->hash_right) {
-        RETURN_ERROR_ASSERT(ERR_BAD_HASH);
+        RETURN_ERROR_ASSERT(ERROR_BAD_HASH);
     }
+#else
+#ifdef SEC_CANARY
+    if (cake->canary_left != STACK_CANARY || cake->canary_left != cake->canary_right) {
+        RETURN_ERROR_ASSERT(ERROR_BAD_CANARY);
+    }
+#endif
+#endif
+
+    return OK;
+}
+
+int STACK_GENERIC(recalcute_security)(STACK_GENERIC_TYPE *cake) {
+    RETURNING_ASSERT(cake != NULL);
+
+#ifdef SEC_HASH
+    STACK_GENERIC(recalculate_hash)(cake);
+#else
+#ifdef SEC_CANARY
+    cake->canary_left = STACK_CANARY;
+    cake->canary_right = STACK_CANARY;
+#endif
+#endif
 
     return OK;
 }
 
 int STACK_GENERIC(construct)(STACK_GENERIC_TYPE *cake) {
     RETURNING_ASSERT(cake != NULL);
-    const int capacity = 32;
+
+    const size_t capacity = 32;
     cake->buffer = (STACK_VALUE_TYPE*) calloc(capacity, sizeof(STACK_VALUE_TYPE));
-    if (!cake->buffer) {
-        return ERR_STACK_NOT_CREATED;
-    }
+    RETURNING_ASSERT(cake->buffer != NULL);
 
     cake->capacity = capacity;
     cake->size = 0;
-    STACK_GENERIC(recalculate_hash)(cake);
+
+    RETURNING_ASSERT_OK(STACK_GENERIC(recalcute_security)(cake));
     STACK_OK(cake);
     return OK;
 }
@@ -151,8 +214,15 @@ size_t STACK_GENERIC(capacity)(const STACK_GENERIC_TYPE *cake) {
 int STACK_GENERIC(dump)(const STACK_GENERIC_TYPE *cake) {
     const int validity = STACK_GENERIC(valid)(cake);
     printf("[DMP]<stack>: [ptr](%p) [valid](%s)\n", (void*) cake, validity ? "FALSE" : "true");
+#ifdef SEC_HASH
     printf("[   ]<     >: [hash_l](%lld)\n", cake->hash_left);
     printf("[   ]<     >: [hash_r](%lld)\n", cake->hash_right);
+#else
+#ifdef SEC_CANARY
+    printf("[   ]<     >: [canary_l](%lld)\n", cake->canary_left);
+    printf("[   ]<     >: [canary_r](%lld)\n", cake->canary_right);
+#endif
+#endif
     printf("[   ]<     >: [size](%zu) [capacity](%zu)\n", STACK_GENERIC(size)(cake), STACK_GENERIC(capacity)(cake));
     printf("[   ]<.buf.>: [buffer](%p)\n", (void*) (cake->buffer));
 
@@ -178,7 +248,7 @@ int STACK_GENERIC(realloc)(STACK_GENERIC_TYPE *cake, const size_t new_capacity) 
 
     cake->buffer   = new_buffer;
     cake->capacity = new_capacity;
-    STACK_GENERIC(recalculate_hash)(cake);
+    STACK_GENERIC(recalcute_security)(cake);
     STACK_OK(cake);
 
     return OK;
@@ -192,7 +262,7 @@ int STACK_GENERIC(push)(STACK_GENERIC_TYPE *cake, const STACK_VALUE_TYPE val) {
     }
 
     cake->buffer[cake->size++] = val;
-    STACK_GENERIC(recalculate_hash)(cake);
+    STACK_GENERIC(recalcute_security)(cake);
     STACK_OK(cake);
 
     return OK;
@@ -203,13 +273,13 @@ int STACK_GENERIC(pop)(STACK_GENERIC_TYPE *cake) {
     RETURNING_ASSERT(cake->size > 0);
 
     --cake->size;
-    STACK_GENERIC(recalculate_hash)(cake);
+    STACK_GENERIC(recalcute_security)(cake);
 
     if (cake->capacity / (cake->size + 1) > STACK_REALLOC_DOWN_COEF) {
         RETURNING_ASSERT(STACK_GENERIC(realloc)(cake, (double) STACK_GENERIC(capacity)(cake) / STACK_REALLOC_DOWN_COEF * 1.5) == 0);
     }
 
-    STACK_GENERIC(recalculate_hash)(cake);
+    STACK_GENERIC(recalcute_security)(cake);
     STACK_OK(cake);
 
     return OK;

@@ -42,6 +42,10 @@ enum RETURN_CODES {
     ERROR_NULL_OBJECT,
     ERROR_NO_RET_CODE,
     ERROR_BAD_ARGS,
+
+    ERROR_BAD_CANARY,
+    ERROR_BAD_HASH,
+
     ERROR_CHECK_UPPER_ASSERT = -1,
 
     NULL_OBJ_OK = 0,
@@ -69,7 +73,7 @@ const int CHECK_ERROR = 1;
             printf("[   ]<      >: [line_indx](%d)\n", __LINE__);                   \
             }                                                                       \
         if (ERROR || !ret) {                                                        \
-                if (droptable) { exit   (ERROR_CHECK_UPPER_ASSERT); }                   \
+            if (droptable) { exit   (ERROR_CHECK_UPPER_ASSERT); }                   \
             else           { return (ERROR_CHECK_UPPER_ASSERT); }                   \
         }                                                                           \
     } while(0)

@@ -2,6 +2,8 @@
 
 #include <stdlib.h>
 
+#define ASSERT_BOMB
+
 #define STACK_VALUE_TYPE int
 #define STACK_VALUE_PRINTF_SPEC "%d"
 #include "stack.h"
