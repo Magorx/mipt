@@ -91,28 +91,28 @@ struct STACK_GENERIC(t) {
 
 typedef struct STACK_GENERIC(t) STACK_GENERIC_TYPE;
 
-long long STACK_GENERIC(hash)(const STACK_GENERIC_TYPE *cake);
+long long STACK_GENERIC(hash)(const STACK_GENERIC_TYPE *cake); ///< Calculates hash(cake) the right way
 
-void      STACK_GENERIC(recalculate_hash)   (STACK_GENERIC_TYPE *cake);
-int       STACK_GENERIC(recalcute_security) (STACK_GENERIC_TYPE *cake);
+void      STACK_GENERIC(recalculate_hash)   (STACK_GENERIC_TYPE *cake); ///< Calls hash(cake) the right way and sets hash_lr
+int       STACK_GENERIC(recalcute_security) (STACK_GENERIC_TYPE *cake); ///< Calls recalculate_security(cake) and sets security vars
 
-int       STACK_GENERIC(construct)      (STACK_GENERIC_TYPE *cake);
-int       STACK_GENERIC(destruct)       (STACK_GENERIC_TYPE *cake);
+int       STACK_GENERIC(construct)      (STACK_GENERIC_TYPE *cake); ///< Constructs stack the right way. Must be called before any operations with stack
+int       STACK_GENERIC(destruct)       (STACK_GENERIC_TYPE *cake); ///< Destructs stack the right way. Must be called after all operations with stack
 
-int       STACK_GENERIC(dump)     (const STACK_GENERIC_TYPE *cake);
-int       STACK_GENERIC(valid)    (const STACK_GENERIC_TYPE *cake);
+int       STACK_GENERIC(dump)     (const STACK_GENERIC_TYPE *cake); ///< Dumps stack in a pretty way
+int       STACK_GENERIC(valid)    (const STACK_GENERIC_TYPE *cake); ///< Checks, if stack is valid, returns 0 if is, err_code otherwise
 
-size_t    STACK_GENERIC(size)     (const STACK_GENERIC_TYPE *cake);
-size_t    STACK_GENERIC(capacity) (const STACK_GENERIC_TYPE *cake);
+size_t    STACK_GENERIC(size)     (const STACK_GENERIC_TYPE *cake); ///< Returs current number of elements in stack
+size_t    STACK_GENERIC(capacity) (const STACK_GENERIC_TYPE *cake); ///< Return current max_number of elements in stack
 
-size_t    STACK_GENERIC(is_empty) (const STACK_GENERIC_TYPE *cake);
-size_t    STACK_GENERIC(is_full)  (const STACK_GENERIC_TYPE *cake);
+size_t    STACK_GENERIC(is_empty) (const STACK_GENERIC_TYPE *cake); ///< Returns 1 if stack is empty, 0 otherwise
+size_t    STACK_GENERIC(is_full)  (const STACK_GENERIC_TYPE *cake); ///< Returns 1 if cake->size == cake->capacity, 0 otherwise
 
-int STACK_GENERIC(push) (STACK_GENERIC_TYPE *cake, const STACK_VALUE_TYPE val);
-int STACK_GENERIC(pop)  (STACK_GENERIC_TYPE *cake);
-int STACK_GENERIC(clear)(STACK_GENERIC_TYPE *cake);
+int STACK_GENERIC(push) (STACK_GENERIC_TYPE *cake, const STACK_VALUE_TYPE val); ///< Pushes val on the top of stack
+int STACK_GENERIC(pop)  (STACK_GENERIC_TYPE *cake); ///< Pop top val from stack. DOES NOT return value
+int STACK_GENERIC(clear)(STACK_GENERIC_TYPE *cake); ///< Pops all elements from stack
 
-int STACK_GENERIC(realloc)(STACK_GENERIC_TYPE *cake, const size_t new_capacity);
+int STACK_GENERIC(realloc)(STACK_GENERIC_TYPE *cake, const size_t new_capacity); ///< Tries to make cake->capacity be new_capacity
 
 //=============================================================================
 //=============================================================================
