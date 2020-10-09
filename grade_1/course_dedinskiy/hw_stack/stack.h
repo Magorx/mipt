@@ -55,7 +55,6 @@ typedef enum stack_code {
     OK = 0,
 } stack_code;
 
-const STACK_VALUE_TYPE SVT_P = -7777777.0;
 const long long STACK_CANARY = 0xDED0C;
 
 const double STACK_REALLOC_UP_COEF = 1.5;
@@ -216,6 +215,9 @@ size_t STACK_GENERIC(capacity)(const STACK_GENERIC_TYPE *cake) {
 }
 
 int STACK_GENERIC(dump)(const STACK_GENERIC_TYPE *cake) {
+    if (cake == NULL) {
+        printf("[DMP]<stack>: [ptr](0) [valid](FALSE) /try to guess why/\n");
+    }
     const int validity = STACK_GENERIC(valid)(cake);
 
     if (!validity) {
@@ -236,8 +238,8 @@ int STACK_GENERIC(dump)(const STACK_GENERIC_TYPE *cake) {
 
 #endif
 
-    printf("[   ]<     >: [size](%zu)\n", cake->capacity);
-    printf("[   ]<     >: [capacity](%zu)\n", cake->size);
+    printf("[   ]<     >: [size](%zu)\n", cake->size);
+    printf("[   ]<     >: [capacity](%zu)\n", cake->capacity);
     printf("[   ]<.buf.>: [buffer](%p)\n", (void*)(cake->buffer));
 
     const size_t print_depth = min(cake->size, STACK_DUMP_DEPTH);
