@@ -6,7 +6,6 @@
 
 #include "Stack.h"
 
-
 #define STRUCT_REVEAL_no
 
 void printStatus(StackStatus s)

@@ -5,17 +5,19 @@
 /*
 Copyright (c) 2020  MIPT
 Module Name:
-    Stack.h
+    Stack
 Abstract:
     Реализует класс стека для 64-битных переменных, а также имплементацию
     его методов и собственных "системных" функций.
 Author:
     JulesIMF
 Last Edit:
-    07.10.2020 22:51
+    09.10.2020 2:16
 Edit Notes:
-    1) Добавлен stackCopy
-    2) Добавлен stackRescue
+    1) Хеширование структуры
+    2) stackCapacity
+    3) Мелкие улучшения, дебаг и рефакторинг
+    4) Временно удален _ReturnAddress()
 */
 #pragma once
 #include "Stack.h"
@@ -23,13 +25,11 @@ Edit Notes:
 #include <time.h>
 #include <assert.h>
 #include <stdio.h>
-#include <intrin.h>
 #include <string.h>
-#pragma intrinsic(_ReturnAddress)
 
 //Макрос для создания копии
 #define DUPLICATE(STACK, COPY)                                  \
-Stack* COPY = makeStackDuplicate(STACK);                        \
+Stack* COPY = _makeStackDuplicate(STACK);                       \
 if (COPY == NULL)                                               \
     return STACK_DUPLICATION_ERROR;                             \
 COPY += duplicateOffset;                                        \
@@ -46,27 +46,37 @@ if(EXPRESSION)                                                  \
     return STACK_INVALID;                                       \
 }
 
-#define STATIC_VALUES() if(!frontCanary) { if(!strcmp(__FUNCTION__, "stackNew")) generateValues(); else return STACK_INVALID; }
+#define STATIC_VALUES() if(!frontCanary) { if(!strcmp(__FUNCTION__, "stackNew")) _generateValues(); else return STACK_INVALID; }
 
 #define _STACK_DUPLICATE_OFFSET
 #define _STACK_HASH
 #define _STACK_RETURN_ADDRESS
-#define _STACK_PRINT_MESSAGES 1
 #define _STACK_DUPLICATE
+#define _STACK_PRINT_MESSAGES 1
 #define _STACK_DEEP_VALIDATION
 
-
+struct Stack__
+{
+    unsigned long long* data;
+    size_t capacity;
+    size_t size;
+    unsigned long long hash;
+    struct Stack__* duplicate;
+    unsigned long long structHash;
+};
 
 
 static unsigned long long frontCanary   = 0, backCanary = 0, poison = 0;
 static int const maxAbsOffset           = 10;
 static int duplicateOffset              = 0;
 
+static void _stackRecalculate(Stack * stack);
+
 /**
  * Генерирует системные значения.
  * \warning СИСТЕМНАЯ ФУНКЦИЯ
  */
-static void generateValues(void)
+static void _generateValues(void)
 {
 #ifdef    _STACK_RETURN_ADDRESS
     static int timesCalled = 0;
@@ -76,7 +86,7 @@ static void generateValues(void)
     if (timesCalled > 1)
     {
     #ifdef    _STACK_PRINT_MESSAGES
-        printf("\tFunction %s was unexpectedly called from %p.\n\n", __FUNCTION__);
+        printf("\tFunction %s was unexpectedly called.\n\n", __FUNCTION__);
     #endif //!_STACK_PRINT_MESSAGES
         return;
     }
@@ -105,38 +115,59 @@ static void generateValues(void)
     }
 
 #if ( defined(_STACK_DUPLICATE) && defined(_STACK_DUPLICATE_OFFSET) )
-    duplicateOffset = rand() % (maxAbsOffset * 2) - maxAbsOffset;
+    while(!duplicateOffset)
+        duplicateOffset = rand() % (maxAbsOffset * 2) - maxAbsOffset;
 #endif
 
 }
 
 #ifdef _STACK_HASH
-static long long getHash(Stack* stack)
+static unsigned long long _getHash(void* buffer, size_t size)
 {
-    //TODO Проверка адреса возврата
-    assert(stack);
-    static long long base = 0;
+    static unsigned long long base = 0;
+    char* data = (char*)buffer;
 
     //Установка base
     if (!base)
     {
         for (int i = 0; i != 64; i++)
-            base |= ( (unsigned long long)(rand() & 1) << i );
+            base |= ((unsigned long long)(rand() & 1) << i);
 
         base |= 1ll;
     }
 
-    unsigned long long* data = stack->data;
-
     unsigned long long hash = 0;
-    size_t size = stack->size;
     for (int i = 0; i != size; i++)
     {
         hash *= base;
-        hash += *(++data);
+        hash += (unsigned long long)*(++data);
     }
 
     return hash;
+}
+
+static unsigned long long _getDataHash(Stack* stack)
+{
+    //TODO Проверка адреса возврата
+    assert(stack);
+
+    return _getHash(stack->data + 1, sizeof(unsigned long long) * stack->size);
+}
+
+static unsigned long long _getStructHash(Stack* stack)
+{
+    //TODO Проверка адреса возврата
+    assert(stack);
+
+    //Ужас конечно
+    return
+        _getHash(&(stack->capacity),     sizeof(stack->capacity))   +
+        _getHash(&(stack->data),         sizeof(stack->data))       +
+        _getHash(&(stack->size),         sizeof(stack->size))       +
+        _getHash(&(stack->duplicate),    sizeof(stack->duplicate))  +
+        _getHash(&(stack->hash),         sizeof(stack->hash));
+
+
 }
 #endif
 
@@ -149,9 +180,15 @@ StackStatus stackIsValid(Stack* stack)
         НАЧАЛО БЛОКА
     */
     STATIC_VALUES();
-    CHECK(stack == NULL);
+    if (stack == NULL)
+        return STACK_NULL;
+
 
     //Дефолтные проверки
+#ifdef _STACK_HASH
+    CHECK(stack->structHash != _getStructHash(stack));
+#endif
+
     CHECK(stack->data == NULL);
 
     CHECK(!stack->capacity);
@@ -171,7 +208,7 @@ StackStatus stackIsValid(Stack* stack)
     }
 
 #ifdef _STACK_HASH
-    CHECK(getHash(stack) != stack->hash);
+    CHECK(_getDataHash(stack) != stack->hash);
 #endif
 
     /*
@@ -188,10 +225,10 @@ StackStatus stackIsValid(Stack* stack)
     CHECK(duplicate == NULL);
     duplicate -= duplicateOffset;
     CHECK(
-        duplicate->capacity != stack->capacity ||
-        duplicate->size     != stack->size ||
-        duplicate->hash     != stack->hash ||
-        duplicate->data     == NULL ||
+        duplicate->capacity     != stack->capacity      ||
+        duplicate->size         != stack->size          ||
+        duplicate->hash         != stack->hash          ||
+        duplicate->data         == NULL                 ||
         duplicate->duplicate
     );
 
@@ -207,18 +244,20 @@ StackStatus stackIsValid(Stack* stack)
 }
 
 
-static Stack* allocateStack(size_t capacity)
+static Stack* _allocateStack(size_t capacity)
 {
     Stack* stack = (Stack*)calloc(1, sizeof(Stack));
     if (stack == NULL)
         return NULL;
 
-    stack->capacity = capacity;
-    stack->size = 0;
-    stack->duplicate = NULL;
-    stack->hash = 0;
+    stack->capacity     = capacity;
+    stack->size         = 0;
+    stack->duplicate    = NULL;
+    stack->hash         = 0;
+
     size_t realCapacity = capacity + 2;
     stack->data = calloc(realCapacity, sizeof(unsigned long long));
+
     if (stack->data == NULL)
     {
         free(stack);
@@ -229,19 +268,20 @@ static Stack* allocateStack(size_t capacity)
 }
 
 
-static Stack* makeStackDuplicate(Stack* stack)
+static Stack* _makeStackDuplicate(Stack* stack)
 {
     if (stack == NULL || stack->data == NULL)
         return NULL;
 
     STATIC_VALUES();
-    Stack* copy = allocateStack(stack->capacity);
+    Stack* copy = _allocateStack(stack->capacity);
 
     if (copy == NULL)
         return NULL;
 
     copy->hash = stack->hash;
     copy->size = stack->size;
+
     size_t realCapacity = stack->capacity + 2;
 
     unsigned long long* copyData  = copy-> data;
@@ -250,13 +290,16 @@ static Stack* makeStackDuplicate(Stack* stack)
     for (int i = 0; i != realCapacity; i++)
         *(copyData++) = *(stackData++);
 
+#ifdef _STACK_HASH
+    copy->structHash = _getStructHash(copy);
+#endif
     return copy;
 }
 
 
 Stack* stackNew(size_t capacity)
 {
-    Stack* stack = allocateStack(capacity);
+    Stack* stack = _allocateStack(capacity);
     if (stack == NULL)
         return NULL;
 
@@ -269,7 +312,7 @@ Stack* stackNew(size_t capacity)
     stack->data[0] = frontCanary;
     stack->data[1] = backCanary;
 #ifdef _STACK_DUPLICATE
-    Stack* duplicate = makeStackDuplicate(stack);
+    Stack* duplicate = _makeStackDuplicate(stack);
     if (duplicate == NULL)
     {
         stackDelete(stack);
@@ -277,6 +320,8 @@ Stack* stackNew(size_t capacity)
     }
     stack->duplicate = duplicate + duplicateOffset;
 #endif
+
+    _stackRecalculate(stack);
     return stack;
 }
 
@@ -295,6 +340,23 @@ void stackDelete(Stack* stack)
 }
 
 
+static void _stackRecalculate(Stack* stack)
+{
+    assert(stack);
+#ifdef _STACK_HASH
+    stack->hash = _getDataHash(stack);
+#endif
+
+#ifdef _STACK_DUPLICATE
+    DUPLICATE(stack, duplicate);
+#endif
+
+#ifdef _STACK_HASH
+    stack->structHash = _getStructHash(stack);
+#endif
+}
+
+
 StackStatus stackResize(Stack* stack, size_t capacity)
 {
     if (stack == NULL)
@@ -309,9 +371,12 @@ StackStatus stackResize(Stack* stack, size_t capacity)
     if (capacity < stack->size)
         return STACK_OVERFLOW;
 
-    unsigned long long* newData = (unsigned long long*)realloc(stack->data, (capacity + 2)*sizeof(unsigned long long));
+    unsigned long long* newData =
+        (unsigned long long*)realloc(stack->data, (capacity + 2) * sizeof(unsigned long long));
+
     if (newData == NULL)
         return STACK_RESIZE_ERROR;
+
     size_t realCapacity = capacity + 2;
 
     for (size_t i = stack->capacity + 2; i < realCapacity; i++)
@@ -319,9 +384,8 @@ StackStatus stackResize(Stack* stack, size_t capacity)
 
     stack->data = newData;
     stack->capacity = capacity;
-#ifdef _STACK_DUPLICATE
-    DUPLICATE(stack, duplicate);
-#endif
+
+    _stackRecalculate(stack);
 
 #ifdef _STACK_DEEP_VALIDATION
     return stackIsValid(stack);
@@ -353,11 +417,8 @@ StackStatus stackPush(Stack* stack, unsigned long long value)
 
         КОНЕЦ БЛОКА
     */
-    stack->hash = getHash(stack);
 
-#ifdef _STACK_DUPLICATE
-    DUPLICATE(stack, duplicate);
-#endif
+    _stackRecalculate(stack);
 
 #ifdef _STACK_DEEP_VALIDATION
     return stackIsValid(stack);
@@ -389,11 +450,8 @@ StackStatus stackPop(Stack* stack)
 
         КОНЕЦ БЛОКА
     */
-    stack->hash = getHash(stack);
 
-#ifdef _STACK_DUPLICATE
-    DUPLICATE(stack, duplicate);
-#endif
+    _stackRecalculate(stack);
 
 #ifdef _STACK_DEEP_VALIDATION
     return stackIsValid(stack);
@@ -407,9 +465,30 @@ StackStatus stackSize(Stack* stack, size_t* value)
     if (stack == NULL)
         return STACK_NULL;
 
+    if (value == NULL)
+        return STACK_NULL;
+
     STATIC_VALUES();
     CHECK(stackIsValid(stack) != STACK_OK);
     *value = stack->size;
+
+#ifdef _STACK_DEEP_VALIDATION
+    return stackIsValid(stack);
+#endif // _STACK_DEEP_VALIDATION
+    return STACK_OK;
+}
+
+StackStatus stackCapacity(Stack* stack, size_t* value)
+{
+    if (stack == NULL)
+        return STACK_NULL;
+
+    if (value == NULL)
+        return STACK_NULL;
+
+    STATIC_VALUES();
+    CHECK(stackIsValid(stack) != STACK_OK);
+    *value = stack->capacity;
 
 #ifdef _STACK_DEEP_VALIDATION
     return stackIsValid(stack);
@@ -421,6 +500,9 @@ StackStatus stackSize(Stack* stack, size_t* value)
 StackStatus stackTop(Stack* stack, unsigned long long* value)
 {
     if (stack == NULL)
+        return STACK_NULL;
+
+    if (value == NULL)
         return STACK_NULL;
 
     STATIC_VALUES();
@@ -462,11 +544,8 @@ StackStatus stackClear(Stack* stack)
 
         КОНЕЦ БЛОКА
     */
-    stack->hash = getHash(stack);
 
-#ifdef _STACK_DUPLICATE
-    DUPLICATE(stack, duplicate);
-#endif
+    _stackRecalculate(stack);
 
 #ifdef _STACK_DEEP_VALIDATION
     return stackIsValid(stack);
@@ -481,12 +560,12 @@ Stack* stackCopy(Stack* stack)
 
     STATIC_VALUES();
 
-    Stack* copy = makeStackDuplicate(stack);
+    Stack* copy = _makeStackDuplicate(stack);
     if (copy == NULL)
         return NULL;
 
 #ifdef _STACK_DUPLICATE
-    copy->duplicate = makeStackDuplicate(stack->duplicate - duplicateOffset);
+    copy->duplicate = _makeStackDuplicate(stack->duplicate - duplicateOffset);
 
     if (copy->duplicate == NULL)
     {
@@ -496,6 +575,8 @@ Stack* stackCopy(Stack* stack)
 
     copy->duplicate += duplicateOffset;
 #endif
+
+    _stackRecalculate(copy);
 
     return copy;
 }
@@ -507,11 +588,18 @@ StackStatus stackRescue(Stack* stack)
         return STACK_NULL;
     STATIC_VALUES();
 
+#ifdef _STACK_HASH
+    if ((stack->duplicate - duplicateOffset)->structHash != _getStructHash(stack->duplicate - duplicateOffset))
+        return STACK_RESCUE_ERROR;
+#endif // _STACK_HASH
+
+
 #ifdef _STACK_DUPLICATE
     if (stack->duplicate == NULL)
         return STACK_RESCUE_ERROR;
     Stack* backup = stack->duplicate - duplicateOffset;
-    backup->duplicate = makeStackDuplicate(backup) + duplicateOffset;
+    backup->duplicate = _makeStackDuplicate(backup) + duplicateOffset;
+    _stackRecalculate(backup);
     if (stackIsValid(backup) == STACK_INVALID)
     {
         stackDelete(backup->duplicate - duplicateOffset);
@@ -527,4 +615,3 @@ StackStatus stackRescue(Stack* stack)
     return STACK_RESCUE_ERROR;
 #endif
 }
-

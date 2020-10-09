@@ -3,13 +3,15 @@ Copyright (c) 2020  MIPT
 Module Name:
     Stack.h
 Abstract:
-    Описывает класс стека для 64-битных переменных
+    Описывает класс стека для 64-битных
+    переменных и его методы
 Author:
     JulesIMF
 Last Edit:
-    07.10.2020 16:39
+    09.10.2020 2:16
 Edit Notes:
-
+    1) Удалено описание структуры
+    2) Метод stackCapacity
 */
 
 
@@ -32,14 +34,7 @@ typedef enum
 } StackStatus;
 
 
-typedef struct Stack__
-{
-    unsigned long long* data;
-    size_t capacity;
-    size_t size;
-    unsigned long long hash;
-    struct Stack__* duplicate;
-} Stack;
+typedef struct Stack__ Stack;
 
 Stack*          stackNew        (size_t capacity);
 void            stackDelete     (Stack* stack);
@@ -47,6 +42,7 @@ StackStatus     stackIsValid    (Stack* stack);
 StackStatus     stackPush       (Stack* stack, unsigned long long value);
 StackStatus     stackPop        (Stack* stack);
 StackStatus     stackSize       (Stack* stack, size_t* value);
+StackStatus     stackCapacity   (Stack* stack, size_t* value);
 StackStatus     stackTop        (Stack* stack, unsigned long long* value);
 StackStatus     stackClear      (Stack* stack);
 StackStatus     stackResize     (Stack* stack, size_t capacity);
@@ -55,4 +51,3 @@ StackStatus     stackRescue     (Stack* stack);
 
 
 #endif // !JULESIMF_STACK
-

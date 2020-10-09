@@ -39,14 +39,7 @@ printf_formated(what, from_who) with statics
 capacity overload
 
 canary to general ??!?!??!?!!?!
-
-#ifdef XXX -> XXX + 0
-
-VERIFY -> VERIFIE ~~~
-
 #define ERRNAME(error, descr) -> sace error: return #error ": " descr
-
-realloc add one more abstract layer
 
 TXlib.h is_good_ptr ===== MACROS $(x)
 */

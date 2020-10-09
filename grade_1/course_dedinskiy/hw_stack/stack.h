@@ -116,6 +116,8 @@ int STACK_GENERIC(pop)  (STACK_GENERIC_TYPE *cake); ///< Pop top val from stack.
 int STACK_GENERIC(clear)(STACK_GENERIC_TYPE *cake); ///< Pops all elements from stack
 
 int STACK_GENERIC(resize)(STACK_GENERIC_TYPE *cake, const size_t new_capacity); ///< Tries to make cake->capacity be new_capacity
+int STACK_GENERIC(resize_up)(STACK_GENERIC_TYPE *cake);
+int STACK_GENERIC(resize_down)(STACK_GENERIC_TYPE *cake);
 
 //=============================================================================
 //=============================================================================
@@ -264,8 +266,26 @@ int STACK_GENERIC(resize)(STACK_GENERIC_TYPE *cake, const size_t new_capacity) {
     cake->buffer   = new_buffer;
     cake->capacity = new_capacity;
     STACK_GENERIC(recalcute_security)(cake);
+
+    STACK_OK(cake);
+    return OK;
+}
+
+int STACK_GENERIC(resize_up)(STACK_GENERIC_TYPE *cake) {
     STACK_OK(cake);
 
+    RETURNING_VERIFY_OK(STACK_GENERIC(resize)(cake, (double) STACK_GENERIC(capacity)(cake) * STACK_REALLOC_UP_COEF));
+
+    STACK_OK(cake);
+    return OK;
+}
+
+int STACK_GENERIC(resize_down)(STACK_GENERIC_TYPE *cake) {
+    STACK_OK(cake);
+
+    RETURNING_VERIFY(STACK_GENERIC(resize)(cake, (double) STACK_GENERIC(capacity)(cake) / STACK_REALLOC_DOWN_COEF * 1.5) == 0);
+
+    STACK_OK(cake);
     return OK;
 }
 
@@ -273,13 +293,13 @@ int STACK_GENERIC(push)(STACK_GENERIC_TYPE *cake, const STACK_VALUE_TYPE val) {
     STACK_OK(cake);
 
     if (STACK_GENERIC(is_full)(cake)) {
-        RETURNING_VERIFY_OK(STACK_GENERIC(resize)(cake, (double) STACK_GENERIC(capacity)(cake) * STACK_REALLOC_UP_COEF));
+        STACK_GENERIC(resize_up)(cake);
     }
 
     cake->buffer[cake->size++] = val;
     STACK_GENERIC(recalcute_security)(cake);
-    STACK_OK(cake);
 
+    STACK_OK(cake);
     return OK;
 }
 
@@ -291,12 +311,12 @@ int STACK_GENERIC(pop)(STACK_GENERIC_TYPE *cake) {
     STACK_GENERIC(recalcute_security)(cake);
 
     if (cake->capacity / (cake->size + 1) > STACK_REALLOC_DOWN_COEF) {
-        RETURNING_VERIFY(STACK_GENERIC(resize)(cake, (double) STACK_GENERIC(capacity)(cake) / STACK_REALLOC_DOWN_COEF * 1.5) == 0); // MAGIC~~~*
+        STACK_GENERIC(resize_down)(cake);
     }
 
     STACK_GENERIC(recalcute_security)(cake);
-    STACK_OK(cake);
 
+    STACK_OK(cake);
     return OK;
 }
 

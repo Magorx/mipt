@@ -108,6 +108,7 @@ const long long HASH_MODULE = 1000000007;
 const long long BASE = 257;
 
 #define get_hash(struct) do_hash(struct, sizeof(struct))
+long long do_hash(void *memptr, size_t size_in_bytes);
 
 long long do_hash(void *memptr, size_t size_in_bytes) {
     assert(memptr);
@@ -431,7 +432,7 @@ void print_error(int error) {
 
 
 // UNIT TESTS
-
+int utest_compare_lines_letters();
 int utest_compare_lines_letters() {
     //srand(time(NULL));
     File_t file = {};
@@ -465,11 +466,12 @@ int utest_compare_lines_letters() {
 }
 
 //<KCTF>[SUPER_SIMPLE] ========================================================
-
+long long int min(long long int a, long long int b);
 long long int min(long long int a, long long int b) {
     return a > b ? b : a;
 }
 
+long long int max(long long int a, long long int b);
 long long int max(long long int a, long long int b) {
     return a < b ? b : a;
 }
