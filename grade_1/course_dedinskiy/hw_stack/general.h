@@ -46,7 +46,7 @@ enum RETURN_CODES {
     ERROR_BAD_CANARY,
     ERROR_BAD_HASH,
 
-    ERROR_CHECK_UPPER_ASSERT = -1,
+    ERROR_CHECK_UPPER_VERIFY = -1,
 
     NULL_OBJ_OK = 0,
     RET_OK = 0
@@ -54,11 +54,11 @@ enum RETURN_CODES {
 
 //=============================================================================
 //<KCTF> Handmade asserts =====================================================
-const int KCTF_ASSERT_LOUDNESS = 1;
+const int KCTF_VERIFY_LOUDNESS = 1;
 const int FATAL_ERROR = 2;
 const int CHECK_ERROR = 1;
 
-#define FULL_ASSERT(expr, err_name, loudness, cur_loudness, droptable, ERROR)       \
+#define FULL_VERIFY(expr, err_name, loudness, cur_loudness, droptable, ERROR)       \
     do {                                                                            \
         int ret = (expr);                                                           \
         if ((ERROR || !ret) && (loudness) >= (cur_loudness)) {                      \
@@ -73,27 +73,27 @@ const int CHECK_ERROR = 1;
             printf("[   ]<      >: [line_indx](%d)\n", __LINE__);                   \
             }                                                                       \
         if (ERROR || !ret) {                                                        \
-            if (droptable) { exit   (ERROR_CHECK_UPPER_ASSERT); }                   \
-            else           { return (ERROR_CHECK_UPPER_ASSERT); }                   \
+            if (droptable) { exit   (ERROR_CHECK_UPPER_VERIFY); }                   \
+            else           { return (ERROR_CHECK_UPPER_VERIFY); }                   \
         }                                                                           \
     } while(0)
 
-#define ASSERT_YESDROP(expr, err_name, loudness, cur_loudness) FULL_ASSERT(expr, err_name, loudness, cur_loudness, 1, 0)
-#define ASSERT_LOUDSET(expr, err_name, loudness) ASSERT_YESDROP(expr, err_name, loudness, KCTF_ASSERT_LOUDNESS)
-#define ASSERT_ERRCDNM(expr, err_name) ASSERT_LOUDSET(expr, err_name, KCTF_ASSERT_LOUDNESS)
+#define VERIFY_YESDROP(expr, err_name, loudness, cur_loudness) FULL_VERIFY(expr, err_name, loudness, cur_loudness, 1, 0)
+#define VERIFY_LOUDSET(expr, err_name, loudness) VERIFY_YESDROP(expr, err_name, loudness, KCTF_VERIFY_LOUDNESS)
+#define VERIFY_ERRCDNM(expr, err_name) VERIFY_LOUDSET(expr, err_name, KCTF_VERIFY_LOUDNESS)
 
-#define ASSERT(expr) ASSERT_ERRCDNM(expr, #expr)
-#define ASSERT_OK(expr) ASSERT((expr) == OK)
+#define VERIFY(expr) VERIFY_ERRCDNM(expr, #expr)
+#define VERIFY_OK(expr) VERIFY((expr) == OK)
 
-#define RETURN_ERROR_ASSERT(expr) FULL_ASSERT(expr, #expr, KCTF_ASSERT_LOUDNESS, KCTF_ASSERT_LOUDNESS, 0, 1)
+#define RETURN_ERROR_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 0, 1)
 
-#ifdef ASSERT_BOMB
-#define RETURNING_ASSERT(expr) FULL_ASSERT(expr, #expr, KCTF_ASSERT_LOUDNESS, KCTF_ASSERT_LOUDNESS, 1, 0)
+#ifdef VERIFY_BOMB
+#define RETURNING_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 1, 0)
 #else
-#define RETURNING_ASSERT(expr) FULL_ASSERT(expr, #expr, KCTF_ASSERT_LOUDNESS, KCTF_ASSERT_LOUDNESS, 0, 0)
+#define RETURNING_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 0, 0)
 #endif
 
-#define RETURNING_ASSERT_OK(expr) RETURNING_ASSERT((expr) == OK)
+#define RETURNING_VERIFY_OK(expr) RETURNING_VERIFY((expr) == OK)
 
 //=============================================================================
 //<KCTF> Handmade_overloads ===================================================

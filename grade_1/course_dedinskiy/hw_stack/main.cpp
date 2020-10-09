@@ -13,13 +13,13 @@
 
 int main() {
     Stack_int s = {};
-    ASSERT_OK(Stack_construct_int(&s));
+    VERIFY_OK(Stack_construct_int(&s));
 
     for (int i = 0; i < 1000; ++i) {
-        ASSERT_OK(Stack_push_int(&s, rand()));
+        VERIFY_OK(Stack_push_int(&s, rand()));
     }
 
-    ASSERT_OK(Stack_dump_int(&s));
+    VERIFY_OK(Stack_dump_int(&s));
 
     for (int i = 0; i < 10000; ++i) {
         if ((Stack_pop_int(&s)) != OK)
@@ -28,7 +28,7 @@ int main() {
 
     s.capacity = 5;
     s.size = 10;
-    ASSERT_OK(Stack_dump_int(&s));
+    VERIFY_OK(Stack_dump_int(&s));
 
     return 0;
 }
@@ -36,28 +36,17 @@ int main() {
 /* TODO
 printf_formated(what, from_who) with statics
 
-Unit tests
-
 capacity overload
 
 canary to general ??!?!??!?!!?!
 
-Byte poison, dump, etc.
-
 #ifdef XXX -> XXX + 0
 
-ASSERT -> VERIFIE ~~~
+VERIFY -> VERIFIE ~~~
 
 #define ERRNAME(error, descr) -> sace error: return #error ": " descr
 
-reverse dump data
-
 realloc add one more abstract layer
-
---verbose
-stdlog
-
-poison to buffer in destruct, zeros to buffer
 
 TXlib.h is_good_ptr ===== MACROS $(x)
 */
