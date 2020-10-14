@@ -1,7 +1,5 @@
 CUR_PROG = assembler
 
-cur_run: $(CUR_PROG)
-
 ifndef VERBOSE
 .SILENT:
 endif
@@ -20,6 +18,8 @@ cpu: cpu.c
 
 assembler: assembler.c general.h
 	$(CC) $(CFLAGS) assembler.c -o assembler
+
+cur_run: $(CUR_PROG)
 
 run: cur_run
 	make clear
