@@ -11,7 +11,8 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys\stat.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 //<KCTF> Everyday_staff =======================================================
 
@@ -357,7 +358,7 @@ int read_lines(File_t *file) {
 
     DEBUG(1) {printf("Working with [%s] file\n", file->name);}
 
-    file->file_dscr = open(file->name, O_BINARY);
+    file->file_dscr = open(file->name, 0);
 
     read(file->file_dscr, file->text, file->info.st_size);
     int lines_cnt = 0;

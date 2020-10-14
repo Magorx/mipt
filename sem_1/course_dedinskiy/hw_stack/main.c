@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#define ASSERT_BOMB
+#define VERIFY_BOMB
 
 #define STACK_VALUE_TYPE int
 #define STACK_VALUE_PRINTF_SPEC "%d"
@@ -22,13 +22,13 @@ int is_zero(int a) {
 
 int main() {
     Stack_int s = {};
-    ASSERT(Stack_construct_int(&s) == OK);
+    VERIFY(Stack_construct_int(&s) == OK);
 
     for (int i = 0; i < 1000; ++i) {
-        ASSERT(Stack_push_int(&s, (double) rand() / rand()) == OK);
+        VERIFY(Stack_push_int(&s, (double) rand() / rand()) == OK);
     }
 
-    ASSERT(Stack_clear_int(&s) == OK);
+    VERIFY(Stack_clear_int(&s) == OK);
 
     Stack_dump_int(&s);
 
@@ -38,17 +38,17 @@ int main() {
 
     // USAGE EXAMPLE ==========================================================;
     Stack_double ss = {};
-    ASSERT(Stack_construct_double(&ss) == OK);
+    VERIFY(Stack_construct_double(&ss) == OK);
 
     for (int i = 0; i < 1000; ++i) {
-        ASSERT(Stack_push_double(&ss, (double) rand() / rand()) == OK);
+        VERIFY(Stack_push_double(&ss, (double) rand() / rand()) == OK);
     }
 
     Stack_dump_double(&ss);
 
     for (int i = 0; i < 10000; ++i) {
         if (rand() % 10 != 0) {
-            ASSERT(Stack_pop_double(&ss) == OK);
+            VERIFY(Stack_pop_double(&ss) == OK);
         }
     }
 
