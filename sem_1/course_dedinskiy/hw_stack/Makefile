@@ -9,11 +9,11 @@ STANDARD =
 CFLAGS = $(STANDARD) $(WARNINGS)
 
 stack: main.cpp
-	$(CC) $(CFLAGS) main.cpp -o stack
+	$(CC) $(CFLAGS) main.cpp -o stack.out
 
 run: stack
 	make clear
-	./stack
+	./stack.out
 
 clear:
 	rm *.o -f
