@@ -55,6 +55,7 @@ enum RETURN_CODES {
 
 //=============================================================================
 //<KCTF> Handmade asserts =====================================================
+
 const int KCTF_VERIFY_LOUDNESS = 1;
 const int FATAL_ERROR = 2;
 const int CHECK_ERROR = 1;
@@ -122,7 +123,7 @@ long long do_hash(void *memptr, size_t size_in_bytes) {
 }
 
 //=============================================================================
-/// Handmade stringview =======================================================
+///<KCTF> Handmade stringview =======================================================
 struct Line {
     unsigned char *string;
     size_t len;
