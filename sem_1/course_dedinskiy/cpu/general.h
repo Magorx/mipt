@@ -437,17 +437,21 @@ int File_construct(File *file, const char *name) {
     return ret;
 }
 
+
 int read_lines(File *file) {
     assert(file);
 
-    file->file_dscr = open(file->name, 1); //[<>] MAGIC fROM BINARY_O, MUST BE 1
+    file->file_dscr = open(file->name, O_RDONLY);
 
     read(file->file_dscr, file->text, (size_t) file->info.st_size);
+    
     int lines_cnt = 0;
     for (unsigned char *c = file->text; *c; ++c) {
         lines_cnt += *c == '\n';
     }
-    file->lines = (Line_t**) calloc((size_t) lines_cnt, sizeof(Line_t*));
+    file->lines_cnt = (size_t) lines_cnt + 1;
+
+    file->lines = (Line_t**) calloc((size_t) lines_cnt + 1, sizeof(Line_t*));
     if (file->lines == NULL) {
         return ERROR_MALLOC_FAIL;
     }
@@ -455,7 +459,8 @@ int read_lines(File *file) {
     unsigned char *c = file->text;
     lines_cnt = -1;
     int line_len = 0;
-    while (*c) {
+    int itrs = 0;
+    while (itrs < file->info.st_size && *c) {
         ++lines_cnt;
 
         file->lines[lines_cnt] = (Line_t*) calloc(1, sizeof(Line_t));
@@ -466,20 +471,21 @@ int read_lines(File *file) {
         line_ptr->string = c;
         line_ptr->index = lines_cnt;
 
-        while(*c != '\n') {
+        while(itrs < file->info.st_size && *c != '\n') {
             ++line_len;
             ++c;
+            ++itrs;
             if (*c == '\r') {
                 *c = '\0';
             }
         }
         *c = '\0';
         ++c;
+        ++itrs;
 
         line_ptr->len = (size_t) line_len;
         line_len = 0;
     }
-    file->lines_cnt = (size_t) lines_cnt + 1;
 
     return lines_cnt + 1;
 }

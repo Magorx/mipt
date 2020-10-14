@@ -23,6 +23,11 @@ int assemble_file(const char* fin_name, const char* fout_name) {
 
     assert(fwrite(&signature, sizeof(Signature), 1, fout) == 1);
 
+    printf("lines: %zu\n", fin.lines_cnt);
+    for (size_t i = 0; i < fin.lines_cnt; ++i) {
+    	printf("%s\n", fin.lines[i]->string);
+    }
+
     fclose(fout);
     File_destruct(&fin);
 
