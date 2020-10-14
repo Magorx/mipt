@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-const int16_t VERSION = 2;
+const int16_t VERSION = 1;
 
 /*
 Command - index

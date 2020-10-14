@@ -16,7 +16,7 @@ all: cpu
 cpu: cpu.c
 	$(CC) $(CFLAGS) cpu.c -o cpu
 
-assembler: assembler.c general.h
+assembler: assembler.c general.h opcodes.h
 	$(CC) $(CFLAGS) assembler.c -o assembler
 
 cur_run: $(CUR_PROG)
