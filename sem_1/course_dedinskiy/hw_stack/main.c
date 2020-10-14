@@ -16,16 +16,12 @@
 #undef STACK_VALUE_TYPE
 #undef STACK_VALUE_PRINTF_SPEC
 
-int is_zero(int a) {
-    return a == 0;
-}
-
 int main() {
     Stack_int s = {};
     VERIFY(Stack_construct_int(&s) == OK);
 
     for (int i = 0; i < 1000; ++i) {
-        VERIFY(Stack_push_int(&s, (double) rand() / rand()) == OK);
+        VERIFY(Stack_push_int(&s, rand()) == OK);
     }
 
     VERIFY(Stack_clear_int(&s) == OK);

@@ -126,7 +126,7 @@ int STACK_GENERIC(resize_down)(STACK_GENERIC_TYPE *cake);
 long long STACK_GENERIC(hash)(const STACK_GENERIC_TYPE *cake) {
     RETURNING_VERIFY(cake != NULL);
     RETURNING_VERIFY(cake->buffer != NULL);
-    return + do_hash((char*)cake + sizeof(long long), sizeof(STACK_GENERIC_TYPE) - 2 * sizeof(long long))
+    return + do_hash((const char*)cake + sizeof(long long), sizeof(STACK_GENERIC_TYPE) - 2 * sizeof(long long))
            + do_hash(cake->buffer, cake->capacity * sizeof(STACK_VALUE_TYPE));
 }
 
@@ -224,9 +224,9 @@ int STACK_GENERIC(dump)(const STACK_GENERIC_TYPE *cake) {
     const int validity = STACK_GENERIC(valid)(cake);
 
     if (!validity) {
-        printf("[DMP]<stack>: [ptr](%p) [valid](true)\n", (void*)cake);
+        printf("[DMP]<stack>: [ptr](%p) [valid](true)\n", (const void*) cake);
     } else {
-        printf("[DMP]<stack>: [ptr](%p) [valid](FALSE) ^- check last error -^\n", (void*)cake);
+        printf("[DMP]<stack>: [ptr](%p) [valid](FALSE) ^- check last error -^\n", (const void*) cake);
     }
 
 #ifdef SEC_HASH
@@ -274,7 +274,7 @@ int STACK_GENERIC(resize)(STACK_GENERIC_TYPE *cake, const size_t new_capacity) {
 int STACK_GENERIC(resize_up)(STACK_GENERIC_TYPE *cake) {
     STACK_OK(cake);
 
-    RETURNING_VERIFY_OK(STACK_GENERIC(resize)(cake, (double) STACK_GENERIC(capacity)(cake) * STACK_REALLOC_UP_COEF));
+    RETURNING_VERIFY_OK(STACK_GENERIC(resize)(cake, (size_t)((double) STACK_GENERIC(capacity)(cake) * STACK_REALLOC_UP_COEF)));
 
     STACK_OK(cake);
     return OK;
@@ -283,7 +283,7 @@ int STACK_GENERIC(resize_up)(STACK_GENERIC_TYPE *cake) {
 int STACK_GENERIC(resize_down)(STACK_GENERIC_TYPE *cake) {
     STACK_OK(cake);
 
-    RETURNING_VERIFY(STACK_GENERIC(resize)(cake, (double) STACK_GENERIC(capacity)(cake) / STACK_REALLOC_DOWN_COEF * 1.5) == 0);
+    RETURNING_VERIFY(STACK_GENERIC(resize)(cake, (size_t)((double) STACK_GENERIC(capacity)(cake) / STACK_REALLOC_DOWN_COEF * 1.5)) == 0);
 
     STACK_OK(cake);
     return OK;
@@ -310,7 +310,7 @@ int STACK_GENERIC(pop)(STACK_GENERIC_TYPE *cake) {
     --cake->size;
     STACK_GENERIC(recalcute_security)(cake);
 
-    if (cake->capacity / (cake->size + 1) > STACK_REALLOC_DOWN_COEF) {
+    if ((double) cake->capacity / (double) (cake->size + 1) > STACK_REALLOC_DOWN_COEF) {
         STACK_GENERIC(resize_down)(cake);
     }
 
