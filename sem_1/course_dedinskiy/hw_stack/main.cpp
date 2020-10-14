@@ -32,14 +32,3 @@ int main() {
 
     return 0;
 }
-
-/* TODO
-printf_formated(what, from_who) with statics
-
-capacity overload
-
-canary to general ??!?!??!?!!?!
-#define ERRNAME(error, descr) -> sace error: return #error ": " descr
-
-TXlib.h is_good_ptr ===== MACROS $(x)
-*/

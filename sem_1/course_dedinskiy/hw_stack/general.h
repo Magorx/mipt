@@ -3,6 +3,10 @@
     \brief General functions to be used in all projects
 */
 
+/* todo
+    + formated_print() for [what]<who>: xxx
+*/
+
 #ifndef KCTF_GENERAL_H
 #define KCTF_GENERAL_H
 
