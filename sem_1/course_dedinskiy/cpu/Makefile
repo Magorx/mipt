@@ -1,22 +1,33 @@
+CUR_PROG = assembler
+
+cur_run: $(CUR_PROG)
+
 ifndef VERBOSE
 .SILENT:
 endif
 
 CC = gcc
 
-WARNINGS = -Wall -Werror	
+WARNINGS = -Wall	
 STANDARD =  
 CFLAGS = $(STANDARD) $(WARNINGS)
 
 all: cpu
 	$(CC) $(CFLAGS) cpu.o 
 
-cpu: cpu.cpp
+cpu: cpu.c
 	$(CC) $(CFLAGS) cpu.c -o cpu
 
-run: cpu
+assembler: assembler.c general.h
+	$(CC) $(CFLAGS) assembler.c -o assembler
+
+run: cur_run
 	make clear
-	./cpu
+	./$(CUR_PROG)
+
+valg: cur_run
+	make clear
+	valgrind --leak-check=full --track-origins=yes -s ./$(CUR_PROG)
 
 clear:
 	rm *.o -f

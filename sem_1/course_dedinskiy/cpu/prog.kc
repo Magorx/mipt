@@ -1,0 +1,5 @@
+push 01 1
+push 01 2
+add
+out
+halt
