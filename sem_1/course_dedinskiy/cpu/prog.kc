@@ -1,5 +1,9 @@
-push 01 1
-push 01 2
+push i 1
+push u 2
+pop u rax
+pop i rbx
+push d rax+1
+push d rbx+2
 add
 out
 halt

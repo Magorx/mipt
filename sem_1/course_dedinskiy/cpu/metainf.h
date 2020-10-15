@@ -5,8 +5,8 @@
 
 typedef struct Signature_t {
 	int32_t magic;
-	int16_t version;
-	int32_t file_size;
+	int32_t version;
+	int64_t file_size;
 } Signature;
 
 #endif // METAINF_H

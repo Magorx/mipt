@@ -43,7 +43,6 @@
     #pragma GCC diagnostic warning     "-Wformat=2"
     #pragma GCC diagnostic warning     "-Wlarger-than=8192"
     #pragma GCC diagnostic warning     "-Wlogical-op"
-    #pragma GCC diagnostic warning     "-Wmissing-declarations"
     #pragma GCC diagnostic warning     "-Wnarrowing"
     #pragma GCC diagnostic warning     "-Wnon-virtual-dtor"
     #pragma GCC diagnostic warning     "-Wnonnull"
@@ -96,6 +95,9 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <stdint.h>
+
+typedef int8_t Byte;
 
 //<KCTF> Everyday_staff =======================================================
 
@@ -107,11 +109,16 @@ unsigned char DEBUG_LETTER = 'a'; ///< Just a char for debugging
 #define DEBUG_NUMBER_PRINT() printf("[deb] %d [deb]\n", DEBUG_NUMBER++);
 #define DEBUG_LETTER_PRINT() printf("[deb] %c [deb]\n", DEBUG_LETTER++);
 
+#define DEBUG_PRINTF() DEBUG_NUMBER_PRINT();
+
 #define DEBUG_NUMBER_INCR() DEBUG_NUMBER++;
 #define DEBUG_LETTER_INCR() DEBUG_LETTER++;
 
 #define DEBUG(LEVEL) if (LEVEL <= KCTF_DEBUG_LEVEL)
 
+const size_t STANDART_INIT_SIZE = 32;
+
+const long KCTF_POISON = -7777777;
 const int INT_P = -7777777; /// Poison int
 const size_t SIZE_T_P = 7777777; /// Poison size_t
 
@@ -121,6 +128,7 @@ enum RETURN_CODES {
     ERROR_FILE_NOT_FOUND = -20,
     ERROR_BIG_FILE,
     ERROR_MALLOC_FAIL,
+    ERROR_REALLOC_FAIL,
     ERROR_NULL_OBJECT,
     ERROR_NO_RET_CODE,
     ERROR_BAD_ARGS,
@@ -131,7 +139,8 @@ enum RETURN_CODES {
     ERROR_CHECK_UPPER_VERIFY = -1,
 
     NULL_OBJ_OK = 0,
-    RET_OK = 0
+    RET_OK = 0,
+    OK = 0
 };
 
 #define PRINTF_ERROR printf("EROR HAPANED\n")
@@ -206,15 +215,129 @@ long long do_hash(const void *memptr, size_t size_in_bytes) {
 }
 
 //=============================================================================
-///<KCTF> Handmade stringview =======================================================
-struct Line {
+//<KCTF> Buffer work ==========================================================
+
+void *realloc_buffer(void *buffer, const size_t cur_len, const double coef);
+void *realloc_buffer(void *buffer, const size_t cur_len, const double coef) {
+    const size_t new_size = (size_t) ((double) cur_len * coef);
+    void *new_ptr = realloc(buffer, new_size);
+    return new_ptr;
+}
+
+//=============================================================================
+//<KCTF> Byte output ==========================================================
+
+typedef struct ByteOP_t {
+    size_t capacity;
+    size_t size;
+    Byte *buffer;
+    Byte *cur_ptr;
+} ByteOP;
+
+ByteOP *new_ByteOP(const size_t size) {
+    ByteOP *bop = calloc(sizeof(ByteOP), 1);
+    if (!bop) {
+        return NULL;
+    }
+
+    bop->buffer = calloc(size, 1);
+    if (!bop->buffer) {
+        free(bop);
+        return NULL;
+    }
+    bop->cur_ptr = bop->buffer;
+    bop->capacity = size;
+    bop->size = 0;
+
+    return bop;
+}
+
+int delete_ByteOP(ByteOP *cake) {
+    free(cake->buffer);
+
+    cake->buffer = (Byte*) KCTF_POISON;
+    cake->cur_ptr = (Byte*) KCTF_POISON;
+    cake->capacity = (size_t) KCTF_POISON;
+    cake->size = (size_t) KCTF_POISON;
+
+    free(cake);
+
+    return 0;
+}
+
+int ByteOP_realloc_up(ByteOP *cake) {
+    assert(cake);
+    void *new_ptr = realloc_buffer(cake->buffer, cake->capacity, 2);
+    if (!new_ptr) {
+        return ERROR_REALLOC_FAIL;
+    }
+
+    long int shift = cake->cur_ptr - cake->buffer;
+    cake->buffer = (Byte*) new_ptr;
+    cake->cur_ptr = cake->buffer + shift;
+    cake->capacity = cake->capacity * 2;
+
+    return 0;
+}
+
+int ByteOP_put(ByteOP *cake, const void *src, const size_t size) {
+    VERIFY(cake != NULL);
+    if (cake->size + size >= cake->capacity) {
+        VERIFY_OK(ByteOP_realloc_up(cake));
+    }
+
+    memcpy(cake->cur_ptr, src, size);
+    cake->cur_ptr += size;
+    cake->size += size;
+
+    return 0;
+}
+
+int ByteOP_put_byte(ByteOP *cake, const Byte src) {
+    VERIFY(cake != NULL);
+    ByteOP_put(cake, &src, sizeof(Byte));
+    return 0;
+}
+
+int ByteOP_put_int(ByteOP *cake, const int src) {
+    VERIFY(cake != NULL);
+    ByteOP_put(cake, &src, sizeof(int));
+    return 0;
+}
+
+int ByteOP_put_long(ByteOP *cake, const long src) {
+    VERIFY(cake != NULL);
+    ByteOP_put(cake, &src, sizeof(long));
+    return 0;
+}
+
+int ByteOP_put_unsigned(ByteOP *cake, const unsigned int src) {
+    VERIFY(cake != NULL);
+    ByteOP_put(cake, &src, sizeof(unsigned int));
+    return 0;
+}
+
+int ByteOP_put_double(ByteOP *cake, const double src) {
+    VERIFY(cake != NULL);
+    ByteOP_put(cake, &src, sizeof(double));
+    return 0;
+}
+
+int ByteOP_to_file(const ByteOP *cake, const char* filename) {
+    VERIFY(cake != NULL);
+    FILE *fout = fopen(filename, "wb");
+    fwrite(cake->buffer, sizeof(Byte), cake->size, fout);
+    fclose(fout);
+
+    return 0;
+}
+
+//=============================================================================
+///<KCTF> Handmade stringview =================================================
+typedef struct Line_t {
     unsigned char *string;
     size_t len;
-    int index; // for debug !#!@#@!#@!#@!#
-};
-
-/// Typedef for Line
-typedef struct Line Line_t;
+} Line;
 
 /// Struct to store file's information into
 typedef struct File_t {
@@ -223,7 +346,7 @@ typedef struct File_t {
     struct stat info;
     unsigned char *text;
     size_t lines_cnt;
-    Line_t **lines;
+    Line **lines;
 } File;
 
 /**
@@ -384,8 +507,8 @@ void get_next_letter(const unsigned char **c) {
 }
 
 int compare_lines_letters(const void *elem1, const void *elem2) {
-    const unsigned char *first_c  = ((**(Line_t* const *)elem1).string);
-    const unsigned char *second_c = ((**(Line_t* const *)elem2).string);
+    const unsigned char *first_c  = ((**(Line* const *)elem1).string);
+    const unsigned char *second_c = ((**(Line* const *)elem2).string);
 
     while (*first_c && *second_c) {
         get_next_letter(&first_c);
@@ -411,7 +534,7 @@ int reverse_compare_lines_letters(const void **elem1, const void **elem2) {
 void File_destruct(const File *file) {
     assert(file);
 
-    Line_t **lines_ptr = file->lines;
+    Line **lines_ptr = file->lines;
     for (size_t i = 0; i < file->lines_cnt; ++i) {
         free(*lines_ptr);
         ++lines_ptr;
@@ -451,7 +574,7 @@ int read_lines(File *file) {
     }
     file->lines_cnt = (size_t) lines_cnt + 1;
 
-    file->lines = (Line_t**) calloc((size_t) lines_cnt + 1, sizeof(Line_t*));
+    file->lines = (Line**) calloc((size_t) lines_cnt + 1, sizeof(Line*));
     if (file->lines == NULL) {
         return ERROR_MALLOC_FAIL;
     }
@@ -463,13 +586,12 @@ int read_lines(File *file) {
     while (itrs < file->info.st_size && *c) {
         ++lines_cnt;
 
-        file->lines[lines_cnt] = (Line_t*) calloc(1, sizeof(Line_t));
-        Line_t *line_ptr = file->lines[lines_cnt];
+        file->lines[lines_cnt] = (Line*) calloc(1, sizeof(Line));
+        Line *line_ptr = file->lines[lines_cnt];
         if (line_ptr == NULL) {
             return ERROR_MALLOC_FAIL;
         }
         line_ptr->string = c;
-        line_ptr->index = lines_cnt;
 
         while(itrs < file->info.st_size && *c != '\n') {
             ++line_len;
@@ -488,6 +610,30 @@ int read_lines(File *file) {
     }
 
     return lines_cnt + 1;
+}
+
+char Line_starts_with(const unsigned char *line, const char *sample);
+char Line_starts_with(const unsigned char *line, const char *sample) {
+    while (*line && *sample) {
+        if (*line != *sample) {
+            return 0;
+        }
+        ++line;
+        ++sample;
+    }
+
+    return 1;
+}
+
+char Line_verify_min_len(const Line *line, const size_t min_length);
+char Line_verify_min_len(const Line *line, const size_t min_length) {
+    if (line->len >= min_length) {
+        return 1;
+    } else {
+        printf("[ERR]<min_len>: \"%s\" is not of the min len %zu\n", line->string, min_length);
+        VERIFY(!"Line is not big enough");
+        return 0;
+    }
 }
 
 void print_file(const File *file, const char *fout_name, const char *mode) {
@@ -516,41 +662,6 @@ void print_error(int error) {
     } else {
         printf("[ERR](~!~)WERRORHUTGEERRORF(~!~)[ERR]\n");
     }
-}
-
-
-// UNIT TESTS
-int utest_compare_lines_letters();
-int utest_compare_lines_letters() {
-    //srand(time(NULL));
-    File file = {};
-    File_construct(&file, "utest_compare_lines_letters.txt");
-    for (size_t itter = 0; itter < 1000; ++itter) {
-        for (size_t i = 0; i < file.lines_cnt / 2; ++i) {
-            const size_t x = (size_t) rand() % file.lines_cnt;
-            const size_t y = (size_t) rand() % file.lines_cnt;
-            Line_t *tmp = file.lines[x];
-            file.lines[x] = file.lines[y];
-            file.lines[y] = tmp;
-        }
-
-        qsort(file.lines, file.lines_cnt, sizeof(Line_t*), compare_lines_letters);
-
-        for (size_t i = 0; i < file.lines_cnt - 1; ++i) {
-            if (file.lines[i]->index > file.lines[i + 1]->index && compare_lines_letters(&file.lines[i], &file.lines[i + 1])) {
-                printf("[ERR] \"%s\" > \"%s\"\n", file.lines[i]->string, file.lines[i + 1]->string);
-                printf("[ ! ] indexes: %d > %d\n", file.lines[i]->index, file.lines[i + 1]->index);
-                DEBUG(2) {
-                    printf("====\n");
-                    for (size_t j = 0; j < file.lines_cnt; ++j) {
-                        printf("%s\n", file.lines[j]->string);
-                    }
-                }
-            }
-        }
-    }
-
-    return 0;
 }
 
 //<KCTF>[SUPER_SIMPLE] ========================================================
