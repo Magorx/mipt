@@ -97,7 +97,7 @@
 #include <unistd.h>
 #include <stdint.h>
 
-typedef int8_t Byte;
+typedef uint8_t Byte;
 
 //<KCTF> Everyday_staff =======================================================
 
@@ -152,39 +152,41 @@ const int KCTF_VERIFY_LOUDNESS = 1;
 const int FATAL_ERROR = 2;
 const int CHECK_ERROR = 1;
 
-#define FULL_VERIFY(expr, err_name, loudness, cur_loudness, droptable, ERROR)       \
-    do {                                                                            \
-        int ret = (expr);                                                           \
-        if ((ERROR || !ret) && (loudness) >= (cur_loudness)) {                      \
-            printf("[ERR]<assert>: [erro_erro](%s)\n", err_name);                   \
-            if (ret == 0) {                                                         \
-            printf("[   ]<      >: [erro_code](%X)\n", (unsigned)0xDED);            \
-            } else {                                                                \
-            printf("[   ]<      >: [erro_code](%d)\n", ret);                        \
-            }                                                                       \
-            printf("[   ]<      >: [file_name](%s)\n", __FILE__);                   \
-            printf("[   ]<      >: [func_name](%s)\n", __FUNCTION__);               \
-            printf("[   ]<      >: [line_indx](%d)\n", __LINE__);                   \
-            }                                                                       \
-        if (ERROR || !ret) {                                                        \
-            if (droptable) { exit   (ERROR_CHECK_UPPER_VERIFY); }                   \
-            else           { return (ERROR_CHECK_UPPER_VERIFY); }                   \
-        }                                                                           \
+#define FULL_VERIFY(expr, err_name, loudness, cur_loudness, droptable, ERROR, ret_type)  \
+    do {                                                                                 \
+        int ret = (expr);                                                                \
+        if ((ERROR || !ret) && (loudness) >= (cur_loudness)) {                           \
+            printf("[ERR]<assert>: [erro_erro](%s)\n", err_name);                        \
+            if (ret == 0) {                                                              \
+            printf("[   ]<      >: [erro_code](%X)\n", (unsigned)0xDED);                 \
+            } else {                                                                     \
+            printf("[   ]<      >: [erro_code](%d)\n", ret);                             \
+            }                                                                            \
+            printf("[   ]<      >: [file_name](%s)\n", __FILE__);                        \
+            printf("[   ]<      >: [func_name](%s)\n", __FUNCTION__);                    \
+            printf("[   ]<      >: [line_indx](%d)\n", __LINE__);                        \
+            }                                                                            \
+        if (ERROR || !ret) {                                                             \
+            if (droptable) { exit   ((ret_type) ERROR_CHECK_UPPER_VERIFY); }             \
+            else           { return ((ret_type) ERROR_CHECK_UPPER_VERIFY); }             \
+        }                                                                                \
     } while(0)
 
-#define VERIFY_YESDROP(expr, err_name, loudness, cur_loudness) FULL_VERIFY(expr, err_name, loudness, cur_loudness, 1, 0)
+#define VERIFY_YESDROP(expr, err_name, loudness, cur_loudness) FULL_VERIFY(expr, err_name, loudness, cur_loudness, 1, 0, int)
 #define VERIFY_LOUDSET(expr, err_name, loudness) VERIFY_YESDROP(expr, err_name, loudness, KCTF_VERIFY_LOUDNESS)
 #define VERIFY_ERRCDNM(expr, err_name) VERIFY_LOUDSET(expr, err_name, KCTF_VERIFY_LOUDNESS)
 
 #define VERIFY(expr) VERIFY_ERRCDNM(expr, #expr)
 #define VERIFY_OK(expr) VERIFY((expr) == OK)
 
+#define VERIFY_t(expr, type) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 1, 0, type)
+
 #define RETURN_ERROR_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 0, 1)
 
 #ifdef VERIFY_BOMB
-#define RETURNING_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 1, 0)
+#define RETURNING_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 1, 0, int)
 #else
-#define RETURNING_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 0, 0)
+#define RETURNING_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 0, 0, int)
 #endif
 
 #define RETURNING_VERIFY_OK(expr) RETURNING_VERIFY((expr) == OK)
@@ -226,6 +228,8 @@ void *realloc_buffer(void *buffer, const size_t cur_len, const double coef) {
 
 //=============================================================================
 //<KCTF> Byte output ==========================================================
+
+const size_t STANDART_BYTE_LINE_BYTES_COUNT = 12;
 
 typedef struct ByteOP_t {
     size_t capacity;
@@ -450,7 +454,7 @@ void swap_ptrs(void **first, void **second);
     \param[in] first,second prts to swap
     \return
 */
-void get_next_letter(const unsigned char **c);
+void Char_get_next_symb(const unsigned char **c);
 
 /**
     \brief Prints text error message to standard output
@@ -496,11 +500,11 @@ void qqh_sort(void *input_arr, const size_t elem_cnt, const size_t elem_size, in
     }
 }
 
-void get_next_letter(const unsigned char **c) {
+void Char_get_next_symb(const unsigned char **c) {
     assert(c);
 
     const unsigned char *cur_c = *c;
-    while(!is_countable(*cur_c) && *cur_c) {
+    while(isspace(*cur_c) && *cur_c) {
         ++cur_c;
     }
     *c = cur_c;
@@ -511,8 +515,8 @@ int compare_lines_letters(const void *elem1, const void *elem2) {
     const unsigned char *second_c = ((**(Line* const *)elem2).string);
 
     while (*first_c && *second_c) {
-        get_next_letter(&first_c);
-        get_next_letter(&second_c);
+        Char_get_next_symb(&first_c);
+        Char_get_next_symb(&second_c);
 
         if (*first_c != *second_c || (*first_c) * (*second_c) == 0) {
             return (int) *first_c - (int) *second_c;
@@ -522,8 +526,8 @@ int compare_lines_letters(const void *elem1, const void *elem2) {
         ++second_c;
     }
 
-    get_next_letter(&first_c);
-    get_next_letter(&second_c);
+    Char_get_next_symb(&first_c);
+    Char_get_next_symb(&second_c);
     return (int) *first_c - (int) *second_c;
 }
 

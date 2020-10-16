@@ -31,3 +31,6 @@ valg: cur_run
 
 clear:
 	rm *.o -f
+
+show:
+	hexdump -C out.kctf

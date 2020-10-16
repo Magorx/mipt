@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 const int16_t VERSION = 1;
+const Byte REGISTERS_COUNT = 4;
 
 /*
 Command - index
@@ -21,7 +22,8 @@ out - 9
 */
 
 enum OPCODES {
-	OPCODE_PUSH = 1,
+	OPCODE_PUSH_STACK = 1,
+	OPCODE_PUSH_REG,
 	OPCODE_POP,
 	OPCODE_ADD,
 	OPCODE_SUB,
@@ -54,6 +56,16 @@ enum OPCODES_CHAR_LITERALS {
 	OPCODE_MULTIPLY = '*',
 	OPCODE_DIVIDE = '/'
 };
+
+const char *OPNAME_PUSH = "push";
+const char *OPNAME_POP  = "pop";
+const char *OPNAME_ADD  = "add";
+const char *OPNAME_SUB  = "sub";
+const char *OPNAME_MUL  = "mul";
+const char *OPNAME_DIV  = "div";
+const char *OPNAME_SIN  = "sin";
+const char *OPNAME_COS  = "cos";
+const char *OPNAME_OUT  = "out";
 
 const char *COMMANDS_INDEXES[] = {
 	""
