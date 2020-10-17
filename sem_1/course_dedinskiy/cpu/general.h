@@ -510,6 +510,16 @@ void Char_get_next_symb(const unsigned char **c) {
     *c = cur_c;
 }
 
+char Char_in_string(const unsigned char c, const unsigned char *str) {
+    while (*str) {
+        if (c == *str) {
+            return 1;
+        }
+        ++str;
+    }
+    return 0;
+}
+
 int compare_lines_letters(const void *elem1, const void *elem2) {
     const unsigned char *first_c  = ((**(Line* const *)elem1).string);
     const unsigned char *second_c = ((**(Line* const *)elem2).string);

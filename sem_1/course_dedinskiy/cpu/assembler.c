@@ -7,37 +7,88 @@
 #include "opcodes.h"
 #include "metainf.h"
 
-int extract_register_index(const unsigned char **symb, Byte *reg_index) {
+int check_and_process_opname(const unsigned char **symb, ByteOP *bop, const char *opname, const int opcode) {
+	if (Line_starts_with(*symb, opname)) {
+		*symb += strlen(OPNAME_PUSH);
+    	
+    	Char_get_next_symb(symb);
+    	
+    	ByteOP_put_byte(bop, (Byte) opcode);
+    	return 1;
+	}
+	return 0;
+}
+
+int get_extract_register_index(const unsigned char **symb, Byte *reg_index) {
 	VERIFY(**symb == 'r');
+
 	*symb += 1;
+
 	const Byte register_index = (Byte) (**symb - 'a');
 	VERIFY(register_index <= REGISTERS_COUNT);
+	
 	*symb += 2;
-
 	Char_get_next_symb(symb);
 
 	*reg_index = register_index;
 	return 0;
 }
 
-int extract_operation_code(const unsigned char **symb, Byte *opcode) {
-	const Byte operation_code = **symb;
-	*symb += 1;
-	Char_get_next_symb(symb);
-
-	*opcode = operation_code;
+int put_extract_register_index(const unsigned char **symb, ByteOP *bop) {
+	Byte reg_idx = 0;
+	get_extract_register_index(symb, &reg_idx);
+	ByteOP_put_byte(bop, reg_idx);
 	return 0;
 }
 
-int extract_const_value(const unsigned char **symb, double *value) {
+int get_extract_const_value(const unsigned char **symb, double *value) {
 	double val = 0;
 	int symbs_read = 0;
 	sscanf((const char *) *symb, "%lg%n", &val, &symbs_read);
 	VERIFY(symbs_read > 0);
 
+	*symb += symbs_read;
+	Char_get_next_symb(symb);
+
 	*value = val;
 	return 0;
 }
+
+int put_extract_operator_value(const unsigned char **symb, ByteOP *bop) {
+	VERIFY(Char_in_string(**symb, OPERATIONS));
+	ByteOP_put_byte(bop, **symb);
+
+	*symb += 1;
+	Char_get_next_symb(symb);
+
+	return 0;
+}
+
+int put_extract_value(const unsigned char **symb, ByteOP *bop) {
+	VERIFY(**symb != '\n');
+
+	if (**symb == 'r') {
+		Byte reg_idx = 0;
+		get_extract_register_index(symb, &reg_idx);
+		if (Char_in_string(**symb, OPERATIONS)) {
+			put_extract_operator_value(symb, bop);
+			put_extract_value(symb, bop);
+		}
+		ByteOP_put_byte(bop, reg_idx);
+	} else {
+		double const_val = 0;
+		get_extract_const_value(symb, &const_val);
+		if (Char_in_string(**symb, OPERATIONS)) {
+			put_extract_operator_value(symb, bop);
+			put_extract_value(symb, bop);
+		}
+		ByteOP_put_double(bop, const_val);
+	}
+
+	return 0;
+}
+
+int extract_line(const unsigned char **symb, ByteOP *bop);
 
 int assemble_file(const char *fin_name, const char* fout_name) {
 	File fin = {};
@@ -64,34 +115,21 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     	Line *line = fin.lines[line_i];
     	const unsigned char *str = line->string;
     	const unsigned char *symb = str;
+		Char_get_next_symb(&symb);
 
     	const int before_line_index = (int) (bop->cur_ptr - bop->buffer); // for listing
 
-    	if (Line_starts_with(symb, OPNAME_PUSH)) {
-    		symb += strlen(OPNAME_PUSH);
-    		Char_get_next_symb(&symb);
+    	if (0) {
 
-    		if (*symb == 'r') {
-    			ByteOP_put_byte(bop, OPCODE_PUSH_REG);
+    	}
+    	else if (check_and_process_opname(&symb, bop, OPNAME_PUSH, OPCODE_PUSH)) {
+    		put_extract_value(&symb, bop);
+    	}
+    	else if (check_and_process_opname(&symb, bop, OPNAME_POP, OPCODE_POP)) {
+    		put_extract_value(&symb, bop);
+    	}
+    	else if (check_and_process_opname(&symb, bop, OPNAME_POP, OPCODE_POP)) {
 
-    			Byte reg_idx = 0;
-    			Byte operation = 0;
-    			double const_val = 0;
-    			
-    			extract_register_index(&symb, &reg_idx);
-    			extract_operation_code(&symb, &operation);
-    			extract_const_value   (&symb, &const_val);
-
-    			ByteOP_put_byte   (bop, reg_idx);
-    			ByteOP_put_byte   (bop, operation);
-    			ByteOP_put_double (bop, const_val);
-    		} else {
-    			ByteOP_put_byte(bop, OPCODE_PUSH_STACK);
-
-    			double const_val = 0;
-    			extract_const_value(&symb, &const_val);
-    			ByteOP_put_double(bop, const_val);
-    		}
     	}
 
     	printf("%.4ld | ", bop->cur_ptr - bop->buffer);

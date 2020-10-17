@@ -22,8 +22,7 @@ out - 9
 */
 
 enum OPCODES {
-	OPCODE_PUSH_STACK = 1,
-	OPCODE_PUSH_REG,
+	OPCODE_PUSH = 1,
 	OPCODE_POP,
 	OPCODE_ADD,
 	OPCODE_SUB,
@@ -35,14 +34,8 @@ enum OPCODES {
 };
 
 enum OPCODES_ARGS {
-	ARG_PUSH_REG_ADD = 1,
-	ARG_PUSH_REG_SUB,
-	ARG_PUSH_REG_MUL,
-	ARG_PUSH_REG_DIV,
-	ARG_PUSH_SHORT,
-	ARG_PUSH_INT,
-	ARG_PUSH_LONG,
-	ARG_PUSH_DOUBLE
+	VALUE_REGISTER = 1,
+	VALUE_CONSTANT
 };
 
 enum OPCODES_CHAR_LITERALS {
@@ -50,12 +43,13 @@ enum OPCODES_CHAR_LITERALS {
 	OPCODE_INT = 'i',
 	OPCODE_LONG = 'l',
 	OPCODE_UNSIGNED = 'u',
-	OPCODE_DOUBLE = 'd',
-	OPCODE_PLUS = '+',
-	OPCODE_MINUS = '-',
-	OPCODE_MULTIPLY = '*',
-	OPCODE_DIVIDE = '/'
+	OPNAME_DOUBLE = 'd',
+	OPNAME_PLUS = '+',
+	OPNAME_MINUS = '-',
+	OPNAME_MULTIPLY = '*',
+	OPNAME_DIVIDE = '/'
 };
+const unsigned char *OPERATIONS = (unsigned char*)"+-*/";
 
 const char *OPNAME_PUSH = "push";
 const char *OPNAME_POP  = "pop";
