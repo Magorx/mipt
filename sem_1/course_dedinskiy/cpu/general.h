@@ -229,7 +229,7 @@ void *realloc_buffer(void *buffer, const size_t cur_len, const double coef) {
 //=============================================================================
 //<KCTF> Byte output ==========================================================
 
-const size_t STANDART_BYTE_LINE_BYTES_COUNT = 12;
+const size_t STANDART_BYTE_LINE_BYTES_COUNT = 14;
 
 typedef struct ByteOP_t {
     size_t capacity;
@@ -628,6 +628,10 @@ int read_lines(File *file) {
 
 char Line_starts_with(const unsigned char *line, const char *sample);
 char Line_starts_with(const unsigned char *line, const char *sample) {
+    if (!*line || !*sample) {
+        return 0;
+    }
+
     while (*line && *sample) {
         if (*line != *sample) {
             return 0;

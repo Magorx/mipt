@@ -10,18 +10,16 @@ WARNINGS = -Wall -Werror -Wno-multichar
 STANDARD =  
 CFLAGS = $(STANDARD) $(WARNINGS)
 
-all: cpu
-	$(CC) $(CFLAGS) cpu.o 
-
 cpu: cpu.c
 	$(CC) $(CFLAGS) cpu.c -o cpu
 
 assembler: assembler.c general.h opcodes.h
 	$(CC) $(CFLAGS) assembler.c -o assembler
 
-cur_run: $(CUR_PROG)
+everytime.mkdmp:
+	./opcodes_gen.py
 
-run: cur_run
+run: everytime.mkdmp $(CUR_PROG)
 	make clear
 	./$(CUR_PROG)
 

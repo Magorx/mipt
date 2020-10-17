@@ -74,6 +74,7 @@ int put_extract_value(const unsigned char **symb, ByteOP *bop) {
 			put_extract_operator_value(symb, bop);
 			put_extract_value(symb, bop);
 		}
+		ByteOP_put_byte(bop, VALUE_REGISTER);
 		ByteOP_put_byte(bop, reg_idx);
 	} else {
 		double const_val = 0;
@@ -82,13 +83,29 @@ int put_extract_value(const unsigned char **symb, ByteOP *bop) {
 			put_extract_operator_value(symb, bop);
 			put_extract_value(symb, bop);
 		}
+		ByteOP_put_byte(bop, VALUE_CONSTANT);
 		ByteOP_put_double(bop, const_val);
 	}
 
 	return 0;
 }
 
-int extract_line(const unsigned char **symb, ByteOP *bop);
+int put_extract_line(const unsigned char **symb, ByteOP *bop) {
+	for (int opcode = 0; opcode < (int) MAX_OPCODES_COUNT; ++opcode) {
+		if (OPNAMES[opcode] == NULL) {
+			continue;
+		}
+
+		if (check_and_process_opname(symb, bop, OPNAMES[opcode], opcode)) {
+			 if (OPARGS[opcode]) {
+			 	put_extract_value(symb, bop);
+			 }
+			 break;
+		}
+	}
+
+    return 0;
+}
 
 int assemble_file(const char *fin_name, const char* fout_name) {
 	File fin = {};
@@ -119,18 +136,9 @@ int assemble_file(const char *fin_name, const char* fout_name) {
 
     	const int before_line_index = (int) (bop->cur_ptr - bop->buffer); // for listing
 
-    	if (0) {
+    	put_extract_line(&symb, bop);
 
-    	}
-    	else if (check_and_process_opname(&symb, bop, OPNAME_PUSH, OPCODE_PUSH)) {
-    		put_extract_value(&symb, bop);
-    	}
-    	else if (check_and_process_opname(&symb, bop, OPNAME_POP, OPCODE_POP)) {
-    		put_extract_value(&symb, bop);
-    	}
-    	else if (check_and_process_opname(&symb, bop, OPNAME_POP, OPCODE_POP)) {
-
-    	}
+    	// Listing =====
 
     	printf("%.4ld | ", bop->cur_ptr - bop->buffer);
     	size_t bytes_prined = 0;
@@ -145,7 +153,7 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     	}
     	printf("| [%zu] %s", line_i, str);
     	printf("\n");
-
+    	//==============
     }
 
     File_destruct(&fin);
