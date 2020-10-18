@@ -8,7 +8,6 @@ push rbx * rbx
 push -4 * rax * rcx
 add
 sqrt
-out
 pop rdx
 push  2 * rax
 push -1 * rbx

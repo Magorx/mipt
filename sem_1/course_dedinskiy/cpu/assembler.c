@@ -8,7 +8,7 @@
 #include "metainf.h"
 
 int check_and_process_opname(const unsigned char **symb, ByteOP *bop, const char *opname, const int opcode) {
-	if (Line_starts_with(*symb, opname)) {
+	if (String_starts_with(*symb, opname)) {
 		*symb += strlen(OPNAME_PUSH);
     	
     	Char_get_next_symb(symb);
@@ -168,7 +168,7 @@ int assemble_file(const char *fin_name, const char* fout_name) {
 
     printf("------\n");
 
-    printf("%.4ld\n", signature.file_size);
+    printf("%.4ld - %s\n", signature.file_size, fout_name);
 
     delete_ByteOP(bop);
 
@@ -177,14 +177,14 @@ int assemble_file(const char *fin_name, const char* fout_name) {
 	return 0;
 }
 
-typedef union Uni_t {
-	int i;
-	long l;
-	double d;
-} Uni;
+int main(const int argc, const char **argv) {
+	const char *input_file  = "prog.kc";
+	const char *output_file = "out.tf";
+	if (argc > 1) {
+		input_file = argv[1];
+	}
 
-int main() {
-	assemble_file("prog.kc", "out.kctf");
+	assemble_file(input_file, output_file);
 
 	return 0;
 }

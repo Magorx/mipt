@@ -402,6 +402,13 @@ int ByteIP_left_to_file(ByteIP *cake, const char *file_name) {
     return 0;
 }
 
+int ByteIP_reset(ByteIP *cake) {
+    VERIFY(cake != NULL);
+
+    cake->cur_idx = 0;
+    return 0;
+}
+
 int ByteIP_get(ByteIP *cake, void *dest, const size_t size) {
     VERIFY(cake != NULL);
     VERIFY(dest != NULL);
@@ -725,8 +732,7 @@ int read_lines(File *file) {
     return lines_cnt + 1;
 }
 
-char Line_starts_with(const unsigned char *line, const char *sample);
-char Line_starts_with(const unsigned char *line, const char *sample) {
+char String_starts_with(const unsigned char *line, const char *sample) {
     if (!*line || !*sample) {
         return 0;
     }
@@ -740,17 +746,6 @@ char Line_starts_with(const unsigned char *line, const char *sample) {
     }
 
     return 1;
-}
-
-char Line_verify_min_len(const Line *line, const size_t min_length);
-char Line_verify_min_len(const Line *line, const size_t min_length) {
-    if (line->len >= min_length) {
-        return 1;
-    } else {
-        printf("[ERR]<min_len>: \"%s\" is not of the min len %zu\n", line->string, min_length);
-        VERIFY(!"Line is not big enough");
-        return 0;
-    }
 }
 
 void print_file(const File *file, const char *fout_name, const char *mode) {

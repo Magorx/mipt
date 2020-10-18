@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+const int32_t KCTF_MAGIC = 'FTCK';
+
 typedef struct Signature_t {
 	int32_t magic;
 	int32_t version;
