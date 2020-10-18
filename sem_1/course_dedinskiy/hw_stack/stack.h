@@ -127,7 +127,7 @@ long long STACK_GENERIC(hash)(const STACK_GENERIC_TYPE *cake) {
     RETURNING_VERIFY(cake != NULL);
     RETURNING_VERIFY(cake->buffer != NULL);
     return + do_hash((const char*)cake + sizeof(long long), sizeof(STACK_GENERIC_TYPE) - 2 * sizeof(long long))
-           + do_hash(cake->buffer, cake->capacity * sizeof(STACK_VALUE_TYPE));
+           + do_hash(cake->buffer, (cake->capacity - 1) * sizeof(STACK_VALUE_TYPE));
 }
 
 #ifdef SEC_HASH
