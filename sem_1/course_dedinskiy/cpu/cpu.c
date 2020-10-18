@@ -11,7 +11,7 @@ int main(const int argc, const char **argv) {
 	CPU *cpu = new_CPU();
 
 	CPU_init_thread(cpu, input_file);
-	//CPU_init_thread(cpu, input_file);
+	CPU_init_thread(cpu, input_file);
 	while(CPU_tick(cpu) == OK);
 
 	delete_CPU(cpu);

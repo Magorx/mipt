@@ -40,7 +40,7 @@ enum OPCODES_CHAR_LITERALS {
 	OPNAME_MULTIPLY = '*',
 	OPNAME_DIVIDE = '/'
 };
-const unsigned char *OPERATIONS = (unsigned char*)"+-*/";
+const unsigned char *OPERATIONS = (unsigned char*)"+-*";
 
 const char *OPNAME_PUSH = "push";
 const char *OPNAME_POP  = "pop";

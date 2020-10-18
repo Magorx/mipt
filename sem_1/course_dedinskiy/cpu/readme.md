@@ -26,6 +26,6 @@ make cpu
 ```
 cpu prog.xxx
 ```
-to run programm produced by **assembler only**. Running any other file will result in UB and other horrible things.
+to run programm produced **only by assembler**. Running any other file will result in UB and other horrible things.
 
 The suggested format is ```.tf``` for programms.

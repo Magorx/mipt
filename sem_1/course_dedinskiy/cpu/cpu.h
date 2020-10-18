@@ -39,7 +39,7 @@ typedef struct CPU_t {
 	Register registers[REGISTERS_COUNT];
 
 	Stack_double  *rsp; // Stack register pointer
-	ByteIP *bip; // ByteIP of current thread
+	ByteIP *bip;        // ByteIP of current thread
 	
 	Thread **threads;
 	size_t threads_capacity;

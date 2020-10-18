@@ -7,9 +7,6 @@ pop rax
 push rbx * rbx
 push -4 * rax * rcx
 add
-
-label_name:
-
 sqrt
 pop rdx
 push  2 * rax
@@ -17,30 +14,12 @@ push -1 * rbx
 push -1 * rdx
 add
 div
--
-jmp label_name
--
 out
 push  2 * rax
 push -1 * rbx
-
-label_name:
-
 push rdx
 add
 div
 out
-
-
-cmp rax, rbx
-
-cmp rax, 0
-ja label_name
-jae
-jb
-jbe
-je
-jne
-
 halt
 

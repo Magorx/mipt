@@ -1,9 +1,0 @@
-push 4
-push 8
-pop rax
-pop rbx
-push rax + 1
-push rbx - 2
-add
-out
-halt

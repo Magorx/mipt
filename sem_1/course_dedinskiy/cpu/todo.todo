@@ -5,3 +5,5 @@
 [ + ] cpu <-> thread adequates 
 [ . ] formated []<>:[]() printf
 [!!!] refactor
+[ . ] / - in assembler
+[ . ] put + check_and_process_opname
