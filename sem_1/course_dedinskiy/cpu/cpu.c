@@ -1,25 +1,25 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-
-#include "general.h"
 #include "cpu.h"
-#include "metainf.h"
-#include "opcodes.h"
 
-#define STACK_VALUE_TYPE double
-#define STACK_VALUE_PRINTF_SPEC "%lg"
-#include "stack.h"
-#undef STACK_VALUE_TYPE
-#undef STACK_VALUE_PRINTF_SPEC
+// The cpu itself =============================================================
 
-typedef struct Thread_t {
-	byte id;
-	Register registers[REGISTERS_COUNT];
-	
-	ByteIP *bip;
-	Stack_double  *rsp;
-} Thread;
+int main(const int argc, const char **argv) {
+	const char *input_file = "out.tf";
+	if (argc > 1) {
+		input_file = argv[1];
+	}
+
+	CPU *cpu = new_CPU();
+
+	CPU_init_thread(cpu, input_file);
+	//CPU_init_thread(cpu, input_file);
+	while(CPU_tick(cpu) == OK);
+
+	delete_CPU(cpu);
+
+	return 0;
+}
+
+//=============================================================================
 
 Thread *new_Thread(const byte id) {
 	Thread *thread = calloc(1, sizeof(Thread));
@@ -42,20 +42,6 @@ int delete_Thread(Thread *cake) {
 
 	return 0;
 }
- 
-typedef struct CPU_t {
-	ByteIP *signature_reader;
-	Register registers[REGISTERS_COUNT];
-
-	Stack_double  *rsp; // Stack register pointer
-	ByteIP *bip; // ByteIP of current thread
-	
-	Thread **threads;
-	size_t threads_capacity;
-	size_t threads_size;
-	size_t next_thread;
-	byte thread_id;
-} CPU;
 
 CPU *new_CPU() {
 	CPU *cpu = calloc(1, sizeof(CPU));
@@ -414,24 +400,6 @@ int CPU_tick(CPU *cake) {
 		CPU_stop_thread(cake, thr);
 		cake->threads[thr_idx] = NULL;
 	}
-
-	return 0;
-}
-
-
-int main(const int argc, const char **argv) {
-	const char *input_file = "out.tf";
-	if (argc > 1) {
-		input_file = argv[1];
-	}
-
-	CPU *cpu = new_CPU();
-
-	CPU_init_thread(cpu, input_file);
-	//CPU_init_thread(cpu, input_file);
-	while(CPU_tick(cpu) == OK);
-
-	delete_CPU(cpu);
 
 	return 0;
 }

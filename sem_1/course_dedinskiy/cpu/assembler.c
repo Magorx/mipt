@@ -1,11 +1,20 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "assembler.h"
-#include "general.h"
-#include "opcodes.h"
-#include "metainf.h"
+
+// The assembler itself =======================================================
+
+int main(const int argc, const char **argv) {
+	const char *input_file  = "prog.kc";
+	const char *output_file = "out.tf";
+	if (argc > 1) {
+		input_file = argv[1];
+	}
+
+	assemble_file(input_file, output_file);
+
+	return 0;
+}
+
+//=============================================================================
 
 int check_and_process_opname(const unsigned char **symb, ByteOP *bop, const char *opname, const int opcode) {
 	if (String_starts_with(*symb, opname)) {
@@ -173,18 +182,6 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     delete_ByteOP(bop);
 
     printf("\n[END]<assembler>: Done assembling\n");
-
-	return 0;
-}
-
-int main(const int argc, const char **argv) {
-	const char *input_file  = "prog.kc";
-	const char *output_file = "out.tf";
-	if (argc > 1) {
-		input_file = argv[1];
-	}
-
-	assemble_file(input_file, output_file);
 
 	return 0;
 }
