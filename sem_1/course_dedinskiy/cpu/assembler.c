@@ -8,6 +8,9 @@ int main(const int argc, const char **argv) {
 	if (argc > 1) {
 		input_file = argv[1];
 	}
+	if (argc > 2) {
+		output_file = argv[2];
+	}
 
 	assemble_file(input_file, output_file);
 
