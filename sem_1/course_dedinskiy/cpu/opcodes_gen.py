@@ -12,6 +12,7 @@ opnames = {
 	'div'  : [13,  0],
 	'sin'  : [20,  0],
 	'cos'  : [21,  0],
+	'sqrt' : [22,  0],
 	'in'   : [50,  0],
 	'out'  : [51,  0],
 	'halt' : [255, 0]
@@ -59,7 +60,7 @@ print("};\n", file=fout)
 
 # Opargs
 
-print("const Byte OPARGS[] = {", file=fout)
+print("const byte OPARGS[] = {", file=fout)
 
 for code in opcodes:
 	if code[0]:

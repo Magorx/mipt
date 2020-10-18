@@ -4,7 +4,10 @@
 #include <stdint.h>
 
 const int16_t VERSION = 1;
-const Byte REGISTERS_COUNT = 4;
+
+enum CPU_SETTINGS {
+	REGISTERS_COUNT = 4
+};
 
 /*
 Command - index
@@ -61,6 +64,7 @@ enum OPCODES {
     OPCODE_DIV = 13,
     OPCODE_SIN = 20,
     OPCODE_COS = 21,
+    OPCODE_SQRT = 22,
     OPCODE_IN = 50,
     OPCODE_OUT = 51,
     OPCODE_HALT = 255,
@@ -75,12 +79,13 @@ const char *OPNAMES[] = {
     [13] = "div",
     [20] = "sin",
     [21] = "cos",
+    [22] = "sqrt",
     [50] = "in",
     [51] = "out",
     [255] = "halt",
 };
 
-const Byte OPARGS[] = {
+const byte OPARGS[] = {
     [1] = 1,
     [2] = 1,
     [10] = 0,
@@ -89,6 +94,7 @@ const Byte OPARGS[] = {
     [13] = 0,
     [20] = 0,
     [21] = 0,
+    [22] = 0,
     [50] = 0,
     [51] = 0,
     [255] = 0,

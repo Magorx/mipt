@@ -1,9 +1,26 @@
-push 4
-push 8
-pop rax
+in
+in
+in
+pop rcx
 pop rbx
-push rax + 1
-push rbx - 2
+pop rax
+push rbx * rbx
+push -4 * rax * rcx
 add
+sqrt
+out
+pop rdx
+push  2 * rax
+push -1 * rbx
+push -1 * rdx
+add
+div
+out
+push  2 * rax
+push -1 * rbx
+push rdx
+add
+div
 out
 halt
+

@@ -4,7 +4,10 @@
 #include <stdint.h>
 
 const int16_t VERSION = 1;
-const Byte REGISTERS_COUNT = 4;
+
+enum CPU_SETTINGS {
+	REGISTERS_COUNT = 4
+};
 
 /*
 Command - index

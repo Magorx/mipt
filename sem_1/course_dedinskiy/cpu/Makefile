@@ -1,4 +1,4 @@
-CUR_PROG = assembler
+CUR_PROG = cpu
 
 ifndef VERBOSE
 .SILENT:
@@ -10,17 +10,20 @@ WARNINGS = -Wall -Werror -Wno-multichar
 STANDARD =  
 CFLAGS = $(STANDARD) $(WARNINGS)
 
-cpu: cpu.c
-	$(CC) $(CFLAGS) cpu.c -o cpu
+cpu: cpu.c general.h stack.h opcodes.h
+	$(CC) $(CFLAGS) cpu.c -o cpu -lm
+
 
 assembler: assembler.c general.h opcodes.h
 	$(CC) $(CFLAGS) assembler.c -o assembler
 
-everytime.mkdmp:
-	./opcodes_gen.py
-
-run: everytime.mkdmp $(CUR_PROG)
+cur_run: cpu assembler
 	make clear
+	./assembler
+
+run: cpu assembler
+	make clear
+	./assembler
 	./$(CUR_PROG)
 
 valg: cur_run

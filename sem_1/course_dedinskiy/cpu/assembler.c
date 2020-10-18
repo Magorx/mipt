@@ -13,18 +13,18 @@ int check_and_process_opname(const unsigned char **symb, ByteOP *bop, const char
     	
     	Char_get_next_symb(symb);
     	
-    	ByteOP_put_byte(bop, (Byte) opcode);
+    	ByteOP_put_byte(bop, (byte) opcode);
     	return 1;
 	}
 	return 0;
 }
 
-int get_extract_register_index(const unsigned char **symb, Byte *reg_index) {
+int get_extract_register_index(const unsigned char **symb, byte *reg_index) {
 	VERIFY(**symb == 'r');
 
 	*symb += 1;
 
-	const Byte register_index = (Byte) (**symb - 'a');
+	const byte register_index = (byte) (**symb - 'a');
 	VERIFY(register_index <= REGISTERS_COUNT);
 	
 	*symb += 2;
@@ -35,7 +35,7 @@ int get_extract_register_index(const unsigned char **symb, Byte *reg_index) {
 }
 
 int put_extract_register_index(const unsigned char **symb, ByteOP *bop) {
-	Byte reg_idx = 0;
+	byte reg_idx = 0;
 	get_extract_register_index(symb, &reg_idx);
 	ByteOP_put_byte(bop, reg_idx);
 	return 0;
@@ -68,7 +68,7 @@ int put_extract_value(const unsigned char **symb, ByteOP *bop) {
 	VERIFY(**symb != '\n');
 
 	if (**symb == 'r') {
-		Byte reg_idx = 0;
+		byte reg_idx = 0;
 		get_extract_register_index(symb, &reg_idx);
 		if (Char_in_string(**symb, OPERATIONS)) {
 			put_extract_operator_value(symb, bop);
@@ -128,6 +128,8 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     printf("[   ]<         >: [filename](%s) [lines_cnt](%zu)\n", fin_name, fin.lines_cnt);
     printf("\n");
 
+    printf("------\n");
+
     for (size_t line_i = 0; line_i < fin.lines_cnt; ++line_i) {
     	Line *line = fin.lines[line_i];
     	const unsigned char *str = line->string;
@@ -157,7 +159,17 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     }
 
     File_destruct(&fin);
+
+    signature.file_size = bop->cur_ptr - bop->buffer;
+    bop->cur_ptr = bop->buffer;
+    ByteOP_put(bop, &signature, sizeof(Signature));
+    bop->size -= sizeof(Signature);
     ByteOP_to_file(bop, fout_name);
+
+    printf("------\n");
+
+    printf("%.4ld\n", signature.file_size);
+
     delete_ByteOP(bop);
 
     printf("\n[END]<assembler>: Done assembling\n");

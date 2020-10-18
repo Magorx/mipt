@@ -51,8 +51,6 @@ typedef enum stack_code {
     ERR_BUFFER_NOT_EXIST,
     ERR_OVERFLOW,
     ERR_REALLOC_FAILED,
-
-    OK = 0,
 } stack_code;
 
 const long long STACK_CANARY = 0xDED0C;
@@ -108,8 +106,10 @@ int       STACK_GENERIC(valid)    (const STACK_GENERIC_TYPE *cake); ///< Checks,
 size_t    STACK_GENERIC(size)     (const STACK_GENERIC_TYPE *cake); ///< Returs current number of elements in stack
 size_t    STACK_GENERIC(capacity) (const STACK_GENERIC_TYPE *cake); ///< Return current max_number of elements in stack
 
-size_t    STACK_GENERIC(is_empty) (const STACK_GENERIC_TYPE *cake); ///< Returns 1 if stack is empty, 0 otherwise
-size_t    STACK_GENERIC(is_full)  (const STACK_GENERIC_TYPE *cake); ///< Returns 1 if cake->size == cake->capacity, 0 otherwise
+STACK_VALUE_TYPE STACK_GENERIC(top)      (const STACK_GENERIC_TYPE *cake);
+
+char      STACK_GENERIC(is_empty) (const STACK_GENERIC_TYPE *cake); ///< Returns 1 if stack is empty, 0 otherwise
+char      STACK_GENERIC(is_full)  (const STACK_GENERIC_TYPE *cake); ///< Returns 1 if cake->size == cake->capacity, 0 otherwise
 
 int STACK_GENERIC(push) (STACK_GENERIC_TYPE *cake, const STACK_VALUE_TYPE val); ///< Pushes val on the top of stack
 int STACK_GENERIC(pop)  (STACK_GENERIC_TYPE *cake); ///< Pop top val from stack. DOES NOT return value
@@ -127,7 +127,7 @@ long long STACK_GENERIC(hash)(const STACK_GENERIC_TYPE *cake) {
     RETURNING_VERIFY(cake != NULL);
     RETURNING_VERIFY(cake->buffer != NULL);
     return + do_hash((const char*)cake + sizeof(long long), sizeof(STACK_GENERIC_TYPE) - 2 * sizeof(long long))
-           + do_hash(cake->buffer, cake->capacity * sizeof(STACK_VALUE_TYPE));
+           + do_hash(cake->buffer, (cake->capacity - 1) * sizeof(STACK_VALUE_TYPE));
 }
 
 #ifdef SEC_HASH
@@ -196,6 +196,12 @@ int STACK_GENERIC(construct)(STACK_GENERIC_TYPE *cake) {
     return OK;
 }
 
+STACK_GENERIC_TYPE *STACK_GENERIC(new)() {
+    STACK_GENERIC_TYPE *stack = calloc(sizeof(STACK_GENERIC_TYPE), 1);
+    VERIFY_t(STACK_GENERIC(construct)(stack) == 0, STACK_GENERIC_TYPE*);
+    return stack;
+}
+
 int STACK_GENERIC(destruct)(STACK_GENERIC_TYPE *cake) {
     STACK_OK(cake);
 
@@ -207,13 +213,19 @@ int STACK_GENERIC(destruct)(STACK_GENERIC_TYPE *cake) {
     return OK;
 }
 
+int STACK_GENERIC(delete)(STACK_GENERIC_TYPE *cake) {
+    VERIFY_OK(STACK_GENERIC(destruct)(cake));
+    free(cake);
+    return 0;
+}
+
 size_t STACK_GENERIC(size)(const STACK_GENERIC_TYPE *cake) {
-    RETURNING_VERIFY_OK(STACK_GENERIC(valid)(cake));
+    // RETURNING_VERIFY_OK(STACK_GENERIC(valid)(cake));
     return cake->size;
 }
 
 size_t STACK_GENERIC(capacity)(const STACK_GENERIC_TYPE *cake) {
-    RETURNING_VERIFY_OK(STACK_GENERIC(valid)(cake));
+    // RETURNING_VERIFY_OK(STACK_GENERIC(valid)(cake));
     return cake->capacity;
 }
 
@@ -243,7 +255,7 @@ int STACK_GENERIC(dump)(const STACK_GENERIC_TYPE *cake) {
     printf("[   ]<     >: [capacity](%zu)\n", cake->capacity);
     printf("[   ]<.buf.>: [buffer](%p)\n", (void*)(cake->buffer));
 
-    const size_t print_depth = min(cake->size, STACK_DUMP_DEPTH);
+    const size_t print_depth = (size_t) min((long long) cake->size, STACK_DUMP_DEPTH);
     for (size_t i = 0; i < print_depth; ++i) {
         printf("[   ]<%3zu  >: [](" STACK_VALUE_PRINTF_SPEC ")\n", i, cake->buffer[i]);
     }
@@ -332,13 +344,20 @@ int STACK_GENERIC(clear)(STACK_GENERIC_TYPE *cake) {
     return OK;
 }
 
-size_t STACK_GENERIC(is_empty)(const STACK_GENERIC_TYPE *cake) {
+char STACK_GENERIC(is_empty)(const STACK_GENERIC_TYPE *cake) {
     STACK_OK(cake);
     return STACK_GENERIC(size)(cake) == 0;
 }
 
-size_t STACK_GENERIC(is_full)(const STACK_GENERIC_TYPE *cake) {
+char STACK_GENERIC(is_full)(const STACK_GENERIC_TYPE *cake) {
     STACK_OK(cake);
     return cake->size == cake->capacity;
+}
+
+STACK_VALUE_TYPE STACK_GENERIC(top)(const STACK_GENERIC_TYPE *cake) {
+    STACK_OK(cake);
+    VERIFY_t(cake->size > 0, STACK_VALUE_TYPE);
+
+    return cake->buffer[cake->size - 1];
 }
 //=============================================================================

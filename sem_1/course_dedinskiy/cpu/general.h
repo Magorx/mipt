@@ -81,13 +81,16 @@
     #pragma GCC diagnostic ignored     "-Wold-style-cast"
     #pragma GCC diagnostic ignored     "-Wunreachable-code"
     #pragma GCC diagnostic ignored     "-Wunused-const-variable"
-    #pragma GCC diagnostic ignored     "-Wunused-function"
+
+    #pragma GCC diagnostic ignored     "-Wunused-function"  //!!!!!!!!1
+    #pragma GCC diagnostic ignored     "-Wunused-parameter" //!!!!!!!!1
 
     #pragma GCC diagnostic warning     "-Wpragmas"
 #endif
 
 //=============================================================================
 
+#include <string.h>
 #include <assert.h>
 #include <ctype.h>
 #include <fcntl.h>
@@ -97,11 +100,11 @@
 #include <unistd.h>
 #include <stdint.h>
 
-typedef uint8_t Byte;
+typedef uint8_t byte;
 
 //<KCTF> Everyday_staff =======================================================
 
-const int KCTF_DEBUG_LEVEL = 1; ///< Just a mode for debugging
+const int KCTF_DEBUG_LEVEL = 0; ///< Just a mode for debugging
 
 int           DEBUG_NUMBER = 1;   ///< Just an int for debugging
 unsigned char DEBUG_LETTER = 'a'; ///< Just a char for debugging
@@ -167,7 +170,7 @@ const int CHECK_ERROR = 1;
             printf("[   ]<      >: [line_indx](%d)\n", __LINE__);                        \
             }                                                                            \
         if (ERROR || !ret) {                                                             \
-            if (droptable) { exit   ((ret_type) ERROR_CHECK_UPPER_VERIFY); }             \
+            if (droptable) { exit   (           ERROR_CHECK_UPPER_VERIFY); }             \
             else           { return ((ret_type) ERROR_CHECK_UPPER_VERIFY); }             \
         }                                                                                \
     } while(0)
@@ -181,7 +184,7 @@ const int CHECK_ERROR = 1;
 
 #define VERIFY_t(expr, type) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 1, 0, type)
 
-#define RETURN_ERROR_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 0, 1)
+#define RETURN_ERROR_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 0, 1, int)
 
 #ifdef VERIFY_BOMB
 #define RETURNING_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 1, 0, int)
@@ -227,15 +230,15 @@ void *realloc_buffer(void *buffer, const size_t cur_len, const double coef) {
 }
 
 //=============================================================================
-//<KCTF> Byte output ==========================================================
+//<KCTF> byte output ==========================================================
 
-const size_t STANDART_BYTE_LINE_BYTES_COUNT = 14;
+const size_t STANDART_BYTE_LINE_BYTES_COUNT = 16;
 
 typedef struct ByteOP_t {
     size_t capacity;
     size_t size;
-    Byte *buffer;
-    Byte *cur_ptr;
+    byte *buffer;
+    byte *cur_ptr;
 } ByteOP;
 
 ByteOP *new_ByteOP(const size_t size) {
@@ -249,6 +252,7 @@ ByteOP *new_ByteOP(const size_t size) {
         free(bop);
         return NULL;
     }
+
     bop->cur_ptr = bop->buffer;
     bop->capacity = size;
     bop->size = 0;
@@ -259,8 +263,8 @@ ByteOP *new_ByteOP(const size_t size) {
 int delete_ByteOP(ByteOP *cake) {
     free(cake->buffer);
 
-    cake->buffer = (Byte*) KCTF_POISON;
-    cake->cur_ptr = (Byte*) KCTF_POISON;
+    cake->buffer = (byte*) KCTF_POISON;
+    cake->cur_ptr = (byte*) KCTF_POISON;
     cake->capacity = (size_t) KCTF_POISON;
     cake->size = (size_t) KCTF_POISON;
 
@@ -277,7 +281,7 @@ int ByteOP_realloc_up(ByteOP *cake) {
     }
 
     long int shift = cake->cur_ptr - cake->buffer;
-    cake->buffer = (Byte*) new_ptr;
+    cake->buffer = (byte*) new_ptr;
     cake->cur_ptr = cake->buffer + shift;
     cake->capacity = cake->capacity * 2;
 
@@ -286,6 +290,8 @@ int ByteOP_realloc_up(ByteOP *cake) {
 
 int ByteOP_put(ByteOP *cake, const void *src, const size_t size) {
     VERIFY(cake != NULL);
+    VERIFY(src  != NULL);
+
     if (cake->size + size >= cake->capacity) {
         VERIFY_OK(ByteOP_realloc_up(cake));
     }
@@ -297,43 +303,136 @@ int ByteOP_put(ByteOP *cake, const void *src, const size_t size) {
     return 0;
 }
 
-int ByteOP_put_byte(ByteOP *cake, const Byte src) {
-    VERIFY(cake != NULL);
-    ByteOP_put(cake, &src, sizeof(Byte));
-    return 0;
+int ByteOP_put_byte(ByteOP *cake, const byte src) {
+    return ByteOP_put(cake, &src, sizeof(byte));
 }
 
 int ByteOP_put_int(ByteOP *cake, const int src) {
-    VERIFY(cake != NULL);
-    ByteOP_put(cake, &src, sizeof(int));
-    return 0;
+    return ByteOP_put(cake, &src, sizeof(int));
 }
 
 int ByteOP_put_long(ByteOP *cake, const long src) {
-    VERIFY(cake != NULL);
-    ByteOP_put(cake, &src, sizeof(long));
-    return 0;
+    return ByteOP_put(cake, &src, sizeof(long));
 }
 
 int ByteOP_put_unsigned(ByteOP *cake, const unsigned int src) {
-    VERIFY(cake != NULL);
-    ByteOP_put(cake, &src, sizeof(unsigned int));
-    return 0;
+    return ByteOP_put(cake, &src, sizeof(unsigned int));
 }
 
 int ByteOP_put_double(ByteOP *cake, const double src) {
-    VERIFY(cake != NULL);
-    ByteOP_put(cake, &src, sizeof(double));
-    return 0;
+    return ByteOP_put(cake, &src, sizeof(double));
 }
 
 int ByteOP_to_file(const ByteOP *cake, const char* filename) {
     VERIFY(cake != NULL);
     FILE *fout = fopen(filename, "wb");
-    fwrite(cake->buffer, sizeof(Byte), cake->size, fout);
+    fwrite(cake->buffer, sizeof(byte), cake->size, fout);
     fclose(fout);
 
     return 0;
+}
+
+//=============================================================================
+//<KCTF> byte input ===========================================================
+
+typedef struct ByteIP_t {
+    size_t capacity;
+    size_t cur_idx;
+    size_t size;
+    byte *buffer;
+} ByteIP;
+
+ByteIP *new_ByteIP(const size_t capacity) {
+    ByteIP *bip = calloc(sizeof(ByteIP), 1);
+    if (!bip) {
+        return NULL;
+    }
+
+    bip->buffer = calloc(capacity + 1, 1);
+    if (!bip->buffer) {
+        free(bip);
+        return NULL;
+    }
+
+    bip->capacity = capacity;
+    bip->cur_idx = 0;
+
+    return bip;
+}
+
+int delete_ByteIP(ByteIP *cake) {
+    free(cake->buffer);
+
+    cake->buffer = (byte*) KCTF_POISON;
+    cake->capacity = (size_t) KCTF_POISON;
+    cake->size = (size_t) KCTF_POISON;
+    cake->cur_idx = (size_t) KCTF_POISON;
+
+    free(cake);
+
+    return 0;
+}
+
+int ByteIP_read_file(ByteIP *cake, const char *file_name, const size_t file_size) {
+    VERIFY(cake != NULL);
+    VERIFY(file_name != NULL);
+
+    if (file_size > cake->capacity) {
+        byte *new_buffer = realloc(cake->buffer, file_size + 1);
+        VERIFY(new_buffer != NULL);
+
+        cake->buffer = new_buffer;
+        cake->capacity = file_size;
+    }
+
+    int file_dscr = open(file_name, O_RDONLY);
+    cake->size = (size_t) read(file_dscr, cake->buffer, cake->capacity);
+    close(file_dscr);
+
+    return 0;
+}
+
+int ByteIP_left_to_file(ByteIP *cake, const char *file_name) {
+    VERIFY(cake != NULL);
+
+    FILE *fout = fopen(file_name, "wb");
+    fwrite(&cake->buffer[cake->cur_idx], sizeof(byte), cake->size - cake->cur_idx, fout);
+    fclose(fout);
+
+    return 0;
+}
+
+int ByteIP_get(ByteIP *cake, void *dest, const size_t size) {
+    VERIFY(cake != NULL);
+    VERIFY(dest != NULL);
+
+    if (cake->cur_idx + size > cake->size) {
+        return ERROR_ERROR;
+    } else {
+        memcpy(dest, &cake->buffer[cake->cur_idx], size);
+        cake->cur_idx += size;
+        return 0;
+    }
+}
+
+int ByteIP_get_byte(ByteIP *cake, byte *dest) {
+    return ByteIP_get(cake, dest, sizeof(byte));
+}
+
+int ByteIP_get_int(ByteIP *cake, int *dest) {
+    return ByteIP_get(cake, dest, sizeof(int));
+}
+
+int ByteIP_get_long(ByteIP *cake, long *dest) {
+    return ByteIP_get(cake, dest, sizeof(long));
+}
+
+int ByteIP_get_unsigned(ByteIP *cake, unsigned *dest) {
+    return ByteIP_get(cake, dest, sizeof(unsigned));
+}
+
+int ByteIP_get_double(ByteIP *cake, double *dest) {
+    return ByteIP_get(cake, dest, sizeof(double));
 }
 
 //=============================================================================
