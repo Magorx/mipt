@@ -1,6 +1,6 @@
 #Assembler + CPU
 
-#Assembler
+# Assembler
 Usage:
 1) Build assembler
 ```
@@ -10,11 +10,11 @@ make assembler
 ```
 assembler your_prog.xxx assembled_name.xxx
 ```
-to get bytecode for the CPU in ```assembled_name.kctf```. 
+to get bytecode for the CPU in ```assembled_name.xxx```. 
 The suggested format is ```.kc``` for programms with assebler code and ```.tf``` for assembled files.
 Running just ```assembler``` will try to find file named ```prog.kc``` in current directory and assemble it into ```out.tf```.
 
-#CPU
+# CPU
 Usage:
 1) Build cpu
 ```
