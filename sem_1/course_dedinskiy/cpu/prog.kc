@@ -1,46 +1,31 @@
-in
-in
-in
-pop rcx
-pop rbx
-pop rax
-push rbx * rbx
-push -4 * rax * rcx
-add
+jmp main
 
-label_name:
-
-sqrt
-pop rdx
-push  2 * rax
+root:
+push 2 * rax
 push -1 * rbx
-push -1 * rdx
-add
-div
--
-jmp label_name
--
-out
-push  2 * rax
-push -1 * rbx
-
-label_name:
-
 push rdx
 add
 div
 out
+ret
 
+main:
+in
+in
+in
 
-cmp rax, rbx
+pop rcx
+pop rbx
+pop rax
 
-cmp rax, 0
-ja label_name
-jae
-jb
-jbe
-je
-jne
+push rbx * rbx
+push -4 * rax * rcx
+add
+sqrt
+pop rdx
 
-halt
+call root
 
+push -1 * rdx 
+pop rdx
+call root

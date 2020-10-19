@@ -15,6 +15,15 @@ opnames = {
 	'sqrt' : [22,  0],
 	'in'   : [50,  0],
 	'out'  : [51,  0],
+	'jmp'  : [101, 'VALUE_LABEL'],
+	'ja'   : [102, 'VALUE_LABEL'],
+	'jae'  : [103, 'VALUE_LABEL'],
+	'jb'   : [104, 'VALUE_LABEL'],
+	'jbe'  : [105, 'VALUE_LABEL'],
+	'je'   : [106, 'VALUE_LABEL'],
+	'jne'  : [107, 'VALUE_LABEL'],
+	'call' : [108, 'VALUE_LABEL'],
+	'ret'  : [109, 0],
 	'halt' : [255, 0]
 }
 
@@ -44,7 +53,8 @@ print("enum OPCODES {", file=fout)
 
 for code in opcodes:
 	if code[0]:
-		print('    OPCODE_{} = {},'.format(code[1].upper(),code[0]), file=fout)
+		name = 'OPCODE_{}'.format(code[1].upper())
+		print('   {:<12}  = {},'.format(name,code[0]), file=fout)
 
 print("};\n", file=fout)
 
@@ -54,7 +64,7 @@ print("const char *OPNAMES[] = {", file=fout)
 
 for code in opcodes:
 	if code[0]:
-		print('    [{}] = "{}",'.format(code[0], code[1]), file=fout)
+		print('    [{:<3}] = "{}",'.format(code[0], code[1]), file=fout)
 
 print("};\n", file=fout)
 
@@ -64,7 +74,7 @@ print("const byte OPARGS[] = {", file=fout)
 
 for code in opcodes:
 	if code[0]:
-		print('    [{}] = {},'.format(code[0], opnames[code[1]][1]), file=fout)
+		print('    [{:<3}] = {},'.format(code[0], opnames[code[1]][1]), file=fout)
 
 print("};\n", file=fout)
 

@@ -1,0 +1,25 @@
+jmp main
+
+one:
+push 5
+add
+out
+jmp ret1
+
+two:
+push 5
+mul
+out
+jmp ret2
+
+main:
+
+push 10
+jmp one
+ret1:
+
+push 10
+jmp two
+ret2:
+
+halt

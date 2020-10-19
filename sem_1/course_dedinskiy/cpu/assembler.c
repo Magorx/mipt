@@ -19,12 +19,43 @@ int main(const int argc, const char **argv) {
 
 //=============================================================================
 
+//=============================================================================
+
+Label *new_Lable(const unsigned char *name, size_t place) {
+	Label *l = calloc(1, sizeof(Label));
+	l->name = name;
+	l->place = place;
+
+	return l;
+}
+
+int delete_Lable(Label *l) {
+	VERIFY(l != NULL);
+	free(l);
+
+	return 0;
+}
+
+int Label_compare(const Label *first, const Label *second) {
+	const unsigned char *f = first->name;
+	const unsigned char *s = second->name;
+	while(!(isspace(*f) || isspace(*s)) && *f != ':' && *s != ':' &&*f && *s) {
+		if (*f != *s) {
+			return -1;
+		}
+		++f;
+		++s;
+	}
+	return 0;
+}
+
+//=============================================================================
+
 int check_and_process_opname(const unsigned char **symb, ByteOP *bop, const char *opname, const int opcode) {
 	if (String_starts_with(*symb, opname)) {
 		*symb += strlen(OPNAME_PUSH);
-    	
     	Char_get_next_symb(symb);
-    	
+
     	ByteOP_put_byte(bop, (byte) opcode);
     	return 1;
 	}
@@ -109,14 +140,30 @@ int put_extract_line(const unsigned char **symb, ByteOP *bop) {
 		}
 
 		if (check_and_process_opname(symb, bop, OPNAMES[opcode], opcode)) {
-			 if (OPARGS[opcode]) {
-			 	put_extract_value(symb, bop);
-			 }
-			 break;
+			if (OPARGS[opcode] <= MAX_COMMAND_ARGS_COUNT) {
+				for (byte i = 0; i < OPARGS[opcode]; ++i) {
+					put_extract_value(symb, bop);
+				}
+				return EXPR_READ;
+			} else if (OPARGS[opcode] == VALUE_LABEL) {
+				return LABEL_USED;				
+			} else {
+				printf("[ERR] Arguments for %d are ucked up\n", opcode);
+			}
 		}
 	}
 
-    return 0;
+	const unsigned char *s = *symb;
+	while (*s && *s != '\n') {
+		++s;
+	}
+	--s;
+	if (*s == ':') {
+		return LABEL_FOUND;
+	}
+
+
+    return -1;
 }
 
 int assemble_file(const char *fin_name, const char* fout_name) {
@@ -142,15 +189,38 @@ int assemble_file(const char *fin_name, const char* fout_name) {
 
     printf("------\n");
 
+    Label **lables_used    = calloc(fin.lines_cnt, sizeof(Label));
+    size_t l_used_cnt = 0;
+    Label **lables_found   = calloc(fin.lines_cnt, sizeof(Label));
+    size_t l_found_cnt = 0;
+
     for (size_t line_i = 0; line_i < fin.lines_cnt; ++line_i) {
     	Line *line = fin.lines[line_i];
+    	if (line->len == 0 || line->string[0] == ';') {
+    		continue;
+    	}
     	const unsigned char *str = line->string;
     	const unsigned char *symb = str;
 		Char_get_next_symb(&symb);
 
     	const int before_line_index = (int) (bop->cur_ptr - bop->buffer); // for listing
 
-    	put_extract_line(&symb, bop);
+    	switch(put_extract_line(&symb, bop)) {
+    		case EXPR_READ:
+    			break;
+    		case LABEL_USED:
+    			lables_used[l_used_cnt] = new_Lable(symb, (size_t)(bop->cur_ptr - bop->buffer));
+    			++l_used_cnt;
+    			ByteOP_put_double(bop, 0.0);
+    			break;
+    		case LABEL_FOUND:
+    			lables_found[l_found_cnt] = new_Lable(line->string, (size_t)(bop->cur_ptr - bop->buffer));
+    			++l_found_cnt;
+    			break;
+    		default:
+    			printf("[ERR]<assembler>: Command doesn't exist: [%zu](%s)\n", line_i, line->string);
+    			return -1;
+    	}
 
     	// Listing =====
 
@@ -169,6 +239,21 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     	printf("\n");
 
     	//==============
+    }
+
+    for (size_t l_used = 0; l_used < l_used_cnt; ++l_used) {
+    	for (size_t l_found = 0; l_found < l_found_cnt; ++l_found) {
+    		if (Label_compare(lables_found[l_found], lables_used[l_used]) == 0) {
+    			Label *used = lables_used[l_used];
+    			Label *found = lables_found[l_found];
+    			
+    			byte* prev_cur_ptr = bop->cur_ptr;
+    			bop->cur_ptr = bop->buffer + used->place;
+    			bop->size    = bop->size - sizeof(double);
+    			ByteOP_put_size_t(bop, found->place);
+    			bop->cur_ptr = prev_cur_ptr;
+    		}
+    	}
     }
 
     File_destruct(&fin);

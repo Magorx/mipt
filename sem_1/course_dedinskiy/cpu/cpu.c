@@ -11,7 +11,7 @@ int main(const int argc, const char **argv) {
 	CPU *cpu = new_CPU();
 
 	CPU_init_thread(cpu, input_file);
-	CPU_init_thread(cpu, input_file);
+	// CPU_init_thread(cpu, input_file);
 	while(CPU_tick(cpu) == OK);
 
 	delete_CPU(cpu);
@@ -59,6 +59,7 @@ CPU *new_CPU() {
 	VERIFY_t((cpu->threads = calloc(sizeof(Thread), cpu->threads_capacity)) != NULL, CPU*);
 
 	cpu->rsp = NULL;
+	cpu->rip = NULL;
 
 	return cpu;
 }
@@ -92,6 +93,13 @@ int CPU_stack_push(CPU *cake, const double value) {
 	VERIFY(cake != NULL);
 
 	Stack_push_double(cake->rsp, value);
+	return 0;
+}
+
+int CPU_stack_pop(CPU *cake) {
+	VERIFY(cake != NULL);
+
+	Stack_pop_double(cake->rsp);
 	return 0;
 }
 
@@ -150,7 +158,7 @@ int CPU_execute_push(CPU *cake) {
 }
 
 int CPU_execute_out(CPU *cake) {
-	printf("%lg\n", Stack_top_double(cake->rsp));
+	printf("%lg\n", CPU_stack_top(cake));
 
 	return 0;
 }
@@ -247,6 +255,40 @@ int CPU_execute_in(CPU *cake) {
 	return 0;
 }
 
+int CPU_jump(CPU *cake, size_t rip) {
+	*cake->rip = rip;
+	return 0;
+}
+
+size_t CPU_read_size_t(CPU *cake) {
+	size_t val;
+	memcpy(&val, &cake->bip->buffer[*cake->rip], sizeof(size_t));
+	*cake->rip += sizeof(size_t);
+	return val;
+}
+
+int CPU_execute_jump(CPU *cake) {
+	size_t new_rip = CPU_read_size_t(cake);
+	CPU_jump(cake, new_rip);
+
+	return 0;
+}
+
+int CPU_execute_call(CPU *cake) {
+	size_t new_rip = CPU_read_size_t(cake);
+	CPU_stack_push(cake, (double) *cake->rip);
+	CPU_jump(cake, new_rip);
+
+	return 0;
+}
+
+int CPU_execute_ret(CPU *cake) {
+	size_t new_rip = (size_t) CPU_stack_top(cake);
+	CPU_jump(cake, new_rip);
+
+	return 0;
+}
+
 int CPU_execute_command(CPU *cake) {
 	if (cake->bip->cur_idx == cake->bip->size) {
 		return -1;
@@ -254,6 +296,7 @@ int CPU_execute_command(CPU *cake) {
 
 	byte op = 0;
 	ByteIP_get_byte(cake->bip, &op);
+	//DEBUG(0) printf("op %.2x on ind %zu stack size %zu\n", op, cake->bip->cur_idx - 1, Stack_size_double(cake->rsp));
 
 	switch (op) {
 		case OPCODE_PUSH:
@@ -289,10 +332,20 @@ int CPU_execute_command(CPU *cake) {
 		case OPCODE_OUT:
 			CPU_execute_out(cake);
 			break;
+		case OPCODE_JMP:
+			CPU_execute_jump(cake);
+			break;
+		case OPCODE_CALL:
+			CPU_execute_call(cake);
+			break;
+		case OPCODE_RET:
+			CPU_execute_ret(cake);
+			break;
 		case OPCODE_HALT:
 			return -1;
 			break;
 		default:
+			return -1;
 			break;
 	}
 
@@ -302,6 +355,7 @@ int CPU_execute_command(CPU *cake) {
 int CPU_set_cpu_context(CPU *cake, const Thread *thread) {
 	cake->rsp = thread->rsp;
 	cake->bip = thread->bip;
+	cake->rip = &cake->bip->cur_idx;
 	cake->thread_id  = thread->id;
 	for (byte i = 0; i < REGISTERS_COUNT; ++i) {
 		cake->registers[i] = thread->registers[i];
@@ -367,7 +421,7 @@ int CPU_init_thread(CPU *cake, const char *file_name) {
 int CPU_stop_thread(CPU *cake, Thread *thread) {
 	VERIFY(cake != NULL);
 	VERIFY(thread != NULL);
-	printf("[END]<cpu>: (thread)\n");
+	printf("[END]<cpu>: (thread)[%d]\n", thread->id);
 
 	CPU_set_cpu_context(cake, thread);
 

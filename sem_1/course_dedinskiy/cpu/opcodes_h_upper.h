@@ -9,24 +9,10 @@ enum CPU_SETTINGS {
 	REGISTERS_COUNT = 4
 };
 
-/*
-Command - index
-
-push - 1
-pop - 2
-add - 3
-sub - 4
-mul - 5
-div - 6
-sin - 7
-cos - 8
-out - 9
-
-*/
-
 enum VALUE_TYPES {
 	VALUE_CONSTANT = 16,
-	VALUE_REGISTER = 32
+	VALUE_REGISTER = 32,
+	VALUE_LABEL    = 48
 };
 
 enum OPCODES_CHAR_LITERALS {
@@ -40,7 +26,7 @@ enum OPCODES_CHAR_LITERALS {
 	OPNAME_MULTIPLY = '*',
 	OPNAME_DIVIDE = '/'
 };
-const unsigned char *OPERATIONS = (unsigned char*)"+-*";
+const unsigned char *OPERATIONS = (unsigned char*)"+*";
 
 const char *OPNAME_PUSH = "push";
 const char *OPNAME_POP  = "pop";
@@ -52,5 +38,5 @@ const char *OPNAME_SIN  = "sin";
 const char *OPNAME_COS  = "cos";
 const char *OPNAME_OUT  = "out";
 
-const int MAX_COMMANDS_ARGS_COUNT = 3;
+const int MAX_COMMAND_ARGS_COUNT = 3;
 const size_t MAX_OPCODES_COUNT = 256;

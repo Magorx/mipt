@@ -10,6 +10,19 @@
 #include "opcodes.h"
 #include "metainf.h"
 
+enum LINE_ASSEMBLEE_RESULT {
+	EXPR_READ = 0,
+	LABEL_FOUND,
+	LABEL_USED
+};
+
+typedef struct Label_t {
+	const unsigned char *name;
+	size_t len;
+	long long shift;
+	size_t place;
+} Label;
+
 int check_and_process_opname   (const unsigned char **symb, ByteOP *bop, const char *opname, const int opcode);
 
 int get_extract_register_index (const unsigned char **symb, byte *reg_index);

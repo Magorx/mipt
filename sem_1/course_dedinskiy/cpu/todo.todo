@@ -7,3 +7,4 @@
 [!!!] refactor
 [ . ] / - in assembler
 [ . ] put + check_and_process_opname
+[!!!] defines instead of code generating

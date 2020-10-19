@@ -222,7 +222,6 @@ long long do_hash(const void *memptr, size_t size_in_bytes) {
 //=============================================================================
 //<KCTF> Buffer work ==========================================================
 
-void *realloc_buffer(void *buffer, const size_t cur_len, const double coef);
 void *realloc_buffer(void *buffer, const size_t cur_len, const double coef) {
     const size_t new_size = (size_t) ((double) cur_len * coef);
     void *new_ptr = realloc(buffer, new_size);
@@ -315,8 +314,12 @@ int ByteOP_put_long(ByteOP *cake, const long src) {
     return ByteOP_put(cake, &src, sizeof(long));
 }
 
-int ByteOP_put_unsigned(ByteOP *cake, const unsigned int src) {
-    return ByteOP_put(cake, &src, sizeof(unsigned int));
+int ByteOP_put_long_long(ByteOP *cake, const long long src) {
+    return ByteOP_put(cake, &src, sizeof(long long));
+}
+
+int ByteOP_put_size_t(ByteOP *cake, const size_t src) {
+    return ByteOP_put(cake, &src, sizeof(size_t));
 }
 
 int ByteOP_put_double(ByteOP *cake, const double src) {
@@ -385,9 +388,9 @@ int ByteIP_read_file(ByteIP *cake, const char *file_name, const size_t file_size
         cake->capacity = file_size;
     }
 
-    int file_dscr = open(file_name, O_RDONLY);
-    cake->size = (size_t) read(file_dscr, cake->buffer, cake->capacity);
-    close(file_dscr);
+    FILE *fin = fopen(file_name, "rb");
+    cake->size = (size_t) fread(cake->buffer, 1, cake->capacity, fin);
+    fclose(fin);
 
     return 0;
 }
@@ -452,7 +455,7 @@ typedef struct Line_t {
 /// Struct to store file's information into
 typedef struct File_t {
     const char *name;
-    int file_dscr;
+    FILE *file_dscr;
     struct stat info;
     unsigned char *text;
     size_t lines_cnt;
@@ -668,12 +671,6 @@ int File_construct(File *file, const char *name) {
     assert(name);
 
     file->name = name;
-    stat(name, &(file->info));
-
-    file->text = (unsigned char*) calloc((size_t) file->info.st_size + 1, sizeof(char));
-    if (!file->text) {
-        return ERROR_MALLOC_FAIL;
-    }
 
     const int ret = read_lines(file);
     file->lines_cnt = (size_t) ret;
@@ -684,9 +681,16 @@ int File_construct(File *file, const char *name) {
 int read_lines(File *file) {
     assert(file);
 
-    file->file_dscr = open(file->name, O_RDONLY);
+    file->file_dscr = fopen(file->name, "rb");
 
-    read(file->file_dscr, file->text, (size_t) file->info.st_size);
+    fstat(fileno(file->file_dscr), &(file->info));
+
+    file->text = (unsigned char*) calloc((size_t) file->info.st_size + 1, sizeof(char));
+    if (!file->text) {
+        return ERROR_MALLOC_FAIL;
+    }
+
+    fread(file->text, (size_t) file->info.st_size, 1, file->file_dscr);
     
     int lines_cnt = 0;
     for (unsigned char *c = file->text; *c; ++c) {
