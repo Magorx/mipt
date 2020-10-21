@@ -104,7 +104,7 @@ typedef uint8_t byte;
 
 //<KCTF> Everyday_staff =======================================================
 
-const int KCTF_DEBUG_LEVEL = 0; ///< Just a mode for debugging
+#define KCTF_DEBUG_LEVEL 0 ///< Just a mode for debugging
 
 int           DEBUG_NUMBER = 1;   ///< Just an int for debugging
 unsigned char DEBUG_LETTER = 'a'; ///< Just a char for debugging
@@ -120,6 +120,8 @@ unsigned char DEBUG_LETTER = 'a'; ///< Just a char for debugging
 #define DEBUG(LEVEL) if (LEVEL <= KCTF_DEBUG_LEVEL)
 
 const size_t STANDART_INIT_SIZE = 32;
+
+const double EPS = 1e-6;
 
 const long KCTF_POISON = -7777777;
 const int INT_P = -7777777; /// Poison int

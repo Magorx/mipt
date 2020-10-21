@@ -1,4 +1,6 @@
 #include "cpu.h"
+#undef KCTF_DEBUG_LEVEL
+#define KCTF_DEBUG_LEVEL 0
 
 // The cpu itself =============================================================
 
@@ -79,7 +81,7 @@ size_t CPU_stack_size(CPU *cake) {
 	return Stack_size_double(cake->rsp);
 }
 
-double CPU_stack_top(CPU *cake) {
+double CPU_stack_pop(CPU *cake) {
 	VERIFY(cake != NULL);
 	VERIFY(CPU_stack_size(cake) > 0);
 	
@@ -93,13 +95,6 @@ int CPU_stack_push(CPU *cake, const double value) {
 	VERIFY(cake != NULL);
 
 	Stack_push_double(cake->rsp, value);
-	return 0;
-}
-
-int CPU_stack_pop(CPU *cake) {
-	VERIFY(cake != NULL);
-
-	Stack_pop_double(cake->rsp);
 	return 0;
 }
 
@@ -158,7 +153,7 @@ int CPU_execute_push(CPU *cake) {
 }
 
 int CPU_execute_out(CPU *cake) {
-	printf("%lg\n", CPU_stack_top(cake));
+	printf("%lg\n", CPU_stack_pop(cake));
 
 	return 0;
 }
@@ -171,8 +166,16 @@ int CPU_execute_pop(CPU *cake) {
 	VERIFY(reg_idx == VALUE_REGISTER);
 	ByteIP_get_byte(cake->bip, &reg_idx);
 
-	cake->registers[reg_idx] = CPU_stack_top(cake);
+	cake->registers[reg_idx] = CPU_stack_pop(cake);
 	DEBUG(5) printf("pushed %lg in %.2x\n", cake->registers[reg_idx], reg_idx);
+
+	return 0;
+}
+
+int CPU_execute_dup(CPU *cake) {
+	double val = CPU_stack_pop(cake);
+	CPU_stack_push(cake, val);
+	CPU_stack_push(cake, val);
 
 	return 0;
 }
@@ -180,8 +183,8 @@ int CPU_execute_pop(CPU *cake) {
 int CPU_execute_add(CPU *cake) {
 	VERIFY(CPU_stack_size(cake) >= 2);
 
-	double val_1 = CPU_stack_top(cake);
-	double val_2 = CPU_stack_top(cake);
+	double val_1 = CPU_stack_pop(cake);
+	double val_2 = CPU_stack_pop(cake);
 	CPU_stack_push(cake, val_1 + val_2);
 
 	return 0;
@@ -190,8 +193,8 @@ int CPU_execute_add(CPU *cake) {
 int CPU_execute_sub(CPU *cake) {
 	VERIFY(CPU_stack_size(cake) >= 2);
 
-	double val_1 = CPU_stack_top(cake);
-	double val_2 = CPU_stack_top(cake);
+	double val_1 = CPU_stack_pop(cake);
+	double val_2 = CPU_stack_pop(cake);
 	CPU_stack_push(cake, val_1 - val_2);
 
 	return 0;
@@ -200,8 +203,8 @@ int CPU_execute_sub(CPU *cake) {
 int CPU_execute_mul(CPU *cake) {
 	VERIFY(CPU_stack_size(cake) >= 2);
 
-	double val_1 = CPU_stack_top(cake);
-	double val_2 = CPU_stack_top(cake);
+	double val_1 = CPU_stack_pop(cake);
+	double val_2 = CPU_stack_pop(cake);
 	CPU_stack_push(cake, val_1 * val_2);
 
 	return 0;
@@ -210,8 +213,8 @@ int CPU_execute_mul(CPU *cake) {
 int CPU_execute_div(CPU *cake) {
 	VERIFY(CPU_stack_size(cake) >= 2);
 
-	double val_1 = CPU_stack_top(cake);
-	double val_2 = CPU_stack_top(cake);
+	double val_1 = CPU_stack_pop(cake);
+	double val_2 = CPU_stack_pop(cake);
 	CPU_stack_push(cake, val_1 / val_2);
 
 	return 0;
@@ -220,7 +223,7 @@ int CPU_execute_div(CPU *cake) {
 int CPU_execute_sin(CPU *cake) {
 	VERIFY(CPU_stack_size(cake) > 0);
 	
-	double val = CPU_stack_top(cake);
+	double val = CPU_stack_pop(cake);
 	CPU_stack_push(cake, sin(val));
 
 
@@ -230,7 +233,7 @@ int CPU_execute_sin(CPU *cake) {
 int CPU_execute_cos(CPU *cake) {
 	VERIFY(CPU_stack_size(cake) > 0);
 	
-	double val = CPU_stack_top(cake);
+	double val = CPU_stack_pop(cake);
 	CPU_stack_push(cake, cos(val));
 
 	return 0;
@@ -239,7 +242,7 @@ int CPU_execute_cos(CPU *cake) {
 int CPU_execute_sqrt(CPU *cake) {
 	VERIFY(Stack_size_double(cake->rsp) > 0);
 	
-	double val = CPU_stack_top(cake);
+	double val = CPU_stack_pop(cake);
 	CPU_stack_push(cake, sqrt(val));
 
 	return 0;
@@ -256,6 +259,7 @@ int CPU_execute_in(CPU *cake) {
 }
 
 int CPU_jump(CPU *cake, size_t rip) {
+	DEBUG(3) printf("Jumping on %zu\n", rip);
 	*cake->rip = rip;
 	return 0;
 }
@@ -267,7 +271,7 @@ size_t CPU_read_size_t(CPU *cake) {
 	return val;
 }
 
-int CPU_execute_jump(CPU *cake) {
+int CPU_execute_jmp(CPU *cake) {
 	size_t new_rip = CPU_read_size_t(cake);
 	CPU_jump(cake, new_rip);
 
@@ -283,11 +287,74 @@ int CPU_execute_call(CPU *cake) {
 }
 
 int CPU_execute_ret(CPU *cake) {
-	size_t new_rip = (size_t) CPU_stack_top(cake);
+	size_t new_rip = (size_t) CPU_stack_pop(cake);
 	CPU_jump(cake, new_rip);
 
 	return 0;
 }
+
+int CPU_execute_ja(CPU *cake) {
+	size_t new_rip = (size_t) CPU_read_size_t(cake);
+	if (CPU_stack_pop(cake) > CPU_stack_pop(cake)) {
+		CPU_jump(cake, new_rip);
+	}
+
+	return 0;
+}
+
+int CPU_execute_jae(CPU *cake) {
+	size_t new_rip = (size_t) CPU_read_size_t(cake);
+	if (CPU_stack_pop(cake) >= CPU_stack_pop(cake)) {
+		CPU_jump(cake, new_rip);
+	}
+
+	return 0;
+}
+
+int CPU_execute_jb(CPU *cake) {
+	size_t new_rip = (size_t) CPU_read_size_t(cake);
+	if (CPU_stack_pop(cake) < CPU_stack_pop(cake)) {
+		printf("YPOUOUO\n");
+		CPU_jump(cake, new_rip);
+	}
+
+	return 0;
+}
+
+int CPU_execute_jbe(CPU *cake) {
+	size_t new_rip = (size_t) CPU_read_size_t(cake);
+	if (CPU_stack_pop(cake) <= CPU_stack_pop(cake)) {
+		CPU_jump(cake, new_rip);
+	}
+
+	return 0;
+}
+
+int CPU_execute_je(CPU *cake) {
+	size_t new_rip = (size_t) CPU_read_size_t(cake);
+	if (fabs(CPU_stack_pop(cake) - CPU_stack_pop(cake)) <= EPS) {
+		CPU_jump(cake, new_rip);
+	}
+
+	return 0;
+}
+
+int CPU_execute_jne(CPU *cake) {
+	size_t new_rip = (size_t) CPU_read_size_t(cake);
+	if (fabs(CPU_stack_pop(cake) - CPU_stack_pop(cake)) > EPS) {
+		CPU_jump(cake, new_rip);
+	}
+
+	return 0;
+}
+
+int CPU_execute_halt(CPU *cake) {
+	return -1;
+}
+
+#define OPSUF(opcode_suf)				  \
+	case OPCODE_ ## opcode_suf:			  \
+		return CPU_execute_ ## opcode_suf(cake);
 
 int CPU_execute_command(CPU *cake) {
 	if (cake->bip->cur_idx == cake->bip->size) {
@@ -296,54 +363,12 @@ int CPU_execute_command(CPU *cake) {
 
 	byte op = 0;
 	ByteIP_get_byte(cake->bip, &op);
-	//DEBUG(0) printf("op %.2x on ind %zu stack size %zu\n", op, cake->bip->cur_idx - 1, Stack_size_double(cake->rsp));
+	DEBUG(2) printf("op %.2x on ind %zu stack size %zu\n", op, cake->bip->cur_idx - 1, Stack_size_double(cake->rsp));
 
 	switch (op) {
-		case OPCODE_PUSH:
-			CPU_execute_push(cake);
-			break;
-		case OPCODE_POP:
-			CPU_execute_pop(cake);
-			break;
-		case OPCODE_ADD:
-			CPU_execute_add(cake);
-			break;
-		case OPCODE_SUB:
-			CPU_execute_sub(cake);
-			break;
-		case OPCODE_MUL:
-			CPU_execute_mul(cake);
-			break;
-		case OPCODE_DIV:
-			CPU_execute_div(cake);
-			break;
-		case OPCODE_SIN:
-			CPU_execute_sin(cake);
-			break;
-		case OPCODE_COS:
-			CPU_execute_cos(cake);
-			break;
-		case OPCODE_SQRT:
-			CPU_execute_sqrt(cake);
-			break;
-		case OPCODE_IN:
-			CPU_execute_in(cake);
-			break;
-		case OPCODE_OUT:
-			CPU_execute_out(cake);
-			break;
-		case OPCODE_JMP:
-			CPU_execute_jump(cake);
-			break;
-		case OPCODE_CALL:
-			CPU_execute_call(cake);
-			break;
-		case OPCODE_RET:
-			CPU_execute_ret(cake);
-			break;
-		case OPCODE_HALT:
-			return -1;
-			break;
+		
+		#include "opcode_suffexes.h"
+
 		default:
 			return -1;
 			break;
@@ -351,6 +376,8 @@ int CPU_execute_command(CPU *cake) {
 
 	return 0;
 }
+
+#undef OPSUF
 
 int CPU_set_cpu_context(CPU *cake, const Thread *thread) {
 	cake->rsp = thread->rsp;

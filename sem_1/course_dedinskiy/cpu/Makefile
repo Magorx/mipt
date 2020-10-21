@@ -1,5 +1,9 @@
 CUR_PROG = cpu
 
+all: assembler cpu
+	./assembler
+	./cpu
+
 ifndef VERBOSE
 .SILENT:
 endif

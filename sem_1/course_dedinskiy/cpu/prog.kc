@@ -1,31 +1,36 @@
-jmp main
+main:
+push 5
+pop rbx
+in
+pop rax
+call check
+halt
 
-root:
-push 2 * rax
-push -1 * rbx
-push rdx
-add
-div
-out
+check:
+call c_cool
+call c_bad
 ret
 
-main:
-in
-in
-in
+c_cool:
+push rbx
+push rax
+jbe cool
+ret_cool:
+ret
 
-pop rcx
-pop rbx
-pop rax
+c_bad:
+push rbx
+push rax
+ja bad
+ret_bad:
+ret
 
-push rbx * rbx
-push -4 * rax * rcx
-add
-sqrt
-pop rdx
+cool:
+push 666
+out
+jmp ret_cool
 
-call root
-
-push -1 * rdx 
-pop rdx
-call root
+bad:
+push 333
+out
+jmp ret_bad

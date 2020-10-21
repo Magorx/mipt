@@ -52,8 +52,9 @@ int Label_compare(const Label *first, const Label *second) {
 //=============================================================================
 
 int check_and_process_opname(const unsigned char **symb, ByteOP *bop, const char *opname, const int opcode) {
-	if (String_starts_with(*symb, opname)) {
-		*symb += strlen(OPNAME_PUSH);
+	size_t opname_len = strlen(opname);
+	if (String_starts_with(*symb, opname) && (*(*symb + opname_len) == ' ' || *(*symb + opname_len) == '\0')) {
+		*symb += strlen(opname);
     	Char_get_next_symb(symb);
 
     	ByteOP_put_byte(bop, (byte) opcode);
@@ -146,7 +147,7 @@ int put_extract_line(const unsigned char **symb, ByteOP *bop) {
 				}
 				return EXPR_READ;
 			} else if (OPARGS[opcode] == VALUE_LABEL) {
-				return LABEL_USED;				
+				return LABEL_USED;
 			} else {
 				printf("[ERR] Arguments for %d are ucked up\n", opcode);
 			}
@@ -215,6 +216,7 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     			break;
     		case LABEL_FOUND:
     			lables_found[l_found_cnt] = new_Lable(line->string, (size_t)(bop->cur_ptr - bop->buffer));
+    			printf("     |-%s\n", lables_found[l_found_cnt]->name);
     			++l_found_cnt;
     			break;
     		default:
@@ -242,9 +244,10 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     }
 
     for (size_t l_used = 0; l_used < l_used_cnt; ++l_used) {
+    	Label *used = lables_used[l_used];
+    	char is_found = 0;
     	for (size_t l_found = 0; l_found < l_found_cnt; ++l_found) {
-    		if (Label_compare(lables_found[l_found], lables_used[l_used]) == 0) {
-    			Label *used = lables_used[l_used];
+    		if (Label_compare(lables_found[l_found], used) == 0) {
     			Label *found = lables_found[l_found];
     			
     			byte* prev_cur_ptr = bop->cur_ptr;
@@ -252,7 +255,14 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     			bop->size    = bop->size - sizeof(double);
     			ByteOP_put_size_t(bop, found->place);
     			bop->cur_ptr = prev_cur_ptr;
+
+    			DEBUG(5) printf("place %zu for %s\n", found->place, used->name);
+    			is_found = 1;
     		}
+    	}
+    	if (!is_found) {
+    		printf("[ERR]<assembler>: assembling interupted: label for %s is not found\n", lables_used[l_used]->name);
+    		return -1;
     	}
     }
 

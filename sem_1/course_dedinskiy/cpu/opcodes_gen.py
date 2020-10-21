@@ -6,6 +6,7 @@ opnames = {
    #'name' : [opcode, args_cnt],	
 	'push' : [1,   1],
 	'pop'  : [2,   1],
+	'dup'  : [3,   0],
 	'add'  : [10,  0],
 	'sub'  : [11,  0],
 	'mul'  : [12,  0],
@@ -45,6 +46,14 @@ lower_h = open('opcodes_h_lower.h').read()
 
 print(upper_h, file=fout)
 
+# Generation of opcode_suffexes.h ============================================
+
+fout_suf = open('opcode_suffexes.h', 'w')
+for suf in opnames:
+	print('OPSUF(' + suf + ')', file=fout_suf)
+fout_suf.close()
+
+#==============================================================================
 # Generation of opcodes, opnames and opargs_count =============================
 
 # Opcodes
@@ -53,7 +62,7 @@ print("enum OPCODES {", file=fout)
 
 for code in opcodes:
 	if code[0]:
-		name = 'OPCODE_{}'.format(code[1].upper())
+		name = 'OPCODE_{}'.format(code[1])
 		print('   {:<12}  = {},'.format(name,code[0]), file=fout)
 
 print("};\n", file=fout)
