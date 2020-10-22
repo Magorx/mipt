@@ -5,6 +5,9 @@
 // The cpu itself =============================================================
 
 int main(const int argc, const char **argv) {
+
+	srand((unsigned int) time(NULL));
+
 	const char *input_file = "out.tf";
 	if (argc > 1) {
 		input_file = argv[1];
@@ -86,6 +89,7 @@ double CPU_stack_pop(CPU *cake) {
 	VERIFY(CPU_stack_size(cake) > 0);
 	
 	double val = Stack_top_double(cake->rsp);
+	DEBUG(5) printf("poped %lg\n", val);
 	Stack_pop_double(cake->rsp);
 
 	return val;
@@ -96,6 +100,44 @@ int CPU_stack_push(CPU *cake, const double value) {
 
 	Stack_push_double(cake->rsp, value);
 	return 0;
+}
+
+long long CPU_random(CPU *cake) {
+	return randlong() % CPU_MAX_RANDOM_LONG;
+}
+
+double CPU_symb_operation(CPU *cake, byte op, const double val_1, const double val_2) {
+	switch (op) {
+		case OPNAME_PLUS:
+			return val_1 + val_2;
+		case OPNAME_MINUS:
+			return val_1 - val_2;
+		case OPNAME_MULTIPLY:
+			return val_1 * val_2;
+		case OPNAME_DIVIDE:
+			return val_1 / val_2;
+		case OPNAME_RANDOM:
+			return (double) (CPU_random(cake) % ((long long) val_2) + (long long) val_1);
+			break;
+		default:
+			printf("[ERR]<cpu>: operator %.2x doesn't exist, aborting\n", op);
+	}
+
+	return 0.0 / 0.0;
+}
+
+size_t CPU_read_size_t(CPU *cake) {
+	size_t val;
+	//memcpy(&val, &cake->bip->buffer[*cake->rip], sizeof(size_t));
+	//*cake->rip += sizeof(size_t);
+	ByteIP_get_size_t(cake->bip, &val);
+	return val;
+}
+
+byte CPU_read_byte(CPU *cake) {
+	byte val;
+	ByteIP_get_byte(cake->bip, &val);
+	return val;
 }
 
 int CPU_read_value(CPU *cake, double *value) {
@@ -113,31 +155,11 @@ int CPU_read_value(CPU *cake, double *value) {
 		DEBUG(5) printf("[%.2x] -> %lg\n", reg_idx, cake->registers[reg_idx]);
 		*value = cake->registers[reg_idx];
 	} else {
-		if (symb == OPNAME_PLUS) {
-			double val_1 = 0;
-			double val_2 = 0;
-			CPU_read_value(cake, &val_1);
-			CPU_read_value(cake, &val_2);
-			*value = val_1 + val_2;
-		} else if (symb == OPNAME_MINUS) {
-			double val_1 = 0;
-			double val_2 = 0;
-			CPU_read_value(cake, &val_1);
-			CPU_read_value(cake, &val_2);
-			*value = val_1 - val_2;
-		} else if (symb == OPNAME_MULTIPLY) {
-			double val_1 = 0;
-			double val_2 = 0;
-			CPU_read_value(cake, &val_1);
-			CPU_read_value(cake, &val_2);
-			*value = val_1 * val_2;
-		} else if (symb == OPNAME_DIVIDE) {
-			double val_1 = 0;
-			double val_2 = 0;
-			CPU_read_value(cake, &val_1);
-			CPU_read_value(cake, &val_2);
-			*value = val_1 / val_2;
-		}
+		double val_1 = 0;
+		double val_2 = 0;
+		CPU_read_value(cake, &val_1);
+		CPU_read_value(cake, &val_2);
+		*value = CPU_symb_operation(cake, symb, val_1, val_2);
 	}
 
 	return 0;
@@ -180,12 +202,22 @@ int CPU_execute_dup(CPU *cake) {
 	return 0;
 }
 
+int CPU_execute_op(CPU *cake) {
+	byte op = 0;
+	op = CPU_read_byte(cake);
+	double val_1 = CPU_stack_pop(cake); // POP INSIDE OF OP
+	double val_2 = CPU_stack_pop(cake);
+	CPU_stack_push(cake, CPU_symb_operation(cake, op, val_2, val_1));
+
+	return 0;
+}
+
 int CPU_execute_add(CPU *cake) {
 	VERIFY(CPU_stack_size(cake) >= 2);
 
 	double val_1 = CPU_stack_pop(cake);
 	double val_2 = CPU_stack_pop(cake);
-	CPU_stack_push(cake, val_1 + val_2);
+	CPU_stack_push(cake, val_2 + val_1);
 
 	return 0;
 }
@@ -195,7 +227,7 @@ int CPU_execute_sub(CPU *cake) {
 
 	double val_1 = CPU_stack_pop(cake);
 	double val_2 = CPU_stack_pop(cake);
-	CPU_stack_push(cake, val_1 - val_2);
+	CPU_stack_push(cake, val_2 - val_1);
 
 	return 0;
 }
@@ -205,7 +237,7 @@ int CPU_execute_mul(CPU *cake) {
 
 	double val_1 = CPU_stack_pop(cake);
 	double val_2 = CPU_stack_pop(cake);
-	CPU_stack_push(cake, val_1 * val_2);
+	CPU_stack_push(cake, val_2 * val_1);
 
 	return 0;
 }
@@ -215,7 +247,7 @@ int CPU_execute_div(CPU *cake) {
 
 	double val_1 = CPU_stack_pop(cake);
 	double val_2 = CPU_stack_pop(cake);
-	CPU_stack_push(cake, val_1 / val_2);
+	CPU_stack_push(cake, val_2 / val_1);
 
 	return 0;
 }
@@ -250,7 +282,7 @@ int CPU_execute_sqrt(CPU *cake) {
 
 int CPU_execute_in(CPU *cake) {
 	double val = 0;
-	printf("[   ]<   >: (thread)[%d] input\n", cake->thread_id);
+	printf("[   ]<   >: [thread](%d)->(input)\n", cake->thread_id);
 	scanf("%lg", &val);
 	DEBUG(5) printf("Read %lg from the keyboard\n", val);
 	CPU_stack_push(cake, val);
@@ -262,13 +294,6 @@ int CPU_jump(CPU *cake, size_t rip) {
 	DEBUG(3) printf("Jumping on %zu\n", rip);
 	*cake->rip = rip;
 	return 0;
-}
-
-size_t CPU_read_size_t(CPU *cake) {
-	size_t val;
-	memcpy(&val, &cake->bip->buffer[*cake->rip], sizeof(size_t));
-	*cake->rip += sizeof(size_t);
-	return val;
 }
 
 int CPU_execute_jmp(CPU *cake) {
@@ -295,7 +320,7 @@ int CPU_execute_ret(CPU *cake) {
 
 int CPU_execute_ja(CPU *cake) {
 	size_t new_rip = (size_t) CPU_read_size_t(cake);
-	if (CPU_stack_pop(cake) > CPU_stack_pop(cake)) {
+	if (CPU_stack_pop(cake) < CPU_stack_pop(cake)) {
 		CPU_jump(cake, new_rip);
 	}
 
@@ -304,7 +329,7 @@ int CPU_execute_ja(CPU *cake) {
 
 int CPU_execute_jae(CPU *cake) {
 	size_t new_rip = (size_t) CPU_read_size_t(cake);
-	if (CPU_stack_pop(cake) >= CPU_stack_pop(cake)) {
+	if (CPU_stack_pop(cake) <= CPU_stack_pop(cake)) {
 		CPU_jump(cake, new_rip);
 	}
 
@@ -313,7 +338,7 @@ int CPU_execute_jae(CPU *cake) {
 
 int CPU_execute_jb(CPU *cake) {
 	size_t new_rip = (size_t) CPU_read_size_t(cake);
-	if (CPU_stack_pop(cake) < CPU_stack_pop(cake)) {
+	if (CPU_stack_pop(cake) > CPU_stack_pop(cake)) {
 		printf("YPOUOUO\n");
 		CPU_jump(cake, new_rip);
 	}
@@ -323,7 +348,7 @@ int CPU_execute_jb(CPU *cake) {
 
 int CPU_execute_jbe(CPU *cake) {
 	size_t new_rip = (size_t) CPU_read_size_t(cake);
-	if (CPU_stack_pop(cake) <= CPU_stack_pop(cake)) {
+	if (CPU_stack_pop(cake) >= CPU_stack_pop(cake)) {
 		CPU_jump(cake, new_rip);
 	}
 
@@ -332,6 +357,8 @@ int CPU_execute_jbe(CPU *cake) {
 
 int CPU_execute_je(CPU *cake) {
 	size_t new_rip = (size_t) CPU_read_size_t(cake);
+
+	//printf("abs = %lg\n", fabs(CPU_stack_pop(cake) - CPU_stack_pop(cake)));
 	if (fabs(CPU_stack_pop(cake) - CPU_stack_pop(cake)) <= EPS) {
 		CPU_jump(cake, new_rip);
 	}
@@ -352,9 +379,9 @@ int CPU_execute_halt(CPU *cake) {
 	return -1;
 }
 
-#define OPSUF(opcode_suf)				  \
-	case OPCODE_ ## opcode_suf:			  \
-		return CPU_execute_ ## opcode_suf(cake);
+#define OPDEF(opname, opcode, opargs)			 	  \
+	case OPCODE_ ## opname:			  			  	  \
+		return CPU_execute_ ## opname(cake);
 
 int CPU_execute_command(CPU *cake) {
 	if (cake->bip->cur_idx == cake->bip->size) {
@@ -367,7 +394,7 @@ int CPU_execute_command(CPU *cake) {
 
 	switch (op) {
 		
-		#include "opcode_suffexes.h"
+		#include "opcodes_def.h"
 
 		default:
 			return -1;
@@ -377,7 +404,7 @@ int CPU_execute_command(CPU *cake) {
 	return 0;
 }
 
-#undef OPSUF
+#undef OPDEF
 
 int CPU_set_cpu_context(CPU *cake, const Thread *thread) {
 	cake->rsp = thread->rsp;
@@ -407,7 +434,6 @@ int CPU_init_thread(CPU *cake, const char *file_name) {
 	Signature sig = {};
 	ByteIP_get(cake->signature_reader, &sig, sizeof(Signature));
 	ByteIP_reset(cake->signature_reader);
-	printf("[INT]<cpu>: (thread)_new\n");
 
 	if (sig.magic != KCTF_MAGIC) {
 		printf("[ERR]<cpu>: (^^^^^^) Magic is not 'KCTF'\n");
@@ -417,6 +443,7 @@ int CPU_init_thread(CPU *cake, const char *file_name) {
 	Thread *thr = NULL;
 	for (byte i = 0; i < cake->threads_capacity; ++i) {
 		if (cake->threads[i] == NULL) {
+			printf("[INT]<cpu>: [thread](%d)->(init)\n", i);
 			cake->threads[i] = new_Thread(i);
 			thr = cake->threads[i];
 			cake->thread_id = i;
@@ -440,7 +467,7 @@ int CPU_init_thread(CPU *cake, const char *file_name) {
 
 	CPU_set_thread_context(cake, thr);
 	++cake->threads_size;
-	printf("[SAT]<cpu>: (thread)[%d]\n", thr->id);
+	printf("[STH]<cpu>: [thread](%d)\n", thr->id);
 
 	return 0;
 }
@@ -448,7 +475,7 @@ int CPU_init_thread(CPU *cake, const char *file_name) {
 int CPU_stop_thread(CPU *cake, Thread *thread) {
 	VERIFY(cake != NULL);
 	VERIFY(thread != NULL);
-	printf("[END]<cpu>: (thread)[%d]\n", thread->id);
+	printf("[ETH]<cpu>: [thread](%d)->(stop)\n", thread->id);
 
 	CPU_set_cpu_context(cake, thread);
 

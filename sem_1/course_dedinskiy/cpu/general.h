@@ -99,6 +99,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdint.h>
+#include <time.h>
 
 typedef uint8_t byte;
 
@@ -201,6 +202,15 @@ const int CHECK_ERROR = 1;
 
 #define CONCAT(a, c) a ## _ ## c
 #define OVERLOAD(func, type) CONCAT(func, type)
+
+//=============================================================================
+//<KCTF> Handmade_random ======================================================
+
+long randlong() {
+    long ret = rand();
+    ret |= rand() << sizeof(int);
+    return ret > 0 ? ret : -ret;
+}
 
 //=============================================================================
 //<KCTF> Handmade_hash ========================================================
@@ -441,6 +451,10 @@ int ByteIP_get_long(ByteIP *cake, long *dest) {
 
 int ByteIP_get_unsigned(ByteIP *cake, unsigned *dest) {
     return ByteIP_get(cake, dest, sizeof(unsigned));
+}
+
+int ByteIP_get_size_t(ByteIP *cake, size_t *dest) {
+    return ByteIP_get(cake, dest, sizeof(size_t));
 }
 
 int ByteIP_get_double(ByteIP *cake, double *dest) {

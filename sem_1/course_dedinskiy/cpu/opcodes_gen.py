@@ -7,10 +7,11 @@ opnames = {
 	'push' : [1,   1],
 	'pop'  : [2,   1],
 	'dup'  : [3,   0],
-	'add'  : [10,  0],
-	'sub'  : [11,  0],
-	'mul'  : [12,  0],
-	'div'  : [13,  0],
+	'op'   : [10,  1],
+	'add'  : [11,  0],
+	'sub'  : [12,  0],
+	'mul'  : [13,  0],
+	'div'  : [14,  0],
 	'sin'  : [20,  0],
 	'cos'  : [21,  0],
 	'sqrt' : [22,  0],
@@ -46,46 +47,51 @@ lower_h = open('opcodes_h_lower.h').read()
 
 print(upper_h, file=fout)
 
-# Generation of opcode_suffexes.h ============================================
+# Generation of opcode_def.h ==================================================
 
-fout_suf = open('opcode_suffexes.h', 'w')
+fout_suf = open('opcodes_def.h', 'w')
 for suf in opnames:
-	print('OPSUF(' + suf + ')', file=fout_suf)
+	print('OPDEF({}, {}, {})'.format(suf, opnames[suf][0], opnames[suf][1]), file=fout_suf)
 fout_suf.close()
 
 #==============================================================================
 # Generation of opcodes, opnames and opargs_count =============================
 
 # Opcodes
-
 print("enum OPCODES {", file=fout)
-
-for code in opcodes:
-	if code[0]:
-		name = 'OPCODE_{}'.format(code[1])
-		print('   {:<12}  = {},'.format(name,code[0]), file=fout)
-
+print("    #define OPDEF(opname, opcode, opargs) OPCODE_ ## opname = opcode,", file=fout)
+print('    #include "opcodes_def.h"', file=fout)
+print('    #undef OPDEF', file=fout)
 print("};\n", file=fout)
 
-# Opnames
+##for code in opcodes:
+##	if code[0]:
+##		name = 'OPCODE_{}'.format(code[1])
+##		print('   {:<12}  = {},'.format(name,code[0]), file=fout)
+
+# Opnames =====================================================================
 
 print("const char *OPNAMES[] = {", file=fout)
-
-for code in opcodes:
-	if code[0]:
-		print('    [{:<3}] = "{}",'.format(code[0], code[1]), file=fout)
-
+print("    #define OPDEF(opname, opcode, opargs) [opcode] = #opname,", file=fout)
+print('    #include "opcodes_def.h"', file=fout)
+print('    #undef OPDEF', file=fout)
 print("};\n", file=fout)
 
-# Opargs
+##for code in opcodes:
+##	if code[0]:
+##		print('    [{:<3}] = "{}",'.format(code[0], code[1]), file=fout)
+##
+
+# Opargs ======================================================================
 
 print("const byte OPARGS[] = {", file=fout)
-
-for code in opcodes:
-	if code[0]:
-		print('    [{:<3}] = {},'.format(code[0], opnames[code[1]][1]), file=fout)
-
+print("    #define OPDEF(opname, opcode, opargs) [opcode] = opargs,", file=fout)
+print('    #include "opcodes_def.h"', file=fout)
+print('    #undef OPDEF', file=fout)
 print("};\n", file=fout)
+##for code in opcodes:
+##	if code[0]:
+##		print('    [{:<3}] = {},'.format(code[0], opnames[code[1]][1]), file=fout)
 
 #==============================================================================
 

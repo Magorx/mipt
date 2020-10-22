@@ -9,6 +9,8 @@
 #include "metainf.h"
 #include "opcodes.h"
 
+#include "cpu_settings.h"
+
 #define STACK_VALUE_TYPE double
 #define STACK_VALUE_PRINTF_SPEC "%lg"
 #include "stack.h"

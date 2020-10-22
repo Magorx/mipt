@@ -1,25 +1,15 @@
-jmp main
-
-one:
-push 5
-add
-out
-jmp ret1
-
-two:
-push 5
-mul
-out
-jmp ret2
-
 main:
-
-push 10
-jmp one
-ret1:
-
-push 10
-jmp two
-ret2:
-
-halt
+push 5
+pop rbx
+in
+pop rax
+push rbx
+push rax
+jbe if_1_true
+push 8.8
+out
+jmp if_1_end
+if_1_true:
+push 70.07
+out
+if_1_end:

@@ -111,24 +111,32 @@ int put_extract_operator_value(const unsigned char **symb, ByteOP *bop) {
 int put_extract_value(const unsigned char **symb, ByteOP *bop) {
 	VERIFY(**symb != '\n');
 
-	if (**symb == 'r') {
+	if (Char_in_string(**symb, OPERATIONS)) {
+		put_extract_operator_value(symb, bop);
+	} else if (**symb == 'r') {
 		byte reg_idx = 0;
 		get_extract_register_index(symb, &reg_idx);
 		if (Char_in_string(**symb, OPERATIONS)) {
 			put_extract_operator_value(symb, bop);
+			ByteOP_put_byte(bop, VALUE_REGISTER);
+			ByteOP_put_byte(bop, reg_idx);
 			put_extract_value(symb, bop);
+		} else {
+			ByteOP_put_byte(bop, VALUE_REGISTER);
+			ByteOP_put_byte(bop, reg_idx);
 		}
-		ByteOP_put_byte(bop, VALUE_REGISTER);
-		ByteOP_put_byte(bop, reg_idx);
-	} else {
+	} else if (isdigit(**symb)) {
 		double const_val = 0;
 		get_extract_const_value(symb, &const_val);
 		if (Char_in_string(**symb, OPERATIONS)) {
 			put_extract_operator_value(symb, bop);
+			ByteOP_put_byte(bop, VALUE_CONSTANT);
+			ByteOP_put_double(bop, const_val);
 			put_extract_value(symb, bop);
+		} else {
+			ByteOP_put_byte(bop, VALUE_CONSTANT);
+			ByteOP_put_double(bop, const_val);
 		}
-		ByteOP_put_byte(bop, VALUE_CONSTANT);
-		ByteOP_put_double(bop, const_val);
 	}
 
 	return 0;
@@ -143,7 +151,11 @@ int put_extract_line(const unsigned char **symb, ByteOP *bop) {
 		if (check_and_process_opname(symb, bop, OPNAMES[opcode], opcode)) {
 			if (OPARGS[opcode] <= MAX_COMMAND_ARGS_COUNT) {
 				for (byte i = 0; i < OPARGS[opcode]; ++i) {
-					put_extract_value(symb, bop);
+					VERIFY_OK(put_extract_value(symb, bop));
+				}
+				if (**symb != '\0') {
+					printf("[ERR]<assembler>: line was not read to the end, aborting. left: |%s|\n", *symb);
+					return -1;
 				}
 				return EXPR_READ;
 			} else if (OPARGS[opcode] == VALUE_LABEL) {
@@ -205,6 +217,7 @@ int assemble_file(const char *fin_name, const char* fout_name) {
 		Char_get_next_symb(&symb);
 
     	const int before_line_index = (int) (bop->cur_ptr - bop->buffer); // for listing
+    	char listed = 0;
 
     	switch(put_extract_line(&symb, bop)) {
     		case EXPR_READ:
@@ -216,7 +229,15 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     			break;
     		case LABEL_FOUND:
     			lables_found[l_found_cnt] = new_Lable(line->string, (size_t)(bop->cur_ptr - bop->buffer));
-    			printf("     |-%s\n", lables_found[l_found_cnt]->name);
+    			size_t lable_len = strlen((char*) line->string);
+    			line->string[lable_len - 1] = '\0';
+    			--lable_len;
+    			printf("     |");
+    			for (size_t i = 0; i < 3 * STANDART_BYTE_LINE_BYTES_COUNT - 2 - lable_len; ++i) {
+    				printf(" ");
+    			}
+    			printf("%s ->|\n", lables_found[l_found_cnt]->name);
+    			listed = 1;
     			++l_found_cnt;
     			break;
     		default:
@@ -225,20 +246,21 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     	}
 
     	// Listing =====
+    	if (!listed) {
+	    	printf("%.4ld | ", bop->cur_ptr - bop->buffer);
+	    	size_t bytes_prined = 0;
+	    	for (size_t i = 0; i < (size_t) (bop->cur_ptr - bop->buffer - before_line_index); ++i) {
+	    		printf("%.2x ", bop->buffer[before_line_index + (int) i]);
+	    		++bytes_prined;
+	    	}
 
-    	printf("%.4ld | ", bop->cur_ptr - bop->buffer);
-    	size_t bytes_prined = 0;
-    	for (size_t i = 0; i < (size_t) (bop->cur_ptr - bop->buffer - before_line_index); ++i) {
-    		printf("%.2x ", bop->buffer[before_line_index + (int) i]);
-    		++bytes_prined;
-    	}
-
-    	while (bytes_prined < STANDART_BYTE_LINE_BYTES_COUNT) {
-    		printf("   ");
-    		++bytes_prined;
-    	}
-    	printf("| [%zu] %s", line_i, str);
-    	printf("\n");
+	    	while (bytes_prined < STANDART_BYTE_LINE_BYTES_COUNT) {
+	    		printf("   ");
+	    		++bytes_prined;
+	    	}
+	    	printf("| [%zu] %s", line_i, str);
+	    	printf("\n");
+	    }
 
     	//==============
     }

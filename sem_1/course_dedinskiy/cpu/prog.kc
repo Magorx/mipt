@@ -1,36 +1,28 @@
 main:
-push 5
+push 1 $ 20
 pop rbx
+
+loop:
 in
 pop rax
-call check
+push rax
+push rbx
+ja above
+below:
+push rax
+push rbx
+je win
+push 100.9
+out
+jmp end
+above_equal:
+push 9.001
+out
+end:
+jmp loop
+
 halt
-
-check:
-call c_cool
-call c_bad
-ret
-
-c_cool:
-push rbx
-push rax
-jbe cool
-ret_cool:
-ret
-
-c_bad:
-push rbx
-push rax
-ja bad
-ret_bad:
-ret
-
-cool:
-push 666
+win:
+push 11.11
 out
-jmp ret_cool
-
-bad:
-push 333
-out
-jmp ret_bad
+halt

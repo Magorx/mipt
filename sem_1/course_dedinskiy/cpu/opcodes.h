@@ -12,7 +12,8 @@ enum CPU_SETTINGS {
 enum VALUE_TYPES {
 	VALUE_CONSTANT = 16,
 	VALUE_REGISTER = 32,
-	VALUE_LABEL    = 48
+	VALUE_LABEL    = 48,
+    VALUE_RANDOM   = 56
 };
 
 enum OPCODES_CHAR_LITERALS {
@@ -24,9 +25,16 @@ enum OPCODES_CHAR_LITERALS {
 	OPNAME_PLUS = '+',
 	OPNAME_MINUS = '-',
 	OPNAME_MULTIPLY = '*',
-	OPNAME_DIVIDE = '/'
+	OPNAME_DIVIDE = '/',
+    OPNAME_RANDOM = '$'
 };
-const unsigned char *OPERATIONS = (unsigned char*)"+*";
+const unsigned char *OPERATIONS = (unsigned char*)"+*$";
+
+const byte OPERATIONS_ARGS[] = {
+    ['+'] = 2,
+    ['*'] = 2,
+    ['$'] = 2
+};
 
 const char *OPNAME_PUSH = "push";
 const char *OPNAME_POP  = "pop";
@@ -42,78 +50,21 @@ const int MAX_COMMAND_ARGS_COUNT = 3;
 const size_t MAX_OPCODES_COUNT = 256;
 
 enum OPCODES {
-   OPCODE_push   = 1,
-   OPCODE_pop    = 2,
-   OPCODE_dup    = 3,
-   OPCODE_add    = 10,
-   OPCODE_sub    = 11,
-   OPCODE_mul    = 12,
-   OPCODE_div    = 13,
-   OPCODE_sin    = 20,
-   OPCODE_cos    = 21,
-   OPCODE_sqrt   = 22,
-   OPCODE_in     = 50,
-   OPCODE_out    = 51,
-   OPCODE_jmp    = 101,
-   OPCODE_ja     = 102,
-   OPCODE_jae    = 103,
-   OPCODE_jb     = 104,
-   OPCODE_jbe    = 105,
-   OPCODE_je     = 106,
-   OPCODE_jne    = 107,
-   OPCODE_call   = 108,
-   OPCODE_ret    = 109,
-   OPCODE_halt   = 255,
+    #define OPDEF(opname, opcode, opargs) OPCODE_ ## opname = opcode,
+    #include "opcodes_def.h"
+    #undef OPDEF
 };
 
 const char *OPNAMES[] = {
-    [1  ] = "push",
-    [2  ] = "pop",
-    [3  ] = "dup",
-    [10 ] = "add",
-    [11 ] = "sub",
-    [12 ] = "mul",
-    [13 ] = "div",
-    [20 ] = "sin",
-    [21 ] = "cos",
-    [22 ] = "sqrt",
-    [50 ] = "in",
-    [51 ] = "out",
-    [101] = "jmp",
-    [102] = "ja",
-    [103] = "jae",
-    [104] = "jb",
-    [105] = "jbe",
-    [106] = "je",
-    [107] = "jne",
-    [108] = "call",
-    [109] = "ret",
-    [255] = "halt",
+    #define OPDEF(opname, opcode, opargs) [opcode] = #opname,
+    #include "opcodes_def.h"
+    #undef OPDEF
 };
 
 const byte OPARGS[] = {
-    [1  ] = 1,
-    [2  ] = 1,
-    [3  ] = 0,
-    [10 ] = 0,
-    [11 ] = 0,
-    [12 ] = 0,
-    [13 ] = 0,
-    [20 ] = 0,
-    [21 ] = 0,
-    [22 ] = 0,
-    [50 ] = 0,
-    [51 ] = 0,
-    [101] = VALUE_LABEL,
-    [102] = VALUE_LABEL,
-    [103] = VALUE_LABEL,
-    [104] = VALUE_LABEL,
-    [105] = VALUE_LABEL,
-    [106] = VALUE_LABEL,
-    [107] = VALUE_LABEL,
-    [108] = VALUE_LABEL,
-    [109] = 0,
-    [255] = 0,
+    #define OPDEF(opname, opcode, opargs) [opcode] = opargs,
+    #include "opcodes_def.h"
+    #undef OPDEF
 };
 
 #endif 

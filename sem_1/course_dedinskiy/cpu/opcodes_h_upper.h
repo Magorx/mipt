@@ -12,7 +12,8 @@ enum CPU_SETTINGS {
 enum VALUE_TYPES {
 	VALUE_CONSTANT = 16,
 	VALUE_REGISTER = 32,
-	VALUE_LABEL    = 48
+	VALUE_LABEL    = 48,
+    VALUE_RANDOM   = 56
 };
 
 enum OPCODES_CHAR_LITERALS {
@@ -24,9 +25,16 @@ enum OPCODES_CHAR_LITERALS {
 	OPNAME_PLUS = '+',
 	OPNAME_MINUS = '-',
 	OPNAME_MULTIPLY = '*',
-	OPNAME_DIVIDE = '/'
+	OPNAME_DIVIDE = '/',
+    OPNAME_RANDOM = '$'
 };
-const unsigned char *OPERATIONS = (unsigned char*)"+*";
+const unsigned char *OPERATIONS = (unsigned char*)"+*$";
+
+const byte OPERATIONS_ARGS[] = {
+    ['+'] = 2,
+    ['*'] = 2,
+    ['$'] = 2
+};
 
 const char *OPNAME_PUSH = "push";
 const char *OPNAME_POP  = "pop";
