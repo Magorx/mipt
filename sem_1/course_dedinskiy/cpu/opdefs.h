@@ -6,20 +6,26 @@
 #define VAL_2 val_2
 #define NEW_RIP new_rip
 #define REG_IDX reg_idx
+#define TYPE type
+#define DOUBLE_FOR_INDEX idx
+#define IDX (size_t) DOUBLE_FOR_INDEX
+
+#define READ_VAL() CPU_read_value(cake, &VAL)
+#define READ_VAL_1() CPU_read_value(cake, &VAL_1)
+#define READ_VAL_2() CPU_read_value(cake, &VAL_2)
+#define READ_REG_IDX() ByteIP_get_byte(cake->bip, &REG_IDX)
+#define READ_NEW_RIP() NEW_RIP = CPU_read_size_t(cake)
+#define READ_TYPE() TYPE = CPU_read_byte(cake)
+#define READ_IDX() CPU_read_value(cake, &DOUBLE_FOR_INDEX)
 
 #define RIP cake->rip
 #define RSP cake->rsp
+#define RAM cake->ram
 
 #define POP() CPU_stack_pop(cake)
 #define PUSH(val) CPU_stack_push(cake, val)
 
 #define REGISTERS(reg_idx) cake->registers[reg_idx]
-
-#define READ_VAL() CPU_read_value(cake, &val)
-#define READ_VAL_1() CPU_read_value(cake, &val_1)
-#define READ_VAL_2() CPU_read_value(cake, &val_2)
-#define READ_REG_IDX() ByteIP_get_byte(cake->bip, &reg_idx)
-#define READ_NEW_RIP() NEW_RIP = CPU_read_size_t(cake)
 
 #define VERIFY_BYTE_REG(REG) VERIFY(REG == VALUE_REGISTER)
 
@@ -36,10 +42,14 @@ OPDEF(push, 1, 1, {
 })
 
 OPDEF(pop, 2, 1, {
-	READ_REG_IDX();
-	VERIFY_BYTE_REG(REG_IDX);
-	READ_REG_IDX();
-	REGISTERS(REG_IDX) = POP();
+	READ_TYPE();
+	if (TYPE == VALUE_REGISTER) {
+		READ_REG_IDX();
+		REGISTERS(REG_IDX) = POP();
+	} else if (TYPE == VALUE_RAM) {
+		READ_IDX();
+		RAM[IDX] = POP();
+	}
 })
 
 OPDEF(dup, 3, 0, {

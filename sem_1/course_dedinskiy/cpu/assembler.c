@@ -108,37 +108,53 @@ int put_extract_operator_value(const unsigned char **symb, ByteOP *bop) {
 	return 0;
 }
 
+byte check_put_extract_op(const unsigned char **symb, ByteOP *bop) {
+	if (Char_in_string(**symb, OPERATIONS)) {
+		put_extract_operator_value(symb, bop);
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 int put_extract_value(const unsigned char **symb, ByteOP *bop) {
 	VERIFY(**symb != '\n');
+
+	DEBUG(5) printf("Current str is: |%s|\n", *symb);
 
 	if (Char_in_string(**symb, OPERATIONS)) {
 		put_extract_operator_value(symb, bop);
 	} else if (**symb == 'r') {
 		byte reg_idx = 0;
 		get_extract_register_index(symb, &reg_idx);
-		if (Char_in_string(**symb, OPERATIONS)) {
-			put_extract_operator_value(symb, bop);
-			ByteOP_put_byte(bop, VALUE_REGISTER);
-			ByteOP_put_byte(bop, reg_idx);
+		byte operation_put = check_put_extract_op(symb, bop);
+		
+		ByteOP_put_byte(bop, VALUE_REGISTER);
+		ByteOP_put_byte(bop, reg_idx);
+
+		if (operation_put) {
 			put_extract_value(symb, bop);
-		} else {
-			ByteOP_put_byte(bop, VALUE_REGISTER);
-			ByteOP_put_byte(bop, reg_idx);
 		}
 	} else if (isdigit(**symb)) {
 		double const_val = 0;
 		get_extract_const_value(symb, &const_val);
-		if (Char_in_string(**symb, OPERATIONS)) {
-			put_extract_operator_value(symb, bop);
-			ByteOP_put_byte(bop, VALUE_CONSTANT);
-			ByteOP_put_double(bop, const_val);
+		byte operation_put = check_put_extract_op(symb, bop);
+
+		ByteOP_put_byte(bop, VALUE_CONSTANT);
+		ByteOP_put_double(bop, const_val);
+
+		if (operation_put) {
 			put_extract_value(symb, bop);
-		} else {
-			ByteOP_put_byte(bop, VALUE_CONSTANT);
-			ByteOP_put_double(bop, const_val);
 		}
 	} else if (**symb == '[') {
-		
+		ByteOP_put_byte(bop, VALUE_RAM);
+		*symb += 1;
+		put_extract_value(symb, bop);
+		*symb += 1;
+	} else if (**symb == ';') {
+		while (**symb) {
+			*symb += 1;
+		}
 	}
 
 	return 0;

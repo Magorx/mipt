@@ -44,6 +44,8 @@ typedef struct CPU_t {
 	ByteIP *bip;        // ByteIP of current thread
 	size_t *rip;
 
+	double *ram;
+
 	Thread **threads;
 	size_t threads_capacity;
 	size_t threads_size;

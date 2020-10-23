@@ -65,6 +65,7 @@ CPU *new_CPU() {
 
 	cpu->rsp = NULL;
 	cpu->rip = NULL;
+	cpu->ram = calloc(CPU_RAM_SIZE, sizeof(double));
 
 	return cpu;
 }
@@ -75,6 +76,7 @@ int delete_CPU(CPU *cake) {
 	free(cake->threads);
 	delete_ByteIP(cake->signature_reader);
 	free(cake);
+	free(cake->ram);
 
 	return 0;
 }
@@ -152,6 +154,11 @@ int CPU_read_value(CPU *cake, double *value) {
 		ByteIP_get_byte(cake->bip, &reg_idx);
 		DEBUG(5) printf("[%.2x] -> %lg\n", reg_idx, cake->registers[reg_idx]);
 		*value = cake->registers[reg_idx];
+	} else if (symb == VALUE_RAM) {
+		double val = 0;
+		CPU_read_value(cake, &val);
+		size_t ram_index = (size_t) val;
+		*value = cake->ram[ram_index];
 	} else {
 		double val_1 = 0;
 		double val_2 = 0;
@@ -177,9 +184,11 @@ int CPU_execute_ ## opname (CPU *cake) {	\
 	double val_1;							\
 	double val_2;							\
 	size_t new_rip;							\
+	byte type;								\
+	double idx;								\
 	{code}									\
 	return 0;								\
-}				
+}
 
 #include "opdefs.h"
 
