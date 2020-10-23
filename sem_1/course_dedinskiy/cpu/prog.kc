@@ -1,7 +1,7 @@
 main:
 push 1
 push 20
-op $
+bin_op $
 pop rbx
 
 loop:

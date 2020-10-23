@@ -185,11 +185,7 @@ int CPU_execute_ ## opname (CPU *cake) {	\
 
 #undef OPDEF
 
-int CPU_execute_halt(CPU *cake) {
-	return -1;
-}
-
-#define OPDEF(opname, opcode, opargs)			 	  \
+#define OPDEF(opname, opcode, opargs, ignr)		 	  \
 	case OPCODE_ ## opname:			  			  	  \
 		return CPU_execute_ ## opname(cake);
 
@@ -204,7 +200,7 @@ int CPU_execute_command(CPU *cake) {
 
 	switch (op) {
 		
-		#include "opcodes_def.h"
+		#include "opcodass.h"
 
 		default:
 			return -1;

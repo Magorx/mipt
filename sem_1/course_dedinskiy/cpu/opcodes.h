@@ -50,20 +50,20 @@ const int MAX_COMMAND_ARGS_COUNT = 3;
 const size_t MAX_OPCODES_COUNT = 256;
 
 enum OPCODES {
-    #define OPDEF(opname, opcode, opargs) OPCODE_ ## opname = opcode,
-    #include "opcodes_def.h"
+    #define OPDEF(opname, opcode, opargs, code) OPCODE_ ## opname = opcode,
+    #include "opdefs.h"
     #undef OPDEF
 };
 
 const char *OPNAMES[] = {
-    #define OPDEF(opname, opcode, opargs) [opcode] = #opname,
-    #include "opcodes_def.h"
+    #define OPDEF(opname, opcode, opargs, code) [opcode] = #opname,
+    #include "opdefs.h"
     #undef OPDEF
 };
 
 const byte OPARGS[] = {
-    #define OPDEF(opname, opcode, opargs) [opcode] = opargs,
-    #include "opcodes_def.h"
+    #define OPDEF(opname, opcode, opargs, code) [opcode] = opargs,
+    #include "opdefs.h"
     #undef OPDEF
 };
 
