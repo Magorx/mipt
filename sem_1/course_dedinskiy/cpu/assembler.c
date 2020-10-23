@@ -183,16 +183,16 @@ int assemble_file(const char *fin_name, const char* fout_name) {
 	File fin = {};
     int ret = File_construct(&fin, fin_name);
     if (ret < 0) {
-    	printf("let's go die\n");
-        File_destruct(&fin);
+    	printf("File doesn't exits :(\n");
         return -1;
     }
 
     Signature signature = {};
-    signature.magic = KCTF_MAGIC;
+    signature.magic   = KCTF_MAGIC;
     signature.version = VERSION;
 
     ByteOP *bop = new_ByteOP(STANDART_INIT_SIZE);
+    ByteOP *lst = new_ByteOP(STANDART_INIT_SIZE);
 
     ByteOP_put(bop, &signature, sizeof(Signature));
 
@@ -200,6 +200,8 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     printf("[   ]<         >: [filename](%s) [lines_cnt](%zu)\n", fin_name, fin.lines_cnt);
     printf("\n");
 
+    ByteOP_put_string(lst, "------\n");
+    ByteOP_put_string(lst, "------\n");
     printf("------\n");
 
     Label **lables_used    = calloc(fin.lines_cnt, sizeof(Label));
@@ -301,6 +303,9 @@ int assemble_file(const char *fin_name, const char* fout_name) {
     printf("%.4ld - %s\n", signature.file_size, fout_name);
 
     delete_ByteOP(bop);
+
+   	ByteOP_to_file(lst, "lst.lst");
+   	delete_ByteOP(lst);
 
     printf("\n[END]<assembler>: Done assembling\n");
 

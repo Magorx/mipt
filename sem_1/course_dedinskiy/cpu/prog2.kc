@@ -1,15 +1,2 @@
-main:
-push 5
-pop rbx
-in
-pop rax
-push rbx
-push rax
-jbe if_1_true
-push 8.8
+push 1 + 2 + 3 + 4 + 5
 out
-jmp if_1_end
-if_1_true:
-push 70.07
-out
-if_1_end:

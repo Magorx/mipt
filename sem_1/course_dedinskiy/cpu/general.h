@@ -338,6 +338,12 @@ int ByteOP_put_double(ByteOP *cake, const double src) {
     return ByteOP_put(cake, &src, sizeof(double));
 }
 
+int ByteOP_put_string(ByteOP *cake, const char *src) {
+    VERIFY(src != NULL);
+    size_t str_len = strlen(src);
+    return ByteOP_put(cake, (const void*) src, sizeof(char) * str_len);
+}
+
 int ByteOP_to_file(const ByteOP *cake, const char* filename) {
     VERIFY(cake != NULL);
     FILE *fout = fopen(filename, "wb");
@@ -471,7 +477,7 @@ typedef struct Line_t {
 /// Struct to store file's information into
 typedef struct File_t {
     const char *name;
-    FILE *file_dscr;
+    FILE *ptr;
     struct stat info;
     unsigned char *text;
     size_t lines_cnt;
@@ -697,16 +703,19 @@ int File_construct(File *file, const char *name) {
 int read_lines(File *file) {
     assert(file);
 
-    file->file_dscr = fopen(file->name, "rb");
+    file->ptr = fopen(file->name, "rb");
+    if (!file->ptr) {
+        return -1;
+    }
 
-    fstat(fileno(file->file_dscr), &(file->info));
+    fstat(fileno(file->ptr), &(file->info));
 
     file->text = (unsigned char*) calloc((size_t) file->info.st_size + 1, sizeof(char));
     if (!file->text) {
         return ERROR_MALLOC_FAIL;
     }
 
-    fread(file->text, (size_t) file->info.st_size, 1, file->file_dscr);
+    fread(file->text, (size_t) file->info.st_size, 1, file->ptr);
     
     int lines_cnt = 0;
     for (unsigned char *c = file->text; *c; ++c) {
