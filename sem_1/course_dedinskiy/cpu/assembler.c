@@ -137,6 +137,8 @@ int put_extract_value(const unsigned char **symb, ByteOP *bop) {
 			ByteOP_put_byte(bop, VALUE_CONSTANT);
 			ByteOP_put_double(bop, const_val);
 		}
+	} else if (**symb == '[') {
+		
 	}
 
 	return 0;
