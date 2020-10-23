@@ -84,6 +84,7 @@
 
     #pragma GCC diagnostic ignored     "-Wunused-function"  //!!!!!!!!1
     #pragma GCC diagnostic ignored     "-Wunused-parameter" //!!!!!!!!1
+    #pragma GCC diagnostic ignored     "-Wunused-variable"
 
     #pragma GCC diagnostic warning     "-Wpragmas"
 #endif
