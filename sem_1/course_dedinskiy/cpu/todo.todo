@@ -4,7 +4,8 @@
 [ . ] add normal .h files
 [ + ] cpu <-> thread adequates 
 [ . ] formated []<>:[]() printf
-[!!!] refactor
+[~~~] refactor
 [ . ] / - in assembler
 [ . ] put + check_and_process_opname
-[!!!] defines instead of code generating
+[ + ] defines instead of code generating
+[!!!] fix shit with vram

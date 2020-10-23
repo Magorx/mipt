@@ -21,11 +21,12 @@
 #define RIP cake->rip
 #define RSP cake->rsp
 #define RAM cake->ram
+#define VRAM cake->vram
 
 #define POP() CPU_stack_pop(cake)
 #define PUSH(val) CPU_stack_push(cake, val)
 
-#define REGISTERS(reg_idx) cake->registers[reg_idx]
+#define REGISTERS cake->registers
 
 #define VERIFY_BYTE_REG(REG) VERIFY(REG == VALUE_REGISTER)
 
@@ -45,10 +46,13 @@ OPDEF(pop, 2, 1, {
 	READ_TYPE();
 	if (TYPE == VALUE_REGISTER) {
 		READ_REG_IDX();
-		REGISTERS(REG_IDX) = POP();
+		REGISTERS[REG_IDX] = POP();
 	} else if (TYPE == VALUE_RAM) {
 		READ_IDX();
 		RAM[IDX] = POP();
+	} else if (TYPE == VALUE_VRAM) {
+		READ_IDX();
+		VRAM[IDX] = POP();
 	}
 })
 
@@ -170,4 +174,30 @@ OPDEF(ret, 109, 0, {
 
 OPDEF(halt, 255, 0, {
 	return -1;
+})
+
+//=============================================================================
+// Graphics ===================================================================
+
+OPDEF(g_init, 200, 0, {
+	CPU_graphics_init(cake, (size_t) POP(), (size_t) POP());
+})
+
+OPDEF(g_draw_on, 201, 0, {
+	cake->to_tick_graphics = 1;
+})
+
+OPDEF(g_draw_off, 202, 0, {
+	cake->to_tick_graphics = 0;
+})
+
+OPDEF(g_draw, 210, 0, {
+	CPU_graphics_tick(cake);
+})
+
+OPDEF(g_fill, 211, 0, {
+	VAL = POP();
+	for (int i = 0; i < cake->screen_height * cake->screen_width; ++i) {
+		cake->vram[i] = VAL;
+	}
 })

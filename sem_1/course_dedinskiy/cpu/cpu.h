@@ -45,12 +45,17 @@ typedef struct CPU_t {
 	size_t *rip;
 
 	double *ram;
+	double *vram;
 
 	Thread **threads;
 	size_t threads_capacity;
 	size_t threads_size;
 	size_t next_thread;
 	byte thread_id;
+
+	byte to_tick_graphics;
+	size_t screen_width;
+	size_t screen_height;
 } CPU;
 
 CPU *new_CPU();

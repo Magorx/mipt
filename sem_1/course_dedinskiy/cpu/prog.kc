@@ -1,6 +1,37 @@
-push 150
-pop [15]
-push 4
+push 120
+push 30
+g_init
+
+inf:
+push 46
+
+push 0 $ 2
+push 0
+jne if_end
+pop rcx
+push 97 $ 122
+if_end:
+
+
+pop rdx
+; ============ put a's
+push -1
 pop rax
-push [10 + rax + 1  ]
-out
+loop:
+push 1 + rax
+pop rax
+
+;push rax
+;out
+
+push rdx
+pop (rax)
+
+push rax
+push 3600
+jb loop
+; ============
+
+g_draw
+
+jmp inf

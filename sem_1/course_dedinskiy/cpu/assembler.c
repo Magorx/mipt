@@ -135,7 +135,7 @@ int put_extract_value(const unsigned char **symb, ByteOP *bop) {
 		if (operation_put) {
 			put_extract_value(symb, bop);
 		}
-	} else if (isdigit(**symb)) {
+	} else if (isdigit(**symb) || **symb == '+' || **symb == '-') {
 		double const_val = 0;
 		get_extract_const_value(symb, &const_val);
 		byte operation_put = check_put_extract_op(symb, bop);
@@ -151,11 +151,18 @@ int put_extract_value(const unsigned char **symb, ByteOP *bop) {
 		*symb += 1;
 		put_extract_value(symb, bop);
 		*symb += 1;
+	} else if (**symb == '(') {
+		ByteOP_put_byte(bop, VALUE_VRAM);
+		*symb += 1;
+		put_extract_value(symb, bop);
+		*symb += 1;
 	} else if (**symb == ';') {
 		while (**symb) {
 			*symb += 1;
 		}
 	}
+
+	Char_get_next_symb(symb);
 
 	return 0;
 }

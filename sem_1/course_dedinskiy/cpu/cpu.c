@@ -48,6 +48,8 @@ int delete_Thread(Thread *cake) {
 	return 0;
 }
 
+//=============================================================================
+
 CPU *new_CPU() {
 	CPU *cpu = calloc(1, sizeof(CPU));
 
@@ -66,6 +68,10 @@ CPU *new_CPU() {
 	cpu->rsp = NULL;
 	cpu->rip = NULL;
 	cpu->ram = calloc(CPU_RAM_SIZE, sizeof(double));
+	cpu->vram = cpu->ram;
+	VERIFY_t(cpu->ram != NULL, CPU*);
+
+	cpu->to_tick_graphics = 0;
 
 	return cpu;
 }
@@ -75,11 +81,78 @@ int delete_CPU(CPU *cake) {
 	
 	free(cake->threads);
 	delete_ByteIP(cake->signature_reader);
-	free(cake);
 	free(cake->ram);
+	free(cake);
 
 	return 0;
 }
+
+//=============================================================================
+// Graphic ====================================================================
+
+int CPU_graphics_init(CPU *cake, const size_t width, const size_t height) {
+	size_t pixels_cnt = width * height;
+	cake->screen_width = width;
+	cake->screen_height = height;
+	cake->vram = cake->ram + CPU_RAM_SIZE - (pixels_cnt + 1);
+
+	return 0;
+}
+
+int CPU_graphics_draw_clear(CPU *cake) {
+	printf("=== You shouldn't see this ===\n");
+	for (size_t y = 0; y < cake->screen_height; ++y) {
+		printf("\n");
+	}
+
+	return 0;
+}
+
+#define clear() printf("\033[H\033[J")
+#define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
+
+int CPU_graphics_draw_screen(CPU *cake) {
+	gotoxy(0, 0);
+	printf("\e[?25l");
+	printf("|");
+	for (size_t x = 0; x < cake->screen_width; ++x) {
+		printf("=");
+	}
+	//printf("w=%zuh=%zu", cake->screen_width, cake->screen_height);
+	printf("|\n");
+	for (size_t y = 0; y < cake->screen_height; ++y) {
+		printf("|");
+		for (size_t x = 0; x < cake->screen_width; ++x) {
+			//printf("%zu %zu\n", y, x);
+			unsigned char symb = (unsigned char) cake->vram[y * cake->screen_width + x];	
+			if (symb) {
+				printf("%c", symb);
+			} else {
+				printf(" ");
+			}
+		}
+		printf("|\n");
+	}
+	printf("|");
+	for (size_t x = 0; x < cake->screen_width; ++x) {
+		printf("=");
+	}
+	printf("|\n");
+	printf("\e[?25h");
+
+	return 0;
+}
+
+int CPU_graphics_tick(CPU *cake) {
+	//CPU_graphics_draw_clear(cake);
+	//clear();
+	CPU_graphics_draw_screen(cake);
+
+	return 0;
+}
+
+//=============================================================================
+// General incapsulations =====================================================
 
 size_t CPU_stack_size(CPU *cake) {
 	VERIFY_t(cake != NULL, size_t);
@@ -108,6 +181,9 @@ long long CPU_random(CPU *cake) {
 	return randlong() % CPU_MAX_RANDOM_LONG;
 }
 
+//=============================================================================
+// Logic and operations =======================================================
+
 double CPU_symb_operation(CPU *cake, byte op, const double val_1, const double val_2) {
 	switch (op) {
 		case OPNAME_PLUS:
@@ -119,7 +195,7 @@ double CPU_symb_operation(CPU *cake, byte op, const double val_1, const double v
 		case OPNAME_DIVIDE:
 			return val_1 / val_2;
 		case OPNAME_RANDOM:
-			return (double) (CPU_random(cake) % ((long long) val_2) + (long long) val_1);
+			return (double) (CPU_random(cake) % ((long long) (val_2 + 1 - val_1)) + (long long) val_1);
 			break;
 		default:
 			printf("[ERR]<cpu>: operator %.2x doesn't exist, aborting\n", op);
@@ -159,6 +235,11 @@ int CPU_read_value(CPU *cake, double *value) {
 		CPU_read_value(cake, &val);
 		size_t ram_index = (size_t) val;
 		*value = cake->ram[ram_index];
+	} else if (symb == VALUE_VRAM) {
+		double val = 0;
+		CPU_read_value(cake, &val);
+		size_t ram_index = (size_t) val;
+		*value = cake->vram[ram_index];
 	} else {
 		double val_1 = 0;
 		double val_2 = 0;
@@ -221,6 +302,9 @@ int CPU_execute_command(CPU *cake) {
 }
 
 #undef OPDEF
+
+//=============================================================================
+// Threads work ===============================================================
 
 int CPU_set_cpu_context(CPU *cake, const Thread *thread) {
 	cake->rsp = thread->rsp;
@@ -323,6 +407,10 @@ int CPU_tick(CPU *cake) {
 	} else {
 		CPU_stop_thread(cake, thr);
 		cake->threads[thr_idx] = NULL;
+	}
+
+	if (cake->to_tick_graphics) {
+		CPU_graphics_tick(cake);
 	}
 
 	return 0;
