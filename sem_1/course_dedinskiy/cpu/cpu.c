@@ -113,33 +113,36 @@ int CPU_graphics_draw_clear(CPU *cake) {
 
 int CPU_graphics_draw_screen(CPU *cake) {
 	gotoxy(0, 0);
-	printf("\e[?25l"); // printf("\e[?25h"); - recover :)
+	//printf("\e[?25l"); // printf("\e[?25h"); - recover :)
 
-	printf("|");
+	putchar('|');
 	for (size_t x = 0; x < cake->screen_width; ++x) {
-		printf("=");
+		putchar('='	);
 	}
 	//printf("w=%zuh=%zu", cake->screen_width, cake->screen_height);
-	printf("|\n");
+	putchar('|');
+	putchar('\n');
 	for (size_t y = 0; y < cake->screen_height; ++y) {
 		printf("|");
 		for (size_t x = 0; x < cake->screen_width; ++x) {
 			//printf("%zu %zu\n", y, x);
 			unsigned char symb = (unsigned char) cake->vram[y * cake->screen_width + x];	
 			if (symb) {
-				printf("%c", symb);
+				putchar(symb);
 			} else {
-				printf(" ");
+				putchar(' ');
 			}
 		}
-		printf("|\n");
+		putchar('|');
+		putchar('\n');
 	}
-	printf("|");
+	putchar('|');
 	for (size_t x = 0; x < cake->screen_width; ++x) {
-		printf("=");
+		putchar('=');
 	}
-	printf("|\n");
-	printf("\e[?25h");
+	putchar('|');
+	putchar('\n');
+	//printf("\e[?25h");
 
 	return 0;
 }
