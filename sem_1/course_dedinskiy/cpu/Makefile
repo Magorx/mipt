@@ -14,11 +14,11 @@ WARNINGS = -Wall -Werror -Wno-multichar
 STANDARD =  
 CFLAGS = $(STANDARD) $(WARNINGS)
 
-cpu: cpu.c general.h stack.h opcodes.h opdefs.h
+cpu: cpu.c cpu.h general.h stack.h opcodes.h opdefs.h
 	$(CC) $(CFLAGS) cpu.c -o cpu -lm
 
 
-assembler: assembler.c general.h opcodes.h opdefs.h
+assembler: assembler.c assembler.h general.h opcodes.h opdefs.h
 	$(CC) $(CFLAGS) assembler.c -o assembler
 
 cur_run: cpu assembler

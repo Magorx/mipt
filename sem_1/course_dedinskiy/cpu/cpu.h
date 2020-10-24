@@ -11,6 +11,7 @@
 
 #include "cpu_settings.h"
 
+#define STACK_SECURITY_LEVEL 0
 #define STACK_VALUE_TYPE double
 #define STACK_VALUE_PRINTF_SPEC "%lg"
 #include "stack.h"

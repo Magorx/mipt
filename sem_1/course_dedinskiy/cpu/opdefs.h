@@ -82,7 +82,7 @@ OPDEF(sub, 12, 0, {
 
 OPDEF(mul, 13, 0, {
 	VERIFY_STACK_HAS_TWO_ELEMS();
-	PUSH(POP() + POP());
+	PUSH(POP() * POP());
 })	
 
 OPDEF(div, 14, 0, {
@@ -103,6 +103,12 @@ OPDEF(cos, 21, 0, {
 OPDEF(sqrt, 22, 0, {	
 	VERIFY_STACK_NOT_EMPTY();	
 	PUSH(sqrt(POP()));	
+})
+
+OPDEF(pw2, 23, 0, {	
+	VERIFY_STACK_NOT_EMPTY();
+	VAL = POP();
+	PUSH(VAL * VAL);	
 })
 
 OPDEF(in, 50, 0, {	
@@ -197,7 +203,7 @@ OPDEF(g_draw, 210, 0, {
 
 OPDEF(g_fill, 211, 0, {
 	VAL = POP();
-	for (int i = 0; i < cake->screen_height * cake->screen_width; ++i) {
+	for (size_t i = 0; i < cake->screen_height * cake->screen_width; ++i) {
 		cake->vram[i] = VAL;
 	}
 })

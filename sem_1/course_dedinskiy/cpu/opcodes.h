@@ -6,7 +6,7 @@
 const int16_t VERSION = 1;
 
 enum CPU_SETTINGS {
-	REGISTERS_COUNT = 4
+	REGISTERS_COUNT = 26
 };
 
 enum VALUE_TYPES {
@@ -30,7 +30,7 @@ enum OPCODES_CHAR_LITERALS {
 	OPNAME_DIVIDE = '/',
     OPNAME_RANDOM = '$'
 };
-const unsigned char *OPERATIONS = (unsigned char*)"+*$";
+const unsigned char *OPERATIONS = (unsigned char*)"+-*/$";
 
 const byte OPERATIONS_ARGS[] = {
     ['+'] = 2,

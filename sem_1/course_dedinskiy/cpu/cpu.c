@@ -113,7 +113,8 @@ int CPU_graphics_draw_clear(CPU *cake) {
 
 int CPU_graphics_draw_screen(CPU *cake) {
 	gotoxy(0, 0);
-	printf("\e[?25l");
+	printf("\e[?25l"); // printf("\e[?25h"); - recover :)
+
 	printf("|");
 	for (size_t x = 0; x < cake->screen_width; ++x) {
 		printf("=");
