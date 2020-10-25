@@ -190,8 +190,16 @@ push 1008
 call vec_pop
 push 1.8
 pop [1011]
+;===== sphr_4
+push 0
+push 0
+push 0-1000
+push 1012
+call vec_pop
+push 998
+pop [1015]
 ;=====
-push 3
+push 4
 pop [195]
 ;=====
 ret
@@ -356,6 +364,7 @@ lightning:
 pw2
 push 11
 mul
+
 jmp see_end
 cant_see:
 pop rzx
@@ -408,6 +417,19 @@ push 180
 
 call sphere_intercept
 
+;===== check that target is not behind
+push 181
+push 147
+push 5555
+call vec_sub
+
+push 5555
+push 150
+call vec_dot
+push 0
+jb spheres_checker_for_end
+;=====
+
 ;=================== if dist of new inter is less, then current ret
 push [180]
 push [170]
@@ -430,6 +452,7 @@ if_ri_closer_end:
 ;=================== if end
 
 ;===================
+spheres_checker_for_end:
 push 1 + [40]
 pop [40]
 push [40]
@@ -553,7 +576,7 @@ push 383
 call vec_add
 
 push 383
-push 171
+push 181
 call vec_set
 
 push 383
@@ -565,11 +588,11 @@ push 383
 call vec_norm
 
 push 383
-push 174
+push 184
 call vec_set
 
 push [408]
-pop [170]
+pop [180]
 
 ret
 

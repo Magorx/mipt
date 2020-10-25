@@ -2,11 +2,16 @@
 #undef KCTF_DEBUG_LEVEL
 #define KCTF_DEBUG_LEVEL 0
 
+long long cur_time;
+long long prev_cur_time;
+long long cnt;
 // The cpu itself =============================================================
 
 int main(const int argc, const char **argv) {
 
 	srand((unsigned int) time(NULL));
+	prev_cur_time = time(NULL);
+	cnt = 0;
 
 	const char *input_file = "out.tf";
 	if (argc > 1) {
@@ -289,13 +294,21 @@ int CPU_execute_ ## opname (CPU *cake) {	\
 		return CPU_execute_ ## opname(cake);
 
 int CPU_execute_command(CPU *cake) {
+	/*cnt++;
+	cur_time = time(NULL);
+	if (cur_time > prev_cur_time) {
+		printf("sec passed! %lld commands executed\n", cnt);
+		prev_cur_time = cur_time;
+		cnt = 0;
+	}*/
+
 	if (cake->bip->cur_idx == cake->bip->size) {
 		return -1;
 	}
 
 	byte op = 0;
 	ByteIP_get_byte(cake->bip, &op);
-	DEBUG(2) printf("op %.2x on ind %zu stack size %zu || %d\n", op, cake->bip->cur_idx - 1, Stack_size_double(cake->rsp), cake->bip->capacity);
+	DEBUG(2) printf("op %.2x on ind %zu stack size %zu \n", op, cake->bip->cur_idx - 1, Stack_size_double(cake->rsp));
 
 	switch (op) {
 		
