@@ -198,7 +198,7 @@ ret
 
 init_lights:
 ;===== light_1
-push 0-20
+push 0-10
 push 0
 push 0
 push 109
@@ -359,7 +359,7 @@ mul
 jmp see_end
 cant_see:
 pop rzx
-push 255
+push 0
 see_end:
 pop ([37])
 ;===== end of if
@@ -498,7 +498,6 @@ dup
 push 0
 ja disc_pos
 pop rax
-;stack_size
 ret
 disc_pos:
 
@@ -509,6 +508,7 @@ disc_pos:
 
 ;pop [[350]]
 ;===== for now disc is on the stack
+sqrt
 dup
 
 push [355]

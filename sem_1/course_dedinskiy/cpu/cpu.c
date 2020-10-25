@@ -295,7 +295,7 @@ int CPU_execute_command(CPU *cake) {
 
 	byte op = 0;
 	ByteIP_get_byte(cake->bip, &op);
-	DEBUG(2) printf("op %.2x on ind %zu stack size %zu\n", op, cake->bip->cur_idx - 1, Stack_size_double(cake->rsp));
+	DEBUG(2) printf("op %.2x on ind %zu stack size %zu || %d\n", op, cake->bip->cur_idx - 1, Stack_size_double(cake->rsp), cake->bip->capacity);
 
 	switch (op) {
 		
