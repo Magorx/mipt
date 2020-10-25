@@ -127,8 +127,13 @@ int CPU_graphics_draw_screen(CPU *cake) {
 		for (size_t x = 0; x < cake->screen_width; ++x) {
 			//printf("%zu %zu\n", y, x);
 			unsigned char symb = (unsigned char) cake->vram[y * cake->screen_width + x];	
-			if (symb) {
-				putchar(symb);
+			if (symb < 254) {
+				if (symb < 12) {
+					putchar(".,-~:;*=!#$@"[symb]);
+				}
+				else {
+					putchar(symb);
+				}
 			} else {
 				putchar(' ');
 			}

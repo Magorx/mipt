@@ -86,7 +86,7 @@ OPDEF(sub, 12, 0, {
 OPDEF(mul, 13, 0, {
 	VERIFY_STACK_HAS_TWO_ELEMS();
 	PUSH(POP() * POP());
-})	
+})
 
 OPDEF(div, 14, 0, {
 	VAL_1 = POP();
@@ -113,6 +113,18 @@ OPDEF(pw2, 23, 0, {
 	VERIFY_STACK_NOT_EMPTY();
 	VAL = POP();
 	PUSH(VAL * VAL);	
+})
+
+OPDEF(pw_1, 24, 0, {	
+	VERIFY_STACK_NOT_EMPTY();
+	VAL = POP();
+	PUSH(1 / VAL);	
+})
+
+OPDEF(abs, 25, 0, {	
+	VERIFY_STACK_NOT_EMPTY();
+	VAL = POP();
+	PUSH(fabs(VAL));
 })
 
 OPDEF(in, 50, 0, {	
