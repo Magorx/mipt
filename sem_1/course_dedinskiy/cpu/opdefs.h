@@ -32,7 +32,8 @@
 
 #define BINARY_OP(op, val_2, val_1) CPU_symb_operation(cake, op, val_2, val_1)
 
-#define OUT() printf("%lg\n", CPU_stack_pop(cake))
+#define OUT() printf("%lg ", CPU_stack_pop(cake))
+#define OUT_N() printf("\n")
 #define IN_VAL() scanf("%lg", &val)
 
 #define JMP(new_rip) CPU_jump(cake, new_rip);
@@ -77,7 +78,9 @@ OPDEF(add, 11, 0, {
 
 OPDEF(sub, 12, 0, {
 	VERIFY_STACK_HAS_TWO_ELEMS();
-	PUSH(-1 * POP() + POP());
+	VAL_1 = POP();
+	VAL_2 = POP();
+	PUSH(VAL_2 - VAL_1);
 })
 
 OPDEF(mul, 13, 0, {
@@ -86,8 +89,9 @@ OPDEF(mul, 13, 0, {
 })	
 
 OPDEF(div, 14, 0, {
-	VERIFY_STACK_HAS_TWO_ELEMS();
-	PUSH(1 / POP() * POP());	
+	VAL_1 = POP();
+	VAL_2 = POP();
+	PUSH(VAL_2 / VAL_1);
 })
 
 OPDEF(sin, 20, 0, {
@@ -118,6 +122,10 @@ OPDEF(in, 50, 0, {
 
 OPDEF(out, 51, 0, {
 	OUT();
+})
+
+OPDEF(out_n, 52, 0, {
+	OUT_N();
 })
 
 OPDEF(jmp, 101, VALUE_LABEL, {
@@ -206,4 +214,8 @@ OPDEF(g_fill, 211, 0, {
 	for (size_t i = 0; i < cake->screen_height * cake->screen_width; ++i) {
 		cake->vram[i] = VAL;
 	}
+})
+
+OPDEF(stack_size, 250, 0, {
+	printf("Stack_size: %zu\n", cake->rsp->size);
 })

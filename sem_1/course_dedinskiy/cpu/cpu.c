@@ -297,7 +297,7 @@ int CPU_execute_command(CPU *cake) {
 		#include "opdefs.h"
 
 		default:
-			printf("[ERR]<cpu>: unknown command on %zu\n", *cake->rip);
+			printf("[ERR]<cpu>: unknown command on %zu: %.2x\n", *cake->rip, cake->bip->buffer[*cake->rip]);
 			return -1;
 			break;
 	}

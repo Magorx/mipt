@@ -9,3 +9,9 @@
 [ . ] put + check_and_process_opname
 [ + ] defines instead of code generating
 [!!!] fix shit with vram
+
+[%%%] raytracer
++1) vec_cross
+2) find_pixel_in_3d_by_x_y
+3) calc_axes_for_camera_map
+4) 
