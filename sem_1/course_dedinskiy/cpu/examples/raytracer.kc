@@ -48,9 +48,9 @@ jmp main
 
 init_constants:
 ;===== screen_size
-push 120
+push 138
 pop [20]
-push 20
+push 34
 pop [10]
 ;===== g_init
 push [20]

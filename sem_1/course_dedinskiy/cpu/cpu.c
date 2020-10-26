@@ -135,7 +135,7 @@ int CPU_graphics_draw_screen(CPU *cake) {
 			unsigned char symb = (unsigned char) cake->vram[y * cake->screen_width + x];	
 			if (symb < 254) {
 				if (symb < 12) {
-					putchar(".,-~:;*=!#$@"[symb]);
+					putchar(".-,~:;*=!#$@"[symb]);
 				}
 				else {
 					putchar(symb);
