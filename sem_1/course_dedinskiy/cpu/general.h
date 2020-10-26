@@ -244,7 +244,7 @@ void *realloc_buffer(void *buffer, const size_t cur_len, const double coef) {
 //=============================================================================
 //<KCTF> byte output ==========================================================
 
-const size_t STANDART_BYTE_LINE_BYTES_COUNT = 16;
+const size_t STANDART_BYTE_LINE_BYTES_COUNT = 20;
 
 typedef struct ByteOP_t {
     size_t capacity;

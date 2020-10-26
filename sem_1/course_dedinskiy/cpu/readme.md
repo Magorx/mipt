@@ -1,5 +1,7 @@
 # Assembler + CPU
 
+The set of commands can be changed, look for ```opdefs.h``` file. Add just one block like others and use it in your assembler! (But don't try to use same opcodes for different opnames)
+
 # Assembler
 Usage:
 1) Build assembler

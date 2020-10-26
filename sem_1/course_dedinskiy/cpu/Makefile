@@ -10,7 +10,7 @@ endif
 
 CC = gcc
 
-WARNINGS = -Wall -Werror -Wno-multichar
+WARNINGS = -Wall -Wno-multichar
 STANDARD =  
 CFLAGS = $(STANDARD) $(WARNINGS)
 

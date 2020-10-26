@@ -1,26 +1,27 @@
 #define VERIFY_STACK_NOT_EMPTY() do {VERIFY(Stack_size_double(cake->rsp) >  0);} while(0)
 #define VERIFY_STACK_HAS_TWO_ELEMS() do {VERIFY(Stack_size_double(cake->rsp) >= 2);} while(0)
 
-#define VAL val
-#define VAL_1 val_1
-#define VAL_2 val_2
-#define NEW_RIP new_rip
-#define REG_IDX reg_idx
-#define TYPE type
-#define DOUBLE_FOR_INDEX idx
-#define IDX (size_t) DOUBLE_FOR_INDEX
+#define VAL 				val
+#define VAL_1 				val_1
+#define VAL_2 				val_2
+#define NEW_RIP 			new_rip
+#define REG_IDX 			reg_idx
+#define TYPE 				type
+#define DOUBLE_FOR_INDEX 	idx
+#define IDX 			    (size_t) DOUBLE_FOR_INDEX
 
-#define READ_VAL() CPU_read_value(cake, &VAL)
-#define READ_VAL_1() CPU_read_value(cake, &VAL_1)
-#define READ_VAL_2() CPU_read_value(cake, &VAL_2)
-#define READ_REG_IDX() ByteIP_get_byte(cake->bip, &REG_IDX)
-#define READ_NEW_RIP() NEW_RIP = CPU_read_size_t(cake)
-#define READ_TYPE() TYPE = CPU_read_byte(cake)
-#define READ_IDX() CPU_read_value(cake, &DOUBLE_FOR_INDEX)
+#define READ_VAL() 			CPU_read_value(cake, &VAL)
+#define READ_VAL_1() 		CPU_read_value(cake, &VAL_1)
+#define READ_VAL_2() 		CPU_read_value(cake, &VAL_2)
+#define READ_IDX() 			CPU_read_value(cake, &DOUBLE_FOR_INDEX)
 
-#define RIP cake->rip
-#define RSP cake->rsp
-#define RAM cake->ram
+#define READ_REG_IDX() 		ByteIP_get_byte(cake->bip, &REG_IDX)
+#define READ_NEW_RIP() 		NEW_RIP = CPU_read_size_t(cake)
+#define READ_TYPE() 		TYPE    = CPU_read_byte  (cake)
+
+#define RIP  cake->rip
+#define RSP  cake->rsp
+#define RAM  cake->ram
 #define VRAM cake->vram
 
 #define POP() CPU_stack_pop(cake)

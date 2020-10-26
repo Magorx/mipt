@@ -100,6 +100,7 @@ int CPU_graphics_init(CPU *cake, const size_t width, const size_t height) {
 	cake->screen_width = width;
 	cake->screen_height = height;
 	cake->vram = cake->ram + CPU_RAM_SIZE - (pixels_cnt + 1);
+	printf("\033c");
 
 	return 0;
 }
