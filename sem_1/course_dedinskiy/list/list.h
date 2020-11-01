@@ -254,7 +254,8 @@ int List_sort(List *cake) {
 
 	Node *new_buffer = calloc(cake->capacity, sizeof(Node));
 	int node_index = cake->head;
-	for (int i = 0; i < (int) cake->size; ++i) {
+	int inted_size = (int) cake->size;
+	for (int i = 0; i < inted_size; ++i) {
 		//printf("%d\n", i);
 		//memcpy(&new_buffer[i + 1], &cake->buffer[node_index], sizeof(Node));
 		new_buffer[i + 1] = cake->buffer[node_index];
@@ -265,10 +266,10 @@ int List_sort(List *cake) {
 	free(cake->buffer);
 
 	cake->head = 1;
-	cake->tail = (int) cake->size;
+	cake->tail = inted_size;
 	cake->buffer = new_buffer;
 
-	cake->max_sorted_index = (int) cake->size;
+	cake->max_sorted_index = inted_size;
 
 	return 0;
 }
