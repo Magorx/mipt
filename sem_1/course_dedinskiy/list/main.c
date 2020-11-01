@@ -8,14 +8,14 @@ int main() {
 	List *l = new_List();
 	List_push_right(l, 1, -1);
 
-	for (int i = 1; i <= 1000; ++i) {
+	for (int i = 1; i <= 30000; ++i) {
 		if (rand() % 2) {
 			List_push_front(l, i);
 		} else {
 			List_push_back(l, i);
 		}
 		if (rand() % 2) {
-			List_pop(l, l->head);
+			//List_pop(l, l->head);
 		}
 	}
 
