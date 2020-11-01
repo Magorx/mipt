@@ -4,37 +4,19 @@ digraph G {
 	NODE_3[color="red",label="16"];
 	NODE_1->NODE_2->NODE_3;
 	arsen [label=<
-        <TABLE>
-            <TR>
-                <TD>Top left</TD>
-                <TD>
-                    <TABLE>
-                        <TR><TD>Row 1</TD></TR>
-                        <TR><TD>Row 2</TD></TR>
-                    </TABLE>
-                </TD>
-            </TR>
-            <TR>
-                <TD>Bottom Left</TD>
-                <TD>
-                    <TABLE>
-                        <TR><TD>Row 1</TD></TR>
-                        <TR><TD>Row 2</TD></TR>
-                    </TABLE>
-                </TD>
-            </TR>
-        </TABLE>
-    >, ];
-}
-
-digraph G{
- rankdir=LR;
- node[color="red",fontsize=14];
- edge[color="darkgreen",fontcolor="blue",fontsize=12];
- OPEN[shape="rectangle",style="filled",fillcolor="lightgrey"];
- CLOSED[shape="octagon",label="Финиш"];
- VERIFIED[shape="rectangle",style="rounded"];
- OPEN->RESOLVED->VERIFIED->CLOSED;
- OPEN->CLOSED[style="bold"];
- VERIFIED->OPEN[label="обнаружены ошибки",style="dashed",arrowhead="dot"];
+        <table border="0" cellspacing="1">
+        	<tr>
+        		<td port="index" colspan="3" border="1">XXX</td>
+        	</tr>
+        	<tr>
+        		<td port="prev" border="1">X</td>
+        		<td port="val"  border="1">AAAAA</td>
+        		<td port="next" border="1">B</td>
+        	</tr>
+        </table>
+    >, shape=none];
+    arsen:index->arsen:prev;
+    arsen:index->arsen:next;
+    arsen:prev->arsen:next;
+    arsen:next->arsen:prev;
 }
