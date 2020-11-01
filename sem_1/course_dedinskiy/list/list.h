@@ -194,3 +194,11 @@ int List_push_left(List *cake, int node, LIST_TYPE data) {
 
 	return 0;
 }
+
+int List_push_front(List *cake, LIST_TYPE data) {
+	return List_push_left(cake, cake->head, data);
+}
+
+int List_push_back(List *cake, LIST_TYPE data) {
+	return List_push_right(cake, cake->tail, data);
+}

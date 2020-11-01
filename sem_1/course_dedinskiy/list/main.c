@@ -10,14 +10,10 @@ int main() {
 
 	for (int i = 1; i <= 1000; ++i) {
 		if (rand() % 2) {
-			List_push_right(l, rand() % l->size + 1, i);
+			List_push_front(l, i);
 		} else {
-			List_push_left(l, rand() % l->size + 1, i);
+			List_push_back(l, i);
 		}
-	}
-
-	for (int i = 0; i < 5; ++i) {
-		List_push_left(l, rand() % 10 + 1, i * 10);
 	}
 
 	List_dump(l);
