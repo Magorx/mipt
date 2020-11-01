@@ -14,9 +14,19 @@ int main() {
 		} else {
 			List_push_back(l, i);
 		}
+		if (rand() % 2) {
+			List_pop(l, l->head);
+		}
 	}
 
-	List_dump(l);
+	List_sort(l);
+
+	for (int i = l->head; i != l->tail; i = l->buffer[i].next) {
+		printf("%d ", i);
+	}
+	printf("\n");
+
+	//List_dump(l);
 
 	delete_List(l);
 

@@ -21,11 +21,15 @@ typedef struct List_t {
 	int head;
 	int tail;
 	int free_head;
+
+	int max_sorted_index;
 } List;
 
-/*enum LIST_RETURN_CODES {
-	LIST_
-};*/
+enum LIST_ERROR_CODES {
+	ERROR_BROCKEN_LINKS = -7777,
+	ERROR_UNEXPECTED_LOOP,
+	ERROR_NODE_NOT_IN_LIST,
+};
 
 List *new_List();
 int   delete_List();
@@ -46,6 +50,25 @@ int List_valid(const List *cake) {
 
 	if (!cake->buffer) {
 		RETURNING_VERIFY(ERROR_NULL_BUFFER);
+	}
+
+	{
+		char *visited = calloc(cake->capacity, sizeof(char));
+		for (int i = cake->head; (int) i != cake->tail; i = cake->buffer[i].next) {
+			if (visited[i]) {
+				RETURNING_VERIFY(ERROR_UNEXPECTED_LOOP);
+			}
+			visited[i] = 1;
+		}
+		visited[cake->tail] = 1;
+		int visited_sum = 0;
+		for (size_t i = 0; i < cake->capacity; ++i) {
+			visited_sum += (int) visited[i];
+		}
+		if (visited_sum != (int) cake->size && cake->size != 0) {
+			RETURNING_VERIFY(ERROR_BROCKEN_LINKS);
+		}
+		free(visited);
 	}
 
 	return 0;
@@ -84,7 +107,7 @@ List *new_List() {
 int delete_List(List *cake) {
 	VERIFY_OK(List_valid(cake));
 
-	free(cake->buffer);
+;	free(cake->buffer);
 	
 	cake->capacity  = (size_t) KCTF_POISON;
 	cake->head      = (int) KCTF_POISON;
@@ -110,7 +133,7 @@ int List_dump(const List *cake) {
 int List_set_capacity(List *cake, const size_t capacity) {
 	VERIFY_OK(List_valid(cake));
 
-	if (cake->size <= capacity - 1) {
+	if (cake->size >= capacity - 1) {
 		RETURNING_VERIFY(ERROR_REALLOC_FAIL);
 	}
 
@@ -135,8 +158,8 @@ int List_set_capacity(List *cake, const size_t capacity) {
 
 int List_set_node_value(List *cake, const int node, const int left_node, const int right_node, const LIST_TYPE *data) {
 	cake->buffer[node].data = *data;
-	cake->buffer[node].next = 0;
-	cake->buffer[node].prev = 0;
+	cake->buffer[node].next = node;
+	cake->buffer[node].prev = node;
 
 	if (left_node) {
 		cake->buffer[left_node].next = node;
@@ -158,7 +181,7 @@ int List_set_node_value(List *cake, const int node, const int left_node, const i
 int List_push_right(List *cake, int node, LIST_TYPE data) {
 	VERIFY_OK(List_valid(cake));
 	if (cake->buffer[node].prev == (int) KCTF_POISON) {
-		RETURNING_VERIFY(ERROR_BAD_NODE_INDEX);
+		RETURNING_VERIFY(ERROR_NODE_NOT_IN_LIST);
 	}
 
 	int next_free = cake->free_head;
@@ -178,7 +201,7 @@ int List_push_right(List *cake, int node, LIST_TYPE data) {
 int List_push_left(List *cake, int node, LIST_TYPE data) {
 	VERIFY_OK(List_valid(cake));
 	if (cake->buffer[node].prev == (int) KCTF_POISON) {
-		RETURNING_VERIFY(ERROR_BAD_NODE_INDEX);
+		RETURNING_VERIFY(ERROR_NODE_NOT_IN_LIST);
 	}
 
 	int next_free = cake->free_head;
@@ -201,4 +224,51 @@ int List_push_front(List *cake, LIST_TYPE data) {
 
 int List_push_back(List *cake, LIST_TYPE data) {
 	return List_push_right(cake, cake->tail, data);
+}
+
+int List_pop(List *cake, const int node) {
+	VERIFY_OK(List_valid(cake));
+	VERIFY(cake->size > 0);
+
+	int next_node = cake->buffer[node].next;
+	int prev_node = cake->buffer[node].prev;
+
+	if (node == cake->head) {
+		cake->head = next_node;
+	}
+	if (node == cake->tail) {
+		cake->tail = prev_node;
+	}
+
+	cake->buffer[node].next = prev_node;
+	cake->buffer[node].prev = next_node;
+
+	//cake->buffer[node].data = (LIST_TYPE) KCTF_POISON;
+	--cake->size;
+
+	return 0;
+}
+
+int List_sort(List *cake) {
+	VERIFY_OK(List_valid(cake));
+
+	Node *new_buffer = calloc(cake->capacity, sizeof(Node));
+	int node_index = cake->head;
+	for (int i = 0; i < (int) cake->size; ++i) {
+		//printf("%d\n", i);
+		//memcpy(&new_buffer[i + 1], &cake->buffer[node_index], sizeof(Node));
+		new_buffer[i + 1] = cake->buffer[node_index];
+		new_buffer[i + 1].next = i + 2;
+		new_buffer[i + 1].prev = i;
+		node_index = cake->buffer[node_index].next;
+	}
+	free(cake->buffer);
+
+	cake->head = 1;
+	cake->tail = (int) cake->size;
+	cake->buffer = new_buffer;
+
+	cake->max_sorted_index = (int) cake->size;
+
+	return 0;
 }
