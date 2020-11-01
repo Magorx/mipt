@@ -44,6 +44,7 @@ int List_push_back();
 // Implementation =============================================================
 
 int List_valid(const List *cake) {
+	return OK;
 	if (!cake) {
 		RETURNING_VERIFY(ERROR_NULL_OBJECT);
 	}
@@ -53,7 +54,7 @@ int List_valid(const List *cake) {
 	}
 
 	{
-		char *visited = calloc(cake->capacity, sizeof(char));
+		char *visited = (char*) calloc(cake->capacity, sizeof(char));
 		for (int i = cake->head; (int) i != cake->tail; i = cake->buffer[i].next) {
 			if (visited[i]) {
 				RETURNING_VERIFY(ERROR_UNEXPECTED_LOOP);
@@ -77,12 +78,12 @@ int List_valid(const List *cake) {
 List *new_List() {
 	size_t cap = STANDART_INIT_SIZE;
 	
-	List *l = calloc(1, sizeof(List));
+	List *l = (List*) calloc(1, sizeof(List));
 	if (!l) {
 		return NULL;
 	}
 
-	l->buffer = calloc(cap, sizeof(Node));
+	l->buffer = (Node*) calloc(cap, sizeof(Node));
 	if (!l->buffer) {
 		free(l);
 		return NULL;
@@ -252,15 +253,13 @@ int List_pop(List *cake, const int node) {
 int List_sort(List *cake) {
 	VERIFY_OK(List_valid(cake));
 
-	Node *new_buffer = calloc(cake->capacity, sizeof(Node));
+	Node *new_buffer = (Node*) calloc(cake->capacity, sizeof(Node));
 	int node_index = cake->head;
 	int inted_size = (int) cake->size;
-	for (int i = 0; i < inted_size; ++i) {
-		//printf("%d\n", i);
-		//memcpy(&new_buffer[i + 1], &cake->buffer[node_index], sizeof(Node));
-		new_buffer[i + 1] = cake->buffer[node_index];
-		new_buffer[i + 1].next = i + 2;
-		new_buffer[i + 1].prev = i;
+	for (int i = 1; i <= inted_size; ++i) {
+		new_buffer[i].data = cake->buffer[node_index].data;
+		new_buffer[i].next = i + 1;
+		new_buffer[i].prev = i - 1;
 		node_index = cake->buffer[node_index].next;
 	}
 	free(cake->buffer);

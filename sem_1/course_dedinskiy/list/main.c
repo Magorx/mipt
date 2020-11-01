@@ -4,11 +4,18 @@
 #include "list.h"
 #undef LIST_TYPE
 
+#define TIME_MEASURED(code){clock_t begin = clock();code;clock_t end = clock();\
+double elapsed_secs = (double)(end - begin) / CLOCKS_PER_SEC;\
+printf("ELAPSED: %lf sec\n", elapsed_secs);}
+
 int main() {
 	List *l = new_List();
-	List_push_right(l, 1, -1);
+	
+	printf("Pushing\n");
+	TIME_MEASURED({
 
-	for (int i = 1; i <= 30000; ++i) {
+	List_push_right(l, 1, -1);
+	for (int i = 1; i <= 100000000; ++i) {
 		if (rand() % 2) {
 			List_push_front(l, i);
 		} else {
@@ -19,12 +26,12 @@ int main() {
 		}
 	}
 
-	List_sort(l);
+	});
 
-	for (int i = l->head; i != l->tail; i = l->buffer[i].next) {
-		printf("%d ", i);
-	}
-	printf("\n");
+	printf("Sorting\n");
+	TIME_MEASURED({
+	List_sort(l);
+	});
 
 	//List_dump(l);
 
