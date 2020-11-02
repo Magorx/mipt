@@ -1,0 +1,14 @@
+node%d[label=<
+<table cellspacing="1" border="0">
+	<tr color="red">
+		<td border="1" colspan="3" color="black" bgcolor="gray95" port="index">%d</td>
+	</tr>
+	<tr color="red">
+		<td border="1" colspan="1" color="dodgerblue2" port="prev">%d</td>
+		<td border="1" colspan="1" color="darkslategray4" port="val">%d</td>
+		<td border="1" colspan="1" color="crimson" port="next">%d</td>
+	</tr>
+	
+</table>
+
+>, shape=none]

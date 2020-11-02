@@ -11,7 +11,7 @@ printf("ELAPSED: %lf sec\n", elapsed_secs);}
 int main() {
 	srand((unsigned int) time(NULL));
 	List *l = new_List();
-	int N = 100;
+	int N = 10;
 	
 	printf("Pushing\n");
 
@@ -35,9 +35,13 @@ int main() {
 	printf("Sorting\n");
 	TIME_MEASURED(
 
-	List_linear_optimization(l);
+	//List_linear_optimization(l);
 
 	);
+
+	List_graphviz_dump(l, "gv_dump_");
+	List_dump(l);
+
 	delete_List(l);
 
 	printf("done.\n");

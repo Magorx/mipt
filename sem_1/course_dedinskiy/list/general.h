@@ -84,6 +84,7 @@
 
     #pragma GCC diagnostic ignored     "-Wunused-variable"
     #pragma GCC diagnostic ignored     "-Wunused-result"
+    #pragma GCC diagnostic ignored     "-Wformat-nonliteral"
 
     #pragma GCC diagnostic warning     "-Wpragmas"
 #endif

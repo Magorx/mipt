@@ -24,6 +24,8 @@ typedef struct List_t {
 	int free_head;
 
 	int max_sorted_index;
+
+	int graphviz_dumper_cnt;
 } List;
 
 enum LIST_ERROR_CODES {
@@ -110,6 +112,9 @@ List *new_List() {
 		l->buffer[i].prev = 0;
 	}
 	l->buffer[0].next = 0;
+
+	l->max_sorted_index = -1;
+	l->graphviz_dumper_cnt = 0;
 
 	VERIFY_T(List_valid(l) == OK, List*);
 	return l;
@@ -289,4 +294,66 @@ int List_linear_index_search(const List *cake, int index) {
 		}
 		return node;
 	}
+}
+
+//=============================================================================
+
+int List_graphviz_dump(List *cake, const char *output_file_name) {
+	VERIFY_OK(List_valid(cake));
+	const char *tmp_graphviz_file_name = "gv_dump.dt";
+
+	size_t of_len = strlen(output_file_name);
+	char *output_name_format = (char*) calloc(of_len + 20, sizeof(char));
+	char *output_name = (char*) calloc(of_len + 20, sizeof(char));
+	strcpy(output_name_format, output_file_name);
+	
+	output_name_format[of_len + 0] = '%';
+	output_name_format[of_len + 1] = 'd';
+	sprintf(output_name, output_name_format, cake->graphviz_dumper_cnt++);
+
+	FILE *dot_file = fopen(tmp_graphviz_file_name, "w");
+	fprintf(dot_file, "digraph list {\n");
+
+	char *node_format = (char*) calloc(1000, sizeof(char));
+	FILE *node_format_file = fopen("graphviz_node_format.gv", "r");
+	fread(node_format, sizeof(char), 1000, node_format_file);
+
+	printf("%s\n", node_format);
+
+	int head = List_head(cake);
+	int tail = List_tail(cake);
+	for (int node = head; ; node = cake->buffer[node].next) {
+		fprintf(dot_file, node_format, node, node, cake->buffer[node].prev, cake->buffer[node].data, cake->buffer[node].next);
+		fprintf(dot_file, "\n");
+		fprintf(dot_file, "node%d:next->node%d:index [constraint=false, color=crimson];\n", node, cake->buffer[node].next);
+
+		fprintf(dot_file, "node%d:prev->node%d:index [constraint=false, color=dodgerblue2];\n", node, cake->buffer[node].prev);
+
+		if (node == cake->fictive_node) {
+			break;
+		}
+	}
+
+	//printf("size %d\n", cake->size);
+
+
+	fprintf(dot_file, "}\n");
+	fclose(dot_file);
+
+	char *generate_picture_command = (char*)calloc(of_len + 20, sizeof(char));
+	sprintf(generate_picture_command, "neato %s -Tsvg -o%s.svg", tmp_graphviz_file_name, output_name);
+
+	char *view_picture_command = (char*)calloc(of_len + 20, sizeof(char));
+	sprintf(view_picture_command, "eog %s.svg", output_name);
+	printf("output: %s\n", output_name);
+	
+	system(generate_picture_command);
+	system(view_picture_command);
+
+	free(output_name_format);
+	free(output_name);
+	free(generate_picture_command);
+	free(view_picture_command);
+
+	return 0;
 }
