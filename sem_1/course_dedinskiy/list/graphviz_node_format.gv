@@ -5,7 +5,7 @@ node%d[label=<
 	</tr>
 	<tr color="red">
 		<td border="1" colspan="1" color="dodgerblue2" port="prev">%d</td>
-		<td border="1" colspan="1" color="darkslategray4" port="val">%d</td>
+		<td border="1" colspan="1" color="black" bgcolor="lightsalmon" port="val">%d</td>
 		<td border="1" colspan="1" color="crimson" port="next">%d</td>
 	</tr>
 	
