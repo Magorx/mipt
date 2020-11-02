@@ -26,6 +26,7 @@ int main() {
 		if (rand() % 2) {
 			//List_pop(l, l->head);
 		}
+		List_graphviz_dump(l, "gv_dump_");
 	}
 
 	);
@@ -39,7 +40,7 @@ int main() {
 
 	);
 
-	List_graphviz_dump(l, "gv_dump_");
+	List_graphviz_generate_html(l, "gv_dump_");
 	List_dump(l);
 
 	delete_List(l);

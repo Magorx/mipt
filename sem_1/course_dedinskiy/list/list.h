@@ -298,62 +298,111 @@ int List_linear_index_search(const List *cake, int index) {
 
 //=============================================================================
 
+int List_graphviz_dump_node(List *cake, FILE *fout, char *node_format, const int node) {
+	fprintf(fout, node_format, node, node, cake->buffer[node].next, cake->buffer[node].data, cake->buffer[node].prev);
+	fprintf(fout, "\n");
+	fprintf(fout, "node%d:index->node%d:index [constraint=false, color=crimson];\n", node, cake->buffer[node].next);
+	fprintf(fout, "node%d:next->node%d:prev [constraint=true, color=dodgerblue2];\n", cake->buffer[node].next, node);
+
+	return 0;
+}
+
+int List_graphviz_new_output_name(List *cake, const char *output_file_name, char *output_name) {
+	size_t of_len = strlen(output_file_name);
+	char *output_name_format = (char*) calloc(of_len + 20, sizeof(char));
+	
+	strcpy(output_name_format, output_file_name);
+	output_name_format[of_len + 0] = '%';
+	output_name_format[of_len + 1] = 'd';
+	sprintf(output_name, output_name_format, cake->graphviz_dumper_cnt++);
+	
+	free(output_name_format);
+
+	return 0;
+}
+
 int List_graphviz_dump(List *cake, const char *output_file_name) {
 	VERIFY_OK(List_valid(cake));
 	const char *tmp_graphviz_file_name = "gv_dump.dt";
 
 	size_t of_len = strlen(output_file_name);
-	char *output_name_format = (char*) calloc(of_len + 20, sizeof(char));
 	char *output_name = (char*) calloc(of_len + 20, sizeof(char));
-	strcpy(output_name_format, output_file_name);
-	
-	output_name_format[of_len + 0] = '%';
-	output_name_format[of_len + 1] = 'd';
-	sprintf(output_name, output_name_format, cake->graphviz_dumper_cnt++);
+	List_graphviz_new_output_name(cake, output_file_name, output_name);
+
 
 	FILE *dot_file = fopen(tmp_graphviz_file_name, "w");
-	fprintf(dot_file, "digraph list {\n");
+	fprintf(dot_file, "digraph list {rankdir=\"LR\";\n");
 
 	char *node_format = (char*) calloc(1000, sizeof(char));
+	
 	FILE *node_format_file = fopen("graphviz_node_format.gv", "r");
 	fread(node_format, sizeof(char), 1000, node_format_file);
+	fclose(node_format_file);
 
-	printf("%s\n", node_format);
+	//printf("%s\n", node_format);
 
 	int head = List_head(cake);
 	int tail = List_tail(cake);
 	for (int node = head; ; node = cake->buffer[node].next) {
-		fprintf(dot_file, node_format, node, node, cake->buffer[node].prev, cake->buffer[node].data, cake->buffer[node].next);
-		fprintf(dot_file, "\n");
-		fprintf(dot_file, "node%d:next->node%d:index [constraint=false, color=crimson];\n", node, cake->buffer[node].next);
-
-		fprintf(dot_file, "node%d:prev->node%d:index [constraint=false, color=dodgerblue2];\n", node, cake->buffer[node].prev);
+		List_graphviz_dump_node(cake, dot_file, node_format, node);
 
 		if (node == cake->fictive_node) {
 			break;
 		}
 	}
 
-	//printf("size %d\n", cake->size);
-
-
 	fprintf(dot_file, "}\n");
 	fclose(dot_file);
 
-	char *generate_picture_command = (char*)calloc(of_len + 20, sizeof(char));
-	sprintf(generate_picture_command, "neato %s -Tsvg -o%s.svg", tmp_graphviz_file_name, output_name);
+	char *generate_picture_command = (char*)calloc(100, sizeof(char));
+	sprintf(generate_picture_command, "dot %s -Tsvg -o%s.svg", tmp_graphviz_file_name, output_name);
 
-	char *view_picture_command = (char*)calloc(of_len + 20, sizeof(char));
+	char *view_picture_command = (char*)calloc(100, sizeof(char));
 	sprintf(view_picture_command, "eog %s.svg", output_name);
-	printf("output: %s\n", output_name);
 	
 	system(generate_picture_command);
-	system(view_picture_command);
+	//system(view_picture_command);
 
-	free(output_name_format);
+	free(node_format);
 	free(output_name);
 	free(generate_picture_command);
 	free(view_picture_command);
+
+	return 0;
+}
+
+int List_graphviz_generate_html(const List *cake, const char *output_file_name) {
+	VERIFY_OK(List_valid(cake));
+	const char *tmp_html_file_name = "list_dump.html";
+
+	FILE *html_fout = fopen(tmp_html_file_name, "w");
+	fprintf(html_fout, "<pre><tt>\n");
+
+	const size_t of_len = strlen(output_file_name);
+	char *cur_gv_file_name_format = (char*) calloc(of_len + 20, sizeof(char));
+	strcpy(cur_gv_file_name_format, output_file_name);
+	cur_gv_file_name_format[of_len + 0] = '%';
+	cur_gv_file_name_format[of_len + 1] = 'd';
+	cur_gv_file_name_format[of_len + 2] = '.';
+	cur_gv_file_name_format[of_len + 3] = 's';
+	cur_gv_file_name_format[of_len + 4] = 'v';
+	cur_gv_file_name_format[of_len + 5] = 'g';
+	
+	char *cur_gv_file_name = (char*) calloc(of_len + 20, sizeof(char));
+
+	for (int i = 0; i < cake->graphviz_dumper_cnt; ++i) {
+		sprintf(cur_gv_file_name, cur_gv_file_name_format, i);
+		printf("%d) |%s| -> |%s|\n", i, cur_gv_file_name, tmp_html_file_name);
+		fprintf(html_fout, "<img src=\"%s\">", cur_gv_file_name);
+		fprintf(html_fout, "\n");
+	}
+
+	fclose(html_fout);
+
+	free(cur_gv_file_name_format);
+	free(cur_gv_file_name);
+
+	system("google-chrome list_dump.html");
 
 	return 0;
 }

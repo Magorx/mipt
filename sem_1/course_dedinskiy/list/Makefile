@@ -19,7 +19,7 @@ list: main.c list.h general.h
 
 valg: list
 	make clear
-	valgrind --leak-check=full --track-origins=yes -s ./$(CUR_PROG)
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -s ./$(CUR_PROG)
 
 clear:
 	rm *.o -f
