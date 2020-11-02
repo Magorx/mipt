@@ -41,7 +41,7 @@ int main() {
 	);
 
 	List_graphviz_generate_html(l, "gv_dump_");
-	List_dump(l);
+	//List_dump(l);
 
 	delete_List(l);
 
