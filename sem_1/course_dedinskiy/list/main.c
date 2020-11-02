@@ -11,12 +11,11 @@ printf("ELAPSED: %lf sec\n", elapsed_secs);}
 int main() {
 	srand((unsigned int) time(NULL));
 	List *l = new_List();
-	int N = 10;
+	int N = 1000000;
 	
 	printf("Pushing\n");
 
-	TIME_MEASURED(
-
+	TIMER_START();
 	for (int i = 1; i <= N; ++i) {
 		if (rand() % 2) {
 			List_push_front(l, i);
@@ -26,25 +25,18 @@ int main() {
 		if (rand() % 2) {
 			//List_pop(l, l->head);
 		}
-		List_graphviz_dump(l, "gv_dump_");
+		//List_graphviz_dump(l, "gv_dump_");
 	}
-
-	);
-
-	//List_dump(l);
+	TIMER_END_AND_PRINT();
 
 	printf("Sorting\n");
-	TIME_MEASURED(
-
-	//List_linear_optimization(l);
-
-	);
+	List_linear_optimization(l);
+	TIMER_END_AND_PRINT();
 
 	List_graphviz_generate_html(l, "gv_dump_");
 	//List_dump(l);
 
 	delete_List(l);
 
-	printf("done.\n");
 	return 0;
 }

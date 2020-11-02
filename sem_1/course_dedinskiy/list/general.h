@@ -220,6 +220,41 @@ long randlong() {
 }
 
 //=============================================================================
+//<KCTF> GLOBAL_timer =========================================================
+time_t GLOBAL_TIMER;
+double GLOBAL_TIMER_INTERVAL;
+
+#define TIMER_START() do {GLOBAL_TIMER = clock();} while (0)
+#define TIMER_END() do {GLOBAL_TIMER_INTERVAL = (double)(clock() - GLOBAL_TIMER) / CLOCKS_PER_SEC; GLOBAL_TIMER = clock();} while (0)
+#define TIMER_PRINT() do {printf("<Timer>: %lf\n", GLOBAL_TIMER_INTERVAL);} while (0)
+#define TIMER_END_AND_PRINT() TIMER_END(); TIMER_PRINT()
+
+//=============================================================================
+//<Babichev> Fast_random ======================================================
+
+typedef struct FastRandom_s {
+    unsigned long long rnd;
+} FastRandom;
+
+FastRandom *new_FastRandom(unsigned long long seed) {
+  FastRandom *t = (FastRandom*)malloc(sizeof (FastRandom));
+  t->rnd = seed;
+  return t;
+}
+
+unsigned long long 
+FastRandom_rand(FastRandom *t) {
+  t->rnd ^= t->rnd << 21;
+  t->rnd ^= t->rnd >> 35;
+  t->rnd ^= t->rnd << 4;
+  return t->rnd;
+}
+
+void delete_FastRandom(FastRandom *r) {
+  free(r);
+}
+
+//=============================================================================
 //<KCTF> Handmade_hash ========================================================
 
 const long long HASH_MODULE = 1000000007;
