@@ -15,7 +15,7 @@ typedef struct Node_t {
 
 typedef struct List_t {
 	Node *buffer;
-	int fictive_node;
+	int fictive;
 
 	size_t capacity;
 	size_t size;
@@ -47,11 +47,11 @@ int List_push_back();
 // Implementation =============================================================
 
 int List_head(const List *cake) {
-	return cake->buffer[cake->fictive_node].next;
+	return cake->buffer[cake->fictive].next;
 }
 
 int List_tail(const List *cake) {
-	return cake->buffer[cake->fictive_node].prev;
+	return cake->buffer[cake->fictive].prev;
 }
 
 int List_valid(const List *cake) {
@@ -104,7 +104,7 @@ List *new_List() {
 
 	l->capacity = cap;
 	l->size = 0;
-	l->fictive_node = 0;
+	l->fictive = 0;
 	l->free_head = 1;
 
 	for (size_t i = 0; i < cap; ++i) {
@@ -186,24 +186,39 @@ int List_set_node_value(List *cake, const int node, const int left_node, const i
 	return 0;
 }
 
+int List_get_next_free_node(List *cake, int *next_free_node) {
+	int next_free = cake->free_head;
+	if ((size_t) next_free >= cake->capacity - 1) {
+		VERIFY_OK(List_set_capacity(cake, cake->capacity * 2));
+	}
+	cake->free_head = cake->buffer[next_free].next;
+
+	*next_free_node = next_free;
+
+	return 0;
+}
+
+int List_update_max_sorted(List *cake, const int new_max_sorted) {
+	VERIFY_OK(List_valid(cake));
+	cake->max_sorted_index = new_max_sorted < cake->max_sorted_index ? new_max_sorted : cake->max_sorted_index;
+
+	return 0;
+}
+
 int List_push_right(List *cake, int node, LIST_TYPE data) {
 	VERIFY_OK(List_valid(cake));
 	if (cake->buffer[node].prev == (int) KCTF_POISON) {
 		RETURNING_VERIFY(ERROR_NODE_NOT_IN_LIST);
 	}
 
-	int next_free = cake->free_head;
-	if ((size_t) next_free >= cake->capacity - 1) {
-		VERIFY_OK(List_set_capacity(cake, cake->capacity * 2));
-	}
-
-	cake->free_head = cake->buffer[next_free].next;
+	int next_free = 0;
+	List_get_next_free_node(cake, &next_free);
 
 	int next_node = cake->buffer[node].next;
 	List_set_node_value(cake, next_free, node, next_node, &data);
 	
 	cake->size += 1;
-	cake->max_sorted_index = node < cake->max_sorted_index ? node : cake->max_sorted_index;
+	List_update_max_sorted(cake, node);
 
 	return 0;
 }
@@ -214,28 +229,24 @@ int List_push_left(List *cake, int node, LIST_TYPE data) {
 		RETURNING_VERIFY(ERROR_NODE_NOT_IN_LIST);
 	}
 
-	int next_free = cake->free_head;
-	if ((size_t) next_free >= cake->capacity - 1) {
-		VERIFY_OK(List_set_capacity(cake, cake->capacity * 2));
-	}
-
-	cake->free_head = cake->buffer[next_free].next;
+	int next_free = 0;
+	List_get_next_free_node(cake, &next_free);
 
 	int prev_node = cake->buffer[node].prev;
 	List_set_node_value(cake, next_free, prev_node, node, &data);
+	
 	cake->size += 1;
-
-	cake->max_sorted_index = node - 1 < cake->max_sorted_index ? node - 1 : cake->max_sorted_index;
+	List_update_max_sorted(cake, node - 2);
 
 	return 0;
 }
 
 int List_push_front(List *cake, LIST_TYPE data) {
-	return List_push_left(cake, cake->fictive_node, data);
+	return List_push_left(cake, cake->fictive, data);
 }
 
 int List_push_back(List *cake, LIST_TYPE data) {
-	return List_push_right(cake, cake->fictive_node, data);
+	return List_push_right(cake, cake->fictive, data);
 }
 
 int List_pop(List *cake, const int node) {
@@ -258,7 +269,7 @@ int List_linear_optimization(List *cake) {
 	VERIFY_OK(List_valid(cake));
 
 	Node *new_buffer = (Node*) calloc(cake->capacity, sizeof(Node));
-	int node_index = cake->fictive_node;
+	int node_index = cake->fictive;
 	int inted_size = (int) cake->size;
 	for (int i = 0; i <= inted_size; ++i) {
 		new_buffer[i].data = cake->buffer[node_index].data;
@@ -296,13 +307,34 @@ int List_linear_index_search(const List *cake, int index) {
 	}
 }
 
+int List_randop(List *cake) {
+	VERIFY_OK(List_valid(cake));
+
+	int roll = rand() % (2 + (cake->size != 0));
+	if (roll == 0) {
+		List_push_front(cake, (LIST_TYPE) rand());
+	} else if (roll == 1) {
+		List_push_back(cake, (LIST_TYPE) rand());
+	} else if (roll == 2) {
+		roll = rand() % 2;
+		if (roll == 0) {
+			List_pop(cake, List_head(cake));
+		} else {
+			List_pop(cake, List_tail(cake));
+		}
+	}
+
+	return 0;
+}
+
 //=============================================================================
+//<KCTF> Dumping ==============================================================
 
 int List_graphviz_dump_node(List *cake, FILE *fout, char *node_format, const int node) {
 	int next = cake->buffer[node].next;
 	int prev = cake->buffer[node].prev;
 
-	if (node == cake->fictive_node) {
+	if (node == cake->fictive) {
 		fprintf(fout, "node%d[shape=diamond, color=black, label=\"Fictive\"];", node);
 		fprintf(fout, "node%d->node%d:index;\n", node, next);
 		fprintf(fout, "node%d->node%d:index;\n", node, prev);
@@ -312,13 +344,13 @@ int List_graphviz_dump_node(List *cake, FILE *fout, char *node_format, const int
 	fprintf(fout, node_format, node, node, cake->buffer[node].prev, cake->buffer[node].data, cake->buffer[node].next);
 	fprintf(fout, "\n");
 
-	if (next != cake->fictive_node) {
+	if (next != cake->fictive) {
 		fprintf(fout, "node%d:next->node%d:index [constraint=true, color=dodgerblue2];\n", node, next);
 	} else {
 		fprintf(fout, "node%d:next->node%d;", node, next);
 	}
 
-	if (prev != cake->fictive_node) {
+	if (prev != cake->fictive) {
 		fprintf(fout, "node%d:prev->node%d:index [constraint=true, color=crimson];\n", node, prev);
 	} else {
 		fprintf(fout, "node%d:prev->node%d;", node, prev);
@@ -366,7 +398,7 @@ int List_graphviz_dump(List *cake, const char *output_file_name) {
 	for (int node = head; ; node = cake->buffer[node].next) {
 		List_graphviz_dump_node(cake, dot_file, node_format, node);
 
-		if (node == cake->fictive_node) {
+		if (node == cake->fictive) {
 			break;
 		}
 	}

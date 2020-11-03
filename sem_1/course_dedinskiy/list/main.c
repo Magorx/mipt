@@ -23,13 +23,13 @@ int main() {
 			List_push_back(l, i);
 		}
 		if (rand() % 2) {
-			//List_pop(l, l->head);
+			// List_pop(l, l->head);
 		}
 		List_graphviz_dump(l, "gv_dump_");
 	}
 	TIMER_END_AND_PRINT();
 
-	printf("Sorting\n");
+	printf("Optimizing\n");
 	List_linear_optimization(l);
 	TIMER_END_AND_PRINT();
 

@@ -263,26 +263,29 @@ void delete_FastRandom(FastRandom *r) {
 //=============================================================================
 //<KCTF> Unit_test ============================================================
 
+#define KCTF_TEST_ITERATIONS_CNT 10
 char GLOBAL_EXPECTATION_FLAG;
 
 #define EXPECT_FAILED() do {GLOBAL_EXPECTATION_FLAG = NOT_OK;} while (0)
 
-#define EXPECT_TRUE (expr) do {if (!(expr)) EXPECT_FAILED();} while (0)
+#define EXPECT_TRUE(expr) do {if (!(expr)) EXPECT_FAILED();} while (0)
 #define EXPECT_FALSE(expr) do {if ( (expr)) EXPECT_FAILED();} while (0)
 
 #define EXPECT_EQ(expr1, expr2) do {if ((expr1) != (expr2)) EXPECT_FAILED();} while (0)
 
 
-#define KCTF_UNIT_TEST(test_name, code) do {                    \
-    printf("[TST]<unit_test>: (" ## test_name ## ")\n");        \
-    GLOBAL_EXPECTATION_FLAG = OK;                               \
-    {code}                                                      \
-    if (GLOBAL_EXPECTATION_FLAG == OK) {                        \
-        printf("[   ]<         >: (passed)\n");                 \
-    } else {                                                    \
-        printf("[   ]<         >: (FAILED)\n");                 \
-    }                                                           \
+#define KCTF_UNIT_TEST_RUN(test_name) do {                                              \
+    printf("[   ]<         >: (" #test_name ")\n");                                     \
+    GLOBAL_EXPECTATION_FLAG = OK;                                                       \
+    for (int i = 0; i < KCTF_TEST_ITERATIONS_CNT; ++i) {KCTF_TEST_ ## test_name();}     \
+    if (GLOBAL_EXPECTATION_FLAG == OK) {                                                \
+        printf("[   ]<         >: (passed)\n");                                         \
+    } else {                                                                            \
+        printf("[!!!]>->->->->->: (FAILED)\n");                                         \
+    }                                                                                   \
 } while (0);
+
+#define KCTF_UNIT_TEST(test_name) void KCTF_TEST_ ## test_name()
 
 //=============================================================================
 //<KCTF> Handmade_hash ========================================================
