@@ -11,7 +11,7 @@ printf("ELAPSED: %lf sec\n", elapsed_secs);}
 int main() {
 	srand((unsigned int) time(NULL));
 	List *l = new_List();
-	int N = 1000000;
+	int N = 10;
 	
 	printf("Pushing\n");
 
@@ -25,7 +25,7 @@ int main() {
 		if (rand() % 2) {
 			//List_pop(l, l->head);
 		}
-		//List_graphviz_dump(l, "gv_dump_");
+		List_graphviz_dump(l, "gv_dump_");
 	}
 	TIMER_END_AND_PRINT();
 

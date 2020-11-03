@@ -305,23 +305,23 @@ int List_graphviz_dump_node(List *cake, FILE *fout, char *node_format, const int
 	if (node == cake->fictive_node) {
 		fprintf(fout, "node%d[shape=diamond, color=black, label=\"Fictive\"];", node);
 		fprintf(fout, "node%d->node%d:index;\n", node, next);
-		fprintf(fout, "node%d:next->node%d;\n", prev, node);
+		fprintf(fout, "node%d->node%d:index;\n", node, prev);
 		return 0;
-	} else {
-		fprintf(fout, node_format, node, node, cake->buffer[node].next, cake->buffer[node].data, cake->buffer[node].prev);
-		fprintf(fout, "\n");
 	}
+	
+	fprintf(fout, node_format, node, node, cake->buffer[node].prev, cake->buffer[node].data, cake->buffer[node].next);
+	fprintf(fout, "\n");
 
 	if (next != cake->fictive_node) {
-		fprintf(fout, "node%d:index->node%d:index [constraint=false, color=crimson];\n", node, next);
+		fprintf(fout, "node%d:next->node%d:index [constraint=true, color=dodgerblue2];\n", node, next);
 	} else {
-		fprintf(fout, "node%d:index->node%d;", node, next);
+		fprintf(fout, "node%d:next->node%d;", node, next);
 	}
 
 	if (prev != cake->fictive_node) {
-		fprintf(fout, "node%d:next->node%d:prev [constraint=true, color=dodgerblue2];\n", node, prev);
+		fprintf(fout, "node%d:prev->node%d:index [constraint=true, color=crimson];\n", node, prev);
 	} else {
-		fprintf(fout, "node%d:next->node%d;", node, prev);
+		fprintf(fout, "node%d:prev->node%d;", node, prev);
 	}
 
 	return 0;
