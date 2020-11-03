@@ -153,7 +153,9 @@ enum RETURN_CODES {
 
     NULL_OBJ_OK = 0,
     RET_OK = 0,
-    OK = 0
+    OK = 0,
+
+    NOT_OK = 1
 };
 
 #define PRINTF_ERROR printf("EROR HAPANED\n")
@@ -257,6 +259,30 @@ FastRandom_rand(FastRandom *t) {
 void delete_FastRandom(FastRandom *r) {
   free(r);
 }
+
+//=============================================================================
+//<KCTF> Unit_test ============================================================
+
+char GLOBAL_EXPECTATION_FLAG;
+
+#define EXPECT_FAILED() do {GLOBAL_EXPECTATION_FLAG = NOT_OK;} while (0)
+
+#define EXPECT_TRUE (expr) do {if (!(expr)) EXPECT_FAILED();} while (0)
+#define EXPECT_FALSE(expr) do {if ( (expr)) EXPECT_FAILED();} while (0)
+
+#define EXPECT_EQ(expr1, expr2) do {if ((expr1) != (expr2)) EXPECT_FAILED();} while (0)
+
+
+#define KCTF_UNIT_TEST(test_name, code) do {                    \
+    printf("[TST]<unit_test>: (" ## test_name ## ")\n");        \
+    GLOBAL_EXPECTATION_FLAG = OK;                               \
+    {code}                                                      \
+    if (GLOBAL_EXPECTATION_FLAG == OK) {                        \
+        printf("[   ]<         >: (passed)\n");                 \
+    } else {                                                    \
+        printf("[   ]<         >: (FAILED)\n");                 \
+    }                                                           \
+} while (0);
 
 //=============================================================================
 //<KCTF> Handmade_hash ========================================================
