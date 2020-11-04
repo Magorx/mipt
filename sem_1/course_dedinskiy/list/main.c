@@ -4,6 +4,8 @@
 #include "list.h"
 #undef LIST_TYPE
 
+#define X 1
+
 #define TIME_MEASURED(code){clock_t begin = clock();{code};clock_t end = clock();\
 double elapsed_secs = (double)(end - begin) / CLOCKS_PER_SEC;\
 printf("ELAPSED: %lf sec\n", elapsed_secs);}
@@ -17,13 +19,13 @@ int main() {
 
 	TIMER_START();
 	for (int i = 1; i <= N; ++i) {
-		if (rand() % 2) {
+		int roll = rand() % 3;
+		if (roll == 0) {
 			List_push_front(l, i);
-		} else {
+		} else if (roll == 1){
 			List_push_back(l, i);
-		}
-		if (rand() % 2) {
-			// List_pop(l, l->head);
+		} else if (roll == 2 && l->size) {
+			List_pop(l, List_linear_index_search(l, rand() % ((int) l->size)));
 		}
 		List_graphviz_dump(l, "gv_dump_");
 	}
@@ -37,6 +39,8 @@ int main() {
 	//List_dump(l);
 
 	delete_List(l);
+
+
 
 	return 0;
 }

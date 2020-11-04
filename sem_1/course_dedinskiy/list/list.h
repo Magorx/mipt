@@ -19,8 +19,6 @@ typedef struct List_t {
 
 	size_t capacity;
 	size_t size;
-	int head;
-	int tail;
 	int free_head;
 
 	int max_sorted_index;
@@ -55,7 +53,7 @@ int List_tail(const List *cake) {
 }
 
 int List_valid(const List *cake) {
-	return OK;
+	//return OK;
 	if (!cake) {
 		RETURNING_VERIFY(ERROR_NULL_OBJECT);
 	}
@@ -67,21 +65,22 @@ int List_valid(const List *cake) {
 	{
 		char *visited = (char*) calloc(cake->capacity, sizeof(char));
 		int head = List_head(cake);
-		int tail = List_tail(cake);
-		for (int i = head; (int) i != tail; i = cake->buffer[i].next) {
+		for (int i = head; (int) i != cake->fictive; i = cake->buffer[i].next) {
 			if (visited[i]) {
 				RETURNING_VERIFY(ERROR_UNEXPECTED_LOOP);
 			}
 			visited[i] = 1;
 		}
-		visited[tail] = 1;
+
 		int visited_sum = 0;
 		for (size_t i = 0; i < cake->capacity; ++i) {
 			visited_sum += (int) visited[i];
 		}
-		if (visited_sum != (int) cake->size && cake->size != 0) {
+
+		if (visited_sum != (int) cake->size) {
 			RETURNING_VERIFY(ERROR_BROCKEN_LINKS);
 		}
+
 		free(visited);
 	}
 
@@ -158,12 +157,8 @@ int List_set_capacity(List *cake, const size_t capacity) {
 		RETURNING_VERIFY(ERROR_REALLOC_FAIL);
 	}
 
-	// printf("%d -> %d\n", cake->buffer, new_ptr);
-
 	cake->buffer = new_ptr;
-	// printf("%d -> %d\n", cake->buffer, new_ptr);
 	for (size_t i = cake->capacity; i < capacity; ++i) {
-		// printf("%d\n", i);
 		cake->buffer[i].next = (int) i + 1;
 		cake->buffer[i].prev = 0;
 	}
@@ -198,9 +193,10 @@ int List_get_next_free_node(List *cake, int *next_free_node) {
 	return 0;
 }
 
-int List_update_max_sorted(List *cake, const int new_max_sorted) {
+int List_update_max_sorted(List *cake, const int potential_new_max_sorted) {
 	VERIFY_OK(List_valid(cake));
-	cake->max_sorted_index = new_max_sorted < cake->max_sorted_index ? new_max_sorted : cake->max_sorted_index;
+	int pnms = potential_new_max_sorted; //MAGIC
+	cake->max_sorted_index = pnms < cake->max_sorted_index ? pnms : cake->max_sorted_index;
 
 	return 0;
 }
@@ -256,11 +252,14 @@ int List_pop(List *cake, const int node) {
 	int next_node = cake->buffer[node].next;
 	int prev_node = cake->buffer[node].prev;
 
-	cake->buffer[node].next = prev_node;
-	cake->buffer[node].prev = next_node;
+	cake->buffer[next_node].prev = prev_node;
+	cake->buffer[prev_node].next = next_node;
 
 	--cake->size;
-	cake->max_sorted_index = node - 1 < cake->max_sorted_index ? node - 1 : cake->max_sorted_index;
+	List_update_max_sorted(cake, node - 1);
+
+	cake->buffer[node].next = cake->free_head;
+	cake->free_head = node;
 
 	return 0;
 }
@@ -295,7 +294,6 @@ int List_linear_index_search(const List *cake, int index) {
 		RETURNING_VERIFY(ERROR_BAD_ARGS);
 	}
 
-	printf("%d vs %d\n", index, cake->max_sorted_index);
 	if (index <= cake->max_sorted_index) {
 		return index;
 	} else {
@@ -315,13 +313,8 @@ int List_randop(List *cake) {
 		List_push_front(cake, (LIST_TYPE) rand());
 	} else if (roll == 1) {
 		List_push_back(cake, (LIST_TYPE) rand());
-	} else if (roll == 2) {
-		roll = rand() % 2;
-		if (roll == 0) {
-			List_pop(cake, List_head(cake));
-		} else {
-			List_pop(cake, List_tail(cake));
-		}
+	} else if (roll == 2 && cake->size) {
+		List_pop(cake, List_linear_index_search(cake, rand() % ((int) cake->size)));
 	}
 
 	return 0;

@@ -4,10 +4,6 @@
 
 const int TEST_LOOP_MAX_ITR = 1000;
 
-KCTF_UNIT_TEST(nop) {
-
-}
-
 KCTF_UNIT_TEST(head_tail) {
 	List *l = new_List();
 
