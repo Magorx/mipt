@@ -279,9 +279,9 @@ char GLOBAL_EXPECTATION_FLAG;
     GLOBAL_EXPECTATION_FLAG = OK;                                                       \
     for (int i = 0; i < KCTF_TEST_ITERATIONS_CNT; ++i) {KCTF_TEST_ ## test_name();}     \
     if (GLOBAL_EXPECTATION_FLAG == OK) {                                                \
-        printf("[   ]<         >: (passed)\n");                                         \
+        printf("[   ]<^ passed >:\n");                                         \
     } else {                                                                            \
-        printf("[!!!]>->->->->->: (FAILED)\n");                                         \
+        printf("[!!!]<^ FAILED >:\n");                                         \
     }                                                                                   \
 } while (0);
 

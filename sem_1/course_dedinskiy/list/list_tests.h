@@ -30,50 +30,6 @@ KCTF_UNIT_TEST(set_capacity) {
 	delete_List(l);
 }
 
-KCTF_UNIT_TEST(b) {
-	List *l = new_List();
-
-
-
-	delete_List(l);
-}
-
-KCTF_UNIT_TEST(c) {
-	List *l = new_List();
-
-
-
-	delete_List(l);
-}
-
-KCTF_UNIT_TEST(d) {
-	List *l = new_List();
-
-
-
-	delete_List(l);
-}
-
-KCTF_UNIT_TEST(e) {
-	List *l = new_List();
-
-
-
-	delete_List(l);
-}
-
-KCTF_UNIT_TEST(f) {
-	List *l = new_List();
-
-
-
-	delete_List(l);
-}
-
-KCTF_UNIT_TEST(g) {
-	List *l = new_List();
-
-
-
-	delete_List(l);
+KCTF_UNIT_TEST(fail) {
+	EXPECT_TRUE(0);
 }
