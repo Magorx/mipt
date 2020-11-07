@@ -4,10 +4,10 @@
 #include <cstring>
 
 template <typename T>
-class AVLNode;
+class Node;
 
 template <typename T>
-int AVLNode_get_balance(const AVLNode<T> *cake) {
+int Node_get_balance(const Node<T> *cake) {
 	if (cake == nullptr) {
 		return 0;
 	} else {
@@ -18,10 +18,10 @@ int AVLNode_get_balance(const AVLNode<T> *cake) {
 }
 
 template <typename T>
-void AVLNode_dump(const AVLNode<T> *cake, const int depth, const int to_format_cnt) {
+void Node_dump(const Node<T> *cake, const int depth, const int to_format_cnt) {
 	if (!cake) {return;}
 
-	AVLNode_dump(cake->R, depth + 1, to_format_cnt + 1);
+	Node_dump(cake->R, depth + 1, to_format_cnt + 1);
 
 	for (int i = 0; i < depth; ++i) {
 		printf("    ");
@@ -33,22 +33,20 @@ void AVLNode_dump(const AVLNode<T> *cake, const int depth, const int to_format_c
 	}
 
 	printf("%03d>|\n", cake->key);
-	AVLNode_dump(cake->L, depth + 1, to_format_cnt + 1);
+	Node_dump(cake->L, depth + 1, to_format_cnt + 1);
 }
 
-// Реализуем само дерево в виде ноды, оставив в классе AVLTree только интерфейс к взаимодействию с нодами
-// Так пользователь не будет ничего знать о самих нодах, т.к. и не должен
 template <typename T>
-class AVLNode {
+class Node {
 public:
 	T key;
-	AVLNode<T> *L;
-	AVLNode<T> *R;
+	Node<T> *L;
+	Node<T> *R;
 	int height;
 	int cnt;
 	bool multinode;
 
-	AVLNode<T>() {
+	Node<T>() {
 		key = 0;
 		int cnt = 0;
 		L = nullptr;
@@ -57,7 +55,7 @@ public:
 		multinode = 0;
 	}
 
-	AVLNode<T>(const T &new_key) {
+	Node<T>(const T &new_key) {
 		key = new_key;
 		cnt = 1;
 		L = nullptr;
@@ -66,16 +64,7 @@ public:
 		multinode = 0;
 	}
 
-	~AVLNode<T>() {
-		key = 0;
-		cnt = 0;
-		L = nullptr;
-		R = nullptr;
-		height = 0;
-		multinode = 0;
-	}
-
-	AVLNode<T> *&operator[](int i) {
+	Node<T> *&operator[](int i) {
 		switch(i % 2) {
 			case 0:
 				return L;
@@ -93,8 +82,8 @@ public:
   		height = (r > l ? r : l) + 1;
 	}
 
-	AVLNode<T> *rotate_left() {
-		AVLNode<T>* node = R;
+	Node<T> *rotate_left() {
+		Node<T>* node = R;
 		R = node->L;
 		node->L = this;
 		this->update();
@@ -103,8 +92,8 @@ public:
 		return node;
 	}
 
-	AVLNode<T> *rotate_right() {
-		AVLNode<T>* node = L;
+	Node<T> *rotate_right() {
+		Node<T>* node = L;
 		L = node->R;
 		node->R = this;
 		this->update();
@@ -113,27 +102,27 @@ public:
 		return node;
 	}
 
-	AVLNode<T> *rotate_left_big() {
+	Node<T> *rotate_left_big() {
 		R = R->rotate_right();
 		return this->rotate_left();
 	}
 
-	AVLNode<T> *rotate_right_big() {
+	Node<T> *rotate_right_big() {
 		L = L->rotate_left();
 		return this->rotate_right();
 	}
 
-	AVLNode<T> *balance() {
-		int balance = AVLNode_get_balance(this);
+	Node<T> *balance() {
+		int balance = Node_get_balance(this);
 		if (balance == 2) {
-			balance = AVLNode_get_balance(R);
+			balance = Node_get_balance(R);
 			if (balance == 1 || balance == 0) {
 				return rotate_left();
 			} else {
 				return rotate_left_big();
 			}
 		} else if (balance == -2) {
-			balance = AVLNode_get_balance(L);
+			balance = Node_get_balance(L);
 			if (balance == -1 || balance == 0) {
 				return rotate_right();
 			} else {
@@ -144,20 +133,20 @@ public:
 		}
 	}
 
-	AVLNode<T> *insert(const T val) {
+	Node<T> *insert(const T val) {
 		if (key == val) {
 			++cnt;
 			return this;
 		}
 
 		int flag = val > key;
-		(*this)[flag] = (*this)[flag] ? (*this)[flag]->insert(val) : new AVLNode(val);
+		(*this)[flag] = (*this)[flag] ? (*this)[flag]->insert(val) : new Node(val);
 		
 		update();
 		return balance();
 	}
 
-	AVLNode<T> *dislink(const T val) {
+	Node<T> *dislink(const T val) {
 		if (val == key) {
 			return R ? R : L;
 		} else {
@@ -168,23 +157,17 @@ public:
 		}
 	}
 
-	AVLNode<T> *erase(T val) {
+	Node<T> *erase(T val) {
 		if (val < key) {
-			if (L) {
-				L = L->erase(val);
-				update();
-				return balance();
-			} else {
-				return this;
-			}
+			assert(L);
+			L = L->erase(val);
+			update();
+			return balance();
 		} else if (val > key) {
-			if (R) {
-				R = R->erase(val);
-				update();
-				return balance();
-			} else {
-				return this;
-			}
+			assert(R);
+			R = R->erase(val);
+			update();
+			return balance();
 		} else {
 			if (multinode) {
 				--cnt;
@@ -193,17 +176,23 @@ public:
 				}
 			}
 
-			if (!R) {
-				AVLNode<T> *l = L;
+			if (!R && !L) {
 				delete this;
-				return l;
+				return nullptr;
+			}
+			if (!R) {
+				L = nullptr;
+				delete this;
+				return L;
 			}
 
-			AVLNode<T> *r_min = R->min();
+			Node<T> *r_min = R->min();
 			R = R->dislink(r_min->key);
 			r_min->R = R;
 			r_min->L = L;
 
+			R = nullptr;
+			L = nullptr;
 			delete this;
 
 			r_min->update();
@@ -211,15 +200,15 @@ public:
 		}
 	}
 
-	AVLNode<T> *min() {
+	Node<T> *min() {
 		return L ? L->min() : this;
 	}
 
-	AVLNode<T> *max() {
+	Node<T> *max() {
 		return R ? R->max() : this;
 	}
 
-	AVLNode<T> *find(const T val) {
+	Node<T> *find(const T val) {
 		if (key == val) {
 			return this;
 		}
@@ -228,64 +217,63 @@ public:
 		return (*this)[flag] ? (*this)[flag]->find(val) : nullptr;
 	}
 
-	AVLNode<T> *next(const T val) {
+	Node<T> *next(const T val) {
 		if (key == val) {
 			return R ? R->min() : nullptr;
 		} else if (key < val) {
-			AVLNode<T> *ret = R ? R->next(val) : nullptr;
+			Node<T> *ret = R ? R->next(val) : nullptr;
 			return ret ? ret : nullptr;
 		} else {
-			AVLNode<T> *ret = L ? L->next(val) : nullptr;
+			Node<T> *ret = L ? L->next(val) : nullptr;
 			return ret ? ret : this;
 		}
 	}
 
-	AVLNode<T> *prev(const T val) {
+	Node<T> *prev(const T val) {
 		if (key == val) {
 			return L ? L->max() : nullptr;
 		} else if (key > val) {
-			AVLNode<T> *ret = L ? L->prev(val) : nullptr;
+			Node<T> *ret = L ? L->prev(val) : nullptr;
 			return ret ? ret : nullptr;
 		} else {
-			AVLNode<T> *ret = R ? R->prev(val) : nullptr;
+			Node<T> *ret = R ? R->prev(val) : nullptr;
 			return ret ? ret : this;
 		}
 	}
 
 	void dump(int depth = 0) {
-		AVLNode_dump(this, depth, depth);
+		Node_dump(this, depth, depth);
 	}
 };
 
 template <typename T>
-class AVLTree {
+class AVLtree {
 private:
-	AVLNode<T> *root;
+	Node<T> *root;
 	size_t size;
 public:
-	AVLTree<T>() {
+	AVLtree<T>() {
 		root = nullptr;
 		size = 0;
 	}
 
-	~AVLTree<T>() {
-		recursive_node_delete(root);
+	~AVLtree<T>() {
+		//recursive_node_delete(root);
 	}
 
-	void recursive_node_delete(AVLNode<T> *node) {
+	void recursive_node_delete(Node<T> *node) {
 		if (!node) {return;}
-		recursive_node_delete(node->L);
-		recursive_node_delete(node->R);
+		if (node->L) {recursive_node_delete(node->L);}
+		if (node->R) {recursive_node_delete(node->R);}
 		delete node;
 	}
 
 	void insert(const T val) {
 		if (!root) {
-			root = new AVLNode<T>(val);
+			root = new Node<T>(val);
 		} else {
 			root = root->insert(val);
 		}
-		++size;
 	}
 
 	void erase(const T val) {
@@ -294,7 +282,6 @@ public:
 				root = root->erase(val);
 			}
 		}
-		--size;
 	}
 
 	T *find(const T val) {
@@ -302,16 +289,8 @@ public:
 			return nullptr;
 		}
 
-		AVLNode<T> *ret = root->find(val);
+		Node<T> *ret = root->find(val);
 		return ret ? &ret->key : nullptr;
-	}
-
-	T *min() {
-		return root ? root->min()->key : (T) 0;
-	}
-
-	T *max() {
-		return root ? root->max()->key : (T) 0;
 	}
 
 	T *next(const T val) {
@@ -319,7 +298,7 @@ public:
 			return nullptr;
 		}
 
-		AVLNode<T> *node = root->next(val);
+		Node<T> *node = root->next(val);
 		if (!node) {
 			return nullptr;
 		} else {
@@ -332,7 +311,7 @@ public:
 			return nullptr;
 		}
 
-		AVLNode<T> *node = root->prev(val);
+		Node<T> *node = root->prev(val);
 		if (!node) {
 			return nullptr;
 		} else {
@@ -347,9 +326,8 @@ public:
 	}
 };
 
-// Решение задачи по написанию авл-дерево сведено к задаче написания авл-дерева
 int main() {
-	AVLTree<int> tree;
+	AVLtree<int> tree;
 
 	char str[10] = {};
     while (scanf("%6s", str) == 1) {
@@ -381,7 +359,7 @@ int main() {
         //tree.dump();
     }
 
+	//printf("%lld %lld\n", (*a)[0], (*a)[1]);
+
 	return 0;
 }
-
-// AVL-дерево даровало нам свой логарифм для O(nlogn)
