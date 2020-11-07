@@ -63,7 +63,6 @@ public:
 	bool multinode;
 
 	AVLTreeNode<T_KEY>() {
-		key = 0;
 		int cnt = 0;
 		L = nullptr;
 		R = nullptr;
@@ -81,7 +80,6 @@ public:
 	}
 
 	~AVLTreeNode<T_KEY>() {
-		key = 0;
 		cnt = 0;
 		L = nullptr;
 		R = nullptr;
