@@ -1,15 +1,37 @@
-#include <stdexcept>
+/*
+На вступительном контесте в пилотную группу по программированию Вашему другу предложили реализовать структуру данных для хранения множеств чисел. Так как он специализируется на истории литературы, данную структуру придётся реализовать Вам.
+
+Структура должна хранить m+1 множеств чисел от 0 до n, пронумерованных от 0 до m включительно, при этом одно число может принадлежать сразу нескольким множествам. Изначально все множества пустые.
+
+Вы должны реализовать следующие операции на этой структуре:
+
+ADD e s
+Добавить в множество №s (0≤s≤m) число e (0≤e≤n).
+
+DELETE e s
+Удалить из множества №s (0≤s≤m) число e (0≤e≤n). Гарантируется, что до этого число e было помещено в множество
+
+CLEAR s
+Очистить множество №s (0≤s≤m).
+
+LISTSET s
+Показать содержимое множества №s (0≤s≤m) в возрастающем порядке, либо −1, если множество пусто.
+
+LISTSETSOF e
+Показать множества, в которых лежит число e (0≤e≤n), либо −1, если этого числа нет ни в одном множестве.
+*/
 
 #include <cstdlib>
 #include <cstdio>
 #include <cassert>
 #include <cstring>
 
-template <typename T_KEY, typename T_VAL>
-class AVLMapNode;
+// Дерево из A ================================================================
+template <typename T_KEY>
+class AVLTreeNode;
 
-template <typename T_KEY, typename T_VAL>
-int AVLNode_get_balance(const AVLMapNode<T_KEY, T_VAL> *cake) {
+template <typename T_KEY>
+int AVLTreeNode_get_balance(const AVLTreeNode<T_KEY> *cake) {
 	if (cake == nullptr) {
 		return 0;
 	} else {
@@ -19,11 +41,11 @@ int AVLNode_get_balance(const AVLMapNode<T_KEY, T_VAL> *cake) {
 	}
 }
 
-template <typename T_KEY, typename T_VAL>
-void AVLNode_dump(const AVLMapNode<T_KEY, T_VAL> *cake, const int depth, const int to_format_cnt) {
+template <typename T_KEY>
+void AVLTreeNode_dump(const AVLTreeNode<T_KEY> *cake, const int depth, const int to_format_cnt) {
 	if (!cake) {return;}
 
-	AVLNode_dump(cake->R, depth + 1, to_format_cnt + 1);
+	AVLTreeNode_dump(cake->R, depth + 1, to_format_cnt + 1);
 
 	for (int i = 0; i < depth; ++i) {
 		printf("    ");
@@ -35,21 +57,20 @@ void AVLNode_dump(const AVLMapNode<T_KEY, T_VAL> *cake, const int depth, const i
 	}
 
 	printf("%03d>|\n", cake->key);
-	AVLNode_dump(cake->L, depth + 1, to_format_cnt + 1);
+	AVLTreeNode_dump(cake->L, depth + 1, to_format_cnt + 1);
 }
 
-// Дерево из A ================================================================
-template <typename T>
-class AVLNode {
+template <typename T_KEY>
+class AVLTreeNode {
 public:
-	T key;
-	AVLNode<T> *L;
-	AVLNode<T> *R;
+	T_KEY key;
+	AVLTreeNode<T_KEY> *L;
+	AVLTreeNode<T_KEY> *R;
 	int height;
 	int cnt;
 	bool multinode;
 
-	AVLNode<T>() {
+	AVLTreeNode<T_KEY>() {
 		key = 0;
 		int cnt = 0;
 		L = nullptr;
@@ -58,7 +79,7 @@ public:
 		multinode = 0;
 	}
 
-	AVLNode<T>(const T &new_key) {
+	AVLTreeNode<T_KEY>(const T_KEY &new_key) {
 		key = new_key;
 		cnt = 1;
 		L = nullptr;
@@ -67,7 +88,7 @@ public:
 		multinode = 0;
 	}
 
-	~AVLNode<T>() {
+	~AVLTreeNode<T_KEY>() {
 		key = 0;
 		cnt = 0;
 		L = nullptr;
@@ -76,7 +97,7 @@ public:
 		multinode = 0;
 	}
 
-	AVLNode<T> *&operator[](int i) {
+	AVLTreeNode<T_KEY> *&operator[](int i) {
 		switch(i % 2) {
 			case 0:
 				return L;
@@ -94,8 +115,8 @@ public:
   		height = (r > l ? r : l) + 1;
 	}
 
-	AVLNode<T> *rotate_left() {
-		AVLNode<T>* node = R;
+	AVLTreeNode<T_KEY> *rotate_left() {
+		AVLTreeNode<T_KEY>* node = R;
 		R = node->L;
 		node->L = this;
 		this->update();
@@ -104,8 +125,8 @@ public:
 		return node;
 	}
 
-	AVLNode<T> *rotate_right() {
-		AVLNode<T>* node = L;
+	AVLTreeNode<T_KEY> *rotate_right() {
+		AVLTreeNode<T_KEY>* node = L;
 		L = node->R;
 		node->R = this;
 		this->update();
@@ -114,27 +135,27 @@ public:
 		return node;
 	}
 
-	AVLNode<T> *rotate_left_big() {
+	AVLTreeNode<T_KEY> *rotate_left_big() {
 		R = R->rotate_right();
 		return this->rotate_left();
 	}
 
-	AVLNode<T> *rotate_right_big() {
+	AVLTreeNode<T_KEY> *rotate_right_big() {
 		L = L->rotate_left();
 		return this->rotate_right();
 	}
 
-	AVLNode<T> *balance() {
-		int balance = AVLNode_get_balance(this);
+	AVLTreeNode<T_KEY> *balance() {
+		int balance = AVLTreeNode_get_balance(this);
 		if (balance == 2) {
-			balance = AVLNode_get_balance(R);
+			balance = AVLTreeNode_get_balance(R);
 			if (balance == 1 || balance == 0) {
 				return rotate_left();
 			} else {
 				return rotate_left_big();
 			}
 		} else if (balance == -2) {
-			balance = AVLNode_get_balance(L);
+			balance = AVLTreeNode_get_balance(L);
 			if (balance == -1 || balance == 0) {
 				return rotate_right();
 			} else {
@@ -145,20 +166,20 @@ public:
 		}
 	}
 
-	AVLNode<T> *insert(const T val) {
+	AVLTreeNode<T_KEY> *insert(const T_KEY val) {
 		if (key == val) {
 			++cnt;
 			return this;
 		}
 
 		int flag = val > key;
-		(*this)[flag] = (*this)[flag] ? (*this)[flag]->insert(val) : new AVLNode(val);
+		(*this)[flag] = (*this)[flag] ? (*this)[flag]->insert(val) : new AVLTreeNode(val);
 		
 		update();
 		return balance();
 	}
 
-	AVLNode<T> *dislink(const T val) {
+	AVLTreeNode<T_KEY> *dislink(const T_KEY val) {
 		if (val == key) {
 			return R ? R : L;
 		} else {
@@ -169,7 +190,7 @@ public:
 		}
 	}
 
-	AVLNode<T> *erase(T val) {
+	AVLTreeNode<T_KEY> *erase(T_KEY val) {
 		if (val < key) {
 			if (L) {
 				L = L->erase(val);
@@ -195,12 +216,12 @@ public:
 			}
 
 			if (!R) {
-				AVLNode<T> *l = L;
+				AVLTreeNode<T_KEY> *l = L;
 				delete this;
 				return l;
 			}
 
-			AVLNode<T> *r_min = R->min();
+			AVLTreeNode<T_KEY> *r_min = R->min();
 			R = R->dislink(r_min->key);
 			r_min->R = R;
 			r_min->L = L;
@@ -212,15 +233,15 @@ public:
 		}
 	}
 
-	AVLNode<T> *min() {
+	AVLTreeNode<T_KEY> *min() {
 		return L ? L->min() : this;
 	}
 
-	AVLNode<T> *max() {
+	AVLTreeNode<T_KEY> *max() {
 		return R ? R->max() : this;
 	}
 
-	AVLNode<T> *find(const T val) {
+	AVLTreeNode<T_KEY> *find(const T_KEY val) {
 		if (key == val) {
 			return this;
 		}
@@ -229,73 +250,93 @@ public:
 		return (*this)[flag] ? (*this)[flag]->find(val) : nullptr;
 	}
 
-	AVLNode<T> *next(const T val) {
+	AVLTreeNode<T_KEY> *next(const T_KEY val) {
 		if (key == val) {
 			return R ? R->min() : nullptr;
 		} else if (key < val) {
-			AVLNode<T> *ret = R ? R->next(val) : nullptr;
+			AVLTreeNode<T_KEY> *ret = R ? R->next(val) : nullptr;
 			return ret ? ret : nullptr;
 		} else {
-			AVLNode<T> *ret = L ? L->next(val) : nullptr;
+			AVLTreeNode<T_KEY> *ret = L ? L->next(val) : nullptr;
 			return ret ? ret : this;
 		}
 	}
 
-	AVLNode<T> *prev(const T val) {
+	AVLTreeNode<T_KEY> *prev(const T_KEY val) {
 		if (key == val) {
 			return L ? L->max() : nullptr;
 		} else if (key > val) {
-			AVLNode<T> *ret = L ? L->prev(val) : nullptr;
+			AVLTreeNode<T_KEY> *ret = L ? L->prev(val) : nullptr;
 			return ret ? ret : nullptr;
 		} else {
-			AVLNode<T> *ret = R ? R->prev(val) : nullptr;
+			AVLTreeNode<T_KEY> *ret = R ? R->prev(val) : nullptr;
 			return ret ? ret : this;
 		}
 	}
 
 	void dump(int depth = 0) {
-		AVLNode_dump(this, depth, depth);
+		AVLTreeNode_dump(this, depth, depth);
+	}
+
+	void space_dump() {
+		if (L) L->space_dump();
+		printf("%lld ", key);
+		if (R) R->space_dump();
 	}
 };
 
-template <typename T>
+template <typename T_KEY>
 class AVLTree {
 private:
-	AVLNode<T> *root;
+	AVLTreeNode<T_KEY> *root;
 	size_t size;
+
+	AVLTreeNode<T_KEY> *find_node(const T_KEY &val) {
+		if (!root) {
+			return nullptr;
+		} else {
+			return root->find(val);
+		}
+	}
 public:
-	AVLTree<T>() {
+	AVLTree<T_KEY>() {
 		root = nullptr;
 		size = 0;
 	}
 
-	~AVLTree<T>() {
+	~AVLTree<T_KEY>() {
 		recursive_node_delete(root);
 	}
 
-	void recursive_node_delete(AVLNode<T> *node) {
+	void recursive_node_delete(AVLTreeNode<T_KEY> *node) {
 		if (!node) {return;}
 		recursive_node_delete(node->L);
 		recursive_node_delete(node->R);
 		delete node;
 	}
 
-	void insert(const T val) {
+	void insert(const T_KEY key) {
 		if (!root) {
-			root = new AVLNode<T>(val);
+			root = new AVLTreeNode<T_KEY>(key);
+			++size;
 		} else {
-			root = root->insert(val);
+			AVLTreeNode<T_KEY> *node = find_node(key);
+			if (!node) {
+				root = root->insert(key);
+				++size;
+			} else {
+				node->cnt++;
+			}
 		}
-		++size;
 	}
 
-	void erase(const T val) {
+	void erase(const T_KEY val) {
 		if (root) {
 			if (root->find(val)) {
 				root = root->erase(val);
+				--size;
 			}
 		}
-		--size;
 	}
 
 	void clear() {
@@ -304,29 +345,48 @@ public:
 		size = 0;
 	}
 
-	T *find(const T val) {
+	bool find(const T_KEY val) {
+		if (!root) {
+			return false;
+		}
+
+		if (root->find(val)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	T_KEY min() {
+		if (root) {
+			return root->min()->key;
+		} else {
+			throw "AVLTree is empty";
+		}
+	}
+
+	T_KEY max() {
+		if (root) {
+			return root->max()->key;
+		} else {
+			throw "AVLTree is empty";
+		}
+	}
+
+	size_t get_size() {
+		return size;
+	}
+
+	bool empty() {
+		return !size;
+	}
+
+	T_KEY *next(const T_KEY val) {
 		if (!root) {
 			return nullptr;
 		}
 
-		AVLNode<T> *ret = root->find(val);
-		return ret ? &ret->key : nullptr;
-	}
-
-	T *min() {
-		return root ? root->min()->key : (T) 0;
-	}
-
-	T *max() {
-		return root ? root->max()->key : (T) 0;
-	}
-
-	T *next(const T val) {
-		if (!root) {
-			return nullptr;
-		}
-
-		AVLNode<T> *node = root->next(val);
+		AVLTreeNode<T_KEY> *node = root->next(val);
 		if (!node) {
 			return nullptr;
 		} else {
@@ -334,12 +394,12 @@ public:
 		}
 	}
 
-	T *prev(const T val) {
+	T_KEY *prev(const T_KEY val) {
 		if (!root) {
 			return nullptr;
 		}
 
-		AVLNode<T> *node = root->prev(val);
+		AVLTreeNode<T_KEY> *node = root->prev(val);
 		if (!node) {
 			return nullptr;
 		} else {
@@ -352,10 +412,49 @@ public:
 			root->dump();
 		}
 	}
+
+	void space_dump() {
+		if (root) {
+			root->space_dump();
+		}
+	}
 };
 
 //=============================================================================
 // Мап на этом же дереве :3 ===================================================
+
+template <typename T_KEY, typename T_VAL>
+class AVLMapNode;
+
+template <typename T_KEY, typename T_VAL>
+int AVLMapNode_get_balance(const AVLMapNode<T_KEY, T_VAL> *cake) {
+	if (cake == nullptr) {
+		return 0;
+	} else {
+		int r = cake->R == nullptr ? 0 : cake->R->height;
+	  	int l = cake->L == nullptr ? 0 : cake->L->height;
+	  	return r - l;
+	}
+}
+
+template <typename T_KEY, typename T_VAL>
+void AVLMapNode_dump(const AVLMapNode<T_KEY, T_VAL> *cake, const int depth, const int to_format_cnt) {
+	if (!cake) {return;}
+
+	AVLMapNode_dump(cake->R, depth + 1, to_format_cnt + 1);
+
+	for (int i = 0; i < depth; ++i) {
+		printf("    ");
+		if (depth - to_format_cnt- 1 <= i) {
+			printf("|");
+		} else {
+			printf(" ");
+		}
+	}
+
+	printf("%03lld>|\n", cake->key);
+	AVLMapNode_dump(cake->L, depth + 1, to_format_cnt + 1);
+}
 
 template <typename T_KEY, typename T_VAL>
 class AVLMapNode {
@@ -443,16 +542,16 @@ public:
 	}
 
 	AVLMapNode<T_KEY, T_VAL> *balance() {
-		int balance = AVLNode_get_balance(this);
+		int balance = AVLMapNode_get_balance(this);
 		if (balance == 2) {
-			balance = AVLNode_get_balance(R);
+			balance = AVLMapNode_get_balance(R);
 			if (balance == 1 || balance == 0) {
 				return rotate_left();
 			} else {
 				return rotate_left_big();
 			}
 		} else if (balance == -2) {
-			balance = AVLNode_get_balance(L);
+			balance = AVLMapNode_get_balance(L);
 			if (balance == -1 || balance == 0) {
 				return rotate_right();
 			} else {
@@ -572,7 +671,7 @@ public:
 	}
 
 	void dump(int depth = 0) {
-		AVLNode_dump(this, depth, depth);
+		AVLMapNode_dump(this, depth, depth);
 	}
 };
 
@@ -610,10 +709,12 @@ public:
 	void insert(const T_KEY key, const T_VAL val) {
 		if (!root) {
 			root = new AVLMapNode<T_KEY, T_VAL>(key, val);
+			++size;
 		} else {
 			AVLMapNode<T_KEY, T_VAL> *node = find_node(key);
 			if (!node) {
 				root = root->insert(key, val);
+				++size;
 			} else {
 				if (node->val == val) {
 					node->cnt++;
@@ -623,7 +724,15 @@ public:
 				}
 			}
 		}
-		++size;
+	}
+
+	bool find(const T_KEY key) {
+		AVLMapNode<T_KEY, T_VAL> *node = find_node(key);
+		if (node) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	T_VAL get(const T_KEY key) {
@@ -631,7 +740,7 @@ public:
 		if (node) {
 			return node->val;
 		} else {
-			throw std::invalid_argument("AVLMap doesn't containt key");
+			throw "AVLMap doesn't containt key";
 		}
 	}
 
@@ -651,11 +760,19 @@ public:
 	}
 
 	T_KEY *min() {
-		return root ? root->min()->key : (T_KEY) 0;
+		if (root) {
+			return root->min()->key;
+		} else {
+			throw "AVLMap is empty";
+		}
 	}
 
 	T_KEY *max() {
-		return root ? root->max()->key : (T_KEY) 0;
+		if (root) {
+			return root->max()->key;
+		} else {
+			throw "AVLMap is empty";
+		}
 	}
 
 	T_KEY *next(const T_KEY val) {
@@ -692,69 +809,86 @@ public:
 };
 
 //=============================================================================
-template <typename T>
-void avl_node_dump(AVLNode<T> *n) {
-	if (!n) {return;}
-
-	avl_node_dump(n->L);
-	printf("%lld ", n->key);
-	avl_node_dump(n->R);
-}
-
-
-template <typename T>
-void avl_task_dump(AVLTree<T> *t) {
-	if 
-}
+// Будем хранить массив сетов для быстрого доступа к ним
+// И мапу из числа в сет указателей на сеты, в которых это число лежит
 
 int main() {
 	long long n, m, k;
-	scanf("%lld %lld %lld", &n, &m, &k);
+	scanf("%lld %lld", &n, &m);
+	scanf("%lld", &k);
 	++m;
 	AVLTree<AVLTree<long long>*> to_delete;
 	AVLMap<long long, AVLTree<long long>*> num_to_set;    // [n] -> [sets containing n]
 	AVLTree<long long> *sets = new AVLTree<long long>[m]; // sets[i] - set of index i
 
 	char str[20] = {};
-    while (scanf("%15s", str) == 1) {
+    for (int i = 0; i < k; ++i) {
+    	scanf("%15s", str);
         if (       strcmp(str, "ADD") == 0 || str[0] == 'a') {
         	long long x = 0;
         	long long s = 0;
-        	scanf("%lld %lld\n", &x, &s);
+        	scanf("%lld %lld", &x, &s);
 
             sets[s].insert(x);
-            num_to_set->insert(x, &sets[s]);
-        } else if (strcmp(str, "DELETE" || str[0] == 'd') == 0) {
+            if (!num_to_set.find(x)) {
+            	AVLTree<long long> *new_set = new AVLTree<long long>;
+            	to_delete.insert(new_set);
+            	num_to_set.insert(x, new_set);
+            }
+            num_to_set.get(x)->insert(s);
+        } else if (strcmp(str, "DELETE") == 0 || str[0] == 'd') {
         	long long x = 0;
         	long long s = 0;
-        	scanf("%lld %lld\n", &x, &s);
+        	scanf("%lld %lld", &x, &s);
 
             sets[s].erase(x);
-            num_to_set->get(x)->erase()
+            num_to_set.get(x)->erase(s);
         } else if (strcmp(str, "CLEAR") == 0) {
         	long long s = 0;
-        	scanf("%lld\n", &s);
+        	scanf("%lld", &s);
 
-        	sets[s].clear();          
+        	while (!sets[s].empty()) {
+        		long long x = sets[s].min();
+        		num_to_set.get(x)->erase(s);
+        		sets[s].erase(x);
+        	}
         } else if (strcmp(str, "LISTSET") == 0) {
         	long long s = 0;
-        	scanf("%lld\n", &s);
-        } else if(strcmp(str, "LISTSETOF") == 0) {
-        	int *ret = tree.prev(x);
-        	if (ret) {
-        		printf("%d\n", *ret);
+        	scanf("%lld", &s);
+
+        	if (sets[s].empty()) {
+        		printf("-1\n");
         	} else {
-        		printf("none\n");
+        		sets[s].space_dump();
+        		printf("\n");
         	}
-        } else if (str[0] == 'd') {
-            
+        } else if(strcmp(str, "LISTSETSOF") == 0) {
+        	long long x = 0;
+        	scanf("%lld", &x);
+
+        	if (num_to_set.find(x)) {
+        		AVLTree<long long> *tree = num_to_set.get(x);
+        		if (tree->empty()) {
+        			printf("-1\n");
+        		} else {
+        			tree->space_dump();
+        			printf("\n");
+        		}
+        	} else {
+        		printf("-1\n");
+        	}
         }
-        //tree.dump();
-    }*/
+    }
+
+    while (!to_delete.empty()) {
+    	AVLTree<long long> *tree = to_delete.min();
+    	to_delete.erase(tree);
+    	delete tree;
+    }
 
 	delete[] sets;
 
 	return 0;
 }
 
-// AVL-дерево даровало нам свой логарифм для O(nlogn)
+// AVL-дерево даровало нам свой логарифм для O(klogk)
