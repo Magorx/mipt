@@ -33,11 +33,20 @@ public:
 	void dump(FILE *file_ptr = nullptr) const;
 };
 
+class DecisionDefinition : public DecisionStatement {
+public:
+	DecisionDefinition(String *statement_) : DecisionStatement(statement_) {};
+
+	int state(char *end = (char*) "");
+	int get_answer();
+};
+
+
 class DecisionQuestion : public DecisionStatement {
 public:
 	DecisionQuestion(String *statement_) : DecisionStatement(statement_) {};
 
-	int state(char *end = (char*) "?");
+	int state(char *end = (char*) "");
 	int get_answer();
 };
 
@@ -71,11 +80,20 @@ public:
 //=============================================================================
 // Tree =======================================================================
 
-const char SYMB_OPEN_NODE = '[';
+const char SYMB_OPEN_NODE  = '[';
 const char SYMB_CLOSE_NODE = ']';
-const char SYMB_QUOTE = '"';
+const char SYMB_QUOTE      = '"';
 
 const int MAX_STATEMENT_LEN = 10;
+
+enum GUESS_GAME_OUTCOMES {
+	GUESS       = 0,
+	QUESTION    = 0,
+	NO  		= 0,
+	YES 		= 1,
+	GUESSED_NO  = 2,
+	GUESSED_YES = 3,
+};
 
 class DecisionTree {
 private:

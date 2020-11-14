@@ -6,9 +6,9 @@ endif
 
 CUR_PROG = desee
 
-G_PRE = general
-GC = $(G_PRE)/general_c
-GCPP = $(G_PRE)/general_cpp
+GENERAL_PREFIX = general
+GC = $(GENERAL_PREFIX)/general_c
+GCPP = $(GENERAL_PREFIX)/general_cpp
 
 CC = gcc
 CPP = g++
