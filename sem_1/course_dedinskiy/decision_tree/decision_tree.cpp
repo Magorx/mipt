@@ -77,7 +77,7 @@ void DecisionTreeNode::dump() {
 	statement->dump();
 }
 
-size_t DecisionTreeNode::statement_length() {
+int DecisionTreeNode::statement_length() {
 	return statement->size();
 }
 
@@ -91,9 +91,6 @@ DecisionTree::DecisionTree() {
 DecisionTreeNode *DecisionTree::read_node(File *file) {
 	// printf("->\n");
 	const unsigned char *c = file->cc;
-	if (*c == SYMB_CLOSE_NODE || *c == SYMB_OPEN_NODE) {
-		++c;
-	}
 	Char_get_next_symb(&c);
 	// printf("cur_c: [%c]\n", *c);
 	if (*c != SYMB_QUOTE) {
@@ -123,8 +120,13 @@ DecisionTreeNode *DecisionTree::read_node(File *file) {
 		DecisionQuestion *question = new DecisionQuestion(node_statement);
 		DecisionTreeNode *node = new DecisionTreeNode(question);
 
+		++file->cc;
+
 		node->set_true (read_node(file));
 		node->set_false(read_node(file));
+
+		Char_get_next_symb(&file->cc);
+		++file->cc;
 
 		return node;
 	} else if (*c == SYMB_CLOSE_NODE || *c == SYMB_QUOTE) {
@@ -173,13 +175,13 @@ void DecisionTree::dump(DecisionTreeNode *node, int depth, int to_format_cnt, in
 	}
 
 	node->dump();
-	for (size_t i = 0; i < maxlen - node->statement_length(); ++i) {
-		printf(" ");
+	for (int i = 0; i < maxlen - node->statement_length() - 1; ++i) {
+		printf("-");
 	}
-	printf(" |\n");
+	printf("->|\n");
 	dump(node->get_node_false(), depth + 1, to_format_cnt + 1, maxlen);
 }
 
 void DecisionTree::dump() {
-	dump(root, 0, 0, 10);
+	dump(root, 0, 0, MAX_STATEMENT_LEN);
 }

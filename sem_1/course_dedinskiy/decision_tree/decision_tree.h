@@ -60,7 +60,7 @@ public:
 	DecisionTreeNode *get_node_true ();
 	DecisionTreeNode *get_node_false();
 
-	size_t statement_length();
+	int statement_length();
 
 	int state();
 	void dump();
@@ -74,6 +74,8 @@ public:
 const char SYMB_OPEN_NODE = '[';
 const char SYMB_CLOSE_NODE = ']';
 const char SYMB_QUOTE = '"';
+
+const int MAX_STATEMENT_LEN = 10;
 
 class DecisionTree {
 private:
