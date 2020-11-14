@@ -23,6 +23,15 @@ void DecisionStatement::dump(FILE *file_ptr) const {
 	statement->print(file_ptr);
 }
 
+String *DecisionStatement::get_statement() const {
+	return statement;
+}
+
+
+bool DecisionStatement::operator==(const DecisionStatement &other) const {
+	return *statement == *other.get_statement();
+}
+
 int answer_is_yes(char *answer) {
 	return (answer[0] == 'y' || answer[0] == 'Y' || answer[0] == '+' || answer[0] == '1');
 }
@@ -87,6 +96,10 @@ DecisionTreeNode* DecisionTreeNode::get_node_false() const {
 	return node_false;
 }
 
+AbstractDecisionStatement* DecisionTreeNode::get_statement() const {
+	return statement;
+}
+
 DecisionTreeNode *DecisionTreeNode::proceed(const int answer) {
 	if (answer) {
 		return node_true;
@@ -105,6 +118,14 @@ void DecisionTreeNode::dump(FILE *file_ptr) const {
 
 int DecisionTreeNode::statement_length() {
 	return statement->size();
+}
+
+bool DecisionTreeNode::is_question() const {
+	return get_node_true();
+}
+
+bool DecisionTreeNode::is_defenition() const {
+	return !get_node_true();
 }
 
 //=============================================================================
@@ -229,6 +250,10 @@ int DecisionTree::save(const char *file_name) {
 	return 0;
 }
 
+DecisionTreeNode *DecisionTree::get_root() const {
+	return root;
+}
+
 void DecisionTree::dump(DecisionTreeNode *node, int depth, int to_format_cnt, int maxlen, FILE *file_ptr) const {
 	if (!node) {return;}
 
@@ -255,6 +280,29 @@ void DecisionTree::dump(DecisionTreeNode *node, int depth, int to_format_cnt, in
 
 void DecisionTree::dump(FILE *file_ptr) const {
 	dump(root, 0, 0, MAX_STATEMENT_LEN, file_ptr);
+}
+
+DecisionTreeNode* DecisionTree::merge_node(DecisionTreeNode *first, DecisionTreeNode *second) {
+	if (first->is_question() && second->is_question()) {
+		if (*(dynamic_cast<const DecisionStatement*>(first->get_statement())) == *(dynamic_cast<const DecisionStatement*>(second->get_statement()))) {
+			first->set_true (merge_node(first->get_node_true (), second->get_node_true ()));
+			first->set_false(merge_node(first->get_node_false(), second->get_node_false()));
+		} else {
+			printf("[");
+			((DecisionStatement*) first->get_statement())->get_statement()->print();
+			printf("] vs [");
+			((DecisionStatement*) second->get_statement())->get_statement()->print();
+			printf("]\n");
+			printf("Merge error, aborting...\n");
+			exit(0);
+		}
+	}
+
+	if (first->is_question()) {
+		return first;
+	} else {
+		return second;
+	}
 }
 
 //=============================================================================
@@ -300,6 +348,7 @@ int DecisionTree::run_guess() {
 	int answer = QUESTION;
 	int prev_ans = QUESTION;
 	DecisionTreeNode *prev_node = nullptr;
+
 	while (true) {
 		prev_ans = answer;
 		answer   = cur_node->state();
@@ -322,4 +371,8 @@ int DecisionTree::run_guess() {
 	}
 
 	return 0;
+}
+
+void DecisionTree::merge(const DecisionTree &tree) {
+	root = merge_node(root, tree.get_root());
 }

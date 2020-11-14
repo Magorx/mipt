@@ -2,14 +2,14 @@
 #include <cstdio>
 
 int main() {
-	DecisionTree t;
-	t.load("db.db");
-	t.save("db_runtime_copy.db");
+	DecisionTree first, second;
+	first.load("db1.db");
+	second.load("db2.db");
 
-	t.run_guess();
+	first.merge(second);
 
-	t.save("db.db");
-	
+	first.save("db_out.db");
+
 	printf(".doned.\n");
 	return 0;
 }

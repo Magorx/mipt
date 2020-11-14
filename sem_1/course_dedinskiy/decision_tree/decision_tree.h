@@ -11,6 +11,7 @@ class AbstractDecisionStatement {
 public:
 	virtual int  state(char *end = (char*) "") = 0;
 	virtual int  size() = 0;
+	//virtual bool operator==(const AbstractDecisionStatement &other) const = 0;
 	virtual void dump(FILE *file_ptr = nullptr) const = 0;
 };
 
@@ -30,6 +31,9 @@ public:
 	DecisionStatement(String *statement_);
 	int  state(char *end = (char*) "");
 	int  size();
+	String *get_statement() const;
+	bool operator==(const AbstractDecisionStatement &other) const;
+	bool operator==(const DecisionStatement &other) const;
 	void dump(FILE *file_ptr = nullptr) const;
 };
 
@@ -66,8 +70,12 @@ public:
 	void set_true (DecisionTreeNode* node);
 	void set_false(DecisionTreeNode* node);
 
+	bool is_question() const;
+	bool is_defenition() const;
+
 	DecisionTreeNode *get_node_true () const;
 	DecisionTreeNode *get_node_false() const;
+	AbstractDecisionStatement *get_statement() const;
 
 	int statement_length();
 
@@ -107,11 +115,15 @@ private:
 	void dump(DecisionTreeNode *node, int depth, int to_format_cnt, int maxlen, FILE *file_ptr) const;
 
 	int run_new_node_generation(DecisionTreeNode *cur_node, DecisionTreeNode* prev_node, const int prev_ans);
+
+	DecisionTreeNode *merge_node(DecisionTreeNode *fisrt, DecisionTreeNode *second);
 public:
 	DecisionTree();
 
 	int load(const char *file_name);
 	int save(const char *file_name);
+
+	DecisionTreeNode *get_root() const;
 
 	int run_guess();
 	int run_define(const String &statement);
@@ -120,6 +132,8 @@ public:
 	int run_interaction();
 
 	void dump(FILE *file_ptr = nullptr) const;
+
+	void merge(const DecisionTree &tree);
 };
 
 #endif // DECISION_TREE
