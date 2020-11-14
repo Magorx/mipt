@@ -13,28 +13,23 @@ GCPP = $(G_PRE)/general_cpp
 CC = gcc
 CPP = g++
 
-WARNINGS = -Wall -Wno-multichar
+WARNINGS = -Wall -Wextra -Wno-multichar
 STANDARD =  
 CFLAGS = $(STANDARD) $(WARNINGS) -lm
 
 all: desee
 
-desee: main.cpp general.h decision_tree gc_strings_and_files gcpp_string
+desee: main.cpp general.h decision_tree gc_strings_and_files.oo gcpp_string.oo
 	$(CPP) $(CFLAGS) main.cpp decision_tree gc_strings_and_files gcpp_string -o desee
 
 decision_tree: decision_tree.cpp decision_tree.h
-	$(CPP) $(CFLAGS) decision_tree.cpp  -c -o decision_tree
+	$(CPP) $(CFLAGS) decision_tree.cpp -c -o decision_tree
 
+gc_strings_and_files.oo: $(GC)/strings_and_files.c $(GC)/strings_and_files.h
+	$(CPP) $(CFLAGS) $(GC)/strings_and_files.c -c -o gc_strings_and_files.oo
 
-general_include: gc_strings_and_files gcpp_string
-	$(CPP) $(CFLAGS) gc_strings_and_files gcpp_string general.c -c -o general_include
-
-
-gc_strings_and_files: $(GC)/strings_and_files.c $(GC)/strings_and_files.h
-	$(CC) $(CFLAGS) $(GC)/strings_and_files.c -c -o gc_strings_and_files
-
-gcpp_string: $(GCPP)/string.cpp $(GCPP)/string.h
-	$(CPP) $(CFLAGS) $(GCPP)/string.cpp -c -o gcpp_string
+gcpp_string.oo: $(GCPP)/string.cpp $(GCPP)/string.h
+	$(CPP) $(CFLAGS) $(GCPP)/string.cpp -c -o gcpp_string.oo
 
 run: all
 	./$(CUR_PROG)
