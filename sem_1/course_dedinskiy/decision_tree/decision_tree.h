@@ -10,6 +10,8 @@
 class AbstractDecisionStatement {
 public:
 	virtual int state(char *end = (char*) "") = 0;
+	virtual int size() = 0;
+	virtual void dump() = 0;
 };
 
 class DecisionAbstractQuestion : public AbstractDecisionStatement {
@@ -21,12 +23,14 @@ public:
 // Statement & Question =======================================================
 
 class DecisionStatement : public AbstractDecisionStatement {
-public:
+private:
 	String *statement;
 
 public:
 	DecisionStatement(String *statement_);
 	int state(char *end = (char*) "");
+	int size();
+	void dump();
 };
 
 class DecisionQuestion : public DecisionStatement {
@@ -41,7 +45,7 @@ public:
 // Node =======================================================================
 
 class DecisionTreeNode {
-public:
+private:
 	AbstractDecisionStatement *statement;
 	DecisionTreeNode *node_true;
 	DecisionTreeNode *node_false;
@@ -53,7 +57,13 @@ public:
 	void set_true (DecisionTreeNode* node);
 	void set_false(DecisionTreeNode* node);
 
+	DecisionTreeNode *get_node_true ();
+	DecisionTreeNode *get_node_false();
+
+	size_t statement_length();
+
 	int state();
+	void dump();
 
 	DecisionTreeNode *proceed(const int answer);
 };

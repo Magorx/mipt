@@ -1,7 +1,10 @@
 "one" [
 	"two" [
 		"five"
-		"seven"
+		"seven" [
+			"eight"
+			"nine"
+		]
 	]
 	"three"
 ]
