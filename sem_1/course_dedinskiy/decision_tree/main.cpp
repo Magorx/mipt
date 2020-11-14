@@ -3,8 +3,10 @@
 
 int main() {
 	DecisionTree t;
-	t.load("dt.db");
-	t.dump();
+	t.load("db.db");
+	t.save("db_copy.db");
+
+	t.save("db.db");
 	
 	printf("doned.\n");
 	return 0;

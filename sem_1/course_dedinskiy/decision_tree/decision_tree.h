@@ -9,9 +9,9 @@
 
 class AbstractDecisionStatement {
 public:
-	virtual int state(char *end = (char*) "") = 0;
-	virtual int size() = 0;
-	virtual void dump() = 0;
+	virtual int  state(char *end = (char*) "") = 0;
+	virtual int  size() = 0;
+	virtual void dump(FILE *file_ptr = nullptr) const = 0;
 };
 
 class DecisionAbstractQuestion : public AbstractDecisionStatement {
@@ -28,9 +28,9 @@ private:
 
 public:
 	DecisionStatement(String *statement_);
-	int state(char *end = (char*) "");
-	int size();
-	void dump();
+	int  state(char *end = (char*) "");
+	int  size();
+	void dump(FILE *file_ptr = nullptr) const;
 };
 
 class DecisionQuestion : public DecisionStatement {
@@ -57,13 +57,13 @@ public:
 	void set_true (DecisionTreeNode* node);
 	void set_false(DecisionTreeNode* node);
 
-	DecisionTreeNode *get_node_true ();
-	DecisionTreeNode *get_node_false();
+	DecisionTreeNode *get_node_true () const;
+	DecisionTreeNode *get_node_false() const;
 
 	int statement_length();
 
 	int state();
-	void dump();
+	void dump(FILE *file_ptr = nullptr) const;
 
 	DecisionTreeNode *proceed(const int answer);
 };
@@ -81,10 +81,12 @@ class DecisionTree {
 private:
 	DecisionTreeNode *root;
 
-	DecisionTreeNode* read_node(File *file_ptr);
+	DecisionTreeNode* load_node(File *file_ptr);
+	int               save_node(const DecisionTreeNode* node, int depth, bool is_false_node, FILE *file_ptr);
+
 	DecisionTreeNode* find(const String &statement);
 
-	void dump(DecisionTreeNode *node, int depth, int to_format_cnt, int maxlen);
+	void dump(DecisionTreeNode *node, int depth, int to_format_cnt, int maxlen, FILE *file_ptr) const;
 public:
 	DecisionTree();
 
@@ -97,7 +99,7 @@ public:
 
 	int run_interaction();
 
-	void dump();
+	void dump(FILE *file_ptr = nullptr) const;
 };
 
 #endif // DECISION_TREE
