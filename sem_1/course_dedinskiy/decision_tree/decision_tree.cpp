@@ -265,7 +265,7 @@ int DecisionTree::run_new_node_generation(DecisionTreeNode *cur_node, DecisionTr
 	printf("What is your object?\n> ");
 	
 	char str[MAX_STATEMENT_LEN];
-	fgets(str, 100, stdin);
+	scanf ("%[^\n]%*c", str);
 	String *definition = new String(str);
 	(*definition)[definition->length() - 1] = '\0';
 	DecisionTreeNode *new_defenition_node = new DecisionTreeNode(new DecisionDefinition(definition));
@@ -276,7 +276,7 @@ int DecisionTree::run_new_node_generation(DecisionTreeNode *cur_node, DecisionTr
 	cur_node->dump();
 	printf("]? It... /*continue the phrase*/\n> ");
 
-	fgets(str, 100, stdin);
+	scanf ("%[^\n]%*c", str);
 	String *question = new String(str);
 	(*question)[question->length() - 1] = '\0';
 	DecisionTreeNode *new_question_node = new DecisionTreeNode(new DecisionQuestion(question));
