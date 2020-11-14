@@ -24,10 +24,11 @@ void DecisionStatement::dump(FILE *file_ptr) const {
 }
 
 int answer_is_yes(char *answer) {
-	return answer[0] == 'y' || answer[0] == 'Y' || answer[0] == '+' || answer[0] == '1';
+	return (answer[0] == 'y' || answer[0] == 'Y' || answer[0] == '+' || answer[0] == '1');
 }
 
 int get_and_process_answer() {
+	printf("> ");
 	char answer[51];
 	scanf("%50s", answer);
 
@@ -135,7 +136,7 @@ DecisionTreeNode *DecisionTree::load_node(File *file) {
 	file->cc = c;
 
 	if (*c == SYMB_OPEN_NODE) {
-		DecisionDefinition *question = new DecisionDefinition(node_statement);
+		DecisionQuestion *question = new DecisionQuestion(node_statement);
 		DecisionTreeNode *node = new DecisionTreeNode(question);
 
 		++file->cc;
@@ -148,7 +149,7 @@ DecisionTreeNode *DecisionTree::load_node(File *file) {
 
 		return node;
 	} else if (*c == SYMB_CLOSE_NODE || *c == SYMB_QUOTE) {
-		DecisionStatement *statement = new DecisionStatement(node_statement);
+		DecisionDefinition *statement = new DecisionDefinition(node_statement);
 		DecisionTreeNode *node = new DecisionTreeNode(statement);
 
 		return node;
@@ -254,4 +255,71 @@ void DecisionTree::dump(DecisionTreeNode *node, int depth, int to_format_cnt, in
 
 void DecisionTree::dump(FILE *file_ptr) const {
 	dump(root, 0, 0, MAX_STATEMENT_LEN, file_ptr);
+}
+
+//=============================================================================
+// Tree - interactions ========================================================
+
+int DecisionTree::run_new_node_generation(DecisionTreeNode *cur_node, DecisionTreeNode* prev_node, const int prev_ans) {
+	printf("Well, okay...\n");
+	printf("What is your object?\n> ");
+	
+	char str[MAX_STATEMENT_LEN];
+	fgets(str, 100, stdin);
+	String *definition = new String(str);
+	(*definition)[definition->length() - 1] = '\0';
+	DecisionTreeNode *new_defenition_node = new DecisionTreeNode(new DecisionDefinition(definition));
+
+	printf("\nAnd how is [");
+	new_defenition_node->dump();
+	printf("] different from [");
+	cur_node->dump();
+	printf("]? It... /*continue the phrase*/\n> ");
+
+	fgets(str, 100, stdin);
+	String *question = new String(str);
+	(*question)[question->length() - 1] = '\0';
+	DecisionTreeNode *new_question_node = new DecisionTreeNode(new DecisionQuestion(question));
+	new_question_node->set_true (new_defenition_node);
+	new_question_node->set_false(cur_node);
+
+	if (prev_ans) {
+		prev_node->set_true(new_question_node);
+	} else {
+		prev_node->set_false(new_question_node);
+	}
+
+	printf("\nI'll remember!\n");
+
+	return 0;
+}
+
+int DecisionTree::run_guess() {
+	DecisionTreeNode *cur_node = root;
+
+	int answer = QUESTION;
+	int prev_ans = QUESTION;
+	DecisionTreeNode *prev_node = nullptr;
+	while (true) {
+		prev_ans = answer;
+		answer   = cur_node->state();
+		printf("\n");
+
+		if (answer < GUESS) {
+			prev_node = cur_node;
+			cur_node = cur_node->proceed(answer);
+		} else {
+			break;
+		}
+	}
+
+	getchar(); // getting rid of \n after scanf
+
+	if (answer == GUESS_YES) {
+		printf("Accurate as always \\(>o<)/\n");
+	} else {
+		run_new_node_generation(cur_node, prev_node, prev_ans);
+	}
+
+	return 0;
 }

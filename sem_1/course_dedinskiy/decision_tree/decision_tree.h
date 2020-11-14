@@ -87,12 +87,12 @@ const char SYMB_QUOTE      = '"';
 const int MAX_STATEMENT_LEN = 10;
 
 enum GUESS_GAME_OUTCOMES {
-	GUESS       = 0,
-	QUESTION    = 0,
-	NO  		= 0,
-	YES 		= 1,
-	GUESSED_NO  = 2,
-	GUESSED_YES = 3,
+	GUESS     = 2,
+	QUESTION  = 0,
+	NO  	  = 0,
+	YES 	  = 1,
+	GUESS_NO  = 2,
+	GUESS_YES = 3,
 };
 
 class DecisionTree {
@@ -105,6 +105,8 @@ private:
 	DecisionTreeNode* find(const String &statement);
 
 	void dump(DecisionTreeNode *node, int depth, int to_format_cnt, int maxlen, FILE *file_ptr) const;
+
+	int run_new_node_generation(DecisionTreeNode *cur_node, DecisionTreeNode* prev_node, const int prev_ans);
 public:
 	DecisionTree();
 
