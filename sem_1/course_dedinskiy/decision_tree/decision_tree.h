@@ -21,19 +21,19 @@ public:
 // Statement & Question =======================================================
 
 class DecisionStatement : public AbstractDecisionStatement {
-private:
-	String statement;
+public:
+	String *statement;
 
 public:
-	DecisionStatement(const String &statement_);
+	DecisionStatement(String *statement_);
 	int state(char *end = (char*) "");
 };
 
 class DecisionQuestion : public DecisionStatement {
 public:
-	DecisionQuestion(const String statement_) : DecisionStatement(statement_) {};
+	DecisionQuestion(String *statement_) : DecisionStatement(statement_) {};
 
-	int state();
+	int state(char *end = (char*) "?");
 	int get_answer();
 };
 
@@ -41,7 +41,7 @@ public:
 // Node =======================================================================
 
 class DecisionTreeNode {
-private:
+public:
 	AbstractDecisionStatement *statement;
 	DecisionTreeNode *node_true;
 	DecisionTreeNode *node_false;
@@ -71,6 +71,8 @@ private:
 
 	DecisionTreeNode* read_node(File *file_ptr);
 	DecisionTreeNode* find(const String &statement);
+
+	void dump(DecisionTreeNode *node, int depth, int to_format_cnt, int maxlen);
 public:
 	DecisionTree();
 
@@ -82,6 +84,8 @@ public:
 	int run_difference(const String &first, const String &second);
 
 	int run_interaction();
+
+	void dump();
 };
 
 #endif // DECISION_TREE

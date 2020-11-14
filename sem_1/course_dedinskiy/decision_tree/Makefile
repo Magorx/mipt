@@ -19,11 +19,11 @@ CFLAGS = $(STANDARD) $(WARNINGS) -lm
 
 all: desee
 
-desee: main.cpp general.h decision_tree gc_strings_and_files.oo gcpp_string.oo
-	$(CPP) $(CFLAGS) main.cpp decision_tree gc_strings_and_files gcpp_string -o desee
+desee: main.cpp general.h decision_tree.oo gc_strings_and_files.oo gcpp_string.oo
+	$(CPP) $(CFLAGS) main.cpp decision_tree.oo gc_strings_and_files.oo gcpp_string.oo -o desee
 
-decision_tree: decision_tree.cpp decision_tree.h
-	$(CPP) $(CFLAGS) decision_tree.cpp -c -o decision_tree
+decision_tree.oo: decision_tree.cpp decision_tree.h
+	$(CPP) $(CFLAGS) decision_tree.cpp -c -o decision_tree.oo
 
 gc_strings_and_files.oo: $(GC)/strings_and_files.c $(GC)/strings_and_files.h
 	$(CPP) $(CFLAGS) $(GC)/strings_and_files.c -c -o gc_strings_and_files.oo

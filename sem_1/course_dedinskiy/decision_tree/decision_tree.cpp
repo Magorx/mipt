@@ -5,19 +5,19 @@
 //=============================================================================
 // Statement and Question =====================================================
 
-DecisionStatement::DecisionStatement(const String &statement_) {
+DecisionStatement::DecisionStatement(String *statement_) {
 	statement = statement_;
 }
 
 int DecisionStatement::state(char *end) {
-	statement.print();
+	statement->print();
 	printf("%s", end);
 	return 0;
 }
 
-int DecisionQuestion::state() {
-	printf("Is it true that your object ");
-	DecisionStatement::state((char*) "?\n");
+int DecisionQuestion::state(char *end) {
+	//printf("Is it true that your object ");
+	DecisionStatement::state((char*) "?");
 
 	return 0;
 }
@@ -65,31 +65,48 @@ DecisionTree::DecisionTree() {
 }
 
 DecisionTreeNode *DecisionTree::read_node(File *file) {
+	printf("->\n");
 	const unsigned char *c = file->cc;
+	if (*c == SYMB_CLOSE_NODE || *c == SYMB_OPEN_NODE) {
+		++c;
+	}
 	Char_get_next_symb(&c);
+	printf("cur_c: [%c]\n", *c);
 	if (*c != SYMB_QUOTE) {
 		printf("Invalid input file\n");
 		return nullptr;
 	}
 
-	String node_statement;
-	c += node_statement.read(c);
+	if (*c != SYMB_QUOTE) {
+		printf("Invalid input file\n");
+		return nullptr;
+	}
+
+	++c;
+	String *node_statement = new String();
+	c += node_statement->read(c);
+	(*node_statement)[node_statement->length() - 1] = '\0';
+	printf("read: |");
+	node_statement->print();
+	printf("|\n");
 
 	Char_get_next_symb(&c);
 	file->cc = c;
+	printf("cur_c_now: [%c]\n", *c);
 
 	if (*c == SYMB_OPEN_NODE) {
-		DecisionQuestion question(node_statement);
-		DecisionTreeNode *node = new DecisionTreeNode(&question);
+		printf("question!\n");
+		DecisionQuestion *question = new DecisionQuestion(node_statement);
+		DecisionTreeNode *node = new DecisionTreeNode(question);
+
 		node->set_true (read_node(file));
 		node->set_false(read_node(file));
 
 		return node;
-	} else if (*c == SYMB_CLOSE_NODE) {
-		DecisionStatement statement(node_statement);
-		DecisionTreeNode *node = new DecisionTreeNode(&statement);
-
-		++file->cc;
+	} else if (*c == SYMB_CLOSE_NODE || *c == SYMB_QUOTE) {
+		printf("statement!\n");
+		DecisionStatement *statement = new DecisionStatement(node_statement);
+		DecisionTreeNode *node = new DecisionTreeNode(statement);
 
 		return node;
 	} else {
@@ -110,4 +127,32 @@ int DecisionTree::load(const char *file_name) {
 
 int DecisionTree::save(const char *file_name) {
 
+}
+
+void DecisionTree::dump(DecisionTreeNode *node, int depth, int to_format_cnt, int maxlen) {
+	if (!node) {return;}
+
+	dump(node->node_true, depth + 1, to_format_cnt + 1, maxlen);
+
+	for (int i = 0; i < depth; ++i) {
+		for (int j = 0; j < maxlen; ++j) {
+			printf(" ");
+		}
+		if (depth - to_format_cnt- 1 <= i) {
+			printf("|");
+		} else {
+			printf(" ");
+		}
+	}
+
+	node->state();
+	for (int i = 0; i < maxlen - ((DecisionStatement*)(node->statement))->statement->length() - (node->node_true != nullptr); ++i) {
+		printf(" ");
+	}
+	printf(" |\n");
+	dump(node->node_false, depth + 1, to_format_cnt + 1, maxlen);
+}
+
+void DecisionTree::dump() {
+	dump(root, 0, 0, 10);
 }
