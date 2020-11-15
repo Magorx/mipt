@@ -403,27 +403,52 @@ Vector<char> *DecisionTree::find_definition_way(const String &definition) {
 	return buffer;
 }
 
-void DecisionTree::print_definition_by_way(const Vector<char> &way, const int max_depth) const {
+void DecisionTree::print_prefixed_statement(const String &statement, const bool truth) const {
+	if (!statement.length()) {
+		return;
+	}
+
+	if (truth) {
+		statement.print();
+		return;
+	}
+
+	if (statement[0] == 'i') {
+		printf("isn't ");
+		statement.print(stdout, 3);
+	} else {
+		printf("doesn't ");
+		statement.print(stdout, 5);
+	}
+}
+
+void DecisionTree::print_definition_by_way(const Vector<char> &way, const int min_depth, const int max_depth) const {
 	DecisionTreeNode *node = root;
 
 	size_t way_size = way.size();
-	for (size_t i = 0; !((i >= way_size - 1) || (max_depth >= 0 && (int) i < max_depth)); ++i) {
-		if (way[i] == 0) {
-			printf("Not ");
-			node->get_statement().print();
+	int definitions_printed = 0;
+	for (size_t i = 0; i < way_size - 1; ++i) {
+		if ((int) i >= min_depth && (max_depth < 0 || (int) i < max_depth)) {
+			++definitions_printed;
+			print_prefixed_statement(node->get_statement(), way[i]);
 			printf(", ");
-			node = node->get_node_false();
-		} else {
-			node->get_statement().print();
-			printf(", ");
+		}
+
+		if (way[i]) {
 			node = node->get_node_true();
+		} else {
+			node = node->get_node_false();
 		}
 	}
 
-	node->get_statement().print();
+	if (max_depth < 0) {
+		print_prefixed_statement(node->get_statement(), way[way_size - 1]);
+	} else {
+		print_prefixed_statement(node->get_statement(), way[max_depth]);
+	}
 }
 
-int DecisionTree::run_define(const String &definition) {
+int DecisionTree::print_definition(const String &definition) {
 	Vector<char> *way = find_definition_way(definition);
 	if (way->size() == 0) {
 		printf("I don't know what [");
@@ -435,19 +460,87 @@ int DecisionTree::run_define(const String &definition) {
 	definition.print();
 	printf(" ");
 	print_definition_by_way(*way);
-	printf("\n");
 
 	delete way;
 	return 0;
 }
 
 int DecisionTree::run_define() {
-	printf("What object do you want me to define?\n");
+	printf("What object do you want me to define?\n> ");
 	char str[MAX_STATEMENT_LEN];
 	scanf("%[^\n]%*c", str);
 	String defenition(str);
 
-	run_define(defenition);
+	print_definition(defenition);
+	printf("\n");
+
+	return 0;
+}
+
+int DecisionTree::run_difference() {
+	printf("What object do you want me to compare?\n> ");
+	char c_first[MAX_STATEMENT_LEN];
+	scanf("%[^\n]%*c", c_first);
+	String first(c_first);
+
+	printf("What should I compare it with?\n> ");
+	char c_second[MAX_STATEMENT_LEN];
+	scanf("%[^\n]%*c", c_second);
+	String second(c_second);
+
+	printf("\n");
+
+	if (first == second) {
+		printf("They are just the same, pathetic human...\n");
+		return 0;
+	}
+
+	Vector<char> *way_first  = find_definition_way(first );
+	Vector<char> *way_second = find_definition_way(second);
+
+	if (!way_first->size()) {
+		printf("Oh, I don't know what ");
+		first.print();
+		printf(" is\n");
+		return 0;
+	}
+
+	if (!way_second->size()) {
+		printf("Oh, I don't know what ");
+		second.print();
+		printf(" is\n");
+		return 0;
+	}
+
+	int common_part = 0;
+	for (; common_part < (int) way_first ->size()  && 
+		   common_part < (int) way_second->size() &&
+		   (*way_first)[common_part] == (*way_second)[common_part]; ++common_part);
+	if (common_part == 0) {
+		printf("They are so different...\n");
+	} else {
+		first.print();
+		printf(" ");
+		print_definition_by_way(*way_first, 0, common_part + 1);
+		printf(" and so is ");
+		second.print();
+
+		printf("\n\n~~But~~\n");
+	}
+
+	first.print();
+	printf(" ");
+	print_definition_by_way(*way_first, common_part);
+
+	printf("\nWhile\n");
+
+	second.print();
+	printf(" ");
+	print_definition_by_way(*way_second, common_part);
+	printf("\n~~~~~~~\n");
+
+	delete way_first;
+	delete way_second;
 
 	return 0;
 }

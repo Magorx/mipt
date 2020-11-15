@@ -93,7 +93,7 @@ const char SYMB_OPEN_NODE  = '[';
 const char SYMB_CLOSE_NODE = ']';
 const char SYMB_QUOTE      = '"';
 
-const int MAX_STATEMENT_LEN = 10;
+const int MAX_STATEMENT_LEN = 50;
 
 enum GUESS_GAME_OUTCOMES {
 	GUESS     = 2,
@@ -116,10 +116,11 @@ private:
 
 	void dump(DecisionTreeNode *node, int depth, int to_format_cnt, int maxlen, FILE *file_ptr) const;
 
-	int run_define(const String &defenition);
+	int print_definition(const String &defenition);
 	int run_new_node_generation(DecisionTreeNode *cur_node, DecisionTreeNode* prev_node, const int prev_ans);
 
-	void print_definition_by_way(const Vector<char> &way, const int max_depth = -1) const;
+	void print_prefixed_statement(const String &statement, const bool truth) const;
+	void print_definition_by_way(const Vector<char> &way, const int min_depth = 0, const int max_depth = -1) const;
 
 	DecisionTreeNode *merge_node(DecisionTreeNode *fisrt, DecisionTreeNode *second);
 
@@ -133,7 +134,7 @@ public:
 
 	int run_guess();
 	int run_define();
-	int run_difference(const String &first, const String &second);
+	int run_difference();
 
 	int run_interaction();
 
