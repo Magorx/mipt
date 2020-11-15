@@ -15,6 +15,7 @@ int main() {
 	tree.load("db.db");
 
 	tree.run_interaction();
-	//tree.save("db_out.db");
+	tree.save("db.db");
+
 	return 0;
 }

@@ -9,18 +9,34 @@
             "ALIVE - IS_PHYSTECH - NOT_IS_STUDENT === PROFESSOR"
         ]
 
-        "is selling you something" [
-            "does say 'thank you' after every purchase" [
+        "is selling you something"
+        [
+            "does say 'thank you' after every purchase"
+            [
                 "Alisher"
+
                 "Canteen saleswoman"
             ]
 
-            "does look for you in the shower" [
+            "does look for you in the shower"
+            [
                 "Tetya Zoya"
 
-                "is the most known livving creature in MIPT" [
-                    "Poltorashka"
-                    "Sobaken#443"
+                "does want to steal your food"
+                [
+                    "is already fried and eaten"
+                    [
+                        "A rat"
+
+                        "A cockroach"
+                    ]
+
+                    "is the most known livving creature in MIPT"
+                    [
+                        "Poltorashka"
+
+                        "Sobaken#443"
+                    ]
                 ]
             ]
         ]

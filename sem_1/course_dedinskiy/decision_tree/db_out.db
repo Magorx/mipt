@@ -9,21 +9,7 @@
             "ALIVE - IS_PHYSTECH - NOT_IS_STUDENT === PROFESSOR"
         ]
 
-        "does sell something" [
-            "does say 'thank you' after every purchase" [
-                "Alisher"
-                "Canteen saleswoman"
-            ]
-
-            "does look for you in the shower" [
-                "Tetya Zoya"
-
-                "is the most known living cat in MIPT" [
-                    "Poltorashka"
-                    "Sobaken#443"
-                ]
-            ]
-        ]
+        "NOT A PHYSTECH BUT ALIVE AND LIVES IN PHYSTECH"
     ]
 
     "is a building"
@@ -42,13 +28,13 @@
                 "NOT_IS_ALIVE - IS_A_BUILDING - IS_A_DORMITORY - NOT_IS_INHABITED_BY_A_CAT === OTHER DORMITORIES"
             ]
 
-            "is place of unknown things and events"
+            "something unknown happens here"
             [
-                "does have some biologists inside"
+                "biologists work here"
                 [
                     "Phystech.BIO"
 
-                    "is occupied by RTshniki"
+                    "RTshniki study here"
                     [
                         "Microelectronics Building"
 
@@ -56,11 +42,11 @@
                     ]
                 ]
 
-                "does have library inside"
+                "library is here"
                 [
                     "the main building"
 
-                    "is mainly known for canteen"
+                    "you can eat here"
                     [
                         "suicide"
                         [
@@ -73,11 +59,11 @@
                         [
                             "Laboratory Building"
 
-                            "does allow you to sTudI EaNgLiSh"
+                            "you speak EaNgLiSh"
                             [
                                 "Phystech.Kvant"
 
-                                "is inhabited by physicians"
+                                "is physician here"
                                 [
                                     "Hospital"
 
@@ -94,13 +80,13 @@
         [
             "=== SPORT_COURTS (VOLLEYBALL, FOOTBALL, ETC.)"
 
-            "does shock you"
+            "shocks you"
             [
                 "Mathematical logic course with Evgeniy Dashkov"
 
                 "is associated with night-time debugging"
                 [
-                    "does have a chance of grading you with 16"
+                    "can be graded 16"
                     [
                         "Introduction to data structures course with Ilya Dedinsky"
 
