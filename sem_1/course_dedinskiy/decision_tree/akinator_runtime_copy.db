@@ -9,7 +9,37 @@
             "ALIVE - IS_PHYSTECH - NOT_IS_STUDENT === PROFESSOR"
         ]
 
-        "NOT A PHYSTECH BUT ALIVE AND LIVES IN PHYSTECH"
+        "is selling you something"
+        [
+            "does say 'thank you' after every purchase"
+            [
+                "Alisher"
+
+                "Canteen saleswoman"
+            ]
+
+            "does look for you in the shower"
+            [
+                "Tetya Zoya"
+
+                "does want to steal your food"
+                [
+                    "is already fried and eaten"
+                    [
+                        "A rat"
+
+                        "A cockroach"
+                    ]
+
+                    "is the most known livving creature in MIPT"
+                    [
+                        "Poltorashka"
+
+                        "Sobaken#443"
+                    ]
+                ]
+            ]
+        ]
     ]
 
     "is a building"
@@ -28,13 +58,13 @@
                 "NOT_IS_ALIVE - IS_A_BUILDING - IS_A_DORMITORY - NOT_IS_INHABITED_BY_A_CAT === OTHER DORMITORIES"
             ]
 
-            "something unknown happens here"
+            "is place of unknown things and events"
             [
-                "biologists work here"
+                "does have some biologists inside"
                 [
                     "Phystech.BIO"
 
-                    "RTshniki study here"
+                    "is occupied by RTshniki"
                     [
                         "Microelectronics Building"
 
@@ -42,11 +72,11 @@
                     ]
                 ]
 
-                "library is here"
+                "does have library inside"
                 [
                     "the main building"
 
-                    "you can eat here"
+                    "is mainly known for canteen"
                     [
                         "suicide"
                         [
@@ -59,11 +89,11 @@
                         [
                             "Laboratory Building"
 
-                            "you speak EaNgLiSh"
+                            "does allow you to sTudI EaNgLiSh"
                             [
                                 "Phystech.Kvant"
 
-                                "is physician here"
+                                "is inhabited by physicians"
                                 [
                                     "Hospital"
 
@@ -80,13 +110,13 @@
         [
             "=== SPORT_COURTS (VOLLEYBALL, FOOTBALL, ETC.)"
 
-            "shocks you"
+            "does shock you"
             [
                 "Mathematical logic course with Evgeniy Dashkov"
 
                 "is associated with night-time debugging"
                 [
-                    "can be graded 16"
+                    "does have a chance of grading you with 16"
                     [
                         "Introduction to data structures course with Ilya Dedinsky"
 

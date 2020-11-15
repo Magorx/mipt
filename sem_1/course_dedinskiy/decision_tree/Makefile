@@ -4,7 +4,7 @@ ifndef VERBOSE
 .SILENT:
 endif
 
-CUR_PROG = desee
+CUR_PROG = detree
 
 GENERAL_PREFIX = general
 GC = $(GENERAL_PREFIX)/general_c
@@ -17,19 +17,16 @@ WARNINGS = -Wall -Wextra -Wno-multichar
 STANDARD =  
 CFLAGS = $(STANDARD) $(WARNINGS) -lm
 
-all: desee
+all: detree
 
-desee: main.cpp general.h decision_tree.oo gc_strings_and_files.oo
-	$(CPP) $(CFLAGS) main.cpp decision_tree.oo gc_strings_and_files.oo -o desee
+detree: main.cpp general.h decision_tree.o gc_strings_and_files.o
+	$(CPP) $(CFLAGS) main.cpp decision_tree.o gc_strings_and_files.o -o detree
 
-decision_tree.oo: decision_tree.cpp decision_tree.h $(GCPP)/vector.h $(GCPP)/string.h
-	$(CPP) $(CFLAGS) decision_tree.cpp -c -o decision_tree.oo
+decision_tree.o: decision_tree.cpp decision_tree.h $(GCPP)/vector.h $(GCPP)/string.h
+	$(CPP) $(CFLAGS) decision_tree.cpp -c -o decision_tree.o
 
-gc_strings_and_files.oo: $(GC)/strings_and_files.c $(GC)/strings_and_files.h
-	$(CPP) $(CFLAGS) $(GC)/strings_and_files.c -c -o gc_strings_and_files.oo
-
-gcpp_string.oo: $(GCPP)/string.cpp $(GCPP)/string.h
-	$(CPP) $(CFLAGS) $(GCPP)/string.cpp -c -o gcpp_string.oo
+gc_strings_and_files.o: $(GC)/strings_and_files.c $(GC)/strings_and_files.h
+	$(CPP) $(CFLAGS) $(GC)/strings_and_files.c -c -o gc_strings_and_files.o
 
 run: all
 	./$(CUR_PROG)
