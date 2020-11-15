@@ -444,7 +444,7 @@ void DecisionTree::print_definition_by_way(const Vector<char> &way, const int mi
 	if (max_depth < 0) {
 		print_prefixed_statement(node->get_statement(), way[way_size - 1]);
 	} else {
-		print_prefixed_statement(node->get_statement(), way[max_depth]);
+		print_prefixed_statement(node->get_statement(), way[std::min((int) way_size - 1, max_depth)]);
 	}
 }
 
@@ -471,6 +471,7 @@ int DecisionTree::run_define() {
 	scanf("%[^\n]%*c", str);
 	String defenition(str);
 
+	printf("\n");
 	print_definition(defenition);
 	printf("\n");
 
@@ -541,6 +542,55 @@ int DecisionTree::run_difference() {
 
 	delete way_first;
 	delete way_second;
+
+	return 0;
+}
+
+int DecisionTree::run_interaction() {
+	printf("[ ] ~ Which mode of Ultra-De-Tree you want to use?\n");
+	printf("[1] - play a guessing game\n");
+	printf("[2] - get a definition of an object\n");
+	printf("[3] - get a difference between two objects\n");
+	printf("[4] - merge 'db1.db' with 'db2.db' into 'db_out.db'\n");
+	printf("> ");
+
+	int answer = 0;
+	int cnt = 0;
+	scanf("%d", &answer);
+	while (!(answer >= 1 && answer <= 4)) {
+		++cnt;
+		printf("Ha-ha, very funny, try again\n");
+		if (cnt > 10) {
+			printf("I'll keep you here forever...\n");
+		}
+		printf("> ");
+		scanf("%d", &answer);
+	}
+	printf("\n");
+
+	switch (answer) {
+		case 1:
+			run_guess();
+			break;
+		case 2:
+			getchar();
+			run_define();
+			break;
+		case 3:
+			getchar();
+			run_difference();
+			break;
+		case 4:
+			DecisionTree first, second;
+			first.load("db1.db");
+			second.load("db2.db");
+
+			first.merge(second);
+
+			first.save("db_out.db");
+			printf(".doned.\n");
+			break;
+	}
 
 	return 0;
 }

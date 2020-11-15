@@ -14,7 +14,7 @@ int main() {
 	DecisionTree tree;
 	tree.load("db.db");
 
-	tree.run_difference();
+	tree.run_interaction();
 	//tree.save("db_out.db");
 	return 0;
 }

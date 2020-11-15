@@ -1,35 +1,124 @@
-"is a lie"
+"is alive"
 [
-    "it is finite"
+    "is phystech"
     [
-        "life"
-
-        "cake"
-    ]
-
-    "can explain everything"
-    [
-        "adores catties"
+        "is a student"
         [
-            "curly hair"
-            [
-                "Alex Dremov"
+            "ALIVE - IS_PHYSTECH - IS_STUDENT === STUDENTS (BY GROUPS IF YOU ARE NOT LAZY)"
 
-                "Ded32_t"
-            ]
-
-            "Redkozubov"
+            "ALIVE - IS_PHYSTECH - NOT_IS_STUDENT === PROFESSOR"
         ]
 
-        "is an apple"
+        "does sell something" [
+            "does say 'thank you' after every purchase" [
+                "Alisher"
+                "Canteen saleswoman"
+            ]
+
+            "does look for you in the shower" [
+                "Tetya Zoya"
+
+                "is the most known living cat in MIPT" [
+                    "Poltorashka"
+                    "Sobaken#443"
+                ]
+            ]
+        ]
+    ]
+
+    "is a building"
+    [
+        "is a dormitory"
         [
-            "Apple"
-
-            "Has well-known father"
+            "is inhabited by a cat"
             [
-                "Petrovich"
+                "is visited by Ded"
+                [
+                    "1ka"
 
-                "Doge"
+                    "6ka"
+                ]
+
+                "NOT_IS_ALIVE - IS_A_BUILDING - IS_A_DORMITORY - NOT_IS_INHABITED_BY_A_CAT === OTHER DORMITORIES"
+            ]
+
+            "is place of unknown things and events"
+            [
+                "does have some biologists inside"
+                [
+                    "Phystech.BIO"
+
+                    "is occupied by RTshniki"
+                    [
+                        "Microelectronics Building"
+
+                        "Digit"
+                    ]
+                ]
+
+                "does have library inside"
+                [
+                    "the main building"
+
+                    "is mainly known for canteen"
+                    [
+                        "suicide"
+                        [
+                            "KPM"
+
+                            "KSP"
+                        ]
+
+                        "is one of the oldest buildings"
+                        [
+                            "Laboratory Building"
+
+                            "does allow you to sTudI EaNgLiSh"
+                            [
+                                "Phystech.Kvant"
+
+                                "is inhabited by physicians"
+                                [
+                                    "Hospital"
+
+                                    "Arctic"
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+
+        "is a sport court"
+        [
+            "=== SPORT_COURTS (VOLLEYBALL, FOOTBALL, ETC.)"
+
+            "does shock you"
+            [
+                "Mathematical logic course with Evgeniy Dashkov"
+
+                "is associated with night-time debugging"
+                [
+                    "does have a chance of grading you with 16"
+                    [
+                        "Introduction to data structures course with Ilya Dedinsky"
+
+                        "Introduction to programming course with Sergey Babichev"
+                    ]
+
+                    "is fascinating to listen"
+                    [
+                        "Mathematical Analysis course with Vadim Redkozubov"
+
+                        "is dirty"
+                        [
+                            "seedbed"
+
+                            "Analytical geometry course with Anna Petrovich"
+                        ]
+                    ]
+                ]
             ]
         ]
     ]
