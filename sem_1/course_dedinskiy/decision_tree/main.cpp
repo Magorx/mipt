@@ -13,6 +13,7 @@ int main() {
 
 	DecisionTree tree;
 	tree.load("db.db");
+	tree.save("db_out.db");
 
 	tree.run_guess();
 	tree.save("db_out.db");
