@@ -23,13 +23,13 @@ void DecisionStatement::dump(FILE *file_ptr) const {
 	statement->print(file_ptr);
 }
 
-String *DecisionStatement::get_statement() const {
-	return statement;
+String &DecisionStatement::get_statement() const {
+	return *statement;
 }
 
 
 bool DecisionStatement::operator==(const DecisionStatement &other) const {
-	return *statement == *other.get_statement();
+	return *statement == other.get_statement();
 }
 
 int answer_is_yes(char *answer) {
@@ -88,16 +88,16 @@ void DecisionTreeNode::set_false(DecisionTreeNode* node) {
 	node_false = node;
 }
 
-DecisionTreeNode* DecisionTreeNode::get_node_true() const {
+DecisionTreeNode *DecisionTreeNode::get_node_true() const {
 	return node_true;
 }
 
-DecisionTreeNode* DecisionTreeNode::get_node_false() const {
+DecisionTreeNode *DecisionTreeNode::get_node_false() const {
 	return node_false;
 }
 
-AbstractDecisionStatement* DecisionTreeNode::get_statement() const {
-	return statement;
+String &DecisionTreeNode::get_statement() const {
+	return (dynamic_cast<const DecisionStatement*>(statement))->get_statement();
 }
 
 DecisionTreeNode *DecisionTreeNode::proceed(const int answer) {
@@ -284,14 +284,14 @@ void DecisionTree::dump(FILE *file_ptr) const {
 
 DecisionTreeNode* DecisionTree::merge_node(DecisionTreeNode *first, DecisionTreeNode *second) {
 	if (first->is_question() && second->is_question()) {
-		if (*(dynamic_cast<const DecisionStatement*>(first->get_statement())) == *(dynamic_cast<const DecisionStatement*>(second->get_statement()))) {
+		if (first->get_statement() == second->get_statement()) {
 			first->set_true (merge_node(first->get_node_true (), second->get_node_true ()));
 			first->set_false(merge_node(first->get_node_false(), second->get_node_false()));
 		} else {
 			printf("[");
-			((DecisionStatement*) first->get_statement())->get_statement()->print();
+			first->get_statement().print();
 			printf("] vs [");
-			((DecisionStatement*) second->get_statement())->get_statement()->print();
+			second->get_statement().print();
 			printf("]\n");
 			printf("Merge error, aborting...\n");
 			exit(0);
@@ -369,6 +369,85 @@ int DecisionTree::run_guess() {
 	} else {
 		run_new_node_generation(cur_node, prev_node, prev_ans);
 	}
+
+	return 0;
+}
+
+bool DecisionTree::node_find_definition_way(const String &definition, const DecisionTreeNode *cur_node, Vector<char> *buffer) {
+	if (cur_node->is_question()) {
+		buffer->push_back(1);
+		if (node_find_definition_way(definition, cur_node->get_node_true(), buffer)) {
+			return buffer;
+		} else {
+			buffer->pop_back();
+		}
+
+		buffer->push_back(0);
+		if (node_find_definition_way(definition, cur_node->get_node_false(), buffer)) {
+			return buffer;
+		} else {
+			buffer->pop_back();
+		}
+	} else {
+		if (cur_node->get_statement() == definition) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+Vector<char> *DecisionTree::find_definition_way(const String &definition) {
+	Vector<char> *buffer = new Vector<char>();
+	node_find_definition_way(definition, root, buffer);
+	return buffer;
+}
+
+void DecisionTree::print_definition_by_way(const Vector<char> &way, const int max_depth) const {
+	DecisionTreeNode *node = root;
+
+	size_t way_size = way.size();
+	for (size_t i = 0; !((i >= way_size - 1) || (max_depth >= 0 && (int) i < max_depth)); ++i) {
+		if (way[i] == 0) {
+			printf("Not ");
+			node->get_statement().print();
+			printf(", ");
+			node = node->get_node_false();
+		} else {
+			node->get_statement().print();
+			printf(", ");
+			node = node->get_node_true();
+		}
+	}
+
+	node->get_statement().print();
+}
+
+int DecisionTree::run_define(const String &definition) {
+	Vector<char> *way = find_definition_way(definition);
+	if (way->size() == 0) {
+		printf("I don't know what [");
+		definition.print();
+		printf("] is!\n");
+		return 0;
+	}
+
+	definition.print();
+	printf(" ");
+	print_definition_by_way(*way);
+	printf("\n");
+
+	delete way;
+	return 0;
+}
+
+int DecisionTree::run_define() {
+	printf("What object do you want me to define?\n");
+	char str[MAX_STATEMENT_LEN];
+	scanf("%[^\n]%*c", str);
+	String defenition(str);
+
+	run_define(defenition);
 
 	return 0;
 }

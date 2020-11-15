@@ -1,5 +1,6 @@
 #include "decision_tree.h"
 #include <cstdio>
+#include "general/general_cpp/vector.h"
 
 int main() {
 	/* merge 
@@ -13,10 +14,9 @@ int main() {
 
 	DecisionTree tree;
 	tree.load("db.db");
-	tree.save("db_out.db");
 
-	tree.run_guess();
-	tree.save("db_out.db");
+	tree.run_define();
+	//tree.save("db_out.db");
 
 	printf(".doned.\n");
 	return 0;

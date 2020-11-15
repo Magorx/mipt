@@ -3,6 +3,7 @@
 
 #include "general/general_c/strings_and_files.h"
 #include "general/general_cpp/string.h"
+#include "general/general_cpp/vector.h"
 
 //=============================================================================
 // Abstracts ==================================================================
@@ -31,7 +32,7 @@ public:
 	DecisionStatement(String *statement_);
 	int  state(char *end = (char*) "");
 	int  size();
-	String *get_statement() const;
+	String &get_statement() const;
 	bool operator==(const AbstractDecisionStatement &other) const;
 	bool operator==(const DecisionStatement &other) const;
 	void dump(FILE *file_ptr = nullptr) const;
@@ -75,7 +76,7 @@ public:
 
 	DecisionTreeNode *get_node_true () const;
 	DecisionTreeNode *get_node_false() const;
-	AbstractDecisionStatement *get_statement() const;
+	String &get_statement() const;
 
 	int statement_length();
 
@@ -110,13 +111,18 @@ private:
 	DecisionTreeNode* load_node(File *file_ptr);
 	int               save_node(const DecisionTreeNode* node, int depth, bool is_false_node, FILE *file_ptr);
 
-	DecisionTreeNode* find(const String &statement);
+	bool node_find_definition_way(const String &definition, const DecisionTreeNode *cur_node, Vector<char> *buffer);
+	Vector<char> *find_definition_way(const String &statement);
 
 	void dump(DecisionTreeNode *node, int depth, int to_format_cnt, int maxlen, FILE *file_ptr) const;
 
+	int run_define(const String &defenition);
 	int run_new_node_generation(DecisionTreeNode *cur_node, DecisionTreeNode* prev_node, const int prev_ans);
 
+	void print_definition_by_way(const Vector<char> &way, const int max_depth = -1) const;
+
 	DecisionTreeNode *merge_node(DecisionTreeNode *fisrt, DecisionTreeNode *second);
+
 public:
 	DecisionTree();
 
@@ -126,7 +132,7 @@ public:
 	DecisionTreeNode *get_root() const;
 
 	int run_guess();
-	int run_define(const String &statement);
+	int run_define();
 	int run_difference(const String &first, const String &second);
 
 	int run_interaction();

@@ -1,41 +1,36 @@
-"is alive"
+"is a lie"
 [
-    "is phystech"
+    "it is finite"
     [
-        "is a student"
-        [
-            "ALIVE - IS_PHYSTECH - IS_STUDENT === STUDENTS (BY GROUPS IF YOU ARE NOT LAZY)"
+        "life"
 
-            "ALIVE - IS_PHYSTECH - NOT_IS_STUDENT === PROFESSOR"
-        ]
-
-        "NOT A PHYSTECH BUT ALIVE AND LIVES IN PHYSTECH"
+        "cake"
     ]
 
-    "is a building"
+    "can explain everything"
     [
-        "is a dormitory"
+        "adores catties"
         [
-            "is inhabited by a cat"
+            "curly hair"
             [
-                "is visited by Ded"
-                [
-                    "1ka"
+                "Alex Dremov"
 
-                    "6ka"
-                ]
-
-                "NOT_IS_ALIVE - IS_A_BUILDING - IS_A_DORMITORY - NOT_IS_INHABITED_BY_A_CAT === OTHER DORMITORIES"
+                "Ded32_t"
             ]
 
-            "NOT A DORMITORY === KORPUSA, KSP, ETC."
+            "Redkozubov"
         ]
 
-        "is a sport court"
+        "is an apple"
         [
-            "=== SPORT_COURTS (VOLLEYBALL, FOOTBALL, ETC.)"
+            "Apple"
 
-            "=== SUBJECTS (MATAN, ETC.)"
+            "Has well-known father"
+            [
+                "Petrovich"
+
+                "Doge"
+            ]
         ]
     ]
 ]
