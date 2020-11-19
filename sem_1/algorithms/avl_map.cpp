@@ -1,26 +1,3 @@
-/*
-На вступительном контесте в пилотную группу по программированию Вашему другу предложили реализовать структуру данных для хранения множеств чисел. Так как он специализируется на истории литературы, данную структуру придётся реализовать Вам.
-
-Структура должна хранить m+1 множеств чисел от 0 до n, пронумерованных от 0 до m включительно, при этом одно число может принадлежать сразу нескольким множествам. Изначально все множества пустые.
-
-Вы должны реализовать следующие операции на этой структуре:
-
-ADD e s
-Добавить в множество №s (0≤s≤m) число e (0≤e≤n).
-
-DELETE e s
-Удалить из множества №s (0≤s≤m) число e (0≤e≤n). Гарантируется, что до этого число e было помещено в множество
-
-CLEAR s
-Очистить множество №s (0≤s≤m).
-
-LISTSET s
-Показать содержимое множества №s (0≤s≤m) в возрастающем порядке, либо −1, если множество пусто.
-
-LISTSETSOF e
-Показать множества, в которых лежит число e (0≤e≤n), либо −1, если этого числа нет ни в одном множестве.
-*/
-
 #include <cstdlib>
 #include <cstdio>
 #include <cassert>
@@ -806,87 +783,8 @@ public:
 	}
 };
 
-//=============================================================================
-// Будем хранить массив сетов для быстрого доступа к ним
-// И мапу из числа в сет указателей на сеты, в которых это число лежит
-
 int main() {
-	long long n, m, k;
-	scanf("%lld %lld", &n, &m);
-	scanf("%lld", &k);
-	++m;
-	AVLTree<AVLTree<long long>*> to_delete;
-	AVLMap<long long, AVLTree<long long>*> num_to_set;    // [n] -> [sets containing n]
-	AVLTree<long long> *sets = new AVLTree<long long>[m]; // sets[i] - set of index i
-
-	char str[20] = {};
-    for (int i = 0; i < k; ++i) {
-    	scanf("%15s", str);
-        if (       strcmp(str, "ADD") == 0 || str[0] == 'a') {
-        	long long x = 0;
-        	long long s = 0;
-        	scanf("%lld %lld", &x, &s);
-
-            sets[s].insert(x);
-            if (!num_to_set.find(x)) {
-            	AVLTree<long long> *new_set = new AVLTree<long long>;
-            	to_delete.insert(new_set);
-            	num_to_set.insert(x, new_set);
-            }
-            num_to_set.get(x)->insert(s);
-        } else if (strcmp(str, "DELETE") == 0 || str[0] == 'd') {
-        	long long x = 0;
-        	long long s = 0;
-        	scanf("%lld %lld", &x, &s);
-
-            sets[s].erase(x);
-            num_to_set.get(x)->erase(s);
-        } else if (strcmp(str, "CLEAR") == 0) {
-        	long long s = 0;
-        	scanf("%lld", &s);
-
-        	while (!sets[s].empty()) {
-        		long long x = sets[s].min();
-        		num_to_set.get(x)->erase(s);
-        		sets[s].erase(x);
-        	}
-        } else if (strcmp(str, "LISTSET") == 0) {
-        	long long s = 0;
-        	scanf("%lld", &s);
-
-        	if (sets[s].empty()) {
-        		printf("-1\n");
-        	} else {
-        		sets[s].space_dump();
-        		printf("\n");
-        	}
-        } else if(strcmp(str, "LISTSETSOF") == 0) {
-        	long long x = 0;
-        	scanf("%lld", &x);
-
-        	if (num_to_set.find(x)) {
-        		AVLTree<long long> *tree = num_to_set.get(x);
-        		if (tree->empty()) {
-        			printf("-1\n");
-        		} else {
-        			tree->space_dump();
-        			printf("\n");
-        		}
-        	} else {
-        		printf("-1\n");
-        	}
-        }
-    }
-
-    while (!to_delete.empty()) {
-    	AVLTree<long long> *tree = to_delete.min();
-    	to_delete.erase(tree);
-    	delete tree;
-    }
-
-	delete[] sets;
+	AVLMap<long long, char*> map_tree;
 
 	return 0;
 }
-
-// AVL-дерево даровало нам свой логарифм для O(klogk)
