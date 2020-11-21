@@ -1,0 +1,49 @@
+#ifndef CLASSNAME
+#define CLASSNAME
+
+//=============================================================================
+// ClassName ==================================================================
+
+class ClassName {
+private:
+// data =======================================================================
+
+//=============================================================================
+
+
+public:
+	ClassName():
+	{}
+
+	~ClassName() {}
+
+	void ctor() {
+
+	}
+
+	static ClassName *NEW() {
+		ClassName *cake = calloc(1, sizeof(ClassName));
+		if (!cake) {
+			return nullptr;
+		}
+
+		cake->ctor();
+		return cake;
+	}
+
+	void dtor() {
+
+	}
+
+	static void DELETE(ClassName *classname) {
+		if (!classname) {
+			return;
+		}
+
+		classname->dtor();
+		free(classname);
+	}
+
+};
+
+#endif // CLASSNAME
