@@ -175,7 +175,7 @@ public:
 
 		if (node->P) {
 			node->P->update();
-			node->update();
+			node->update(); // can I remove it?
 		}
 
 		return node;
@@ -367,8 +367,8 @@ public:
         		return;
         	}
 
-        	SplayTree<long long> *right = split(key);
-        	SplayTreeNode<long long> *node = new SplayTreeNode(key);
+        	SplayTree<T_KEY> *right = split(key);
+        	SplayTreeNode<T_KEY> *node = new SplayTreeNode(key);
 
         	node->L = get_root();
         	node->R = right->get_root();

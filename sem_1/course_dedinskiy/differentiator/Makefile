@@ -1,4 +1,4 @@
-CUR_PROG = general
+CUR_PROG = differ
 
 ifndef VERBOSE
 .SILENT:
@@ -11,19 +11,10 @@ WARNINGS = -Wall -Wno-multichar
 STANDARD =  
 CFLAGS = $(STANDARD) $(WARNINGS) -lm
 
-all: main_c main_cpp
+all: differ
 
-c: main_c
-
-cpp: main_cpp
-
-main_c: main.c general_c.h
-	$(CC) $(CFLAGS) main.c -o out
-	./out
-
-main_cpp: main.cpp general_cpp.h
-	$(CPP) $(CFLAGS) main.cpp -o out
-	./out
+differ: main.cpp expression_tree.h
+	$(CPP) $(CFLAGS) main.cpp -o differ
 
 run: all
 	./$(CUR_PROG)
