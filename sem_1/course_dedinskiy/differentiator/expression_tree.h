@@ -5,6 +5,7 @@
 #include "general/c/strings_and_files.h"
 
 #include <cctype>
+#include <cmath>
 
 template <typename T>
 const T &min(const T &first, const T &second) {
@@ -25,13 +26,18 @@ enum EXPRNODE_TYPES {
 enum PRIORITIES {
 	PRIOR_MAX   = 999,
 	PRIOR_MIN   = 0,
-	PRIOR_VALUE = 10,
+	PRIOR_VALUE = 15,
 
 	PRIOR_ADD  = 5,
 	PRIOR_SUB  = 5,
 	PRIOR_MUL  = 7,
 	PRIOR_DIV  = 7,
-}
+
+	PRIOR_POW  = 9,
+	PRIOR_SIN  = 15,
+	PRIOR_COS  = 15,
+	PRIOR_LOG  = 10,
+};
 
 //=============================================================================
 // ExprNode ===================================================================
@@ -54,35 +60,52 @@ private:
 //=============================================================================
 
 	double evaluate_operation(const double *var_table, const size_t var_table_len) {
-		VERIFY_T(L && R, double);
-
 		char operation = val;
 		switch (operation) {
 			case '+': {
-				return L->evaluate() + R->evaluate();
+				VERIFY_T(L && R, double);
+				return L->evaluate(var_table, var_table_len) + R->evaluate(var_table, var_table_len);
 			}
 
 			case '-': {
-				return L->evaluate() - R->evaluate();;
+				VERIFY_T(L && R, double);
+				return L->evaluate(var_table, var_table_len) - R->evaluate(var_table, var_table_len);;
 			}
 
 			case '*': {
-				return L->evaluate() * R->evaluate();;
+				VERIFY_T(L && R, double);
+				return L->evaluate(var_table, var_table_len) * R->evaluate(var_table, var_table_len);;
 			}
 
 			case '/': {
-				return L->evaluate() / R->evaluate();;
+				VERIFY_T(L && R, double);
+				return L->evaluate(var_table, var_table_len) / R->evaluate(var_table, var_table_len);;
+			}
+
+			case '^': {
+				VERIFY_T(L && R, double);
+				return pow(L->evaluate(var_table, var_table_len), R->evaluate(var_table, var_table_len));
+			}
+
+			case 's': {
+				VERIFY_T(!L && R, double);
+				return sin(R->evaluate(var_table, var_table_len));
+			}
+
+			case 'c': {
+				VERIFY_T(!L && R, double);
+				return cos(R->evaluate(var_table, var_table_len));
 			}
 
 			default: {
-				VERIFY_T("INCORRECT_OPERATION" == OK, double);
+				RETURN_ERROR_VERIFY_T("BAD_OPERATION", double);
 				return 0;
 			}
 		}
 	}
 
 	double evaluate_variable(const double *var_table, const size_t var_table_len) {
-		char var = value;
+		int var = val;
 		if (var_table_len <= (size_t) var) {
 			return (double) KCTF_POISON;
 		} else  {
@@ -122,7 +145,7 @@ public:
 	}
 
 	static ExprNode *NEW() {
-		ExprNode *cake = calloc(1, sizeof(ExprNode));
+		ExprNode *cake = (ExprNode*) calloc(1, sizeof(ExprNode));
 		if (!cake) {
 			return nullptr;
 		}
@@ -148,12 +171,12 @@ public:
 	}
 
 	static ExprNode *NEW(const char type_, const double val_, const int prior_ = PRIOR_VALUE, ExprNode *L_ = nullptr, ExprNode *R_ = nullptr) {
-		ExprNode *cake = calloc(1, sizeof(ExprNode));
+		ExprNode *cake = (ExprNode*) calloc(1, sizeof(ExprNode));
 		if (!cake) {
 			return nullptr;
 		}
 
-		cake->ctor(type_, val_, L_, R_);
+		cake->ctor(type_, val_, prior_, L_, R_);
 		return cake;
 	}
 
@@ -178,8 +201,8 @@ public:
 		}
 
 		if (recursive) {
-			DELETE(L, recursive);
-			DELETE(R, recursive);
+			DELETE(exprnode->L, recursive);
+			DELETE(exprnode->R, recursive);
 		}
 
 		exprnode->dtor();
@@ -187,12 +210,32 @@ public:
 	}
 
 //=============================================================================
+// get-set ====================================================================
+//=============================================================================
+
+	ExprNode *get_L() const {
+		return L;
+	}
+
+	ExprNode *get_R() const {
+		return R;
+	}
+
+	void set_L(ExprNode *L_) {
+		L = L_;
+		update();
+	}
+
+	void set_R(ExprNode *R_) {
+		R = R_;
+		update();
+	}
+
+//=============================================================================
 // Maths ======================================================================
 //=============================================================================
 
 	double evaluate(const double *var_table, const size_t var_table_len) {
-		double res = 0.0;
-
 		switch(type) {
 			case (OPERATION) : {
 				return evaluate_operation(var_table, var_table_len);
@@ -205,15 +248,30 @@ public:
 			case (VALUE) : {
 				return val;
 			}
+
+			default: {
+				printf("BAD EXPR\n");
+				return 0.0;
+			}
 		}
 	}
 
 //=============================================================================
 
+	void dump(FILE *file_ptr = stdout) const {
+		if (type == VALUE) {
+			fprintf(file_ptr, "%03lg", val);
+		} else {
+			fprintf(file_ptr, "{%c}", (char) val);
+		}
+	}
+
 };
 
-//=============================================================================
-// ExpressionTree =============================================================
+
+//=====================================================================================================================
+// ExpressionTree =====================================================================================================
+
 
 class ExpressionTree {
 private:
@@ -228,7 +286,7 @@ private:
 	void reading_ptr_proceed(char **buffer) {
 		Char_get_next_symb(buffer);
 		char *c = *buffer;
-		while (*c == ')') {
+		if (*c == ')') {
 			++c;
 			Char_get_next_symb(&c);
 		}
@@ -270,9 +328,8 @@ private:
 	ExprNode *load_node_operation(char **buffer) {
 		char operation = 0;
 		sscanf(*buffer, "%c", &operation);
-		++buffer;
+		++(*buffer);
 		reading_ptr_proceed(buffer);
-
 		switch (operation) {
 			case '+' : {
 				return ExprNode::NEW(OPERATION, operation, PRIOR_ADD);
@@ -290,6 +347,18 @@ private:
 				return ExprNode::NEW(OPERATION, operation, PRIOR_SUB);
 			}
 
+			case '^' : {
+				return ExprNode::NEW(OPERATION, operation, PRIOR_POW);
+			}
+
+			case 's' : {
+				return ExprNode::NEW(OPERATION, operation, PRIOR_SIN);
+			}
+
+			case 'c' : {
+				return ExprNode::NEW(OPERATION, operation, PRIOR_COS);
+			}
+
 			default: {
 				return nullptr;
 			}
@@ -297,7 +366,8 @@ private:
 	}
 
 	ExprNode *load_node(char **buffer) {
-		reading_ptr_proceed(buffer);
+		//printf("--> |%s|\n", *buffer);
+		Char_get_next_symb(buffer);
 
 		if (**buffer == ')') {
 			return nullptr;
@@ -306,19 +376,30 @@ private:
 		} else if ('a' <= **buffer && **buffer <= 'z') {
 			return load_node_variable(buffer);
 		} else { //===================================== definetly an operation
-			if (!(*c == '(')) {
+			if (!(**buffer == '(')) {
 				return nullptr; //ERROR
 			}
+			++(*buffer);
 
 			ExprNode *left_operand = load_node(buffer);
 
+			if (!(**buffer)) {
+				return left_operand;
+			}
+
+			if (**buffer == ')') {
+				++(*buffer);
+				Char_get_next_symb(buffer);
+				return left_operand;
+			}
+
 			ExprNode *node = load_node_operation(buffer);
-			if (!node) {return nullptr;} //ERROR
+			if (!node) {printf("fk\n");return nullptr;} //ERROR
 
 			ExprNode *right_operand = load_node(buffer);
 
-			node->L = left_operand;
-			node->R = right_operand;
+			node->set_L(left_operand);
+			node->set_R(right_operand);
 
 			return node;
 		}
@@ -326,9 +407,30 @@ private:
 
 //=============================================================================
 
+	void dump(ExprNode *node, int depth = 0, int to_format_cnt = 0, FILE *file_ptr = stdout) const {
+		if (!node) {return;}
+
+		dump(node->get_L(), depth + 1, to_format_cnt + 1, file_ptr);
+
+		for (int i = 0; i < depth; ++i) {
+			if (depth - to_format_cnt- 1 <= i) {
+				printf("     |");
+			} else {
+				printf("      ");
+			}
+		}
+
+		node->dump(file_ptr);
+		if (node->get_L() || node->get_R()) printf("->|");
+		printf("\n");
+
+		dump(node->get_R(), depth + 1, to_format_cnt + 1, file_ptr);
+	}
+
 
 public:
 	ExpressionTree():
+	root(0)
 	{}
 
 	~ExpressionTree() {}
@@ -338,7 +440,7 @@ public:
 	}
 
 	static ExpressionTree *NEW() {
-		ExpressionTree *cake = calloc(1, sizeof(ExpressionTree));
+		ExpressionTree *cake = (ExpressionTree*) calloc(1, sizeof(ExpressionTree));
 		if (!cake) {
 			return nullptr;
 		}
@@ -379,8 +481,8 @@ public:
 			printf("[ERR]<detree>: [file_name](%s) unexistance\n", file_name);
 		}
 
-		root = load_node(&file->cc);
-		db_file = file;
+		root = load_node((char**) &file->cc);
+		//db_file = file;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11!!!!!!!!!!!!!!!!!!!!!!!! DELETE FILE
 
 		return 0;
 	}
@@ -397,13 +499,21 @@ public:
 			return -1;
 		}
 
-		save_node(root, 0, false, file);
+		//save_node(root, 0, false, file);
 
 		fclose(file);
 		return 0;
 	}
 
 //=============================================================================
+
+	double evaluate(const double *var_table = nullptr, const size_t var_table_len = 0) {
+		return root ? root->evaluate(var_table, var_table_len) : 0.0;
+	}
+
+	void dump(FILE *file_ptr = stdout) const {
+		dump(root, 0, 0, file_ptr);
+	}
 
 };
 

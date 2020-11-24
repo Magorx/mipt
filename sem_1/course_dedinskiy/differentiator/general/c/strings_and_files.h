@@ -128,7 +128,8 @@ void swap_ptrs(void **first, void **second);
     \param[in] first,second prts to swap
     \return
 */
-void Char_get_next_symb(unsigned char **c);
+void UChar_get_next_symb(unsigned char **c);
+void Char_get_next_symb(char **c);
 
 char Char_in_string(const unsigned char c, const unsigned char *str);
 

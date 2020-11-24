@@ -30,11 +30,25 @@ void qqh_sort(void *input_arr, const size_t elem_cnt, const size_t elem_size, in
     }
 }
 
-void Char_get_next_symb(unsigned char **c) {
+void UChar_get_next_symb(unsigned char **c) {
     assert(c);
 
     unsigned char *cur_c = *c;
-    while(isspace(*cur_c) && *cur_c) {
+    assert(cur_c != NULL);
+
+    while(*cur_c && isspace(*cur_c)) {
+        ++cur_c;
+    }
+    *c = cur_c;
+}
+
+void Char_get_next_symb(char **c) {
+    assert(c);
+
+    char *cur_c = *c;
+    assert(cur_c != NULL);
+
+    while(*cur_c && isspace(*cur_c)) {
         ++cur_c;
     }
     *c = cur_c;
@@ -55,8 +69,8 @@ int compare_lines_letters(const void *elem1, const void *elem2) {
     unsigned char *second_c = ((**(Line* *)elem2).string);
 
     while (*first_c && *second_c) {
-        Char_get_next_symb(&first_c);
-        Char_get_next_symb(&second_c);
+        UChar_get_next_symb(&first_c);
+        UChar_get_next_symb(&second_c);
 
         if (*first_c != *second_c || (*first_c) * (*second_c) == 0) {
             return (int) *first_c - (int) *second_c;
@@ -66,8 +80,8 @@ int compare_lines_letters(const void *elem1, const void *elem2) {
         ++second_c;
     }
 
-    Char_get_next_symb(&first_c);
-    Char_get_next_symb(&second_c);
+    UChar_get_next_symb(&first_c);
+    UChar_get_next_symb(&second_c);
     return (int) *first_c - (int) *second_c;
 }
 

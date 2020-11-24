@@ -26,13 +26,13 @@ const int CHECK_ERROR = 1;
 #ifndef EXCLUDE_VERIFICATION
 #define FULL_VERIFY(expr, err_name, loudness, cur_loudness, droptable, ERROR, ret_type)  \
     do {                                                                                 \
-        int ret = (expr);                                                                \
+        const long long ret = (long long) (expr);                                        \
         if ((ERROR || !ret) && (loudness) >= (cur_loudness)) {                           \
             printf("[ERR]<assert>: [erro_erro](%s)\n", err_name);                        \
             if (ret == 0) {                                                              \
             printf("[   ]<      >: [erro_code](%X)\n", (unsigned)0xDED);                 \
             } else {                                                                     \
-            printf("[   ]<      >: [erro_code](%d)\n", ret);                             \
+            printf("[   ]<      >: [erro_code](%lld)\n", ret);                           \
             }                                                                            \
             printf("[   ]<      >: [file_name](%s)\n", __FILE__);                        \
             printf("[   ]<      >: [func_name](%s)\n", __FUNCTION__);                    \
@@ -56,7 +56,8 @@ const int CHECK_ERROR = 1;
 
 #define VERIFY_T(expr, type) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 1, 0, type)
 
-#define RETURN_ERROR_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 0, 1, int)
+#define RETURN_ERROR_VERIFY  (expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 0, 1, int)
+#define RETURN_ERROR_VERIFY_T(expr, type) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 0, 1, type)
 
 #ifdef VERIFY_BOMB
 #define RETURNING_VERIFY(expr) FULL_VERIFY(expr, #expr, KCTF_VERIFY_LOUDNESS, KCTF_VERIFY_LOUDNESS, 1, 0, int)

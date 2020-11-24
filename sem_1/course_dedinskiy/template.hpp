@@ -22,7 +22,7 @@ public:
 	}
 
 	static ClassName *NEW() {
-		ClassName *cake = calloc(1, sizeof(ClassName));
+		ClassName *cake = (ClassName*) calloc(1, sizeof(ClassName));
 		if (!cake) {
 			return nullptr;
 		}

@@ -4,17 +4,24 @@ ifndef VERBOSE
 .SILENT:
 endif
 
-CC  = gcc
+GENERAL_PREFIX = general
+GC = $(GENERAL_PREFIX)/c
+GCPP = $(GENERAL_PREFIX)/cpp
+
+CC = gcc
 CPP = g++
 
-WARNINGS = -Wall -Wno-multichar
+WARNINGS = -Wall -Wextra -Wno-multichar
 STANDARD =  
 CFLAGS = $(STANDARD) $(WARNINGS) -lm
 
 all: differ
 
-differ: main.cpp expression_tree.h
-	$(CPP) $(CFLAGS) main.cpp -o differ
+differ: main.cpp expression_tree.h gc_strings_and_files.o
+	$(CPP) $(CFLAGS) main.cpp gc_strings_and_files.o -o differ
+
+gc_strings_and_files.o: $(GC)/strings_and_files.c $(GC)/strings_and_files.h
+	$(CPP) $(CFLAGS) $(GC)/strings_and_files.c -c -o gc_strings_and_files.o
 
 run: all
 	./$(CUR_PROG)
