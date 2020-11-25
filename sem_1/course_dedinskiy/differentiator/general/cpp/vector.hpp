@@ -108,6 +108,32 @@ public:
 		return cur_size;
 	}
 
+	void quaratic_pointer_sort() {
+		bool flag = false;
+		for (size_t i = 0; i < size(); ++i) {
+			for (size_t j = 0; j < size(); ++j) {
+				if (*buffer[i] > *buffer[j]) {
+					T tmp = buffer[i];
+					buffer[i] = buffer[j];
+					buffer[j] = tmp;
+					flag = true;
+				}
+			}
+			if (!flag) {
+				return;
+			}
+		}
+	}
+
+	bool contains(const T &item) const {
+		for (size_t i = 0; i < size(); ++i) {
+			if (buffer[i] == item) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	void print_as_ints() const {
 		if (!size()) {
 			return;

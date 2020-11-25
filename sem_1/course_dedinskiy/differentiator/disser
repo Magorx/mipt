@@ -3,15 +3,37 @@
 \begin{document}
 \Large
 So we are given an expression:
-$$ \sin {\left(x\cdot \sin {x}\right)}$$
+$$ \sin { \left(x\cdot \log _{10} x\right)}$$
 
 Let's diffirintiate it!
-$$ \cos {\left(x\cdot \sin {x}\right)}\cdot \left(1\cdot \sin {x}+\cos {x}\cdot 1\cdot \left(-1\right)\cdot x\right)\cdot \left(-1\right)$$
+$$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(1\cdot \log _{10} x+\frac{\frac{\left(10^{\left(-1\right)}\cdot 0\cdot x-10\cdot x\cdot x^{1}\right)}{x}}{x}\cdot x\right)\cdot \left(-1\right)$$
 
 Uhhh, let's simplify it a bit...
-$$ \cos {\left(x\cdot \sin {x}\right)}\cdot \left(\sin {x}+\cos {x}\cdot 1\cdot \left(-1\right)\cdot x\right)\cdot \left(-1\right)$$
-$$ \cos {\left(x\cdot \sin {x}\right)}\cdot \left(\sin {x}+\cos {x}\cdot \left(-1\right)\cdot x\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\frac{\left(10^{\left(-1\right)}\cdot 0\cdot x-10\cdot x\cdot x^{1}\right)}{x}}{x}\cdot x\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\frac{\left(0.1\cdot 0\cdot x-10\cdot x\cdot x^{1}\right)}{x}}{x}\cdot x\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\frac{\left(0\cdot x-10\cdot x\cdot x^{1}\right)}{x}}{x}\cdot x\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\frac{\left(0-10\cdot x\cdot x^{1}\right)}{x}}{x}\cdot x\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\frac{\left(0-10\cdot x\cdot x\right)}{x}}{x}\cdot x\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\frac{\left(-1\right)\cdot 10\cdot x\cdot x}{x}}{x}\cdot x\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\left(-1\right)\cdot 10\cdot x\cdot x}{x\cdot x}\cdot x\right)\cdot \left(-1\right)$$
+STRUCTURE $$ \cos { \left(x^{1}\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\left(-1\right)\cdot 10\cdot x^{\left(1+1\right)}\cdot 1}{x^{2}}\cdot x\right)\cdot \left(-1\right)$$
+STRUCTURE $$ \cos { \left(x^{1}\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\left(-10\right)\cdot 1\cdot x^{\left(1+1\right)}\cdot 1}{x^{2}}\cdot x\right)\cdot \left(-1\right)$$
+STRUCTURE $$ \cos { \left(x^{1}\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\left(-10\right)\cdot 1\cdot x^{\left(1+2-1+1\right)}\cdot 1}{x^{0}}\cdot 1\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\left(-10\right)\cdot 1\cdot x^{\left(1+2-1+1\right)}\cdot 1}{x^{0}}\cdot 1\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\left(-10\right)\cdot 1\cdot x^{\left(1+2-2\right)}\cdot 1}{x^{0}}\cdot 1\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\left(-10\right)\cdot 1\cdot x^{\left(1+0\right)}\cdot 1}{x^{0}}\cdot 1\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\left(-10\right)\cdot 1\cdot x^{1}\cdot 1}{x^{0}}\cdot 1\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\left(-10\right)\cdot 1\cdot x\cdot 1}{x^{0}}\cdot 1\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\left(-10\right)\cdot x\cdot 1}{x^{0}}\cdot 1\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\left(-10\right)\cdot x}{x^{0}}\cdot 1\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\left(-10\right)\cdot x}{1}\cdot 1\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\left(-10\right)\cdot x\cdot 1\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\left(-10\right)\cdot x\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\left(-10\right)\cdot x\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\left(-10\right)\cdot x\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\left(-10\right)\cdot x^{1}\right)\cdot \left(-1\right)$$
+SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\left(-10\right)\cdot x\right)\cdot \left(-1\right)$$
 So finaly:
-$$ \cos {\left(x\cdot \sin {x}\right)}\cdot \left(\sin {x}+\cos {x}\cdot \left(-1\right)\cdot x\right)\cdot \left(-1\right)$$
+$$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\left(-10\right)\cdot x\right)\cdot \left(-1\right)$$
 
 \end{document}

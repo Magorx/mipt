@@ -3,6 +3,7 @@
 
 #include "general/c/common.h"
 #include "general/c/strings_and_files.h"
+#include "general/cpp/vector.hpp"
 
 #include <cctype>
 #include <cmath>
@@ -277,6 +278,25 @@ public:
 		return *NEW(OPERATION, '^', PRIOR_POW, this, NEW(VALUE, other, PRIOR_VALUE));
 	}
 
+
+	bool operator<(const ExprNode &other) {
+		if (type < other.type) {
+			return true;
+		} else if (other.type < type) {
+			return false;
+		}
+
+		if (type == VALUE || type == VARIABLE) {
+			return val < other.val;
+		}
+
+		if (val != '^') {
+			return false;
+		}
+
+		return *R < *other.get_R();
+	}
+
 //=============================================================================
 // Maths ======================================================================
 //=============================================================================
@@ -333,6 +353,220 @@ public:
 
 	#undef OPDEF
 
+#define IS_VAL(N) N->type == VALUE
+#define IS_VAR(N) N->type == VARIABLE
+#define IS_OP(N)  N->type == OPERATION
+#define IS_ZERO(N) (IS_VAL(N) && fabs(N->val)     < GENERAL_EPS)
+#define IS_ONE(N)  (IS_VAL(N) && fabs(N->val - 1) < GENERAL_EPS)
+
+#define NEW_ZERO() NEW(VALUE, 0, PRIOR_VALUE)
+#define NEW_ONE()  NEW(VALUE, 1, PRIOR_VALUE)
+
+#define RETURN_ZERO()  DELETE(this, true); *success = 1; return NEW_ZERO();
+#define RETURN_ONE()   DELETE(this, true); *success = 1; return NEW_ONE();
+#define RETURN_LEFT()  ExprNode *left = L;  DELETE(R); DELETE(this); *success = 1; return left;
+#define RETURN_RIGHT() ExprNode *right = R; DELETE(L); DELETE(this); *success = 1; return right;
+
+#define _RANDOM_CHANCE(x) rand() % x
+#define RAND90() _RANDOM_CHANCE(9)
+#define RAND50() _RANDOM_CHANCE(2)
+
+	void collect_multiplicative_cluster(Vector<ExprNode*> *buffer) {
+		assert(buffer);
+
+		if (val != '*' && val != '/') {
+			buffer->push_back(this);
+			return;
+		}
+
+		if (val == '*') {
+			L->collect_multiplicative_cluster(buffer);
+			R->collect_multiplicative_cluster(buffer);
+		} else {
+			L->collect_multiplicative_cluster(buffer);
+		}
+	}
+
+	bool equivalent(const ExprNode &other) {
+		if (type != other.type) {
+			return false;
+		}
+
+		if (type == VALUE) {
+			return true;
+		} else {
+			if (!(type == OPERATION && val == '^')) {
+				return val == other.val;
+			} else {
+				return L->equivalent(*other.get_L());
+			}
+		}
+	}
+
+	ExprNode *mult_cluster_find_variadic(const Vector<char> &banned) {
+		if (type == OPERATION && val == '^') {
+			if (L->type == VARIABLE && !banned.contains((char) L->val)) {
+				return this;
+			}
+		}
+
+		if (type == OPERATION && val == '*') {
+			ExprNode *ret = L->mult_cluster_find_variadic(banned);
+			if (ret) return ret;
+			ret = R->mult_cluster_find_variadic(banned);
+			return ret;
+		}
+
+		if (type == OPERATION && val == '/') {
+			return L->mult_cluster_find_variadic(banned);
+		}
+
+		if (type == VARIABLE && !banned.contains((char)val)) {
+			ExprNode *left = NEW(VARIABLE, val, PRIOR_VALUE);
+			type = OPERATION;
+			val = '^';
+			prior = PRIOR_POW;
+
+			set_L(left);
+			set_R(NEW(VALUE, 1, PRIOR_VALUE));
+			return this;
+		}
+
+		return nullptr;
+	}
+
+	ExprNode *mult_cluster_find_value() {
+		if (type == VALUE) {
+			return this;
+		}
+
+		if (type == OPERATION && val == '*') {
+			ExprNode *ret = L->mult_cluster_find_value();
+			if (ret) return ret;
+			ret = R->mult_cluster_find_value();
+			return ret;
+		}
+
+		if (type == OPERATION && val == '/') {
+			return L->mult_cluster_find_value();
+		}
+
+		return nullptr;
+	}
+
+	void suggest_multiply_val(ExprNode *node, char *success) {
+		if (this == node) {
+			return;
+		}
+
+		if (!node || node->type != VALUE) {
+			printf("BAD VALUE NODE\n");
+			return;
+		}
+
+		if (type == OPERATION && val == '*') {
+			L->suggest_multiply_val(node, success);
+			R->suggest_multiply_val(node, success);
+		}
+
+		if (type == OPERATION && val == '/') {
+			L->suggest_multiply_val(node, success);
+		}
+
+		if (type == VALUE) {
+			node->val = node->val * val;
+
+			val = 1;
+			*success = 1;
+		}
+	}
+
+	void suggest_multiply_px(ExprNode *node, char *success, char to_sub = 0) {
+		if (this == node) {
+			return;
+		}
+
+		if (!node || node->type != OPERATION || node->val != '^') {
+			printf("BAD PX NODE\n");
+			return;
+		}
+
+		if (type == OPERATION && val == '*') {
+			L->suggest_multiply_px(node, success, to_sub);
+			R->suggest_multiply_px(node, success, to_sub);
+			return;
+		}
+
+		if (type == OPERATION && val == '/') {
+			L->suggest_multiply_px(node, success, to_sub);
+			R->suggest_multiply_px(node, success, to_sub ^ 1);
+		}
+
+		if (type == OPERATION && val == '^') {
+			if (L->type == VARIABLE && node->get_L()->val == L->val) {
+				node->set_R(NEW(OPERATION, to_sub ? '-' : '+', PRIOR_ADD, R->deep_copy(), node->get_R()));
+				DELETE(R, true);
+				set_R(NEW(VALUE, 0, PRIOR_VALUE));
+			}
+		}
+
+		if (type == VARIABLE && val == node->get_L()->val) {
+			node->set_R(NEW(OPERATION, to_sub ? '-' : '+', PRIOR_ADD, NEW_ONE(), node->get_R()));
+
+			type = VALUE;
+			val = 1;
+			prior = PRIOR_VALUE;
+			*success = 1;
+		}
+	}
+
+	ExprNode *simplify_structure(char *success) {
+		if (L) L = L->simplify_structure(success);
+		if (*success) {
+			return this;
+		}
+
+		if (R) R = R->simplify_structure(success);
+		if (*success) {
+			return this;
+		}
+
+		if (!L || !R) {
+			return this;
+		}
+
+		// ========================================================== operation
+		switch ((char) val) {
+			case '*' : {
+				if (RAND50()) {
+					Vector<char> x;
+					x.ctor();
+
+					ExprNode *variadic = mult_cluster_find_variadic(x);
+					if (!variadic) {
+						break;
+					}
+					ExprNode *cur_pow = variadic->R;
+					suggest_multiply_px(variadic, success);
+					//if (cur_pow == variadic->R) *success = 0;
+					break;
+				}
+
+				if (true) {
+					ExprNode *node = mult_cluster_find_value();
+					if (node) {
+
+						double cur_val = node->val;
+						suggest_multiply_val(node, success);
+						*success = cur_val != node->val;
+					}
+				}
+			}
+		}
+
+		return this;
+	}
+
 	ExprNode *simplify(char *success) {
 		if (L) L = L->simplify(success);
 		if (*success) {
@@ -356,19 +590,6 @@ public:
 			*success = 1;
 			return NEW(VALUE, res, PRIOR_VALUE);
 		}
-
-		#define IS_VAL(N) N->type == VALUE
-		#define IS_VAR(N) N->type == VARIABLE
-		#define IS_ZERO(N) (IS_VAL(N) && fabs(N->val)     < GENERAL_EPS)
-		#define IS_ONE(N)  (IS_VAL(N) && fabs(N->val - 1) < GENERAL_EPS)
-
-		#define NEW_ZERO() NEW(VALUE, 0, PRIOR_VALUE)
-		#define NEW_ONE()  NEW(VALUE, 1, PRIOR_VALUE)
-
-		#define RETURN_ZERO()  DELETE(this, true); *success = 1; return NEW_ZERO();
-		#define RETURN_ONE()   DELETE(this, true); *success = 1; return NEW_ONE();
-		#define RETURN_LEFT()  ExprNode *left = L;  DELETE(R); DELETE(this); *success = 1; return left;
-		#define RETURN_RIGHT() ExprNode *right = R; DELETE(L); DELETE(this); *success = 1; return right;
 
 		switch ((char) val) {
 			case '+' : {
@@ -421,12 +642,60 @@ public:
 					return NEW(OPERATION, '^', PRIOR_POW, L, NEW(VALUE, 2, PRIOR_VALUE));
 				}
 
+				if (false && IS_OP(L) && L->val == '*' && IS_OP(R) && R->val == '*') {
+					if (rand() % 10) {
+						ExprNode *LR = L->R;
+						ExprNode *RL = R->L;
+						R->set_L(LR);
+						L->set_R(RL);
+						*success = 1;
+						return this;
+					}
+				}
+
+				if (false && IS_OP(L) && L->val == '*' && (IS_VAL(R) || IS_VAR(R)) && RAND90()) {
+					ExprNode *LR = L->R;
+					L->set_R(R);
+					R = LR;
+
+					*success = 1;
+					return this;
+				}
+
+				if (false && IS_OP(R) && R->val == '*' && (IS_VAL(L) || IS_VAR(L)) && RAND90()) {
+					ExprNode *RL = R->L;
+					R->set_L(L);
+					L = RL;
+
+					*success = 1;
+					return this;
+				}
+
+				if (false && IS_OP(L) && L->val == '/' && RAND90()) {
+					ExprNode *left = L;
+					set_L(left->L);
+					left->set_L(this);
+
+					*success = 1;
+					return left;
+				}
+
 				break;
 			}
 
 			case '/' : {
 				if (IS_ONE(R)) {
 					RETURN_LEFT();
+				}
+
+				if (IS_OP(L) && L->val == '/') {
+					ExprNode *prev_L = L;
+					set_R(NEW(OPERATION, '*', PRIOR_MUL, R, L->R));
+					set_L(L->L);
+					DELETE(prev_L, false);
+
+					*success = 1;
+					return this;
 				}
 				break;
 			}
@@ -770,9 +1039,16 @@ public:
 		return success;
 	}
 
+	bool simplify_structure_step() {
+		if (!root) return 0;
+		char success = 0;
+		root = root->simplify_structure(&success);
+		return success;
+	}
+
 	void simplify() {
 		if (!root) return;
-		while (simplify_step()) {}
+		while (simplify_step() || simplify_structure_step()) {}
 	}
 
 	void show_off(const char *file_name) {
@@ -811,14 +1087,27 @@ public:
 
 		fprintf(file, "Uhhh, let's simplify it a bit...\n");
 
-		while(differed->simplify_step()) {
-			printf("hi\n");
-			fprintf(file, "$$ ");
-			differed->get_root()->latex_dump(file);
-			fprintf(file, "$$\n");
+		char flag = 1;
+		while(flag) {
+			flag = 0;
+			while (differed->simplify_step()) {
+				flag = 1;
+				fprintf(file, "SIMPLE $$ ");
+				differed->get_root()->latex_dump(file);
+				fprintf(file, "$$\n");
+			}
+
+			while (differed->simplify_structure_step()) {
+				flag = 1;
+				fprintf(file, "STRUCTURE $$ ");
+				differed->get_root()->latex_dump(file);
+				fprintf(file, "$$\n");
+			}
+			if (flag) {
+			}
 		}
 
-		differed->simplify();
+		while(differed->simplify_step());
 
 		fprintf(file, "So finaly:\n");
 		fprintf(file, "$$ ");
