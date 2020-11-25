@@ -61,10 +61,10 @@ private:
 
 	double evaluate_operation(const double *var_table, const size_t var_table_len) {
 		char operation = val;
-		double LEFT  = L ? L->evaluate(var_table, var_table_len) : 0;
-		double RIGHT = R ? R->evaluate(var_table, var_table_len) : 0;
+		double L_RES  = L ? L->evaluate(var_table, var_table_len) : 0;
+		double R_RES = R ? R->evaluate(var_table, var_table_len) : 0;
 
-		#define OPDEF(name, sign, arg_cnt, prior, calculation) {                                                      \
+		#define OPDEF(name, sign, arg_cnt, prior, calculation, ign) {                                                 \
             case #sign[0]: {                                                                                          \
             	if (!((arg_cnt == 2 && L && R) || (arg_cnt == 1 && !L && R) || (arg_cnt == 0 && !L && !R))) {         \
         			printf("[ERR]<exrp_eval>: Operation {%c} has bad number of args, need %d\n", #sign[0], arg_cnt);  \
@@ -215,6 +215,51 @@ public:
 		update();
 	}
 
+	ExprNode *deep_copy() const {
+		ExprNode *node = NEW(type, val, prior);
+		if (L) node->set_L(L->deep_copy());
+		if (R) node->set_R(R->deep_copy());
+
+		node->update();
+		return node;
+	}
+
+//=============================================================================
+// Operations with nodes ======================================================
+//=============================================================================
+	
+	ExprNode &operator+(ExprNode &other) {
+		return *NEW(OPERATION, '+', PRIOR_ADD, this, &other);
+	}
+
+	ExprNode &operator-(ExprNode &other) {
+		return *NEW(OPERATION, '-', PRIOR_SUB, this, &other);
+	}
+
+	ExprNode &operator*(ExprNode &other) {
+		return *NEW(OPERATION, '*', PRIOR_MUL, this, &other);
+	}
+
+	ExprNode &operator/(ExprNode &other) {
+		return *NEW(OPERATION, '/', PRIOR_DIV, this, &other);
+	}
+
+	ExprNode &operator+(const double other) {
+		return *NEW(OPERATION, '+', PRIOR_ADD, this, NEW(VALUE, other, PRIOR_VALUE));
+	}
+
+	ExprNode &operator-(const double other) {
+		return *NEW(OPERATION, '-', PRIOR_SUB, this, NEW(VALUE, other, PRIOR_VALUE));
+	}
+
+	ExprNode &operator*(const double other) {
+		return *NEW(OPERATION, '*', PRIOR_MUL, this, NEW(VALUE, other, PRIOR_VALUE));
+	}
+
+	ExprNode &operator/(const double other) {
+		return *NEW(OPERATION, '/', PRIOR_DIV, this, NEW(VALUE, other, PRIOR_VALUE));
+	}
+
 //=============================================================================
 // Maths ======================================================================
 //=============================================================================
@@ -323,7 +368,7 @@ private:
 		sscanf(*buffer, "%c", &operation);
 		reading_ptr_skip_word(buffer);
 
-		#define OPDEF(name, sign, arg_cnt, prior, calculation) {                                                      \
+		#define OPDEF(name, sign, arg_cnt, prior, calculation, ign) {                                                 \
             case #sign[0]: {                                                                                          \
             	return ExprNode::NEW(OPERATION, #sign[0], prior);                                                     \
             }                                                                                                         \
