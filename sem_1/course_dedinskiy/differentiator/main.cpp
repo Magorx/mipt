@@ -7,6 +7,7 @@ int main() {
 	tree.ctor();
 	tree.load("sample.expr");
 	tree.dump();
+	tree.show_off("disser");
 
 	double table[table_size];
 	table['x'] = 7;

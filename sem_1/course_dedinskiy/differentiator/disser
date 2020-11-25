@@ -1,0 +1,17 @@
+\documentclass{article}
+\usepackage{hyperref}
+\begin{document}
+\Large
+So we are given an expression:
+$$ \sin {\left(x\cdot \sin {x}\right)}$$
+
+Let's diffirintiate it!
+$$ \cos {\left(x\cdot \sin {x}\right)}\cdot \left(1\cdot \sin {x}+\cos {x}\cdot 1\cdot \left(-1\right)\cdot x\right)\cdot \left(-1\right)$$
+
+Uhhh, let's simplify it a bit...
+$$ \cos {\left(x\cdot \sin {x}\right)}\cdot \left(\sin {x}+\cos {x}\cdot 1\cdot \left(-1\right)\cdot x\right)\cdot \left(-1\right)$$
+$$ \cos {\left(x\cdot \sin {x}\right)}\cdot \left(\sin {x}+\cos {x}\cdot \left(-1\right)\cdot x\right)\cdot \left(-1\right)$$
+So finaly:
+$$ \cos {\left(x\cdot \sin {x}\right)}\cdot \left(\sin {x}+\cos {x}\cdot \left(-1\right)\cdot x\right)\cdot \left(-1\right)$$
+
+\end{document}

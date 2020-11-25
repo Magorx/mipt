@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.11.25)  25 NOV 2020 18:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.11.25)  25 NOV 2020 20:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**disser.tex
-(./disser.tex
+**disser
+(./disser
 LaTeX2e <2020-02-02> patch level 2
 L3 programming layer <2020-02-14>
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -156,7 +156,7 @@ File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
 \l__kernel_color_stack_int=\count186
 \l__pdf_internal_box=\box45
 )
-No file disser.aux.
+(latex_output/disser.aux)
 \openout1 = `disser.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 3.
@@ -177,6 +177,7 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 3.
 LaTeX Font Info:    ... okay on input line 3.
 \AtBeginShipoutBox=\box46
 Package hyperref Info: Link coloring OFF on input line 3.
+
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 
@@ -191,48 +192,43 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 3.
 LaTeX Info: Redefining \pageref on input line 3.
 LaTeX Info: Redefining \nameref on input line 3.
+
+(latex_output/disser.out) (latex_output/disser.out)
 \@outlinefile=\write3
 \openout3 = `disser.out'.
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 5.
+(Font)              <14.4> on input line 6.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 5.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 8.
-
-[1
+(Font)              <7> on input line 6.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 17.
+ [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 8.
- (./disser.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 8.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 8.
-
-
-Package rerunfilecheck Warning: File `disser.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `disser.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 8.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 17.
+ (latex_output/disser.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 17.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 17.
+Package rerunfilecheck Info: File `disser.out' has not changed.
+(rerunfilecheck)             Checksum: <no file>.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 17.
  ) 
 Here is how much of TeX's memory you used:
- 4389 strings out of 483183
- 69345 string characters out of 5966291
- 317848 words of memory out of 5000000
- 19381 multiletter control sequences out of 15000+600000
- 532506 words of font info for 25 fonts, out of 8000000 for 9000
+ 4400 strings out of 483183
+ 69587 string characters out of 5966291
+ 319952 words of memory out of 5000000
+ 19383 multiletter control sequences out of 15000+600000
+ 533251 words of font info for 27 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 34i,4n,29p,210b,307s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
+ 34i,4n,29p,206b,307s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on disser.pdf (1 page, 28390 bytes).
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on latex_output/disser.pdf (1 page, 37016 bytes).
 PDF statistics:
- 26 PDF objects out of 1000 (max. 8388607)
- 19 compressed objects within 1 object stream
+ 29 PDF objects out of 1000 (max. 8388607)
+ 21 compressed objects within 1 object stream
  2 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

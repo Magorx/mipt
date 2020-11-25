@@ -8,14 +8,14 @@
 #define SIN(N) *NEW(OPERATION, (double) 's', PRIOR_SIN, (N))
 #define LOG(N) *NEW(OPERATION, (double) 'L', PRIOR_LOG, (N))
 
-OPDEF(add, +, 2, 5, L_RES + R_RES, DL + DR)
-OPDEF(sub, -, 2, 5, L_RES - R_RES, DL + DR)
-OPDEF(mul, *, 2, 7, L_RES * R_RES, DL * R_COPY + DR * L_COPY)
-OPDEF(div, /, 2, 7, L_RES / R_RES, (DL * R_COPY - DR * L_COPY) / R_COPY / R_COPY)
+OPDEF(add, +, 2, 5, L_RES + R_RES, DL + DR, "", "+", "")
+OPDEF(sub, -, 2, 5, L_RES - R_RES, DL + DR, "", "-", "")
+OPDEF(mul, *, 2, 7, L_RES * R_RES, DL * R_COPY + DR * L_COPY, "", "\\cdot ", "")
+OPDEF(div, /, 2, 7, L_RES / R_RES, (DL * R_COPY - DR * L_COPY) / R_COPY / R_COPY, "\\frac{", "}{", "}")
 
-OPDEF(pow, ^, 2, 8,   pow(L_RES, R_RES), R_COPY * (L_COPY ^ (R_COPY - 1)) * DL + (L_COPY ^ R_COPY) * LOG(L_COPY) * DR)
-OPDEF(sin, sin, 1, 9, sin(R_RES), COS(R_COPY) * (DR) * (-1))
-OPDEF(cos, cos, 1, 9, cos(R_RES), SIN(R_COPY))
+OPDEF(pow, ^, 2, 8,   pow(L_RES, R_RES), R_COPY * (L_COPY ^ (R_COPY - 1)) * DL + (L_COPY ^ R_COPY) * LOG(L_COPY) * DR, "", "^{", "}")
+OPDEF(sin, sin, 1, 9, sin(R_RES), COS(R_COPY) * (DR) * (-1), "\\sin {", "", "}")
+OPDEF(cos, cos, 1, 9, cos(R_RES), SIN(R_COPY), "\\cos {", "", "}")
 
-OPDEF(Log, Log, 1, 9, log(R_RES), (R_COPY ^ (-1)) * DR)
-OPDEF(log, log, 2, 8, log(R_RES) / log(L_RES), ((L_COPY ^ -1) * DL * R_COPY - L_COPY * R_COPY * (R_COPY ^ 1)) / R_COPY / R_COPY)
+OPDEF(Ln, Ln, 1, 9, log(R_RES), (R_COPY ^ (-1)) * DR, "\\ln ", "", "")
+OPDEF(log, log, 2, 8, log(R_RES) / log(L_RES), ((L_COPY ^ -1) * DL * R_COPY - L_COPY * R_COPY * (R_COPY ^ 1)) / R_COPY / R_COPY, "\\log_", "", "")

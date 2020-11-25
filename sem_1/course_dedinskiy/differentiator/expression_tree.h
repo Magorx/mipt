@@ -50,10 +50,6 @@ private:
 
 	size_t complexity;
 	char variable_presented;
-
-	int prior;
-	int low_prior;
-	int high_prior;
 //=============================================================================
 
 	double evaluate_operation(const double *var_table, const size_t var_table_len) {
@@ -61,7 +57,7 @@ private:
 		double L_RES  = L ? L->evaluate(var_table, var_table_len) : 0;
 		double R_RES = R ? R->evaluate(var_table, var_table_len) : 0;
 
-		#define OPDEF(name, sign, arg_cnt, prior, calculation, ign) {                                                 \
+		#define OPDEF(name, sign, arg_cnt, prior, calculation, ig1, ig2, ig3, ig4) {                                  \
             case #sign[0]: {                                                                                          \
             	if (!((arg_cnt == 2 && L && R) || (arg_cnt == 1 && !L && R) || (arg_cnt == 0 && !L && !R))) {         \
         			printf("[ERR]<exrp_eval>: Operation {%c} has bad number of args, need %d\n", #sign[0], arg_cnt);  \
@@ -97,6 +93,9 @@ private:
 
 public:
 // data =======================================================================
+	int prior;
+	int low_prior;
+	int high_prior;
 	char type;
 	double val;
 //=============================================================================
@@ -303,7 +302,7 @@ public:
 		}
 	}
 
-	#define OPDEF(name, sign, arg_cnt, prior, calculation, differed) {                                            \
+	#define OPDEF(name, sign, arg_cnt, prior, calculation, differed, ig1, ig2, ig3) {                             \
         case #sign[0]: {                                                                                          \
         	if (!((arg_cnt == 2 && L && R) || (arg_cnt == 1 && !L && R) || (arg_cnt == 0 && !L && !R))) {         \
     			printf("[ERR]<exrp_eval>: Operation {%c} has bad number of args, need %d\n", #sign[0], arg_cnt);  \
@@ -336,7 +335,14 @@ public:
 
 	ExprNode *simplify(char *success) {
 		if (L) L = L->simplify(success);
+		if (*success) {
+			return this;
+		}
+
 		if (R) R = R->simplify(success);
+		if (*success) {
+			return this;
+		}
 
 		if (!L || !R) {
 			return this;
@@ -352,6 +358,7 @@ public:
 		}
 
 		#define IS_VAL(N) N->type == VALUE
+		#define IS_VAR(N) N->type == VARIABLE
 		#define IS_ZERO(N) (IS_VAL(N) && fabs(N->val)     < GENERAL_EPS)
 		#define IS_ONE(N)  (IS_VAL(N) && fabs(N->val - 1) < GENERAL_EPS)
 
@@ -371,6 +378,11 @@ public:
 
 				if (IS_ZERO(R)) {
 					RETURN_LEFT();
+				}
+
+				if (IS_VAR(L) && IS_VAR(R) && L->val == R->val) {
+					DELETE(R, true);
+					return NEW(OPERATION, '*', PRIOR_POW, NEW(VALUE, 2, PRIOR_VALUE), L);
 				}
 				break;
 			}
@@ -403,6 +415,12 @@ public:
 				if (IS_ZERO(L) || IS_ZERO(R)) {
 					RETURN_ZERO();
 				}
+
+				if (IS_VAR(L) && IS_VAR(R) && L->val == R->val) {
+					DELETE(R, true);
+					return NEW(OPERATION, '^', PRIOR_POW, L, NEW(VALUE, 2, PRIOR_VALUE));
+				}
+
 				break;
 			}
 
@@ -445,6 +463,53 @@ public:
 			fprintf(file_ptr, "{%c}", (char) val);
 		}
 	}
+
+	void latex_dump_son(FILE *file = stdout, const ExprNode *son = nullptr) const {
+		if (!son) return;
+
+		if (son->prior < prior) {
+			fprintf(file, "\\left(");
+		}
+		son->latex_dump(file);
+		if (son->prior < prior) {
+			fprintf(file, "\\right)");
+		}
+	}
+
+	#define OPDEF(ig1, sign, ig3, ig4, ig5, ig6, before, between, after) {       \
+        case #sign[0]: {							                             \
+        	fprintf(file, "%s", before);                                         \
+        	latex_dump_son(file, L);                                             \
+        	fprintf(file, "%s", between);                                        \
+        	latex_dump_son(file, R);                                             \
+        	fprintf(file, "%s", after);                                          \
+        	break;                                                               \
+        }                                                                        \
+	}
+
+	void latex_dump(FILE *file = stdout) const {
+		//fprintf(file, "{");
+		if (type == VALUE) {
+			if (val < 0) {
+				fprintf(file, "\\left(");
+			}
+			fprintf(file, "%lg", val);
+			if (val < 0) {
+				fprintf(file, "\\right)");
+			}
+		} else if (type == VARIABLE) {
+			fprintf(file, "%c", (char) val);
+		} else {
+			switch ((char) val) {
+
+				#include "ops.dsl"
+
+			}
+		}
+		//fprintf(file, "}");
+	}
+
+	#undef OPDEF
 
 };
 
@@ -519,10 +584,10 @@ private:
 		sscanf(*buffer, "%c", &operation);
 		reading_ptr_skip_word(buffer);
 
-		#define OPDEF(name, sign, arg_cnt, prior, calculation, ign) { \
-            case #sign[0]: {                                          \
-            	return ExprNode::NEW(OPERATION, #sign[0], prior);     \
-            }                                                         \
+		#define OPDEF(name, sign, arg_cnt, prior, calculation, ig1, ig2, ig3, ig4) { \
+            case #sign[0]: {                                                         \
+            	return ExprNode::NEW(OPERATION, #sign[0], prior);                    \
+            }                                                                        \
 		}
 
 		switch (operation) {
@@ -697,14 +762,77 @@ public:
 		return tree;
 	}
 
+	bool simplify_step() {
+		if (!root) return 0;
+
+		char success = 0;
+		root = root->simplify(&success);
+		return success;
+	}
+
 	void simplify() {
 		if (!root) return;
+		while (simplify_step()) {}
+	}
 
-		char success = 1;
-		while (success) {
-			success = 0;
-			root = root->simplify(&success);
+	void show_off(const char *file_name) {
+		if (!root) {
+			printf("[ERR]<expr_swof>: [root](nullptr)\n");
+			return;
 		}
+
+		if (file_name == nullptr) {
+			printf("[ERR]<expr_swof>: [file_name](nullptr)\n");
+			return;
+		}
+
+		FILE *file = fopen(file_name, "w");
+		if (!file) {
+			printf("[ERR]<detexpr_swofree>: [file_name](%s) can't be opened\n", file_name);
+			return;
+		}
+
+		fprintf(file, "\\documentclass{article}\n");
+		fprintf(file, "\\usepackage{hyperref}\n");
+		fprintf(file, "\\begin{document}\n\\Large\n");
+		fprintf(file, "So we are given an expression:\n");
+
+		fprintf(file, "$$ ");
+		root->latex_dump(file);
+		fprintf(file, "$$\n\n");
+
+		fprintf(file, "Let's diffirintiate it!\n");
+
+		ExpressionTree *differed = differentiate();
+
+		fprintf(file, "$$ ");
+		differed->get_root()->latex_dump(file);
+		fprintf(file, "$$\n\n");
+
+		fprintf(file, "Uhhh, let's simplify it a bit...\n");
+
+		while(differed->simplify_step()) {
+			printf("hi\n");
+			fprintf(file, "$$ ");
+			differed->get_root()->latex_dump(file);
+			fprintf(file, "$$\n");
+		}
+
+		differed->simplify();
+
+		fprintf(file, "So finaly:\n");
+		fprintf(file, "$$ ");
+		differed->get_root()->latex_dump(file);
+		fprintf(file, "$$\n");
+
+
+		fprintf(file, "\n\\end{document}");
+
+		fclose(file);
+
+		char generate_pdf_command[200];
+		sprintf(generate_pdf_command, "pdflatex -output-directory='latex_output' -jobname='%s' %s", file_name, file_name);
+		system(generate_pdf_command);
 	}
 
 	void dump(FILE *file_ptr = stdout) const {
