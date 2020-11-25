@@ -45,9 +45,6 @@ enum PRIORITIES {
 class ExprNode {
 private:
 // data =======================================================================
-	char type;
-	double val;
-
 	ExprNode *L;
 	ExprNode *R;
 
@@ -99,13 +96,18 @@ private:
 
 
 public:
+// data =======================================================================
+	char type;
+	double val;
+//=============================================================================
+
 	ExprNode():
-	type(0),
-	val(0.0),
 	L(nullptr),
 	R(nullptr),
 	complexity(0),
-	variable_presented(0)
+	variable_presented(0),
+	type(0),
+	val(0.0)
 	{}
 
 	~ExprNode() {}
@@ -164,6 +166,10 @@ public:
 		return cake;
 	}
 
+	static ExprNode *NEW(const char type_, const double val_, const int prior_, ExprNode &R_) {
+		return NEW(type_, val_, prior_, nullptr, &R_);
+	}
+
 	void dtor(const char recursive = 0) {
 		type = 0;
 		val  = 0;
@@ -215,6 +221,10 @@ public:
 		update();
 	}
 
+	bool is_variadic() {
+		return variable_presented;
+	}
+
 	ExprNode *deep_copy() const {
 		ExprNode *node = NEW(type, val, prior);
 		if (L) node->set_L(L->deep_copy());
@@ -244,6 +254,10 @@ public:
 		return *NEW(OPERATION, '/', PRIOR_DIV, this, &other);
 	}
 
+	ExprNode &operator^(ExprNode &other) {
+		return *NEW(OPERATION, '^', PRIOR_POW, this, &other);
+	}
+
 	ExprNode &operator+(const double other) {
 		return *NEW(OPERATION, '+', PRIOR_ADD, this, NEW(VALUE, other, PRIOR_VALUE));
 	}
@@ -260,11 +274,15 @@ public:
 		return *NEW(OPERATION, '/', PRIOR_DIV, this, NEW(VALUE, other, PRIOR_VALUE));
 	}
 
+	ExprNode &operator^(const double other) {
+		return *NEW(OPERATION, '^', PRIOR_POW, this, NEW(VALUE, other, PRIOR_VALUE));
+	}
+
 //=============================================================================
 // Maths ======================================================================
 //=============================================================================
 
-	double evaluate(const double *var_table, const size_t var_table_len) {
+	double evaluate(const double *var_table = nullptr, const size_t var_table_len = 0) {
 		switch(type) {
 			case (OPERATION) : {
 				return evaluate_operation(var_table, var_table_len);
@@ -283,6 +301,139 @@ public:
 				return 0.0;
 			}
 		}
+	}
+
+	#define OPDEF(name, sign, arg_cnt, prior, calculation, differed) {                                            \
+        case #sign[0]: {                                                                                          \
+        	if (!((arg_cnt == 2 && L && R) || (arg_cnt == 1 && !L && R) || (arg_cnt == 0 && !L && !R))) {         \
+    			printf("[ERR]<exrp_eval>: Operation {%c} has bad number of args, need %d\n", #sign[0], arg_cnt);  \
+    			return 0;                                                                                         \
+        	}                                                                                                     \
+                                                                                                                  \
+        	return &(differed);                                                                                   \
+        }                                                                                                         \
+	}
+
+	ExprNode *differentiate() {
+		if (type == VALUE) {
+			return NEW(VALUE, 0, PRIOR_VALUE);
+		} else if (type == VARIABLE) {
+			return NEW(VALUE, 1, PRIOR_VALUE);
+		} else {
+			switch ((char) val) {
+
+				#include "ops.dsl"
+
+				default: {
+					printf("[ERR]<expr_diff>: Invalid operation {%c}\n", (char) val);
+					return 0;
+				}
+			}
+		}
+	}
+
+	#undef OPDEF
+
+	ExprNode *simplify(char *success) {
+		if (L) L = L->simplify(success);
+		if (R) R = R->simplify(success);
+
+		if (!L || !R) {
+			return this;
+		}
+
+		// ========================================================== operation
+		if (!is_variadic()) {
+			double res = evaluate();
+			DELETE(this, true);
+
+			*success = 1;
+			return NEW(VALUE, res, PRIOR_VALUE);
+		}
+
+		#define IS_VAL(N) N->type == VALUE
+		#define IS_ZERO(N) (IS_VAL(N) && fabs(N->val)     < GENERAL_EPS)
+		#define IS_ONE(N)  (IS_VAL(N) && fabs(N->val - 1) < GENERAL_EPS)
+
+		#define NEW_ZERO() NEW(VALUE, 0, PRIOR_VALUE)
+		#define NEW_ONE()  NEW(VALUE, 1, PRIOR_VALUE)
+
+		#define RETURN_ZERO()  DELETE(this, true); *success = 1; return NEW_ZERO();
+		#define RETURN_ONE()   DELETE(this, true); *success = 1; return NEW_ONE();
+		#define RETURN_LEFT()  ExprNode *left = L;  DELETE(R); DELETE(this); *success = 1; return left;
+		#define RETURN_RIGHT() ExprNode *right = R; DELETE(L); DELETE(this); *success = 1; return right;
+
+		switch ((char) val) {
+			case '+' : {
+				if (IS_ZERO(L)) {
+					RETURN_RIGHT();
+				}
+
+				if (IS_ZERO(R)) {
+					RETURN_LEFT();
+				}
+				break;
+			}
+
+			case '-' : {
+				if (IS_ZERO(L)) {
+					val = '*';
+					prior = PRIOR_MUL;
+					L->val = -1;
+
+					*success = 1;
+					return this;
+				}
+
+				if (IS_ZERO(R)) {
+					RETURN_LEFT();
+				}
+				break;
+			}
+
+			case '*' : {
+				if (IS_ONE(L)) {
+					RETURN_RIGHT();
+				}
+
+				if (IS_ONE(R)) {
+					RETURN_LEFT();
+				}
+
+				if (IS_ZERO(L) || IS_ZERO(R)) {
+					RETURN_ZERO();
+				}
+				break;
+			}
+
+			case '/' : {
+				if (IS_ONE(R)) {
+					RETURN_LEFT();
+				}
+				break;
+			}
+
+			case '^' : {
+				if (IS_ZERO(R)) {
+					RETURN_ONE();
+				}
+
+				if (IS_ONE(R)) {
+					RETURN_LEFT();
+				}
+
+				if (IS_ZERO(L) && IS_VAL(R)) {
+					RETURN_ZERO();
+				}
+				break;
+			}
+
+			default: {
+				return this;
+			}
+		}
+
+		return this;
 	}
 
 //=============================================================================
@@ -368,10 +519,10 @@ private:
 		sscanf(*buffer, "%c", &operation);
 		reading_ptr_skip_word(buffer);
 
-		#define OPDEF(name, sign, arg_cnt, prior, calculation, ign) {                                                 \
-            case #sign[0]: {                                                                                          \
-            	return ExprNode::NEW(OPERATION, #sign[0], prior);                                                     \
-            }                                                                                                         \
+		#define OPDEF(name, sign, arg_cnt, prior, calculation, ign) { \
+            case #sign[0]: {                                          \
+            	return ExprNode::NEW(OPERATION, #sign[0], prior);     \
+            }                                                         \
 		}
 
 		switch (operation) {
@@ -488,6 +639,10 @@ public:
 		return root;
 	}
 
+	void set_root(ExprNode *root_) {
+		root = root_;
+	}
+
 //=============================================================================
 // Disk work ==================================================================
 //=============================================================================
@@ -531,6 +686,25 @@ public:
 
 	double evaluate(const double *var_table = nullptr, const size_t var_table_len = 0) {
 		return root ? root->evaluate(var_table, var_table_len) : 0.0;
+	}
+
+	ExpressionTree *differentiate() {
+		ExpressionTree *tree = NEW();
+		if (root) {
+			tree->set_root(root->differentiate());
+		}
+
+		return tree;
+	}
+
+	void simplify() {
+		if (!root) return;
+
+		char success = 1;
+		while (success) {
+			success = 0;
+			root = root->simplify(&success);
+		}
 	}
 
 	void dump(FILE *file_ptr = stdout) const {

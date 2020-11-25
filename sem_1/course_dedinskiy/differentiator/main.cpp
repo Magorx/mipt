@@ -17,6 +17,12 @@ int main() {
 
 	printf("result = %lg\n", tree.evaluate(table, table_size));
 
+	ExpressionTree *differed = tree.differentiate();
+	differed->simplify();
+	printf("--------------------------------------------------- differed\n");
+	differed->dump();
+	printf("---------------------------------------------------\n");
+
 	return 0;
 }
 
