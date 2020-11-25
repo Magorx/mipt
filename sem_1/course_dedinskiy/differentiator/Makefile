@@ -17,7 +17,7 @@ CFLAGS = $(STANDARD) $(WARNINGS) -lm
 
 all: differ
 
-differ: main.cpp expression_tree.h gc_strings_and_files.o
+differ: main.cpp expression_tree.h gc_strings_and_files.o ops.dsl
 	$(CPP) $(CFLAGS) main.cpp gc_strings_and_files.o -o differ
 
 gc_strings_and_files.o: $(GC)/strings_and_files.c $(GC)/strings_and_files.h

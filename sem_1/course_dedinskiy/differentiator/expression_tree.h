@@ -61,47 +61,31 @@ private:
 
 	double evaluate_operation(const double *var_table, const size_t var_table_len) {
 		char operation = val;
+		double LEFT  = L ? L->evaluate(var_table, var_table_len) : 0;
+		double RIGHT = R ? R->evaluate(var_table, var_table_len) : 0;
+
+		#define OPDEF(name, sign, arg_cnt, prior, calculation) {                                                      \
+            case #sign[0]: {                                                                                          \
+            	if (!((arg_cnt == 2 && L && R) || (arg_cnt == 1 && !L && R) || (arg_cnt == 0 && !L && !R))) {         \
+        			printf("[ERR]<exrp_eval>: Operation {%c} has bad number of args, need %d\n", #sign[0], arg_cnt);  \
+        			return 0;                                                                                         \
+            	}                                                                                                     \
+                                                                                                                      \
+            	return calculation;                                                                                   \
+            }                                                                                                         \
+		}
+
 		switch (operation) {
-			case '+': {
-				VERIFY_T(L && R, double);
-				return L->evaluate(var_table, var_table_len) + R->evaluate(var_table, var_table_len);
-			}
 
-			case '-': {
-				VERIFY_T(L && R, double);
-				return L->evaluate(var_table, var_table_len) - R->evaluate(var_table, var_table_len);;
-			}
-
-			case '*': {
-				VERIFY_T(L && R, double);
-				return L->evaluate(var_table, var_table_len) * R->evaluate(var_table, var_table_len);;
-			}
-
-			case '/': {
-				VERIFY_T(L && R, double);
-				return L->evaluate(var_table, var_table_len) / R->evaluate(var_table, var_table_len);;
-			}
-
-			case '^': {
-				VERIFY_T(L && R, double);
-				return pow(L->evaluate(var_table, var_table_len), R->evaluate(var_table, var_table_len));
-			}
-
-			case 's': {
-				VERIFY_T(!L && R, double);
-				return sin(R->evaluate(var_table, var_table_len));
-			}
-
-			case 'c': {
-				VERIFY_T(!L && R, double);
-				return cos(R->evaluate(var_table, var_table_len));
-			}
+			#include "ops.dsl"
 
 			default: {
-				RETURN_ERROR_VERIFY_T("BAD_OPERATION", double);
+				printf("[ERR]<expr_eval>: Invalid operation {%c}\n", operation);
 				return 0;
 			}
 		}
+
+		#undef OPDEF
 	}
 
 	double evaluate_variable(const double *var_table, const size_t var_table_len) {
@@ -293,6 +277,15 @@ private:
 		*buffer = c;
 	}
 
+	void reading_ptr_skip_word(char **buffer) {
+		Char_get_next_symb(buffer);
+		char *c = *buffer;
+		while (!isspace(*c) && *c != '(' && *c != ')') {
+			++c;
+		}
+		*buffer = c;
+	}
+
 	ExprNode *load_node_value(char **buffer) {
 		double val = 0;
 		int symbs_read = 0;
@@ -328,41 +321,25 @@ private:
 	ExprNode *load_node_operation(char **buffer) {
 		char operation = 0;
 		sscanf(*buffer, "%c", &operation);
-		++(*buffer);
-		reading_ptr_proceed(buffer);
+		reading_ptr_skip_word(buffer);
+
+		#define OPDEF(name, sign, arg_cnt, prior, calculation) {                                                      \
+            case #sign[0]: {                                                                                          \
+            	return ExprNode::NEW(OPERATION, #sign[0], prior);                                                     \
+            }                                                                                                         \
+		}
+
 		switch (operation) {
-			case '+' : {
-				return ExprNode::NEW(OPERATION, operation, PRIOR_ADD);
-			}
-
-			case '-' : {
-				return ExprNode::NEW(OPERATION, operation, PRIOR_SUB);
-			}
-
-			case '*' : {
-				return ExprNode::NEW(OPERATION, operation, PRIOR_MUL);
-			}
-
-			case '/' : {
-				return ExprNode::NEW(OPERATION, operation, PRIOR_SUB);
-			}
-
-			case '^' : {
-				return ExprNode::NEW(OPERATION, operation, PRIOR_POW);
-			}
-
-			case 's' : {
-				return ExprNode::NEW(OPERATION, operation, PRIOR_SIN);
-			}
-
-			case 'c' : {
-				return ExprNode::NEW(OPERATION, operation, PRIOR_COS);
-			}
+			
+			#include "ops.dsl"
 
 			default: {
+				printf("[ERR]<expr_load>: Invalid operation {%c}\n", operation);
 				return nullptr;
 			}
 		}
+
+		#undef OPDEF
 	}
 
 	ExprNode *load_node(char **buffer) {
@@ -394,7 +371,7 @@ private:
 			}
 
 			ExprNode *node = load_node_operation(buffer);
-			if (!node) {printf("fk\n");return nullptr;} //ERROR
+			if (!node) {return nullptr;} //ERROR
 
 			ExprNode *right_operand = load_node(buffer);
 
