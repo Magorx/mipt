@@ -9,20 +9,14 @@ int main() {
 	tree.dump();
 	tree.show_off("disser");
 
-	double table[table_size];
+	/*double table[table_size];
 	table['x'] = 7;
 
 	printf("\n");
 
 	printf("%c = %lg\n", 'x', table['x']);
 
-	printf("result = %lg\n", tree.evaluate(table, table_size));
-
-	ExpressionTree *differed = tree.differentiate();
-	differed->simplify();
-	printf("--------------------------------------------------- differed\n");
-	differed->dump();
-	printf("---------------------------------------------------\n");
+	printf("result = %lg\n", tree.evaluate(table, table_size));*/
 
 	return 0;
 }

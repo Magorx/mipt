@@ -3,30 +3,17 @@
 \begin{document}
 \Large
 So we are given an expression:
-$$ \sin { \left(x\cdot \log _{10} x\right)}$$
+$$ \left(x\cdot \left(x+1\right)\cdot x^{5}+x+x\right)\cdot 2\cdot 5\cdot 7$$
 
 Let's diffirintiate it!
-$$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(1\cdot \log _{10} x+\frac{\frac{\left(x^{\left(-1\right)}\cdot 1\cdot \ln {10}-\ln {x}\cdot 0\cdot 10^{\left(-1\right)}\right)}{\ln {10}}}{\ln {10}}\cdot x\right)\cdot \left(-1\right)$$
+$$ \left(x\cdot \left(x+1\right)\cdot x^{5}+x+x\right)\cdot 2\cdot 5\cdot 7$$
 
 Uhhh, let's simplify it a bit...
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\frac{\left(x^{\left(-1\right)}\cdot 1\cdot \ln {10}-\ln {x}\cdot 0\cdot 10^{\left(-1\right)}\right)}{\ln {10}}}{\ln {10}}\cdot x\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\frac{\left(x^{\left(-1\right)}\cdot \ln {10}-\ln {x}\cdot 0\cdot 10^{\left(-1\right)}\right)}{\ln {10}}}{\ln {10}}\cdot x\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\frac{\left(x^{\left(-1\right)}\cdot \ln {10}-0\cdot 10^{\left(-1\right)}\right)}{\ln {10}}}{\ln {10}}\cdot x\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\frac{\left(x^{\left(-1\right)}\cdot \ln {10}-0\cdot 0.1\right)}{\ln {10}}}{\ln {10}}\cdot x\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\frac{\left(x^{\left(-1\right)}\cdot \ln {10}-0\right)}{\ln {10}}}{\ln {10}}\cdot x\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\frac{x^{\left(-1\right)}\cdot \ln {10}}{\ln {10}}}{\ln {10}}\cdot x\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{x^{\left(-1\right)}\cdot \ln {10}}{\ln {10}\cdot \ln {10}}\cdot x\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{x^{\left(-1\right)}\cdot \ln {10}}{5.3019}\cdot x\right)\cdot \left(-1\right)$$
-STRUCTURE $$ \cos { \left(x^{1}\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{x^{\left(1+\left(-1\right)\right)}\cdot \ln {10}}{5.3019}\cdot 1\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{x^{\left(1+\left(-1\right)\right)}\cdot \ln {10}}{5.3019}\cdot 1\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{x^{0}\cdot \ln {10}}{5.3019}\cdot 1\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{1\cdot \ln {10}}{5.3019}\cdot 1\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\ln {10}}{5.3019}\cdot 1\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\ln {10}}{5.3019}\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\ln {10}}{5.3019}\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\ln {10}}{5.3019}\right)\cdot \left(-1\right)$$
-SIMPLE $$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\ln {10}}{5.3019}\right)\cdot \left(-1\right)$$
+SIMPLE $$ \left(x\cdot \left(x+1\right)\cdot x^{5}+2\cdot x\right)\cdot 2\cdot 35$$
+SIMPLE $$ \left(x\cdot \left(x+1\right)\cdot x^{5}+2\cdot x\right)\cdot 70$$
+STRUCTURE $$ \left(x^{\left(5+1\right)}\cdot \left(x+1\right)+2\cdot x\right)\cdot 70$$
+SIMPLE $$ 70\cdot \left(x^{6}\cdot \left(x+1\right)+2\cdot x\right)$$
 So finaly:
-$$ \cos { \left(x\cdot \log _{10} x\right)}\cdot \left(\log _{10} x+\frac{\ln {10}}{5.3019}\right)\cdot \left(-1\right)$$
+$$ 70\cdot \left(x^{6}\cdot \left(x+1\right)+2\cdot x\right)$$
 
 \end{document}
