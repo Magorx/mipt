@@ -108,7 +108,7 @@ public:
 		return cur_size;
 	}
 
-	void quaratic_pointer_sort() {
+	void quadratic_pointer_sort() {
 		bool flag = false;
 		for (size_t i = 0; i < size(); ++i) {
 			for (size_t j = 0; j < size(); ++j) {

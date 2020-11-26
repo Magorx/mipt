@@ -583,7 +583,7 @@ public:
 		}
 
 		// ========================================================== operation
-		if (!is_variadic()) {
+		if (!is_variadic()) { //todo check for bad funcs, like log
 			double res = evaluate();
 			DELETE(this, true);
 
@@ -1113,6 +1113,12 @@ public:
 		fprintf(file, "$$ ");
 		differed->get_root()->latex_dump(file);
 		fprintf(file, "$$\n");
+
+
+		const int table_size = 257;
+		double table[table_size];
+		table['x'] = 5;
+		printf("dif_result = %lg\n", differed->evaluate(table, table_size));
 
 
 		fprintf(file, "\n\\end{document}");

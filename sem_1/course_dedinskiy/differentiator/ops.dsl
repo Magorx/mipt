@@ -18,4 +18,4 @@ OPDEF(sin, sin, 1, 9, sin(R_RES), COS(R_COPY) * (DR) * (-1), "\\sin {", " ", "}"
 OPDEF(cos, cos, 1, 9, cos(R_RES), SIN(R_COPY), "\\cos {", " ", "}")
 
 OPDEF(Ln, Ln, 1, 9, log(R_RES), (R_COPY ^ (-1)) * DR, "\\ln {", "", "}")
-OPDEF(log, log, 2, 8, log(R_RES) / log(L_RES), ((L_COPY ^ -1) * DL * R_COPY - L_COPY * R_COPY * (R_COPY ^ 1)) / R_COPY / R_COPY, "\\log _{", "} ", "")
+OPDEF(log, log, 2, 8, log(R_RES) / log(L_RES), ((R_COPY ^ -1) * DR * LOG(L_COPY) - LOG(R_COPY) * DL * (L_COPY ^ -1)) / LOG(L_COPY) / LOG(L_COPY), "\\log _{", "} ", "")
