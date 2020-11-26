@@ -256,25 +256,11 @@ public:
 		return tree;
 	}
 
-	bool simplify_step() {
+	char simplify_step() {
 		if (!root) return 0;
-
-		char success = 0;
-		root = root->simplify(&success);
-		root = root->simplify_neutral_elements(&success);
-		return success;
-	}
-
-	bool simplify_structure_step() {
-		if (!root) return 0;
-		char success = 0;
-		root = root->simplify_structure(&success);
-		return success;
-	}
-
-	void simplify() {
-		if (!root) return;
-		while (simplify_step() || simplify_structure_step()) {}
+		char result = 0;
+		root = root->simplify_step(&result);
+		return result;
 	}
 
 	void show_off(const char *file_name) {
@@ -303,39 +289,63 @@ public:
 		root->latex_dump(file);
 		fprintf(file, "$$\n\n");
 
-		fprintf(file, "Let's diffirintiate it!\n");
+		fprintf(file, "Let's differintiate it!\n");
 
-		ExpressionTree *differed = this;
+		ExpressionTree *differed = differentiate();
 
 		fprintf(file, "$$ ");
 		differed->get_root()->latex_dump(file);
 		fprintf(file, "$$\n\n");
 
-		fprintf(file, "Uhhh, let's simplify it a bit...\n");
+		fprintf(file, "Uhhh, let's simplify it a bit...\n\n \\noindent\\makebox[\\linewidth]{\\rule{\\paperwidth}{0.4pt}}\n");
 
-		char flag = 1;
-		while(flag) {
-			differed->dump();
-			flag = 0;
-			while (differed->simplify_step()) {
-				flag = 1;
-				fprintf(file, "SIMPLE $$ ");
+		char result = 0;
+		while (true) {
+			result = differed->simplify_step();
+			//differed->dump();
+			if (!result) {
+				printf("wot\n");
+				break;
+			}
+
+			if (result == 4) {
+				continue;
+			}
+
+			bool to_dump = true;
+			switch (result) {
+				case SIMPLIFIED_EVALUATIVE : {
+					fprintf(file, "Some evaluations leave us with\n");
+					break;
+				}
+
+				case SIMPLIFIED_ELEMENTARY : {
+					fprintf(file, "No big brains are needed to get\n");
+					break;
+				}
+
+				case REORDERED_TREE : {
+					fprintf(file, "Let's reshuffle operands a bit\n");
+					break;
+				}
+
+				case FOLDED_OPERATION : {
+					fprintf(file, "Caboom, we can fold in half of the expression:\n");
+					break;
+				}
+			}
+
+			if (to_dump) {
+				fprintf(file, "$$ ");
 				differed->get_root()->latex_dump(file);
 				fprintf(file, "$$\n");
 			}
-			differed->dump();
 
-			while (differed->simplify_structure_step()) {
-				flag = 1;
-				fprintf(file, "STRUCTURE $$ ");
-				differed->get_root()->latex_dump(file);
-				fprintf(file, "$$\n");
-			}
-			if (flag) {
-			}
-		}
-
-		while(differed->simplify_step());
+			//printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
+			//differed->dump();
+			//printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
+			//printf("\n");
+		}		
 
 		fprintf(file, "So finaly:\n");
 		fprintf(file, "$$ ");
@@ -343,25 +353,21 @@ public:
 		fprintf(file, "$$\n");
 
 		fprintf(file, "\n\\end{document}");
-
 		fclose(file);
 
 		char generate_pdf_command[200];
 		sprintf(generate_pdf_command, "pdflatex -output-directory='latex_output' -jobname='%s' %s", file_name, file_name);
 		system(generate_pdf_command);
 
-		const int table_size = 257;
-		double table[table_size];
-		table['x'] = 5;
-		printf("dif_result = %lg\n", differed->evaluate(table, table_size));
-		printf("-------------------------------------------------------\n");
-		//differed->simplify_structure_step();
+		printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
 		differed->dump();
-		printf("===\n");
-		char a = 0;
+		printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
+		//printf("===\n");
 		//differed->root->get_L()->fold_multiplication(&a);
-		differed->root = root->simplify_structure(&a);
-		differed->dump();
+		//differed->simplify_step();
+		//char a;
+		//differed->get_root()->commutative_reorder('*', &a);
+		//differed->dump();
 	}
 
 	void dump(FILE *file_ptr = stdout) const {

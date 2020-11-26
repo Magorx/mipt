@@ -126,9 +126,9 @@ public:
 
 	void update_complexity() {
 		if (type == VALUE) {
-			complexity = 1 * val;
+			complexity = 1 + fabs(val);
 		} else if (type == VARIABLE) {
-			complexity = 2 * val;
+			complexity = val;
 		} else {
 			switch ((char) val) {
 				case '-' :
@@ -149,11 +149,10 @@ public:
 				}
 
 				default: {
-					complexity = pow((L ? L->complexity : 2), (R ? R->complexity : 2));
+					complexity = 5 + pow((L ? L->complexity : 2), (R ? R->complexity : 2));
 				}
 			}
 		}
-		printf("res: %lg\n", complexity);
 	}
 
 	void ctor() {
@@ -255,6 +254,8 @@ public:
 			return L;
 		} else if (val == '*') {
 			return R;
+		} else {
+			return this;
 		}
 	}
 
@@ -283,7 +284,7 @@ public:
 			DELETE(R);
 			this->ctor(OPERATION, '^', PRIOR_POW, left, right);
 		} else {
-			R = pow_;
+			set_R(pow_);
 		}
 	}
 
@@ -296,7 +297,7 @@ public:
 			DELETE(R);
 			this->ctor(OPERATION, '*', PRIOR_MUL, left, right);
 		} else {
-			L = coef_;
+			set_L(coef_);
 		}
 	}
 
@@ -365,25 +366,6 @@ public:
 
 	ExprNode &operator^(const double other) {
 		return *NEW(OPERATION, '^', PRIOR_POW, this, NEW(VALUE, other, PRIOR_VALUE));
-	}
-
-
-	bool operator<(const ExprNode &other) {
-		if (type < other.type) {
-			return true;
-		} else if (other.type < type) {
-			return false;
-		}
-
-		if (type == VALUE || type == VARIABLE) {
-			return val < other.val;
-		}
-
-		if (val != '^') {
-			return false;
-		}
-
-		return *R < *other.get_R();
 	}
 
 //=============================================================================
@@ -481,28 +463,6 @@ public:
 		}
 	}
 
-	bool equivalent_multiplication(const ExprNode *other) const {
-		if (type != other->type) {
-			return false;
-		}
-
-		if (type == VALUE) {
-			return true;
-		} else if (type == VARIABLE) {
-			return val == other->val;
-		} else {
-			if (val != other->val) {
-				return false;
-			}
-
-			if (val == '^') {
-				return L->equivalent_multiplication(other->get_L());
-			} else {
-				return L->equivalent_multiplication(other->get_L()) && R->equivalent_multiplication(other->get_R());
-			}
-		}
-	}
-
 	bool commutative_reorder(char op, char *success, int order = 1) {
 		if (type != OPERATION || val != op) {
 			return *success;
@@ -561,6 +521,9 @@ public:
 		if (IS_VAL(this) && IS_VAL(other)) {
 			val = val + other->val;
 			other->val = 0;
+
+			other->update();
+			update();
 			return true;
 		}
 
@@ -576,6 +539,9 @@ public:
 		set_coef(NEW(OPERATION, '+', PRIOR_ADD, coef_a, coef_b));
 		other->set_coef(NEW_ZERO());
 
+		other->update();
+		update();
+
 		return true;
 	}
 
@@ -583,6 +549,9 @@ public:
 		if (IS_VAL(this) && IS_VAL(other)) {
 			val = val * other->val;
 			other->val = 1;
+
+			other->update();
+			update();
 			return true;
 		}
 
@@ -598,12 +567,53 @@ public:
 		set_pow(NEW(OPERATION, '+', PRIOR_ADD, pow_a, pow_b));
 		other->set_pow(NEW_ZERO());
 
+		other->update();
+		update();
+
 		return true;
 	}
 
+	bool fold_addition(char *success) {
+		if (!IS_ADD(this)) {
+			return *success;
+		}
+		if (!IS_ADD(R)) {
+			if (L->add(R)) {
+				*success = FOLDED_OPERATION;
+			}
+
+			return *success;
+		}
+
+		if (R->L->add(L)) {
+			*success = FOLDED_OPERATION;
+		}
+
+		return R->fold_addition(success);
+	}
+
+	bool fold_multiplication(char *success) {
+		if (!IS_MUL(this)) {
+			return *success;
+		}
+		if (!IS_MUL(R)) {
+			if (R->multiply(L)) {
+				*success = FOLDED_OPERATION;
+			}
+
+			return *success;
+		}
+
+		if (R->L->multiply(L)) {
+			*success = FOLDED_OPERATION;
+		}
+
+		return R->fold_multiplication(success);
+	}
+
 	ExprNode *simplify_evaluative(char *success) {
-		if (L) L = L->simplify_evaluative(success);
-		if (R) R = R->simplify_evaluative(success);
+		if (L) set_L(L->simplify_evaluative(success));
+		if (R) set_R(R->simplify_evaluative(success));
 		if (!L || !R) {
 			return this;
 		}
@@ -619,9 +629,9 @@ public:
 		}
 	}
 
-	ExprNode *simplify_neutral_elements(char *success) {
-		if (L) L = L->simplify_neutral_elements(success);
-		if (R) R = R->simplify_neutral_elements(success);
+	ExprNode *simplify_elementary(char *success) {
+		if (L) set_L(L->simplify_elementary(success));
+		if (R) set_R(R->simplify_elementary(success));
 		if (!L || !R) {
 			return this;
 		}
@@ -675,6 +685,10 @@ public:
 				if (IS_ZERO(R)) {
 					RETURN_ONE();
 				}
+
+				if (IS_ZERO(L) && IS_VAL(R)) {
+					RETURN_ZERO();
+				}
 				break;
 			}
 		}
@@ -683,51 +697,13 @@ public:
 
 	}
 
-	bool fold_addition(char *success) {
-		if (!IS_ADD(this)) {
-			return *success;
-		}
-		if (!IS_ADD(L)) {
-			if (R->add(L)) {
-				*success = FOLDED_OPERATION;
-			}
-
-			return *success;
-		}
-
-		if (L->R->add(R)) {
-			*success = FOLDED_OPERATION;
-		}
-
-		return L->fold_addition(success);
-	}
-
-	bool fold_multiplication(char *success) {
-		if (!IS_MUL(this)) {
-			return *success;
-		}
-		if (!IS_MUL(R)) {
-			if (R->multiply(L)) {
-				*success = FOLDED_OPERATION;
-			}
-
-			return *success;
-		}
-
-		if (R->L->multiply(L)) {
-			*success = FOLDED_OPERATION;
-		}
-
-		return R->fold_multiplication(success);
-	}
-
 	ExprNode *simplify_structure(char *success) {
-		if (L) L = L->simplify_structure(success);
+		if (L) set_L(L->simplify_structure(success));
 		if (*success) {
 			return this;
 		}
 
-		if (R) R = R->simplify_structure(success);
+		if (R) set_R(R->simplify_structure(success));
 		if (*success) {
 			return this;
 		}
@@ -771,19 +747,19 @@ public:
 
 		if (success) {
 			char ig = 0;
-			return simplify_evaluative(&ig)->simplify_neutral_elements(&ig);
+			return simplify_evaluative(&ig)->simplify_elementary(&ig);
 		} else {
 			return this;
 		}
 	}
 
-	ExprNode *simplify(char *success) {
-		if (L) L = L->simplify(success);
+	ExprNode *simplify_strange(char *success) {
+		if (L) set_L(L->simplify_strange(success));
 		if (*success) {
 			return this;
 		}
 
-		if (R) R = R->simplify(success);
+		if (R) set_R(R->simplify_strange(success));
 		if (*success) {
 			return this;
 		}
@@ -792,79 +768,43 @@ public:
 			return this;
 		}
 
-		// ========================================================== op
-		if (!is_variadic()) { //todo check for bad funcs, like log
-			double res = evaluate();
-			DELETE(this, true);
-
-			*success = 1;
-			return NEW(VALUE, res, PRIOR_VALUE);
-		}
-
 		switch ((char) val) {
-			case '+' : {
-				break;
-			}
-
 			case '-' : {
 				if (IS_ZERO(L)) {
 					val = '*';
 					prior = PRIOR_MUL;
 					L->val = -1;
 
-					*success = 1;
+					*success = SIMPLIFIED_EVALUATIVE;
 					return this;
 				}
 				break;
 			}
 
-			case '*' : {
+			case '+' : {
+				if (L->equivalent_absolute(R)) {
+					DELETE(L);
+					L = NEW(VALUE, 2, PRIOR_VALUE);
 
-				if (IS_VAR(L) && IS_VAR(R) && L->val == R->val) {
-					DELETE(R, true);
-					return NEW(OPERATION, '^', PRIOR_POW, L, NEW(VALUE, 2, PRIOR_VALUE));
-				}
+					this->ctor(OPERATION, '*', PRIOR_MUL, L, R);
 
-				if (false && IS_OP(L) && L->val == '*' && IS_OP(R) && R->val == '*') {
-					if (rand() % 10) {
-						ExprNode *LR = L->R;
-						ExprNode *RL = R->L;
-						R->set_L(LR);
-						L->set_R(RL);
-						*success = 1;
-						return this;
-					}
-				}
-
-				if (false && IS_OP(L) && L->val == '*' && (IS_VAL(R) || IS_VAR(R)) && RAND90()) {
-					ExprNode *LR = L->R;
-					L->set_R(R);
-					R = LR;
-
-					*success = 1;
+					*success = SIMPLIFIED_EVALUATIVE;
 					return this;
 				}
-
-				if (false && IS_OP(R) && R->val == '*' && (IS_VAL(L) || IS_VAR(L)) && RAND90()) {
-					ExprNode *RL = R->L;
-					R->set_L(L);
-					L = RL;
-
-					*success = 1;
-					return this;
-				}
-
-				if (false && IS_OP(L) && L->val == '/' && RAND90()) {
-					ExprNode *left = L;
-					set_L(left->L);
-					left->set_L(this);
-
-					*success = 1;
-					return left;
-				}
-
 				break;
 			}
+
+			/*case '*' : {
+				if (L->equivalent_absolute(R)) {
+					DELETE(L);
+					R = NEW(VALUE, 2, PRIOR_VALUE);
+
+					this->ctor(OPERATION, '^', PRIOR_POW, L, R);
+
+					*success = SIMPLIFIED_EVALUATIVE;
+					return this;
+				}
+			}*/
 
 			case '/' : {
 				if (IS_OP(L) && L->val == '/') {
@@ -873,27 +813,29 @@ public:
 					set_L(L->L);
 					DELETE(prev_L, false);
 
-					*success = 1;
+					*success = SIMPLIFIED_EVALUATIVE;
 					return this;
 				}
 				break;
-			}
-
-			case '^' : {
-				if (IS_ZERO(L) && IS_VAL(R)) {
-					RETURN_ZERO();
-				}
-				break;
-			}
-
-			default: {
-				return this;
 			}
 		}
 
 		return this;
 	}
 
+	#define RETURN_IF_SUCCESS(code) {if (ret = (code), *success) {return ret;}}
+
+	ExprNode *simplify_step(char *success) {
+		ExprNode *ret = this;
+		RETURN_IF_SUCCESS(simplify_evaluative(success));
+		RETURN_IF_SUCCESS(simplify_elementary(success));
+		RETURN_IF_SUCCESS(simplify_strange   (success));
+		RETURN_IF_SUCCESS(simplify_structure (success));
+		return this;
+	}
+
+//=============================================================================
+// Dumps ======================================================================
 //=============================================================================
 
 	void dump(FILE *file_ptr = stdout) const {
@@ -946,7 +888,6 @@ public:
 	}
 
 	void latex_dump(FILE *file = stdout) const {
-		//fprintf(file, "{");
 		if (type == VALUE) {
 			if (val < 0) {
 				fprintf(file, "\\left(");
@@ -964,7 +905,6 @@ public:
 
 			}
 		}
-		//fprintf(file, "}");
 	}
 
 	#undef OPDEF

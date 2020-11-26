@@ -3,27 +3,61 @@
 \begin{document}
 \Large
 So we are given an expression:
-$$ 10\cdot \left(x\cdot \left(x+1\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 2\cdot 5\cdot 7$$
+$$ \left(x+1\right)\cdot \left(x+2\right)\cdot \left(x+2\right)\cdot \left(x+1\right)$$
 
-Let's diffirintiate it!
-$$ 10\cdot \left(x\cdot \left(x+1\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 2\cdot 5\cdot 7$$
+Let's differintiate it!
+$$ \left(\left(1+0\right)\cdot \left(x+2\right)+\left(1+0\right)\cdot \left(x+1\right)\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(\left(1+0\right)\cdot \left(x+1\right)+\left(1+0\right)\cdot \left(x+2\right)\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
 
 Uhhh, let's simplify it a bit...
-SIMPLE $$ 10\cdot \left(x\cdot \left(x+1\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 2\cdot 35$$
-SIMPLE $$ 10\cdot \left(x\cdot \left(x+1\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 70$$
-STRUCTURE $$ 10\cdot \left(x\cdot \left(1+x\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 70$$
-STRUCTURE $$ 10\cdot \left(x\cdot \left(1+x\right)\cdot x^{4}\cdot \left(1+x\right)+x+x+x\right)\cdot 70$$
-STRUCTURE $$ 10\cdot \left(x\cdot \left(1+x\right)\cdot \left(1+x\right)\cdot x^{4}+x+x+x\right)\cdot 70$$
-STRUCTURE $$ 10\cdot \left(x\cdot \left(1+x\right)^{2}\cdot x^{4}+x+x+x\right)\cdot 70$$
-STRUCTURE $$ 10\cdot \left(\left(1+x\right)^{2}\cdot x\cdot x^{4}+x+x+x\right)\cdot 70$$
-STRUCTURE $$ 10\cdot \left(\left(1+x\right)^{2}\cdot x^{5}+x+x+x\right)\cdot 70$$
-STRUCTURE $$ 10\cdot \left(\left(1+x\right)^{2}\cdot x^{5}+2\cdot x+x\right)\cdot 70$$
-STRUCTURE $$ 10\cdot \left(\left(1+x\right)^{2}\cdot x^{5}+x+2\cdot x\right)\cdot 70$$
-STRUCTURE $$ 10\cdot \left(\left(1+x\right)^{2}\cdot x^{5}+3\cdot x\right)\cdot 70$$
-STRUCTURE $$ 10\cdot \left(3\cdot x+\left(1+x\right)^{2}\cdot x^{5}\right)\cdot 70$$
-STRUCTURE $$ 10\cdot 70\cdot \left(3\cdot x+\left(1+x\right)^{2}\cdot x^{5}\right)$$
-STRUCTURE $$ 700\cdot \left(3\cdot x+\left(1+x\right)^{2}\cdot x^{5}\right)$$
+
+ \noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
+Some evaluations leave us with
+$$ \left(1\cdot \left(x+2\right)+1\cdot \left(x+1\right)\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(1\cdot \left(x+1\right)+1\cdot \left(x+2\right)\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+No big brains are needed to get
+$$ \left(x+2+x+1\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(2+x+x+1\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(2+x+1+x\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(2+1+x+x\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Some evaluations leave us with
+$$ \left(2+1+2\cdot x\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(1+2+2\cdot x\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Caboom, we can fold in half of the expression:
+$$ \left(3+2\cdot x\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(3+2\cdot x\right)\cdot \left(2+x\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(3+2\cdot x\right)\cdot \left(2+x\right)\cdot \left(1+x\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(3+2\cdot x\right)\cdot \left(1+x\right)\cdot \left(2+x\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(1+x\right)\cdot \left(3+2\cdot x\right)\cdot \left(2+x\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(1+x+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(1+x+2+x\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(1+2+x+x\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Some evaluations leave us with
+$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(1+2+2\cdot x\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Caboom, we can fold in half of the expression:
+$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(3+2\cdot x\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(3+2\cdot x\right)\cdot \left(1+x\right)\cdot \left(x+2\right)$$
+Let's reshuffle operands a bit
+$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(3+2\cdot x\right)\cdot \left(1+x\right)\cdot \left(2+x\right)$$
+Let's reshuffle operands a bit
+$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(1+x\right)\cdot \left(3+2\cdot x\right)\cdot \left(2+x\right)$$
+Let's reshuffle operands a bit
+$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)$$
+Some evaluations leave us with
+$$ 2\cdot \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)$$
 So finaly:
-$$ 700\cdot \left(3\cdot x+\left(1+x\right)^{2}\cdot x^{5}\right)$$
+$$ 2\cdot \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)$$
 
 \end{document}

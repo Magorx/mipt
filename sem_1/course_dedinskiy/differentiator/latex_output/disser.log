@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.11.25)  26 NOV 2020 19:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.11.25)  26 NOV 2020 23:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -201,36 +201,143 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 6.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 6.
- [1
+
+Overfull \hbox (297.12556pt too wide) detected at line 9
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (155.59407pt too wide) detected at line 15
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (41.92873pt too wide) detected at line 17
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (41.92873pt too wide) detected at line 19
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (41.92873pt too wide) detected at line 21
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (41.92873pt too wide) detected at line 23
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (33.99968pt too wide) detected at line 25
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (33.99968pt too wide) detected at line 27
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (9.58333pt too wide) detected at line 29
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (9.58333pt too wide) detected at line 31
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (9.58333pt too wide) detected at line 33
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+[1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 29.
- [2]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 29.
+Overfull \hbox (9.58333pt too wide) detected at line 35
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (9.58333pt too wide) detected at line 37
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (9.58333pt too wide) detected at line 39
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (9.58333pt too wide) detected at line 41
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (9.58333pt too wide) detected at line 43
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (9.58333pt too wide) detected at line 45
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+
+Overfull \hbox (1.65428pt too wide) detected at line 47
+[] \OMS/cmsy/m/n/14.4 ^^A [] ^^A [] \OT1/cmr/m/n/14.4 + [] \OMS/cmsy/m/n/14.4 ^
+^A [] ^^A []
+ []
+
+[2]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 63.
+ [3]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 63.
  (latex_output/disser.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 29.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 29.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 63.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 63.
 Package rerunfilecheck Info: File `disser.out' has not changed.
 (rerunfilecheck)             Checksum: <no file>.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 29.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 63.
  ) 
 Here is how much of TeX's memory you used:
- 4401 strings out of 483183
- 69593 string characters out of 5966291
- 321952 words of memory out of 5000000
+ 4402 strings out of 483183
+ 69599 string characters out of 5966291
+ 323952 words of memory out of 5000000
  19383 multiletter control sequences out of 15000+600000
  533251 words of font info for 27 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 34i,5n,29p,206b,307s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on latex_output/disser.pdf (2 pages, 48405 bytes).
+ 34i,5n,29p,283b,307s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on latex_output/disser.pdf (3 pages, 41006 bytes).
 PDF statistics:
  37 PDF objects out of 1000 (max. 8388607)
  27 compressed objects within 1 object stream
- 3 named destinations out of 1000 (max. 500000)
+ 4 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
