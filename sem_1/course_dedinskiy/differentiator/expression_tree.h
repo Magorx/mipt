@@ -282,7 +282,7 @@ public:
 
 		fprintf(file, "\\documentclass{article}\n");
 		fprintf(file, "\\usepackage{hyperref}\n");
-		fprintf(file, "\\begin{document}\n\\Large\n");
+		fprintf(file, "\\begin{document}\n\n");
 		fprintf(file, "So we are given an expression:\n");
 
 		fprintf(file, "$$ ");
@@ -304,7 +304,6 @@ public:
 			result = differed->simplify_step();
 			//differed->dump();
 			if (!result) {
-				printf("wot\n");
 				break;
 			}
 

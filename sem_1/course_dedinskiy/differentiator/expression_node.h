@@ -448,6 +448,10 @@ public:
 #define RAND50() RANDOM_CHANCE(2)
 
 	bool equivalent_absolute(const ExprNode *other) const {
+		if (!other) {
+			return false;
+		}
+
 		if (type != other->type) {
 			return false;
 		}
@@ -458,7 +462,7 @@ public:
 			if (val != other->val) {
 				return false;
 			} else {
-				return L->equivalent_absolute(other->get_L()) && R->equivalent_absolute(other->get_R());
+				return (!L || L->equivalent_absolute(other->get_L())) && (!R || R->equivalent_absolute(other->get_R()));
 			}
 		}
 	}
@@ -830,7 +834,7 @@ public:
 		RETURN_IF_SUCCESS(simplify_evaluative(success));
 		RETURN_IF_SUCCESS(simplify_elementary(success));
 		RETURN_IF_SUCCESS(simplify_strange   (success));
-		RETURN_IF_SUCCESS(simplify_structure (success));
+		RETURN_IF_SUCCESS(simplify_structure (success)); // <<<<<<<<<<<<<<<< SEGFAULT
 		return this;
 	}
 

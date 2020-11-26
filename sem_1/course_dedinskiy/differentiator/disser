@@ -1,63 +1,65 @@
 \documentclass{article}
 \usepackage{hyperref}
 \begin{document}
-\Large
+
 So we are given an expression:
-$$ \left(x+1\right)\cdot \left(x+2\right)\cdot \left(x+2\right)\cdot \left(x+1\right)$$
+$$ \frac{x\cdot \log _{x} 7}{x^{\sin { x}}\cdot 5}$$
 
 Let's differintiate it!
-$$ \left(\left(1+0\right)\cdot \left(x+2\right)+\left(1+0\right)\cdot \left(x+1\right)\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(\left(1+0\right)\cdot \left(x+1\right)+\left(1+0\right)\cdot \left(x+2\right)\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+$$ \frac{\frac{\left(\left(1\cdot \log _{x} 7+\frac{\frac{\left(7^{\left(-1\right)}\cdot 0\cdot \ln {x}-\ln {7}\cdot 1\cdot x^{\left(-1\right)}\right)}{\ln {x}}}{\ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-\left(\left(\sin { x}\cdot x^{\left(\sin { x}-1\right)}\cdot 1+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot 1\cdot \left(-1\right)\right)\cdot 5+0\cdot x^{\sin { x}}\right)\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5}}{x^{\sin { x}}\cdot 5}$$
 
 Uhhh, let's simplify it a bit...
 
  \noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
 Some evaluations leave us with
-$$ \left(1\cdot \left(x+2\right)+1\cdot \left(x+1\right)\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(1\cdot \left(x+1\right)+1\cdot \left(x+2\right)\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+$$ \frac{\frac{\left(\left(1\cdot \log _{x} 7+\frac{\frac{\left(0\cdot \ln {x}-1.94591\cdot x^{\left(-1\right)}\right)}{\ln {x}}}{\ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-\left(\left(\sin { x}\cdot x^{\left(\sin { x}-1\right)}\cdot 1+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot 1\cdot \left(-1\right)\right)\cdot 5+0\cdot x^{\sin { x}}\right)\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5}}{x^{\sin { x}}\cdot 5}$$
 No big brains are needed to get
-$$ \left(x+2+x+1\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Let's reshuffle operands a bit
-$$ \left(2+x+x+1\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Let's reshuffle operands a bit
-$$ \left(2+x+1+x\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Let's reshuffle operands a bit
-$$ \left(2+1+x+x\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+$$ \frac{\frac{\left(\left(\log _{x} 7+\frac{\frac{\left(0-1.94591\cdot x^{\left(-1\right)}\right)}{\ln {x}}}{\ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-\left(\sin { x}\cdot x^{\left(\sin { x}-1\right)}+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot \left(-1\right)\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5}}{x^{\sin { x}}\cdot 5}$$
 Some evaluations leave us with
-$$ \left(2+1+2\cdot x\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Let's reshuffle operands a bit
-$$ \left(1+2+2\cdot x\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+$$ \frac{\frac{\left(\left(\log _{x} 7+\frac{\frac{\left(-1\right)\cdot 1.94591\cdot x^{\left(-1\right)}}{\ln {x}}}{\ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-\left(\sin { x}\cdot x^{\left(\sin { x}-1\right)}+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot \left(-1\right)\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5}}{x^{\sin { x}}\cdot 5}$$
+Some evaluations leave us with
+$$ \frac{\frac{\left(\left(\log _{x} 7+\frac{\left(-1\right)\cdot 1.94591\cdot x^{\left(-1\right)}}{\ln {x}\cdot \ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-\left(\sin { x}\cdot x^{\left(\sin { x}-1\right)}+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot \left(-1\right)\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5}}{x^{\sin { x}}\cdot 5}$$
+Some evaluations leave us with
+$$ \frac{\left(\left(\log _{x} 7+\frac{\left(-1\right)\cdot 1.94591\cdot x^{\left(-1\right)}}{\ln {x}\cdot \ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-\left(\sin { x}\cdot x^{\left(\sin { x}-1\right)}+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot \left(-1\right)\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
 Caboom, we can fold in half of the expression:
-$$ \left(3+2\cdot x\right)\cdot \left(x+2\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Let's reshuffle operands a bit
-$$ \left(3+2\cdot x\right)\cdot \left(2+x\right)\cdot \left(x+1\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Let's reshuffle operands a bit
-$$ \left(3+2\cdot x\right)\cdot \left(2+x\right)\cdot \left(1+x\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Let's reshuffle operands a bit
-$$ \left(3+2\cdot x\right)\cdot \left(1+x\right)\cdot \left(2+x\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Let's reshuffle operands a bit
-$$ \left(1+x\right)\cdot \left(3+2\cdot x\right)\cdot \left(2+x\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Let's reshuffle operands a bit
-$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(x+1+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Let's reshuffle operands a bit
-$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(1+x+x+2\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Let's reshuffle operands a bit
-$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(1+x+2+x\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Let's reshuffle operands a bit
-$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(1+2+x+x\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
-Some evaluations leave us with
-$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(1+2+2\cdot x\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+$$ \frac{\left(\left(\log _{x} 7+\frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}\cdot \ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-\left(\sin { x}\cdot x^{\left(\sin { x}-1\right)}+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot \left(-1\right)\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
 Caboom, we can fold in half of the expression:
-$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(3+2\cdot x\right)\cdot \left(x+1\right)\cdot \left(x+2\right)$$
+$$ \frac{\left(\left(\log _{x} 7+\frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-\left(\sin { x}\cdot x^{\left(\sin { x}-1\right)}+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot \left(-1\right)\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
 Let's reshuffle operands a bit
-$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(3+2\cdot x\right)\cdot \left(1+x\right)\cdot \left(x+2\right)$$
+$$ \frac{\left(\left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)\cdot x^{\sin { x}}\cdot 5-\left(\sin { x}\cdot x^{\left(\sin { x}-1\right)}+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot \left(-1\right)\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
 Let's reshuffle operands a bit
-$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(3+2\cdot x\right)\cdot \left(1+x\right)\cdot \left(2+x\right)$$
+$$ \frac{\left(\left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)\cdot 5\cdot x^{\sin { x}}-\left(\sin { x}\cdot x^{\left(\sin { x}-1\right)}+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot \left(-1\right)\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
 Let's reshuffle operands a bit
-$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(1+x\right)\cdot \left(3+2\cdot x\right)\cdot \left(2+x\right)$$
+$$ \frac{\left(5\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)\cdot x^{\sin { x}}-\left(\sin { x}\cdot x^{\left(\sin { x}-1\right)}+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot \left(-1\right)\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
 Let's reshuffle operands a bit
-$$ \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)+\left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)$$
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-\left(\sin { x}\cdot x^{\left(\sin { x}-1\right)}+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot \left(-1\right)\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-\left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\cdot \left(-1\right)\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-\left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+x^{\sin { x}}\cdot \ln {x}\cdot \left(-1\right)\cdot \cos { x}\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-\left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+x^{\sin { x}}\cdot \left(-1\right)\cdot \ln {x}\cdot \cos { x}\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-\left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+\left(-1\right)\cdot x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\right)\cdot 5\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-5\cdot \left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+\left(-1\right)\cdot x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\right)\cdot x\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-5\cdot x\cdot \left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+\left(-1\right)\cdot x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\right)\cdot \log _{x} 7\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-5\cdot x\cdot \log _{x} 7\cdot \left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+\left(-1\right)\cdot x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\right)\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-5\cdot x\cdot \log _{x} 7\cdot \left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+\left(-1\right)\cdot x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\right)\right)}{5\cdot x^{\sin { x}}\cdot x^{\sin { x}}\cdot 5}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-5\cdot x\cdot \log _{x} 7\cdot \left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+\left(-1\right)\cdot x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\right)\right)}{5\cdot x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-5\cdot x\cdot \log _{x} 7\cdot \left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+\left(-1\right)\cdot x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\right)\right)}{5\cdot 5\cdot x^{\sin { x}}\cdot x^{\sin { x}}}$$
+Caboom, we can fold in half of the expression:
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-5\cdot x\cdot \log _{x} 7\cdot \left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+\left(-1\right)\cdot x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\right)\right)}{5\cdot 5\cdot x^{\left(\sin { x}+\sin { x}\right)}}$$
 Some evaluations leave us with
-$$ 2\cdot \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)$$
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-5\cdot x\cdot \log _{x} 7\cdot \left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+\left(-1\right)\cdot x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\right)\right)}{5\cdot 5\cdot x^{\left(2\cdot \sin { x}\right)}}$$
+Caboom, we can fold in half of the expression:
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-5\cdot x\cdot \log _{x} 7\cdot \left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+\left(-1\right)\cdot x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\right)\right)}{25\cdot x^{\left(2\cdot \sin { x}\right)}}$$
 So finaly:
-$$ 2\cdot \left(1+x\right)\cdot \left(2+x\right)\cdot \left(3+2\cdot x\right)$$
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(\log _{x} 7+x\cdot \frac{\left(-1.94591\right)\cdot x^{\left(-1\right)}}{\ln {x}^{2}}\right)-5\cdot x\cdot \log _{x} 7\cdot \left(x^{\left(\sin { x}-1\right)}\cdot \sin { x}+\left(-1\right)\cdot x^{\sin { x}}\cdot \ln {x}\cdot \cos { x}\right)\right)}{25\cdot x^{\left(2\cdot \sin { x}\right)}}$$
 
 \end{document}
