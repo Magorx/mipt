@@ -3,17 +3,27 @@
 \begin{document}
 \Large
 So we are given an expression:
-$$ \left(x\cdot \left(x+1\right)\cdot x^{5}+x+x\right)\cdot 2\cdot 5\cdot 7$$
+$$ 10\cdot \left(x\cdot \left(x+1\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 2\cdot 5\cdot 7$$
 
 Let's diffirintiate it!
-$$ \left(x\cdot \left(x+1\right)\cdot x^{5}+x+x\right)\cdot 2\cdot 5\cdot 7$$
+$$ 10\cdot \left(x\cdot \left(x+1\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 2\cdot 5\cdot 7$$
 
 Uhhh, let's simplify it a bit...
-SIMPLE $$ \left(x\cdot \left(x+1\right)\cdot x^{5}+2\cdot x\right)\cdot 2\cdot 35$$
-SIMPLE $$ \left(x\cdot \left(x+1\right)\cdot x^{5}+2\cdot x\right)\cdot 70$$
-STRUCTURE $$ \left(x^{\left(5+1\right)}\cdot \left(x+1\right)+2\cdot x\right)\cdot 70$$
-SIMPLE $$ 70\cdot \left(x^{6}\cdot \left(x+1\right)+2\cdot x\right)$$
+SIMPLE $$ 10\cdot \left(x\cdot \left(x+1\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 2\cdot 35$$
+SIMPLE $$ 10\cdot \left(x\cdot \left(x+1\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 70$$
+STRUCTURE $$ 10\cdot \left(x\cdot \left(1+x\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 70$$
+STRUCTURE $$ 10\cdot \left(x\cdot \left(1+x\right)\cdot x^{4}\cdot \left(1+x\right)+x+x+x\right)\cdot 70$$
+STRUCTURE $$ 10\cdot \left(x\cdot \left(1+x\right)\cdot \left(1+x\right)\cdot x^{4}+x+x+x\right)\cdot 70$$
+STRUCTURE $$ 10\cdot \left(x\cdot \left(1+x\right)^{2}\cdot x^{4}+x+x+x\right)\cdot 70$$
+STRUCTURE $$ 10\cdot \left(\left(1+x\right)^{2}\cdot x\cdot x^{4}+x+x+x\right)\cdot 70$$
+STRUCTURE $$ 10\cdot \left(\left(1+x\right)^{2}\cdot x^{5}+x+x+x\right)\cdot 70$$
+STRUCTURE $$ 10\cdot \left(\left(1+x\right)^{2}\cdot x^{5}+2\cdot x+x\right)\cdot 70$$
+STRUCTURE $$ 10\cdot \left(\left(1+x\right)^{2}\cdot x^{5}+x+2\cdot x\right)\cdot 70$$
+STRUCTURE $$ 10\cdot \left(\left(1+x\right)^{2}\cdot x^{5}+3\cdot x\right)\cdot 70$$
+STRUCTURE $$ 10\cdot \left(3\cdot x+\left(1+x\right)^{2}\cdot x^{5}\right)\cdot 70$$
+STRUCTURE $$ 10\cdot 70\cdot \left(3\cdot x+\left(1+x\right)^{2}\cdot x^{5}\right)$$
+STRUCTURE $$ 700\cdot \left(3\cdot x+\left(1+x\right)^{2}\cdot x^{5}\right)$$
 So finaly:
-$$ 70\cdot \left(x^{6}\cdot \left(x+1\right)+2\cdot x\right)$$
+$$ 700\cdot \left(3\cdot x+\left(1+x\right)^{2}\cdot x^{5}\right)$$
 
 \end{document}

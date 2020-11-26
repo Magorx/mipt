@@ -356,11 +356,11 @@ public:
 		printf("dif_result = %lg\n", differed->evaluate(table, table_size));
 		printf("-------------------------------------------------------\n");
 		//differed->simplify_structure_step();
-		//differed->dump();
-		//printf("===\n");
-		//char a;
+		differed->dump();
+		printf("===\n");
+		char a = 0;
 		//differed->root->get_L()->fold_multiplication(&a);
-		//differed->root = root->simplify_neutral_elements(&a);
+		differed->root = root->simplify_structure(&a);
 		differed->dump();
 	}
 

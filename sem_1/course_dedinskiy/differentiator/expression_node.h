@@ -35,6 +35,14 @@ enum PRIORITIES {
 	PRIOR_LOG  = 10,
 };
 
+enum SIMPLIFICATIONS_RESULTS {
+	SIMPLIFIED_EVALUATIVE = 1,
+	SIMPLIFIED_ELEMENTARY = 2,
+	REORDERED_TREE        = 3,
+	LINEARIZED_TREE       = 4,
+	FOLDED_OPERATION      = 5,
+};
+
 //=============================================================================
 // ExprNode ===================================================================
 
@@ -47,8 +55,8 @@ private:
 	char variable_presented;
 //=============================================================================
 
-	double evaluate_operation(const double *var_table, const size_t var_table_len) {
-		char operation = val;
+	double evaluate_op(const double *var_table, const size_t var_table_len) {
+		char op = val;
 		double L_RES  = L ? L->evaluate(var_table, var_table_len) : 0;
 		double R_RES = R ? R->evaluate(var_table, var_table_len) : 0;
 
@@ -63,12 +71,12 @@ private:
             }                                                                                                         \
 		}
 
-		switch (operation) {
+		switch (op) {
 
 			#include "ops.dsl"
 
 			default: {
-				printf("[ERR]<expr_eval>: Invalid operation {%c}\n", operation);
+				printf("[ERR]<expr_eval>: Invalid op {%c}\n", op);
 				return 0;
 			}
 		}
@@ -93,7 +101,7 @@ public:
 	int high_prior;
 	char type;
 	double val;
-	int complexity;
+	double complexity;
 //=============================================================================
 
 	ExprNode():
@@ -102,7 +110,7 @@ public:
 	variable_presented(0),
 	type(0),
 	val(0.0),
-	complexity(0)
+	complexity(0.0)
 	{}
 
 	~ExprNode() {}
@@ -118,9 +126,9 @@ public:
 
 	void update_complexity() {
 		if (type == VALUE) {
-			complexity = 1;
+			complexity = 1 * val;
 		} else if (type == VARIABLE) {
-			complexity = 2;
+			complexity = 2 * val;
 		} else {
 			switch ((char) val) {
 				case '-' :
@@ -145,6 +153,7 @@ public:
 				}
 			}
 		}
+		printf("res: %lg\n", complexity);
 	}
 
 	void ctor() {
@@ -384,7 +393,7 @@ public:
 	double evaluate(const double *var_table = nullptr, const size_t var_table_len = 0) {
 		switch(type) {
 			case (OPERATION) : {
-				return evaluate_operation(var_table, var_table_len);
+				return evaluate_op(var_table, var_table_len);
 			}
 
 			case (VARIABLE) : {
@@ -424,7 +433,7 @@ public:
 				#include "ops.dsl"
 
 				default: {
-					printf("[ERR]<expr_diff>: Invalid operation {%c}\n", (char) val);
+					printf("[ERR]<expr_diff>: Invalid op {%c}\n", (char) val);
 					return 0;
 				}
 			}
@@ -440,16 +449,17 @@ public:
 #define IS_VAR(N) (N->type == VARIABLE)
 
 #define IS_OP(N)  (N->type == OPERATION)
+#define IS_ADD(N) (IS_OP(N) && N->val == '+')
 #define IS_MUL(N) (IS_OP(N) && N->val == '*')
 #define IS_POW(N) (IS_OP(N) && N->val == '^')
 
 #define NEW_ZERO() NEW(VALUE, 0, PRIOR_VALUE)
 #define NEW_ONE()  NEW(VALUE, 1, PRIOR_VALUE)
 
-#define RETURN_ZERO()  DELETE(this, true); *success = 1; return NEW_ZERO();
-#define RETURN_ONE()   DELETE(this, true); *success = 1; return NEW_ONE();
-#define RETURN_LEFT()  ExprNode *left = L;  DELETE(R); DELETE(this); *success = 1; return left;
-#define RETURN_RIGHT() ExprNode *right = R; DELETE(L); DELETE(this); *success = 1; return right;
+#define RETURN_ZERO()  DELETE(this, true); *success = SIMPLIFIED_ELEMENTARY; return NEW_ZERO();
+#define RETURN_ONE()   DELETE(this, true); *success = SIMPLIFIED_ELEMENTARY; return NEW_ONE();
+#define RETURN_LEFT()  ExprNode *left = L;  DELETE(R); DELETE(this); *success = SIMPLIFIED_ELEMENTARY; return left;
+#define RETURN_RIGHT() ExprNode *right = R; DELETE(L); DELETE(this); *success = SIMPLIFIED_ELEMENTARY; return right;
 
 #define RANDOM_CHANCE(x) rand() % x
 #define RAND90() RANDOM_CHANCE(9)
@@ -493,23 +503,67 @@ public:
 		}
 	}
 
-	void sort_by_complexity(char operation, char *success, int order = 1) {
-		if (type != OPERATION || val != operation) {
-			return;
+	bool commutative_reorder(char op, char *success, int order = 1) {
+		if (type != OPERATION || val != op) {
+			return *success;
 		}
 
-		L->sort_by_complexity(operation, success, order);
-		R->sort_by_complexity(operation, success, order);
+		L->commutative_reorder(op, success, order);
+		R->commutative_reorder(op, success, order);
 
-		if (L->complexity * order > R->complexity * order) {
-			ExprNode *r = R;
+		if (R->type == OPERATION && R->val == op) {
+			if (L->complexity > R->L->complexity) {
+				ExprNode *rl = R->L;
+				R->set_L(L);
+				set_L(rl);
+
+				*success = REORDERED_TREE;
+				return *success;
+			}
+		} else {
+			if (L->complexity > R->complexity) {
+				ExprNode *r = R;
+				set_R(L);
+				set_L(r);
+
+				*success = REORDERED_TREE;
+				return *success;
+			}
+		}
+
+		return *success;
+	}
+
+	bool commutative_linearize(char op, char *success) {
+		if (type != OPERATION || val != op) {
+			return *success;
+		}
+
+		L->commutative_linearize(op, success);
+		R->commutative_linearize(op, success);
+
+		while (L->type == OPERATION && R->type == OPERATION && L->val == op && R->val == op) {
+			ExprNode *ll = L->L;
+			ExprNode *lr = L->R;
+
+			L->set_R(R);
+			L->set_L(lr);
 			set_R(L);
-			set_L(r);
-			//*success = 1;
+			set_L(ll);
+
+			*success = LINEARIZED_TREE;
 		}
+
+		return *success;
 	}
 
 	bool add(ExprNode *other) {
+		if (IS_VAL(this) && IS_VAL(other)) {
+			val = val + other->val;
+			other->val = 0;
+			return true;
+		}
+
 		ExprNode *base_a = get_base();
 		ExprNode *base_b = other->get_base();
 		if (!base_a->equivalent_absolute(base_b)) {
@@ -526,6 +580,12 @@ public:
 	}
 
 	bool multiply(ExprNode *other) {
+		if (IS_VAL(this) && IS_VAL(other)) {
+			val = val * other->val;
+			other->val = 1;
+			return true;
+		}
+
 		ExprNode *base_a = get_base();
 		ExprNode *base_b = other->get_base();
 		if (!base_a->equivalent_absolute(base_b)) {
@@ -541,127 +601,25 @@ public:
 		return true;
 	}
 
-	ExprNode *mult_cluster_find_variadic(const Vector<char> &banned) {
-		if (type == OPERATION && val == '^') {
-			if (L->type == VARIABLE && !banned.contains((char) L->val)) {
-				return this;
-			}
-		}
-
-		if (type == OPERATION && val == '*') {
-			ExprNode *ret = L->mult_cluster_find_variadic(banned);
-			if (ret) return ret;
-			ret = R->mult_cluster_find_variadic(banned);
-			return ret;
-		}
-
-		if (type == OPERATION && val == '/') {
-			return L->mult_cluster_find_variadic(banned);
-		}
-
-		if (type == VARIABLE && !banned.contains((char)val)) {
-			ExprNode *left = NEW(VARIABLE, val, PRIOR_VALUE);
-			type = OPERATION;
-			val = '^';
-			prior = PRIOR_POW;
-
-			set_L(left);
-			set_R(NEW(VALUE, 1, PRIOR_VALUE));
+	ExprNode *simplify_evaluative(char *success) {
+		if (L) L = L->simplify_evaluative(success);
+		if (R) R = R->simplify_evaluative(success);
+		if (!L || !R) {
 			return this;
 		}
 
-		return nullptr;
-	}
+		if (!is_variadic()) { //todo check for bad funcs, like log
+			double res = evaluate();
+			DELETE(this, true);
 
-	ExprNode *mult_cluster_find_value() {
-		if (type == VALUE) {
+			*success = SIMPLIFIED_EVALUATIVE;
+			return NEW(VALUE, res, PRIOR_VALUE);
+		} else {
 			return this;
-		}
-
-		if (type == OPERATION && val == '*') {
-			ExprNode *ret = L->mult_cluster_find_value();
-			if (ret) return ret;
-			ret = R->mult_cluster_find_value();
-			return ret;
-		}
-
-		if (type == OPERATION && val == '/') {
-			return L->mult_cluster_find_value();
-		}
-
-		return nullptr;
-	}
-
-	void suggest_multiply_val(ExprNode *node, char *success) {
-		if (this == node) {
-			return;
-		}
-
-		if (!node || node->type != VALUE) {
-			printf("BAD VALUE NODE\n");
-			return;
-		}
-
-		if (type == OPERATION && val == '*') {
-			L->suggest_multiply_val(node, success);
-			R->suggest_multiply_val(node, success);
-		}
-
-		if (type == OPERATION && val == '/') {
-			L->suggest_multiply_val(node, success);
-		}
-
-		if (type == VALUE) {
-			node->val = node->val * val;
-
-			val = 1;
-			*success = 1;
-		}
-	}
-
-	void suggest_multiply_px(ExprNode *node, char *success, char to_sub = 0) {
-		if (this == node) {
-			return;
-		}
-
-		if (!node || node->type != OPERATION || node->val != '^') {
-			printf("BAD PX NODE\n");
-			return;
-		}
-
-		if (type == OPERATION && val == '*') {
-			L->suggest_multiply_px(node, success, to_sub);
-			R->suggest_multiply_px(node, success, to_sub);
-			return;
-		}
-
-		if (type == OPERATION && val == '/') {
-			L->suggest_multiply_px(node, success, to_sub);
-			R->suggest_multiply_px(node, success, to_sub ^ 1);
-		}
-
-		if (type == OPERATION && val == '^') {
-			if (L->type == VARIABLE && node->get_L()->val == L->val) {
-				node->set_R(NEW(OPERATION, to_sub ? '-' : '+', PRIOR_ADD, R->deep_copy(), node->get_R()));
-				DELETE(R, true);
-				set_R(NEW(VALUE, 0, PRIOR_VALUE));
-			}
-		}
-
-		if (type == VARIABLE && val == node->get_L()->val) {
-			node->set_R(NEW(OPERATION, to_sub ? '-' : '+', PRIOR_ADD, NEW_ONE(), node->get_R()));
-
-			type = VALUE;
-			val = 1;
-			prior = PRIOR_VALUE;
-			*success = 1;
 		}
 	}
 
 	ExprNode *simplify_neutral_elements(char *success) {
-		printf("> ");
-		dump();
-		printf("\n");
 		if (L) L = L->simplify_neutral_elements(success);
 		if (R) R = R->simplify_neutral_elements(success);
 		if (!L || !R) {
@@ -695,6 +653,10 @@ public:
 				if (IS_ONE(R)) {
 					RETURN_LEFT();
 				}
+
+				if (IS_ZERO(L) || IS_ZERO(R)) {
+					RETURN_ZERO();
+				}
 				break;
 			}
 
@@ -721,24 +683,42 @@ public:
 
 	}
 
-	void fold_multiplication(char *success) {
-		printf("hi ");
-		dump();
-		printf("\n");
+	bool fold_addition(char *success) {
+		if (!IS_ADD(this)) {
+			return *success;
+		}
+		if (!IS_ADD(L)) {
+			if (R->add(L)) {
+				*success = FOLDED_OPERATION;
+			}
+
+			return *success;
+		}
+
+		if (L->R->add(R)) {
+			*success = FOLDED_OPERATION;
+		}
+
+		return L->fold_addition(success);
+	}
+
+	bool fold_multiplication(char *success) {
 		if (!IS_MUL(this)) {
-			printf("bye1\n");
-			return;
+			return *success;
 		}
 		if (!IS_MUL(R)) {
-			printf("bye2\n");
-			return;
+			if (R->multiply(L)) {
+				*success = FOLDED_OPERATION;
+			}
+
+			return *success;
 		}
 
 		if (R->L->multiply(L)) {
-			*success = 1;
+			*success = FOLDED_OPERATION;
 		}
 
-		R->fold_multiplication(success);
+		return R->fold_multiplication(success);
 	}
 
 	ExprNode *simplify_structure(char *success) {
@@ -756,25 +736,42 @@ public:
 			return this;
 		}
 
-		// ========================================================== operation
+		//commutative_linearize('*', success);
+		//commutative_reorder('*', success);
+		//fold_multiplication(success);
+
+		// ========================================================== op
 		switch ((char) val) {
 			case '+' : {
-				sort_by_complexity('+', success, -1);
+				if (commutative_linearize('+', success)) {
+					break;
+				} else if (commutative_reorder('+', success)) {
+					break;
+				} else if (fold_addition(success)) {
+					break;
+				}
 				break;
 			}
 
 			case '*' : {
-				sort_by_complexity('*', success);
-				if (success) {break;}
-				fold_multiplication(success);
-				if (success) {break;}
+				if (commutative_linearize('*', success)) {
+					break;
+				} else if (commutative_reorder('*', success)) {
+					break;
+				} else if (fold_multiplication(success)) {
+					break;
+				} else {
+					commutative_linearize('*', success);
+					commutative_reorder('*', success);
+					fold_multiplication(success);
+				}
+				break;
 			}
 		}
 
 		if (success) {
-			char ig;
-			return simplify_neutral_elements(&ig);;
-			//return this;
+			char ig = 0;
+			return simplify_evaluative(&ig)->simplify_neutral_elements(&ig);
 		} else {
 			return this;
 		}
@@ -795,7 +792,7 @@ public:
 			return this;
 		}
 
-		// ========================================================== operation
+		// ========================================================== op
 		if (!is_variadic()) { //todo check for bad funcs, like log
 			double res = evaluate();
 			DELETE(this, true);
@@ -806,10 +803,6 @@ public:
 
 		switch ((char) val) {
 			case '+' : {
-				if (IS_VAR(L) && IS_VAR(R) && L->val == R->val) {
-					DELETE(R, true);
-					return NEW(OPERATION, '*', PRIOR_POW, NEW(VALUE, 2, PRIOR_VALUE), L);
-				}
 				break;
 			}
 
@@ -826,9 +819,6 @@ public:
 			}
 
 			case '*' : {
-				if (IS_ZERO(L) || IS_ZERO(R)) {
-					RETURN_ZERO();
-				}
 
 				if (IS_VAR(L) && IS_VAR(R) && L->val == R->val) {
 					DELETE(R, true);
@@ -911,6 +901,24 @@ public:
 			fprintf(file_ptr, "%03lg", val);
 		} else {
 			fprintf(file_ptr, "{%c}", (char) val);
+		}
+	}
+
+	void dump_space(FILE *file_ptr = stdout) const {
+		if (L) {
+			printf("(");
+			L->dump_space(file_ptr);
+			printf(")");
+		}
+		if (type == VALUE) {
+			fprintf(file_ptr, "%03lg", val);
+		} else {
+			fprintf(file_ptr, "{%c}", (char) val);
+		}
+		if (R) {
+			printf("(");
+			R->dump_space(file_ptr);
+			printf(")");
 		}
 	}
 
