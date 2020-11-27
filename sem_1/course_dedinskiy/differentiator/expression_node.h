@@ -6,7 +6,7 @@
 #include "general/c/common.h"
 #include "general/cpp/vector.hpp"
 
-//#include "expression_node_interface.h"
+#include "expression_node_interface.h"
 #include "expression_node_decender_interface.h"
 
 
@@ -19,36 +19,6 @@ template <typename T>
 const T &max(const T &first, const T &second) {
 	return second < first ? first : second;
 }
-
-enum EXPRNODE_TYPES {
-	OPERATION = 1,
-	VALUE     = 2,
-	VARIABLE  = 3,
-};
-
-enum PRIORITIES {
-	PRIOR_MAX   = 999,
-	PRIOR_MIN   = 0,
-	PRIOR_VALUE = 15,
-
-	PRIOR_ADD  = 5,
-	PRIOR_SUB  = 5,
-	PRIOR_MUL  = 7,
-	PRIOR_DIV  = 7,
-
-	PRIOR_POW  = 9,
-	PRIOR_SIN  = 15,
-	PRIOR_COS  = 15,
-	PRIOR_LOG  = 10,
-};
-
-enum SIMPLIFICATIONS_RESULTS {
-	SIMPLIFIED_EVALUATIVE = 1,
-	SIMPLIFIED_ELEMENTARY = 2,
-	REORDERED_TREE        = 3,
-	LINEARIZED_TREE       = 4,
-	FOLDED_OPERATION      = 5,
-};
 
 //=============================================================================
 // ExprNode ===================================================================
@@ -609,6 +579,7 @@ public:
 	// }
 
 	bool fold_addition(char *success) {
+		printf("called by ");
 		dump_space();
 		printf("\n");
 		if (!IS_ADD(this)) {
@@ -630,6 +601,12 @@ public:
 				ExprNode *term_1 = term_one.get_elem_node();
 				ExprNode *term_2 = term_two.get_elem_node();
 
+				printf("terms are |");
+				term_1->dump_space();
+				printf("| and |");
+				term_2->dump_space();
+				printf("|\n");
+
 				if (IS_VAL(term_1) && IS_VAL(term_2)) {
 					term_1->val += term_2->val;
 					term_2->val = 0;
@@ -638,13 +615,17 @@ public:
 
 					*success = SIMPLIFIED_EVALUATIVE;
 					return *success;
+				} 
+
+				if (!IS_MUL(term_1) && IS_VAR(term_1)) {
+					term_one.set_operand(MUL(NEW_ONE(), term_1));
+					term_1 = term_one.get_elem_node();
 				}
 
-				printf("going to COMPARE |");
-				term_1->dump_space();
-				printf("| and |");
-				term_2->dump_space();
-				printf("|\n");
+				if (!IS_MUL(term_2) && IS_VAR(term_2)) {
+					term_two.set_operand(MUL(NEW_ONE(), term_2));
+					term_2 = term_two.get_elem_node();
+				}
 
 				ExprNodeDecender factor_one = {};
 				factor_one.ctor(term_1);
@@ -666,30 +647,19 @@ public:
 						fact_2->dump_space();
 						printf("\n");
 
-						if (!fact_1->equivalent_absolute(fact_2)) {
+						if (!fact_1->equivalent_absolute(fact_2) || IS_ONE(fact_1)) {
 							continue;
 						}
 
-						printf("going to sum |");
-						fact_1->dump_space();
-						printf("| and |");
-						fact_2->dump_space();
-						printf("|\n");
-
-						printf("HELLO\n");
-
 						DELETE(fact_2);
-						factor_two.set_op_elem(NEW_ONE());
-						factor_one.set_op_elem(NEW_ONE());
+						factor_two.set_operand(NEW_ONE());
+						factor_one.set_operand(NEW_ONE());
 
-						term_two.set_op_elem(NEW_ZERO());
+						term_two.set_operand(NEW_ZERO());
 
-						term_one.set_op_elem(MUL(fact_1, ADD(term_1, term_2)));
+						term_one.set_operand(MUL(fact_1, ADD(term_1, term_2)));
 
-						*success = FOLDED_OPERATION;
-
-						dump_space();
-						printf("!!!!!!!!!\n");
+						*success = PUT_OUT_OF_BRACKETS;
 						return *success;
 
 						//=========================================================
@@ -879,19 +849,6 @@ public:
 					val = '*';
 					prior = PRIOR_MUL;
 					L->val = -1;
-
-					*success = SIMPLIFIED_EVALUATIVE;
-					return this;
-				}
-				break;
-			}
-
-			case '+' : {
-				if (L->equivalent_absolute(R)) {
-					DELETE(L);
-					L = NEW(VALUE, 2, PRIOR_VALUE);
-
-					this->ctor(OPERATION, '*', PRIOR_MUL, L, R);
 
 					*success = SIMPLIFIED_EVALUATIVE;
 					return this;
@@ -1132,7 +1089,7 @@ bool ExprNodeDecender::next() {
 	return true;
 }
 
-void ExprNodeDecender::set_op_elem(ExprNode *new_elem) {
+void ExprNodeDecender::set_operand(ExprNode *new_elem) {
 	if (!op_node) {
 		return;
 	}

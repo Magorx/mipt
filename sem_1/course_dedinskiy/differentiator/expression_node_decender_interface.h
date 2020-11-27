@@ -1,7 +1,6 @@
 #ifndef EXPRESSION_NODE_DECENDER_INTERFACE
 #define EXPRESSION_NODE_DECENDER_INTERFACE
 
-//#include "expression_node_interface.h"
 class ExprNode;
 
 class ExprNodeDecender {
@@ -32,7 +31,7 @@ public:
 	bool decend();
 	bool next();
 
-	void set_op_elem(ExprNode *new_elem);
+	void set_operand(ExprNode *new_elem);
 
 	ExprNode *get_op_node();
 	ExprNode *get_elem_node();

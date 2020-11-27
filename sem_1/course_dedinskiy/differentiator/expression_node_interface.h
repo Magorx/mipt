@@ -26,12 +26,14 @@ enum PRIORITIES {
 enum SIMPLIFICATIONS_RESULTS {
 	SIMPLIFIED_EVALUATIVE = 1,
 	SIMPLIFIED_ELEMENTARY = 2,
-	REORDERED_TREE        = 3,
-	LINEARIZED_TREE       = 4,
-	FOLDED_OPERATION      = 5,
+	FOLDED_OPERATION      = 3,
+	PUT_OUT_OF_BRACKETS   = 4,
+
+	REORDERED_TREE        = 10,
+	LINEARIZED_TREE       = 11,
 };
 
-class ExprNode {
+/*class ExprNode {
 private:
 // data =======================================================================
 	ExprNode *L;
@@ -128,6 +130,6 @@ public:
 	void latex_dump_son(FILE *file = stdout, const ExprNode *son = nullptr) const;
 	void latex_dump(FILE *file = stdout) const;
 
-};
+};*/
 
 #endif // EXPRESSION_NODE_INTERFACE

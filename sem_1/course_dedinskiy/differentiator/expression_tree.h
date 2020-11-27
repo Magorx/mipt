@@ -307,10 +307,6 @@ public:
 				break;
 			}
 
-			if (result == 4) {
-				continue;
-			}
-
 			bool to_dump = true;
 			switch (result) {
 				case SIMPLIFIED_EVALUATIVE : {
@@ -323,6 +319,11 @@ public:
 					break;
 				}
 
+				case PUT_OUT_OF_BRACKETS : {
+					fprintf(file, "Sprinkling out-of-brackets magic!\n");
+					break;
+				}
+
 				case REORDERED_TREE : {
 					fprintf(file, "Let's reshuffle operands a bit\n");
 					break;
@@ -332,6 +333,11 @@ public:
 					fprintf(file, "Here we fold in half the expression:\n");
 					break;
 				}
+
+				case LINEARIZED_TREE : {
+					to_dump = false;
+				}
+
 			}
 
 			if (to_dump) {

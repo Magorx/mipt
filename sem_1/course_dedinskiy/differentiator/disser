@@ -3,37 +3,23 @@
 \begin{document}
 
 So we are given an expression:
-$$ \left(x+7\right)\cdot \left(3+x\right)+\left(3+x\right)\cdot 2+\left(x+7\right)\cdot \left(9+x\right)$$
+$$ x\cdot 2+x\cdot 3$$
 
 Let's differintiate it!
-$$ \left(x+7\right)\cdot \left(3+x\right)+\left(3+x\right)\cdot 2+\left(x+7\right)\cdot \left(9+x\right)$$
+$$ x\cdot 2+x\cdot 3$$
 
 Uhhh, let's simplify it a bit...
 
  \noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
 Let's reshuffle operands a bit
-$$ \left(7+x\right)\cdot \left(3+x\right)+\left(3+x\right)\cdot 2+\left(x+7\right)\cdot \left(9+x\right)$$
+$$ 2\cdot x+x\cdot 3$$
 Let's reshuffle operands a bit
-$$ \left(3+x\right)\cdot \left(7+x\right)+\left(3+x\right)\cdot 2+\left(x+7\right)\cdot \left(9+x\right)$$
+$$ 2\cdot x+3\cdot x$$
+Sprinkling out-of-brackets magic!
+$$ x\cdot 5$$
 Let's reshuffle operands a bit
-$$ \left(3+x\right)\cdot \left(7+x\right)+2\cdot \left(3+x\right)+\left(x+7\right)\cdot \left(9+x\right)$$
-Let's reshuffle operands a bit
-$$ 2\cdot \left(3+x\right)+\left(3+x\right)\cdot \left(7+x\right)+\left(x+7\right)\cdot \left(9+x\right)$$
-Here we fold in half the expression:
-$$ \left(3+x\right)\cdot \left(2+7+x\right)+\left(x+7\right)\cdot \left(9+x\right)$$
-Some evaluations leave us with
-$$ \left(3+x\right)\cdot \left(9+x\right)+\left(x+7\right)\cdot \left(9+x\right)$$
-Let's reshuffle operands a bit
-$$ \left(3+x\right)\cdot \left(9+x\right)+\left(7+x\right)\cdot \left(9+x\right)$$
-Here we fold in half the expression:
-$$ \left(9+x\right)\cdot \left(3+x+7+x\right)$$
-Let's reshuffle operands a bit
-$$ \left(9+x\right)\cdot \left(3+7+x+x\right)$$
-Some evaluations leave us with
-$$ \left(9+x\right)\cdot \left(3+7+2\cdot x\right)$$
-Some evaluations leave us with
-$$ \left(9+x\right)\cdot \left(10+2\cdot x\right)$$
+$$ 5\cdot x$$
 So finaly:
-$$ \left(9+x\right)\cdot \left(10+2\cdot x\right)$$
+$$ 5\cdot x$$
 
 \end{document}
