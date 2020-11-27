@@ -3,23 +3,33 @@
 \begin{document}
 
 So we are given an expression:
-$$ x\cdot 2+x\cdot 3$$
+$$ 10\cdot \left(x\cdot \left(x+1\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 2\cdot 5\cdot 7$$
 
 Let's differintiate it!
-$$ x\cdot 2+x\cdot 3$$
+$$ 10\cdot \left(x\cdot \left(x+1\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 2\cdot 5\cdot 7$$
 
 Uhhh, let's simplify it a bit...
 
  \noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
+Some evaluations leave us with
+$$ 10\cdot \left(x\cdot \left(x+1\right)\cdot x^{4}\cdot \left(x+1\right)+x+x+x\right)\cdot 70$$
 Let's reshuffle operands a bit
-$$ 2\cdot x+x\cdot 3$$
-Let's reshuffle operands a bit
-$$ 2\cdot x+3\cdot x$$
+$$ 10\cdot \left(x\cdot x^{4}\cdot \left(x+1\right)\cdot \left(x+1\right)+x+x+x\right)\cdot 70$$
+Here we fold in half the expression:
+$$ 10\cdot \left(x\cdot x^{4}\cdot \left(x+1\right)^{2}+x+x+x\right)\cdot 70$$
+Here we fold in half the expression:
+$$ 10\cdot \left(x^{5}\cdot \left(x+1\right)^{2}+x+x+x\right)\cdot 70$$
 Sprinkling out-of-brackets magic!
-$$ x\cdot 5$$
+$$ 10\cdot \left(x^{5}\cdot \left(x+1\right)^{2}+x\cdot 2+x\right)\cdot 70$$
 Let's reshuffle operands a bit
-$$ 5\cdot x$$
+$$ 10\cdot \left(x^{5}\cdot \left(x+1\right)^{2}+2\cdot x+x\right)\cdot 70$$
+Sprinkling out-of-brackets magic!
+$$ 10\cdot \left(x^{5}\cdot \left(x+1\right)^{2}+x\cdot 3\right)\cdot 70$$
+Let's reshuffle operands a bit
+$$ 10\cdot \left(x^{5}\cdot \left(x+1\right)^{2}+3\cdot x\right)\cdot 70$$
+Let's reshuffle operands a bit
+$$ 10\cdot 70\cdot \left(x^{5}\cdot \left(x+1\right)^{2}+3\cdot x\right)$$
 So finaly:
-$$ 5\cdot x$$
+$$ 700\cdot \left(x^{5}\cdot \left(x+1\right)^{2}+3\cdot x\right)$$
 
 \end{document}

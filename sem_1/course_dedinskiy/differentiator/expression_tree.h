@@ -142,7 +142,7 @@ private:
 	void dump(ExprNode *node, int depth = 0, int to_format_cnt = 0, FILE *file_ptr = stdout) const {
 		if (!node) {return;}
 
-		dump(node->get_L(), depth + 1, to_format_cnt + 1, file_ptr);
+		dump(node->get_R(), depth + 1, to_format_cnt + 1, file_ptr);
 
 		for (int i = 0; i < depth; ++i) {
 			if (depth - to_format_cnt- 1 <= i) {
@@ -156,7 +156,7 @@ private:
 		if (node->get_L() || node->get_R()) printf("->|");
 		printf("\n");
 
-		dump(node->get_R(), depth + 1, to_format_cnt + 1, file_ptr);
+		dump(node->get_L(), depth + 1, to_format_cnt + 1, file_ptr);
 	}
 
 
@@ -325,6 +325,7 @@ public:
 				}
 
 				case REORDERED_TREE : {
+					//printf("REORDERED\n");
 					fprintf(file, "Let's reshuffle operands a bit\n");
 					break;
 				}
@@ -335,6 +336,7 @@ public:
 				}
 
 				case LINEARIZED_TREE : {
+					//printf("LINEARIZED\n");
 					to_dump = false;
 				}
 
@@ -346,9 +348,9 @@ public:
 				fprintf(file, "$$\n");
 			}
 
-			//printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
-			//differed->dump();
-			//printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
+			// printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
+			// differed->dump();
+			// printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
 			//printf("\n");
 		}		
 
@@ -370,17 +372,10 @@ public:
 		//printf("===\n");
 		//differed->root->get_L()->fold_multiplication(&a);
 		//differed->simplify_step();
-		char ig;
-		differed->get_root()->fold_addition(&ig);
-		differed->dump();
-		printf("`````````````````````````````````````````````````\n");
-
-		ExprNodeDecender a;
-		a.ctor(differed->get_root());
-		while (a.next()) {
-			a.get_elem_node()->dump_space();
-			printf("\n");
-		}
+		// char ig;
+		// differed->get_root()->fold_addition(&ig);
+		// differed->dump();
+		// printf("`````````````````````````````````````````````````\n");
 	}
 
 	void dump(FILE *file_ptr = stdout) const {

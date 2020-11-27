@@ -8,6 +8,7 @@ private:
 // data =======================================================================
 	ExprNode *op_node;
 	ExprNode *elem_node;
+	int order;
 //=============================================================================
 
 public:
@@ -15,10 +16,10 @@ public:
 	~ExprNodeDecender();
 
 	void ctor();
-	void ctor(ExprNode *op_node_);
+	void ctor(ExprNode *op_node_, int order_ = 1);
 
 	static ExprNodeDecender *NEW();
-	static ExprNodeDecender *NEW(ExprNode *op_node_);
+	static ExprNodeDecender *NEW(ExprNode *op_node_, int order_ = 1);
 
 	void dtor();
 

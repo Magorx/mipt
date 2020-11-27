@@ -5,7 +5,7 @@ const int table_size = 257;
 int main() {
 	ExpressionTree tree;
 	tree.ctor();
-	tree.load("sample.expr");
+	tree.load("smpl_1.expr");
 	tree.dump();
 	tree.show_off("disser");
 

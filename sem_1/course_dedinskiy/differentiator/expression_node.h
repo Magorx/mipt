@@ -409,7 +409,9 @@ public:
 
 #define IS_OP(N)  (N->type == OPERATION)
 #define IS_ADD(N) (IS_OP(N) && N->val == '+')
+#define IS_SUB(N) (IS_OP(N) && N->val == '-')
 #define IS_MUL(N) (IS_OP(N) && N->val == '*')
+#define IS_DIV(N) (IS_OP(N) && N->val == '/')
 #define IS_POW(N) (IS_OP(N) && N->val == '^')
 
 #define NEW_ZERO() NEW(VALUE, 0, PRIOR_VALUE)
@@ -457,20 +459,20 @@ public:
 		L->commutative_reorder(op, success, order);
 		R->commutative_reorder(op, success, order);
 
-		if (R->type == OPERATION && R->val == op) {
-			if (L->complexity > R->L->complexity) {
-				ExprNode *rl = R->L;
-				R->set_L(L);
-				set_L(rl);
+		if (L->type == OPERATION && L->val == op) {
+			if (R->complexity * order < L->R->complexity * order) {
+				ExprNode *lr = L->R;
+				L->set_R(R);
+				set_R(lr);
 
 				*success = REORDERED_TREE;
 				return *success;
 			}
 		} else {
-			if (L->complexity > R->complexity) {
-				ExprNode *r = R;
-				set_R(L);
-				set_L(r);
+			if (R->complexity * order < L->complexity * order) {
+				ExprNode *l = L;
+				set_L(R);
+				set_R(l);
 
 				*success = REORDERED_TREE;
 				return *success;
@@ -488,15 +490,14 @@ public:
 		L->commutative_linearize(op, success);
 		R->commutative_linearize(op, success);
 
-		while (L->type == OPERATION && R->type == OPERATION && L->val == op && R->val == op) {
-			ExprNode *ll = L->L;
-			ExprNode *lr = L->R;
+		while (R->type == OPERATION && R->val == op) {
+			ExprNode *rr = R->R;
+			ExprNode *rl = R->L;
 
-			L->set_R(R);
-			L->set_L(lr);
-			set_R(L);
-			set_L(ll);
-
+			R->set_L(L);
+			R->set_R(rl);
+			set_L(R);
+			set_R(rr);
 			*success = LINEARIZED_TREE;
 		}
 
@@ -579,19 +580,16 @@ public:
 	// }
 
 	bool fold_addition(char *success) {
-		printf("called by ");
-		dump_space();
-		printf("\n");
 		if (!IS_ADD(this)) {
 			return *success;
 		}
 
 		ExprNodeDecender term_one;
-		term_one.ctor(this);
+		term_one.ctor(this, -1);
 
 		while (term_one.next()) {
 			ExprNodeDecender term_two  = {};
-			term_two.ctor(term_one.get_op_node());
+			term_two.ctor(term_one.get_op_node(), -1);
 
 			while (term_two.next()) {
 				if (term_one.get_elem_node() == term_two.get_elem_node()) {
@@ -601,11 +599,11 @@ public:
 				ExprNode *term_1 = term_one.get_elem_node();
 				ExprNode *term_2 = term_two.get_elem_node();
 
-				printf("terms are |");
-				term_1->dump_space();
-				printf("| and |");
-				term_2->dump_space();
-				printf("|\n");
+				// printf("terms are |");
+				// term_1->dump_space();
+				// printf("| and |");
+				// term_2->dump_space();
+				// printf("|\n");
 
 				if (IS_VAL(term_1) && IS_VAL(term_2)) {
 					term_1->val += term_2->val;
@@ -627,6 +625,10 @@ public:
 					term_2 = term_two.get_elem_node();
 				}
 
+				if (term_1->val != term_2->val || !(IS_MUL(term_1) || IS_DIV(term_1))) {
+					continue;
+				}
+
 				ExprNodeDecender factor_one = {};
 				factor_one.ctor(term_1);
 
@@ -640,12 +642,11 @@ public:
 						ExprNode *fact_1 = factor_one.get_elem_node();
 						ExprNode *fact_2 = factor_two.get_elem_node();
 
-						printf("cur factor 1: ");
-						fact_1->dump_space();
-						printf("\n");
-						printf("cur factor 2: ");
-						fact_2->dump_space();
-						printf("\n");
+						// printf("factos: |");
+						// fact_1->dump_space();
+						// printf("| vs |");
+						// fact_2->dump_space();
+						// printf("|\n");
 
 						if (!fact_1->equivalent_absolute(fact_2) || IS_ONE(fact_1)) {
 							continue;
@@ -657,7 +658,11 @@ public:
 
 						term_two.set_operand(NEW_ZERO());
 
-						term_one.set_operand(MUL(fact_1, ADD(term_1, term_2)));
+						if (IS_DIV(factor_one.get_op_node()) && fact_1 != factor_one.get_op_node()->get_L()) {
+							term_one.set_operand(MUL(DIV(NEW_ONE(), fact_1), ADD(term_1, term_2)));
+						} else {
+							term_one.set_operand(MUL(fact_1, ADD(term_1, term_2)));
+						}
 
 						*success = PUT_OUT_OF_BRACKETS;
 						return *success;
@@ -675,19 +680,19 @@ public:
 		if (!IS_MUL(this)) {
 			return *success;
 		}
-		if (!IS_MUL(R)) {
-			if (R->multiply(L)) {
+		if (!IS_MUL(L)) {
+			if (L->multiply(R)) {
 				*success = FOLDED_OPERATION;
 			}
 
 			return *success;
 		}
 
-		if (R->L->multiply(L)) {
+		if (L->R->multiply(R)) {
 			*success = FOLDED_OPERATION;
 		}
 
-		return R->fold_multiplication(success);
+		return L->fold_multiplication(success);
 	}
 
 	ExprNode *simplify_evaluative(char *success) {
@@ -796,7 +801,7 @@ public:
 			case '+' : {
 				if (commutative_linearize('+', success)) {
 					break;
-				} else if (commutative_reorder('+', success)) {
+				} else if (commutative_reorder('+', success, -1)) {
 					break;
 				} else if (fold_addition(success)) {
 					break;
@@ -811,10 +816,6 @@ public:
 					break;
 				} else if (fold_multiplication(success)) {
 					break;
-				} else {
-					commutative_linearize('*', success);
-					commutative_reorder('*', success);
-					fold_multiplication(success);
 				}
 				break;
 			}
@@ -1006,18 +1007,19 @@ ExprNodeDecender *ExprNodeDecender::NEW() {
 	return cake;
 }
 
-void ExprNodeDecender::ctor(ExprNode *op_node_) {
+void ExprNodeDecender::ctor(ExprNode *op_node_, int order_) {
 	op_node   = op_node_;
 	elem_node = op_node_;
+	order     = order_;
 }
 
-ExprNodeDecender *ExprNodeDecender::NEW(ExprNode *op_node_) {
+ExprNodeDecender *ExprNodeDecender::NEW(ExprNode *op_node_, int order_) {
 	ExprNodeDecender *cake = (ExprNodeDecender*) calloc(1, sizeof(ExprNodeDecender));
 	if (!cake) {
 		return nullptr;
 	}
 
-	cake->ctor(op_node_);
+	cake->ctor(op_node_, order_);
 	return cake;
 }
 
@@ -1046,20 +1048,21 @@ bool ExprNodeDecender::decend() {
 	}
 
 	char op = op_node->val;
-	ExprNode *R = op_node->get_R();
 
-	if (!R) {
+	ExprNode *L = op_node->get_L();
+
+	if (!L) {
 		dtor();
 		return false;
 	}
 
-	if (R->type != OPERATION || R->val != op) {
+	if (L->type != OPERATION || (L->val != op && ! ((op == '*' && L->val == '/') || (op == '/' && L->val == '*')))) { //todo with /
 		dtor();
 		return false;
 	}
 
-	op_node   = R;
-	elem_node = R->get_L();
+	op_node   = L;
+	elem_node = L->get_R();
 	return true;
 }
 
@@ -1075,35 +1078,43 @@ bool ExprNodeDecender::next() {
 	ExprNode *L = op_node->get_L();
 	ExprNode *R = op_node->get_R();
 
-	if (elem_node == L) {
+	if (order < 0) {
+		if (elem_node == L) {
+			elem_node = R;
+			return true;
+		}
+
+		if (elem_node == R) {
+			return decend();
+		}
+
+		elem_node = L;
+		return true;
+	} else {
+		if (elem_node == R) {
+			elem_node = L;
+			return true;
+		}
+
+		if (elem_node == L) {
+			return decend();
+		}
+
 		elem_node = R;
 		return true;
 	}
-
-	if (elem_node == R) {
-		return decend();
-	}
-
-	// so we are at the beggining, poiting in ourself
-	elem_node = L;
-	return true;
 }
 
 void ExprNodeDecender::set_operand(ExprNode *new_elem) {
 	if (!op_node) {
 		return;
 	}
-	printf("setting ");
-	new_elem->dump_space();
-	printf("\n");
 
 	if (elem_node == op_node->get_L()) {
-		printf("left set %p\n", op_node);
 		op_node->set_L(new_elem);
 	}
 
 	if (elem_node == op_node->get_R()) {
-		printf("right set %p\n", op_node);
 		op_node->set_R(new_elem);
 	}
 
