@@ -291,7 +291,7 @@ public:
 
 		fprintf(file, "Let's differintiate it!\n");
 
-		ExpressionTree *differed = differentiate();
+		ExpressionTree *differed = this; //differentiate();
 
 		fprintf(file, "$$ ");
 		differed->get_root()->latex_dump(file);
@@ -329,7 +329,7 @@ public:
 				}
 
 				case FOLDED_OPERATION : {
-					fprintf(file, "Caboom, we can fold in half of the expression:\n");
+					fprintf(file, "Here we fold in half the expression:\n");
 					break;
 				}
 			}
@@ -364,9 +364,17 @@ public:
 		//printf("===\n");
 		//differed->root->get_L()->fold_multiplication(&a);
 		//differed->simplify_step();
-		//char a;
-		//differed->get_root()->commutative_reorder('*', &a);
-		//differed->dump();
+		char ig;
+		differed->get_root()->fold_addition(&ig);
+		differed->dump();
+		printf("`````````````````````````````````````````````````\n");
+
+		ExprNodeDecender a;
+		a.ctor(differed->get_root());
+		while (a.next()) {
+			a.get_elem_node()->dump_space();
+			printf("\n");
+		}
 	}
 
 	void dump(FILE *file_ptr = stdout) const {

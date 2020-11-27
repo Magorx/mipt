@@ -1,7 +1,14 @@
+#ifndef EXPRESSION_NODE
+#define EXPRESSION_NODE
+
 #include <cmath>
 
 #include "general/c/common.h"
 #include "general/cpp/vector.hpp"
+
+//#include "expression_node_interface.h"
+#include "expression_node_decender_interface.h"
+
 
 template <typename T>
 const T &min(const T &first, const T &second) {
@@ -126,7 +133,7 @@ public:
 
 	void update_complexity() {
 		if (type == VALUE) {
-			complexity = 1 + fabs(val);
+			complexity = 1 + fabs(val) * (GENERAL_EPS);
 		} else if (type == VARIABLE) {
 			complexity = val;
 		} else {
@@ -438,6 +445,11 @@ public:
 #define NEW_ZERO() NEW(VALUE, 0, PRIOR_VALUE)
 #define NEW_ONE()  NEW(VALUE, 1, PRIOR_VALUE)
 
+#define ADD(A, B)  NEW(OPERATION, '+', PRIOR_ADD, A, B)
+#define SUB(A, B)  NEW(OPERATION, '-', PRIOR_SUB, A, B)
+#define MUL(A, B)  NEW(OPERATION, '*', PRIOR_MUL, A, B)
+#define DIV(A, B)  NEW(OPERATION, '/', PRIOR_DIV, A, B)
+
 #define RETURN_ZERO()  DELETE(this, true); *success = SIMPLIFIED_ELEMENTARY; return NEW_ZERO();
 #define RETURN_ONE()   DELETE(this, true); *success = SIMPLIFIED_ELEMENTARY; return NEW_ONE();
 #define RETURN_LEFT()  ExprNode *left = L;  DELETE(R); DELETE(this); *success = SIMPLIFIED_ELEMENTARY; return left;
@@ -577,23 +589,116 @@ public:
 		return true;
 	}
 
+	// bool fold_addition(char *success) {
+	// 	if (!IS_ADD(this)) {
+	// 		return *success;
+	// 	}
+	// 	if (!IS_ADD(R)) {
+	// 		if (L->add(R)) {
+	// 			*success = FOLDED_OPERATION;
+	// 		}
+
+	// 		return *success;
+	// 	}
+
+	// 	if (R->L->add(L)) {
+	// 		*success = FOLDED_OPERATION;
+	// 	}
+
+	// 	return R->fold_addition(success);
+	// }
+
 	bool fold_addition(char *success) {
+		dump_space();
+		printf("\n");
 		if (!IS_ADD(this)) {
 			return *success;
 		}
-		if (!IS_ADD(R)) {
-			if (L->add(R)) {
-				*success = FOLDED_OPERATION;
+
+		ExprNodeDecender term_one;
+		term_one.ctor(this);
+
+		while (term_one.next()) {
+			ExprNodeDecender term_two  = {};
+			term_two.ctor(term_one.get_op_node());
+
+			while (term_two.next()) {
+				if (term_one.get_elem_node() == term_two.get_elem_node()) {
+					continue;
+				}
+
+				ExprNode *term_1 = term_one.get_elem_node();
+				ExprNode *term_2 = term_two.get_elem_node();
+
+				if (IS_VAL(term_1) && IS_VAL(term_2)) {
+					term_1->val += term_2->val;
+					term_2->val = 0;
+					term_1->update();
+					term_2->update();
+
+					*success = SIMPLIFIED_EVALUATIVE;
+					return *success;
+				}
+
+				printf("going to COMPARE |");
+				term_1->dump_space();
+				printf("| and |");
+				term_2->dump_space();
+				printf("|\n");
+
+				ExprNodeDecender factor_one = {};
+				factor_one.ctor(term_1);
+
+				while (factor_one.next()) {
+					ExprNodeDecender factor_two = {};
+					factor_two.ctor(term_2);
+
+					while (factor_two.next()) {
+						//=========================================================
+
+						ExprNode *fact_1 = factor_one.get_elem_node();
+						ExprNode *fact_2 = factor_two.get_elem_node();
+
+						printf("cur factor 1: ");
+						fact_1->dump_space();
+						printf("\n");
+						printf("cur factor 2: ");
+						fact_2->dump_space();
+						printf("\n");
+
+						if (!fact_1->equivalent_absolute(fact_2)) {
+							continue;
+						}
+
+						printf("going to sum |");
+						fact_1->dump_space();
+						printf("| and |");
+						fact_2->dump_space();
+						printf("|\n");
+
+						printf("HELLO\n");
+
+						DELETE(fact_2);
+						factor_two.set_op_elem(NEW_ONE());
+						factor_one.set_op_elem(NEW_ONE());
+
+						term_two.set_op_elem(NEW_ZERO());
+
+						term_one.set_op_elem(MUL(fact_1, ADD(term_1, term_2)));
+
+						*success = FOLDED_OPERATION;
+
+						dump_space();
+						printf("!!!!!!!!!\n");
+						return *success;
+
+						//=========================================================
+					}
+				}
 			}
-
-			return *success;
 		}
 
-		if (R->L->add(L)) {
-			*success = FOLDED_OPERATION;
-		}
-
-		return R->fold_addition(success);
+		return *success;
 	}
 
 	bool fold_multiplication(char *success) {
@@ -715,10 +820,6 @@ public:
 		if (!L || !R) {
 			return this;
 		}
-
-		//commutative_linearize('*', success);
-		//commutative_reorder('*', success);
-		//fold_multiplication(success);
 
 		// ========================================================== op
 		switch ((char) val) {
@@ -851,19 +952,21 @@ public:
 	}
 
 	void dump_space(FILE *file_ptr = stdout) const {
-		if (L) {
+		if (L && R) {
 			printf("(");
+		}
+		if (L) {
 			L->dump_space(file_ptr);
-			printf(")");
 		}
 		if (type == VALUE) {
-			fprintf(file_ptr, "%03lg", val);
+			fprintf(file_ptr, " %lg ", val);
 		} else {
-			fprintf(file_ptr, "{%c}", (char) val);
+			fprintf(file_ptr, " %c ", (char) val);
 		}
 		if (R) {
-			printf("(");
 			R->dump_space(file_ptr);
+		}
+		if (L && R) {
 			printf(")");
 		}
 	}
@@ -914,3 +1017,150 @@ public:
 	#undef OPDEF
 
 };
+
+
+//=====================================================================================================================
+//=====================================================================================================================
+//=====================================================================================================================
+
+
+#ifndef EXPR_NODE_DECENDER
+#define EXPR_NODE_DECENDER
+
+ExprNodeDecender::ExprNodeDecender():
+	op_node(nullptr),
+	elem_node(nullptr)
+	{}
+
+ExprNodeDecender::~ExprNodeDecender() {}
+
+void ExprNodeDecender::ctor() {
+	op_node   = nullptr;
+	elem_node = nullptr;
+}
+
+ExprNodeDecender *ExprNodeDecender::NEW() {
+	ExprNodeDecender *cake = (ExprNodeDecender*) calloc(1, sizeof(ExprNodeDecender));
+	if (!cake) {
+		return nullptr;
+	}
+
+	cake->ctor();
+	return cake;
+}
+
+void ExprNodeDecender::ctor(ExprNode *op_node_) {
+	op_node   = op_node_;
+	elem_node = op_node_;
+}
+
+ExprNodeDecender *ExprNodeDecender::NEW(ExprNode *op_node_) {
+	ExprNodeDecender *cake = (ExprNodeDecender*) calloc(1, sizeof(ExprNodeDecender));
+	if (!cake) {
+		return nullptr;
+	}
+
+	cake->ctor(op_node_);
+	return cake;
+}
+
+void ExprNodeDecender::dtor() {
+	op_node = nullptr;
+}
+
+void ExprNodeDecender::DELETE(ExprNodeDecender *classname) {
+	if (!classname) {
+		return;
+	}
+
+	classname->dtor();
+	free(classname);
+}
+
+//=============================================================================
+
+bool ExprNodeDecender::is_end() {
+	return !op_node;
+}
+
+bool ExprNodeDecender::decend() {
+	if (!op_node) {
+		return false;
+	}
+
+	char op = op_node->val;
+	ExprNode *R = op_node->get_R();
+
+	if (!R) {
+		dtor();
+		return false;
+	}
+
+	if (R->type != OPERATION || R->val != op) {
+		dtor();
+		return false;
+	}
+
+	op_node   = R;
+	elem_node = R->get_L();
+	return true;
+}
+
+bool ExprNodeDecender::next() {
+	if (!op_node) {
+		return false;
+	} else if (op_node->type != OPERATION) {
+		return false;
+	} else if (elem_node == nullptr) {
+		return false;
+	}
+
+	ExprNode *L = op_node->get_L();
+	ExprNode *R = op_node->get_R();
+
+	if (elem_node == L) {
+		elem_node = R;
+		return true;
+	}
+
+	if (elem_node == R) {
+		return decend();
+	}
+
+	// so we are at the beggining, poiting in ourself
+	elem_node = L;
+	return true;
+}
+
+void ExprNodeDecender::set_op_elem(ExprNode *new_elem) {
+	if (!op_node) {
+		return;
+	}
+	printf("setting ");
+	new_elem->dump_space();
+	printf("\n");
+
+	if (elem_node == op_node->get_L()) {
+		printf("left set %p\n", op_node);
+		op_node->set_L(new_elem);
+	}
+
+	if (elem_node == op_node->get_R()) {
+		printf("right set %p\n", op_node);
+		op_node->set_R(new_elem);
+	}
+
+	elem_node = new_elem;
+}
+
+ExprNode *ExprNodeDecender::get_op_node() {
+	return op_node;
+}
+
+ExprNode *ExprNodeDecender::get_elem_node() {
+	return elem_node;
+}
+
+#endif // EXPR_NODE_DECENDER
+
+#endif // EXPRESSION_NODE
