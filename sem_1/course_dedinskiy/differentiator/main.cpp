@@ -9,14 +9,7 @@ int main() {
 	tree.dump();
 	tree.show_off("disser");
 
-	/*double table[table_size];
-	table['x'] = 7;
-
-	printf("\n");
-
-	printf("%c = %lg\n", 'x', table['x']);
-
-	printf("result = %lg\n", tree.evaluate(table, table_size));*/
+	tree.dtor();
 
 	return 0;
 }

@@ -4,21 +4,15 @@
 #include <cmath>
 
 #include "general/c/common.h"
-#include "general/cpp/vector.hpp"
+#include "general/cpp/common.hpp"
 
 #include "expression_node_interface.h"
 #include "expression_node_decender_interface.h"
 
+#include "lang.dsl"
 
-template <typename T>
-const T &min(const T &first, const T &second) {
-	return first < second ? first : second;
-}
 
-template <typename T>
-const T &max(const T &first, const T &second) {
-	return second < first ? first : second;
-}
+const char *TO_SIMPLIFY = "+-*/^";
 
 //=============================================================================
 // ExprNode ===================================================================
@@ -33,7 +27,7 @@ private:
 //=============================================================================
 
 	double evaluate_op(const double *var_table, const size_t var_table_len) {
-		char op = val;
+		char op = cval;
 		double L_RES  = L ? L->evaluate(var_table, var_table_len) : 0;
 		double R_RES = R ? R->evaluate(var_table, var_table_len) : 0;
 
@@ -62,7 +56,7 @@ private:
 	}
 
 	double evaluate_variable(const double *var_table, const size_t var_table_len) {
-		int var = val;
+		int var = cval;
 		if (var_table_len <= (size_t) var) {
 			return (double) KCTF_POISON;
 		} else  {
@@ -76,27 +70,62 @@ public:
 	int prior;
 	int low_prior;
 	int high_prior;
-	char type;
+
+	char   type;
 	double val;
+	char   cval;
+	int    ival;
+
 	double complexity;
+	char to_simplify;
 //=============================================================================
+
+	ExprNode            (const ExprNode&) = delete;
+	ExprNode &operator= (const ExprNode&) = delete;
+
 
 	ExprNode():
 	L(nullptr),
 	R(nullptr),
 	variable_presented(0),
+	prior(0),
+	low_prior(0),
+	high_prior(0),
 	type(0),
 	val(0.0),
-	complexity(0.0)
+	cval(0),
+	ival(0),
+	complexity(0.0),
+	to_simplify(0)
 	{}
 
 	~ExprNode() {}
 
 	void update() {
+		cval = (char) val;
+		ival = (int ) val;
+
 		complexity = (L ? L->complexity : 0) + (R ? R->complexity : 0) + 1;
 		variable_presented = (L ? L->variable_presented : 0) || (R ? R->variable_presented : 0) || (type == VARIABLE);
+
 		low_prior  = min(min((L ? L->low_prior  : PRIOR_MAX), (R ? R->low_prior  : PRIOR_MAX)), prior);
 		high_prior = max(max((L ? L->high_prior : PRIOR_MIN), (R ? R->high_prior : PRIOR_MIN)), prior);
+
+		if (type == OPERATION) {
+			to_simplify = false;
+			for (int i = 0; i < 5; ++i) {
+				if (cval == TO_SIMPLIFY[i]) {
+					to_simplify = true;
+				}
+			}
+
+			if (IS_OP(L)) {
+				to_simplify = min(to_simplify, L->to_simplify);
+			}
+			if (IS_OP(R)) {
+				to_simplify = min(to_simplify, R->to_simplify);
+			}
+		}
 
 		update_complexity();
 	}
@@ -107,7 +136,7 @@ public:
 		} else if (type == VARIABLE) {
 			complexity = val;
 		} else {
-			switch ((char) val) {
+			switch (cval) {
 				case '-' :
 				case '+' : {
 					complexity = (L ? L->complexity : 0) + (L ? L->complexity : 0);
@@ -135,6 +164,12 @@ public:
 	void ctor() {
 		type = 0;
 		val  = 0;
+		cval = 0;
+		ival = 0;
+
+		prior = 0;
+	    low_prior = 0;
+	    high_prior = 0;
 		
 		L = nullptr;
 		R = nullptr;
@@ -227,9 +262,9 @@ public:
 	ExprNode *get_base() {
 		if (type != OPERATION) {
 			return this;
-		} else if (val == '^') {
+		} else if (cval == '^') {
 			return L;
-		} else if (val == '*') {
+		} else if (cval == '*') {
 			return R;
 		} else {
 			return this;
@@ -237,7 +272,7 @@ public:
 	}
 
 	ExprNode *get_pow() {
-		if (type != OPERATION || val != '^') {
+		if (!IS_POW(this)) {
 			return NEW(VALUE, 1, PRIOR_VALUE);
 		} else {
 			return R;
@@ -245,7 +280,7 @@ public:
 	}
 
 	ExprNode *get_coef() {
-		if (type != OPERATION || val != '*') {
+		if (!IS_MUL(this)) {
 			return NEW(VALUE, 1, PRIOR_VALUE);
 		} else {
 			return L;
@@ -253,7 +288,7 @@ public:
 	}
 
 	void set_pow(ExprNode *pow_) {
-		if (type != OPERATION || val != '^') {
+		if (!IS_POW(this)) {
 			ExprNode *left  = deep_copy();
 			ExprNode *right = pow_;
 
@@ -266,7 +301,7 @@ public:
 	}
 
 	void set_coef(ExprNode *coef_) {
-		if (type != OPERATION || val != '*') {
+		if (!IS_MUL(this)) {
 			ExprNode *right  = deep_copy();
 			ExprNode *left = coef_;
 
@@ -387,12 +422,12 @@ public:
 		} else if (type == VARIABLE) {
 			return NEW(VALUE, 1, PRIOR_VALUE);
 		} else {
-			switch ((char) val) {
+			switch (cval) {
 
 				#include "ops.dsl"
 
 				default: {
-					printf("[ERR]<expr_diff>: Invalid op {%c}\n", (char) val);
+					printf("[ERR]<expr_diff>: Invalid op {%c}\n", cval);
 					return 0;
 				}
 			}
@@ -400,36 +435,6 @@ public:
 	}
 
 	#undef OPDEF
-
-#define IS_VAL(N)  (N->type == VALUE)
-#define IS_ZERO(N) (IS_VAL(N) && fabs(N->val)     < GENERAL_EPS)
-#define IS_ONE(N)  (IS_VAL(N) && fabs(N->val - 1) < GENERAL_EPS)
-
-#define IS_VAR(N) (N->type == VARIABLE)
-
-#define IS_OP(N)  (N->type == OPERATION)
-#define IS_ADD(N) (IS_OP(N) && N->val == '+')
-#define IS_SUB(N) (IS_OP(N) && N->val == '-')
-#define IS_MUL(N) (IS_OP(N) && N->val == '*')
-#define IS_DIV(N) (IS_OP(N) && N->val == '/')
-#define IS_POW(N) (IS_OP(N) && N->val == '^')
-
-#define NEW_ZERO() NEW(VALUE, 0, PRIOR_VALUE)
-#define NEW_ONE()  NEW(VALUE, 1, PRIOR_VALUE)
-
-#define ADD(A, B)  NEW(OPERATION, '+', PRIOR_ADD, A, B)
-#define SUB(A, B)  NEW(OPERATION, '-', PRIOR_SUB, A, B)
-#define MUL(A, B)  NEW(OPERATION, '*', PRIOR_MUL, A, B)
-#define DIV(A, B)  NEW(OPERATION, '/', PRIOR_DIV, A, B)
-
-#define RETURN_ZERO()  DELETE(this, true); *success = SIMPLIFIED_ELEMENTARY; return NEW_ZERO();
-#define RETURN_ONE()   DELETE(this, true); *success = SIMPLIFIED_ELEMENTARY; return NEW_ONE();
-#define RETURN_LEFT()  ExprNode *left = L;  DELETE(R); DELETE(this); *success = SIMPLIFIED_ELEMENTARY; return left;
-#define RETURN_RIGHT() ExprNode *right = R; DELETE(L); DELETE(this); *success = SIMPLIFIED_ELEMENTARY; return right;
-
-#define RANDOM_CHANCE(x) rand() % x
-#define RAND90() RANDOM_CHANCE(9)
-#define RAND50() RANDOM_CHANCE(2)
 
 	bool equivalent_absolute(const ExprNode *other) const {
 		if (!other) {
@@ -443,7 +448,7 @@ public:
 		if (type == VALUE || type == VARIABLE) {
 			return fabs(val - other->val) < GENERAL_EPS;
 		} else {
-			if (val != other->val) {
+			if (fabs(val - other->val) < GENERAL_EPS) {
 				return false;
 			} else {
 				return (!L || L->equivalent_absolute(other->get_L())) && (!R || R->equivalent_absolute(other->get_R()));
@@ -452,14 +457,14 @@ public:
 	}
 
 	bool commutative_reorder(char op, char *success, int order = 1) {
-		if (type != OPERATION || val != op) {
+		if (type != OPERATION || cval != op) {
 			return *success;
 		}
 
 		L->commutative_reorder(op, success, order);
 		R->commutative_reorder(op, success, order);
 
-		if (L->type == OPERATION && L->val == op) {
+		if (L->type == OPERATION && L->cval == op) {
 			if (R->complexity * order < L->R->complexity * order) {
 				ExprNode *lr = L->R;
 				L->set_R(R);
@@ -483,14 +488,14 @@ public:
 	}
 
 	bool commutative_linearize(char op, char *success) {
-		if (type != OPERATION || val != op) {
+		if (type != OPERATION || cval != op) {
 			return *success;
 		}
 
 		L->commutative_linearize(op, success);
 		R->commutative_linearize(op, success);
 
-		while (R->type == OPERATION && R->val == op) {
+		while (R->type == OPERATION && R->cval == op) {
 			ExprNode *rr = R->R;
 			ExprNode *rl = R->L;
 
@@ -560,26 +565,7 @@ public:
 		return true;
 	}
 
-	// bool fold_addition(char *success) {
-	// 	if (!IS_ADD(this)) {
-	// 		return *success;
-	// 	}
-	// 	if (!IS_ADD(R)) {
-	// 		if (L->add(R)) {
-	// 			*success = FOLDED_OPERATION;
-	// 		}
-
-	// 		return *success;
-	// 	}
-
-	// 	if (R->L->add(L)) {
-	// 		*success = FOLDED_OPERATION;
-	// 	}
-
-	// 	return R->fold_addition(success);
-	// }
-
-	bool fold_addition(char *success) {
+	bool put_out_of_addition_brackets(char *success) {
 		if (!IS_ADD(this)) {
 			return *success;
 		}
@@ -625,7 +611,7 @@ public:
 					term_2 = term_two.get_elem_node();
 				}
 
-				if (term_1->val != term_2->val || !(IS_MUL(term_1) || IS_DIV(term_1))) {
+				if (term_1->cval != term_2->cval || !(IS_MUL(term_1) || IS_DIV(term_1))) {
 					continue;
 				}
 
@@ -702,7 +688,7 @@ public:
 			return this;
 		}
 
-		if (!is_variadic()) { //todo check for bad funcs, like log
+		if (!is_variadic() && to_simplify) { //todo check for bad funcs, like log
 			double res = evaluate();
 			DELETE(this, true);
 
@@ -720,7 +706,7 @@ public:
 			return this;
 		}
 
-		switch((char) val) {
+		switch(cval) {
 			case '+' : {
 				if (IS_ZERO(L)) {
 					RETURN_RIGHT();
@@ -775,6 +761,9 @@ public:
 				}
 				break;
 			}
+
+			default:
+				break;
 		}
 
 		return this;
@@ -797,13 +786,13 @@ public:
 		}
 
 		// ========================================================== op
-		switch ((char) val) {
+		switch (cval) {
 			case '+' : {
 				if (commutative_linearize('+', success)) {
 					break;
 				} else if (commutative_reorder('+', success, -1)) {
 					break;
-				} else if (fold_addition(success)) {
+				} else if (put_out_of_addition_brackets(success)) {
 					break;
 				}
 				break;
@@ -819,6 +808,9 @@ public:
 				}
 				break;
 			}
+
+			default:
+				break;
 		}
 
 		if (success) {
@@ -844,7 +836,7 @@ public:
 			return this;
 		}
 
-		switch ((char) val) {
+		switch (cval) {
 			case '-' : {
 				if (IS_ZERO(L)) {
 					val = '*';
@@ -857,20 +849,8 @@ public:
 				break;
 			}
 
-			/*case '*' : {
-				if (L->equivalent_absolute(R)) {
-					DELETE(L);
-					R = NEW(VALUE, 2, PRIOR_VALUE);
-
-					this->ctor(OPERATION, '^', PRIOR_POW, L, R);
-
-					*success = SIMPLIFIED_EVALUATIVE;
-					return this;
-				}
-			}*/
-
 			case '/' : {
-				if (IS_OP(L) && L->val == '/') {
+				if (IS_OP(L) && L->cval == '/') {
 					ExprNode *prev_L = L;
 					set_R(NEW(OPERATION, '*', PRIOR_MUL, R, L->R));
 					set_L(L->L);
@@ -881,6 +861,9 @@ public:
 				}
 				break;
 			}
+
+			default:
+				break;
 		}
 
 		return this;
@@ -964,10 +947,13 @@ public:
 		} else if (type == VARIABLE) {
 			fprintf(file, "%c", (char) val);
 		} else {
-			switch ((char) val) {
+			switch (cval) {
 
 				#include "ops.dsl"
 
+				default:
+					printf("[ERR]<ldmp>: bad op\n");
+					return;
 			}
 		}
 	}
@@ -987,7 +973,8 @@ public:
 
 ExprNodeDecender::ExprNodeDecender():
 	op_node(nullptr),
-	elem_node(nullptr)
+	elem_node(nullptr),
+	order(0)
 	{}
 
 ExprNodeDecender::~ExprNodeDecender() {}
@@ -995,6 +982,7 @@ ExprNodeDecender::~ExprNodeDecender() {}
 void ExprNodeDecender::ctor() {
 	op_node   = nullptr;
 	elem_node = nullptr;
+	order     = 0;
 }
 
 ExprNodeDecender *ExprNodeDecender::NEW() {
@@ -1047,7 +1035,7 @@ bool ExprNodeDecender::decend() {
 		return false;
 	}
 
-	char op = op_node->val;
+	char op = op_node->cval;
 
 	ExprNode *L = op_node->get_L();
 
@@ -1056,7 +1044,7 @@ bool ExprNodeDecender::decend() {
 		return false;
 	}
 
-	if (L->type != OPERATION || (L->val != op && ! ((op == '*' && L->val == '/') || (op == '/' && L->val == '*')))) { //todo with /
+	if (L->type != OPERATION || (L->cval != op && ! ((op == '*' && L->cval == '/') || (op == '/' && L->cval == '*')))) { //todo with /
 		dtor();
 		return false;
 	}
@@ -1130,5 +1118,7 @@ ExprNode *ExprNodeDecender::get_elem_node() {
 }
 
 #endif // EXPR_NODE_DECENDER
+
+#include "undef_lang.h"
 
 #endif // EXPRESSION_NODE

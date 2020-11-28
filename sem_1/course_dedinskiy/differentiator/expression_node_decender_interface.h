@@ -12,6 +12,9 @@ private:
 //=============================================================================
 
 public:
+	ExprNodeDecender            (const ExprNodeDecender&) = delete;
+	ExprNodeDecender &operator= (const ExprNodeDecender&) = delete;
+
 	ExprNodeDecender ();
 	~ExprNodeDecender();
 

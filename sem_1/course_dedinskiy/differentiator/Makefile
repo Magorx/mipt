@@ -17,7 +17,7 @@ CFLAGS = $(STANDARD) $(WARNINGS) -lm
 
 all: differ
 
-differ: main.cpp expression_tree.h expression_node.h gc_strings_and_files.o ops.dsl
+differ: main.cpp expression_tree.h expression_node.h gc_strings_and_files.o ops.dsl lang.dsl undef_lang.h
 	$(CPP) $(CFLAGS) main.cpp gc_strings_and_files.o -o differ
 
 gc_strings_and_files.o: $(GC)/strings_and_files.c $(GC)/strings_and_files.h
@@ -26,5 +26,5 @@ gc_strings_and_files.o: $(GC)/strings_and_files.c $(GC)/strings_and_files.h
 run: all
 	./$(CUR_PROG)
 
-move_tex:
-	mv disser* latex_output
+valg: all
+	valgrind --leak-check=full -s ./$(CUR_PROG)

@@ -1,8 +1,11 @@
 #ifndef DIFFERENTIATOR
 #define DIFFERENTIATOR
 
+#pragma GCC diagnostic ignored "-Wnonnull-compare"
+
 #include "general/c/common.h"
 #include "general/c/strings_and_files.h"
+#include "general/warnings.h"
 
 #include <cctype>
 
@@ -161,6 +164,9 @@ private:
 
 
 public:
+	ExpressionTree            (const ExpressionTree&) = delete;
+	ExpressionTree &operator= (const ExpressionTree&) = delete;
+
 	ExpressionTree():
 	root(0)
 	{}
@@ -181,17 +187,19 @@ public:
 		return cake;
 	}
 
-	void dtor() {
-
+	void dtor(bool to_delete_expression = true) {
+		if (to_delete_expression) {
+			ExprNode::DELETE(root, to_delete_expression);
+		}
 	}
 
-	static void DELETE(ExpressionTree *classname) {
-		if (!classname) {
+	static void DELETE(ExpressionTree *expr_tree, bool to_delete_expression = true) {
+		if (!expr_tree) {
 			return;
 		}
 
-		classname->dtor();
-		free(classname);
+		expr_tree->dtor(to_delete_expression);
+		free(expr_tree);
 	}
 
 	ExprNode *get_root() const {
@@ -212,13 +220,13 @@ public:
 			return -1;
 		}
 
-		File *file = (File*) calloc(1, sizeof(File));
-		if (File_construct(file, file_name) < 0) {
+		File file;
+		if (File_construct(&file, file_name) < 0) {
 			printf("[ERR]<detree>: [file_name](%s) unexistance\n", file_name);
 		}
 
-		root = load_node((char**) &file->cc);
-		//db_file = file;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11!!!!!!!!!!!!!!!!!!!!!!!! DELETE FILE
+		root = load_node((char**) &file.cc);
+		File_destruct(&file);
 
 		return 0;
 	}
@@ -263,6 +271,12 @@ public:
 		return result;
 	}
 
+	void latex_dump_expression(FILE *file) {
+		fprintf(file, "$$ ");
+		get_root()->latex_dump(file);
+		fprintf(file, "$$\n");
+	}
+
 	void show_off(const char *file_name) {
 		if (!root) {
 			printf("[ERR]<expr_swof>: [root](nullptr)\n");
@@ -302,7 +316,6 @@ public:
 		char result = 0;
 		while (true) {
 			result = differed->simplify_step();
-			//differed->dump();
 			if (!result) {
 				break;
 			}
@@ -325,7 +338,6 @@ public:
 				}
 
 				case REORDERED_TREE : {
-					//printf("REORDERED\n");
 					fprintf(file, "Let's reshuffle operands a bit\n");
 					break;
 				}
@@ -336,16 +348,18 @@ public:
 				}
 
 				case LINEARIZED_TREE : {
-					//printf("LINEARIZED\n");
 					to_dump = false;
+					break;
+				}
+
+				default: {
+					fprintf(file, "We are witnessing strange magic now...\n");
 				}
 
 			}
 
 			if (to_dump) {
-				fprintf(file, "$$ ");
-				differed->get_root()->latex_dump(file);
-				fprintf(file, "$$\n");
+				differed->latex_dump_expression(file);
 			}
 
 			// printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
@@ -376,6 +390,8 @@ public:
 		// differed->get_root()->fold_addition(&ig);
 		// differed->dump();
 		// printf("`````````````````````````````````````````````````\n");
+
+		DELETE(differed);
 	}
 
 	void dump(FILE *file_ptr = stdout) const {
