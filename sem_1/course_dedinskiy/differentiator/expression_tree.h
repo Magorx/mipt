@@ -291,7 +291,7 @@ public:
 
 		fprintf(file, "Let's differintiate it!\n");
 
-		ExpressionTree *differed = this; //differentiate();
+		ExpressionTree *differed = differentiate();
 
 		fprintf(file, "$$ ");
 		differed->get_root()->latex_dump(file);
