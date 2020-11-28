@@ -159,6 +159,7 @@ private:
 		}
 
 		node->dump(file_ptr);
+		//fprintf(file_ptr, "[%lg]", node->complexity);
 		if (node->get_L() || node->get_R()) printf("->|");
 		printf("\n");
 
@@ -177,7 +178,7 @@ public:
 	~ExpressionTree() {}
 
 	void ctor() {
-
+		root = nullptr;
 	}
 
 	static ExpressionTree *NEW() {
@@ -350,6 +351,7 @@ public:
 
 				case REORDERED_TREE : {
 					fprintf(file, "Let's reshuffle operands a bit\n");
+					to_dump = false;
 					break;
 				}
 
@@ -373,17 +375,16 @@ public:
 				show_tree->latex_dump_expression(file);
 			}
 
-			// printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
-			// show_tree->dump();
-			// printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
+			printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
+			show_tree->dump();
+			printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
 			//printf("\n");
-		}		
+		}
 
-		fprintf(file, "So finaly:\n");
-		fprintf(file, "$$ ");
-		show_tree->get_root()->latex_dump(file);
-		fprintf(file, "$$\n");
+		//show_tree->set_root(show_tree->get_root()->prettify());
 
+		fprintf(file, "And after final prettifing:\n");
+		show_tree->latex_dump_expression(file);
 		fprintf(file, "\n\\end{document}");
 		fclose(file);
 

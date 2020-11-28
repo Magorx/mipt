@@ -3,12 +3,19 @@
 const int table_size = 257;
 
 int main() {
+	int mode = SIMPLIFY;
+
 	ExpressionTree tree;
 	tree.ctor();
-	tree.load("smpl_3.expr");
-	tree.dump();
-	tree.show_off("disser", SIMPLIFY);
 
+	if (mode == SIMPLIFY) {
+		tree.load("samples/sample_simplification.expr");
+	} else if (mode == DIFFERENCIATE) {
+		tree.load("samples/sample_derivative.expr");
+	}
+
+	tree.dump();
+	tree.show_off("disser", mode);
 	tree.dtor();
 
 	return 0;

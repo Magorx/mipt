@@ -14,6 +14,9 @@
 
 const char *TO_SIMPLIFY = "+-*/^";
 
+const int ORDER_ADD = +1;
+const int ORDER_MUL = +1;
+
 //=============================================================================
 // ExprNode ===================================================================
 
@@ -132,14 +135,14 @@ public:
 
 	void update_complexity() {
 		if (type == VALUE) {
-			complexity = 1 + fabs(val) * (GENERAL_EPS);
+			complexity = 1 + fabs(val) * (1);
 		} else if (type == VARIABLE) {
 			complexity = val;
 		} else {
 			switch (cval) {
 				case '-' :
 				case '+' : {
-					complexity = (L ? L->complexity : 0) + (L ? L->complexity : 0);
+					complexity = (L ? L->complexity : 0) + (R ? R->complexity : 0);
 					break;
 				}
 
@@ -461,13 +464,13 @@ public:
 		}
 	}
 
-	bool commutative_reorder(char op, char *success, int order = 1) {
+	bool commutative_reorder(char op, char *result, int order = 1) {
 		if (type != OPERATION || cval != op) {
-			return *success;
+			return *result;
 		}
 
-		L->commutative_reorder(op, success, order);
-		R->commutative_reorder(op, success, order);
+		L->commutative_reorder(op, result, order);
+		R->commutative_reorder(op, result, order);
 
 		if (L->type == OPERATION && L->cval == op) {
 			if (R->complexity * order < L->R->complexity * order) {
@@ -475,8 +478,8 @@ public:
 				L->set_R(R);
 				set_R(lr);
 
-				*success = REORDERED_TREE;
-				return *success;
+				*result = REORDERED_TREE;
+				return *result;
 			}
 		} else {
 			if (R->complexity * order < L->complexity * order) {
@@ -484,21 +487,21 @@ public:
 				set_L(R);
 				set_R(l);
 
-				*success = REORDERED_TREE;
-				return *success;
+				*result = REORDERED_TREE;
+				return *result;
 			}
 		}
 
-		return *success;
+		return *result;
 	}
 
-	bool commutative_linearize(char op, char *success) {
+	bool commutative_linearize(char op, char *result) {
 		if (type != OPERATION || cval != op) {
-			return *success;
+			return *result;
 		}
 
-		L->commutative_linearize(op, success);
-		R->commutative_linearize(op, success);
+		L->commutative_linearize(op, result);
+		R->commutative_linearize(op, result);
 
 		while (R->type == OPERATION && R->cval == op) {
 			ExprNode *rr = R->R;
@@ -508,10 +511,10 @@ public:
 			R->set_R(rl);
 			set_L(R);
 			set_R(rr);
-			*success = LINEARIZED_TREE;
+			*result = LINEARIZED_TREE;
 		}
 
-		return *success;
+		return *result;
 	}
 
 	bool add(ExprNode *other) {
@@ -564,9 +567,9 @@ public:
 		return true;
 	}
 
-	bool put_out_of_addition_brackets(char *success) {
+	bool put_out_of_addition_brackets(char *result) {
 		if (!IS_ADD(this)) {
-			return *success;
+			return *result;
 		}
 
 		ExprNodeDecender term_one;
@@ -594,8 +597,8 @@ public:
 					term_1->set_val(term_1->val + term_2->val);
 					term_2->set_val(0);
 
-					*success = SIMPLIFIED_EVALUATIVE;
-					return *success;
+					*result = SIMPLIFIED_EVALUATIVE;
+					return *result;
 				} 
 
 				if (!IS_MUL(term_1) && IS_VAR(term_1)) {
@@ -647,8 +650,8 @@ public:
 							term_one.set_operand(MUL(fact_1, ADD(term_1, term_2)));
 						}
 
-						*success = PUT_OUT_OF_BRACKETS;
-						return *success;
+						*result = PUT_OUT_OF_BRACKETS;
+						return *result;
 
 						//=========================================================
 					}
@@ -656,31 +659,31 @@ public:
 			}
 		}
 
-		return *success;
+		return *result;
 	}
 
-	bool fold_multiplication(char *success) {
+	bool fold_multiplication(char *result) {
 		if (!IS_MUL(this)) {
-			return *success;
+			return *result;
 		}
 		if (!IS_MUL(L)) {
 			if (L->multiply(R)) {
-				*success = FOLDED_OPERATION;
+				*result = FOLDED_OPERATION;
 			}
 
-			return *success;
+			return *result;
 		}
 
 		if (L->R->multiply(R)) {
-			*success = FOLDED_OPERATION;
+			*result = FOLDED_OPERATION;
 		}
 
-		return L->fold_multiplication(success);
+		return L->fold_multiplication(result);
 	}
 
-	ExprNode *simplify_evaluative(char *success) {
-		if (L) set_L(L->simplify_evaluative(success));
-		if (R) set_R(R->simplify_evaluative(success));
+	ExprNode *simplify_evaluative(char *result) {
+		if (L) set_L(L->simplify_evaluative(result));
+		if (R) set_R(R->simplify_evaluative(result));
 		if (!L || !R) {
 			return this;
 		}
@@ -689,16 +692,16 @@ public:
 			double res = evaluate();
 			DELETE(this, true);
 
-			*success = SIMPLIFIED_EVALUATIVE;
+			*result = SIMPLIFIED_EVALUATIVE;
 			return NEW(VALUE, res, PRIOR_VALUE);
 		} else {
 			return this;
 		}
 	}
 
-	ExprNode *simplify_elementary(char *success) {
-		if (L) set_L(L->simplify_elementary(success));
-		if (R) set_R(R->simplify_elementary(success));
+	ExprNode *simplify_elementary(char *result) {
+		if (L) set_L(L->simplify_elementary(result));
+		if (R) set_R(R->simplify_elementary(result));
 		if (!L || !R) {
 			return this;
 		}
@@ -767,14 +770,14 @@ public:
 
 	}
 
-	ExprNode *simplify_structure(char *success) {
-		if (L) set_L(L->simplify_structure(success));
-		if (*success) {
+	ExprNode *simplify_structure(char *result) {
+		if (L) set_L(L->simplify_structure(result));
+		if (*result) {
 			return this;
 		}
 
-		if (R) set_R(R->simplify_structure(success));
-		if (*success) {
+		if (R) set_R(R->simplify_structure(result));
+		if (*result) {
 			return this;
 		}
 
@@ -785,22 +788,22 @@ public:
 		// ========================================================== op
 		switch (cval) {
 			case '+' : {
-				if (commutative_linearize('+', success)) {
+				if (commutative_linearize('+', result)) {
 					break;
-				} else if (commutative_reorder('+', success, -1)) {
+				} else if (commutative_reorder('+', result, ORDER_ADD)) {
 					break;
-				} else if (put_out_of_addition_brackets(success)) {
+				} else if (put_out_of_addition_brackets(result)) {
 					break;
 				}
 				break;
 			}
 
 			case '*' : {
-				if (commutative_linearize('*', success)) {
+				if (commutative_linearize('*', result)) {
 					break;
-				} else if (commutative_reorder('*', success)) {
+				} else if (commutative_reorder('*', result, ORDER_MUL)) {
 					break;
-				} else if (fold_multiplication(success)) {
+				} else if (fold_multiplication(result)) {
 					break;
 				}
 				break;
@@ -810,22 +813,22 @@ public:
 				break;
 		}
 
-		if (success) {
-			char ig = 0;
-			return simplify_evaluative(&ig)->simplify_elementary(&ig);
+		if (result) {
+			char ignore = 0;
+			return simplify_evaluative(&ignore)->simplify_elementary(&ignore);
 		} else {
 			return this;
 		}
 	}
 
-	ExprNode *simplify_strange(char *success) {
-		if (L) set_L(L->simplify_strange(success));
-		if (*success) {
+	ExprNode *simplify_strange(char *result) {
+		if (L) set_L(L->simplify_strange(result));
+		if (*result) {
 			return this;
 		}
 
-		if (R) set_R(R->simplify_strange(success));
-		if (*success) {
+		if (R) set_R(R->simplify_strange(result));
+		if (*result) {
 			return this;
 		}
 
@@ -840,7 +843,7 @@ public:
 					prior = PRIOR_MUL;
 					L->set_val(-1);
 
-					*success = SIMPLIFIED_EVALUATIVE;
+					*result = SIMPLIFIED_EVALUATIVE;
 					return this;
 				}
 				break;
@@ -853,7 +856,7 @@ public:
 					set_L(L->L);
 					DELETE(prev_L, false);
 
-					*success = SIMPLIFIED_EVALUATIVE;
+					*result = SIMPLIFIED_EVALUATIVE;
 					return this;
 				}
 				break;
@@ -866,15 +869,76 @@ public:
 		return this;
 	}
 
-	#define RETURN_IF_SUCCESS(code) {if (ret = (code), *success) {return ret;}}
+	#define RETURN_IF_SUCCESS(code) {if (ret = (code), *result) {return ret;}}
 
-	ExprNode *simplify_step(char *success) {
+	ExprNode *linearize_absolute(char *result) {
+		if (L) set_L(L->linearize_absolute(result));
+		if (R) set_R(R->linearize_absolute(result));
+
 		ExprNode *ret = this;
-		RETURN_IF_SUCCESS(simplify_evaluative(success));
-		RETURN_IF_SUCCESS(simplify_elementary(success));
-		RETURN_IF_SUCCESS(simplify_strange   (success));
-		RETURN_IF_SUCCESS(simplify_structure (success)); // <<<<<<<<<<<<<<<< SEGFAULT
-		return this;
+
+		char res = 1;
+		while (res) {
+			res = 0;
+			char ignore = 0;
+
+			ret->commutative_linearize('+', &res);
+			ret = ret->simplify_evaluative(&ignore)->simplify_elementary(&ignore);
+
+			ret->commutative_linearize('*', &res);
+			ret = ret->simplify_evaluative(&ignore)->simplify_elementary(&ignore);
+
+			*result = max(*result, res);
+		}
+
+		return ret;
+	}
+
+	ExprNode *reorder_absolute(char *result, const int order_add = ORDER_ADD, const int order_mul = ORDER_MUL) {
+		dump_space();
+		printf("\n");
+		if (L) set_L(L->reorder_absolute(result));
+		if (R) set_R(R->reorder_absolute(result));
+
+		ExprNode *ret = this;
+
+		char res = 1;
+		while (res) {
+			res = 0;
+			char ignore = 0;
+
+			if (val == '+') {
+				ret->commutative_reorder('+', &res, order_add);
+				ret = ret->simplify_evaluative(&ignore)->simplify_elementary(&ignore);
+			} else {
+				ret->commutative_reorder('*', &res, order_mul);
+				ret = ret->simplify_evaluative(&ignore)->simplify_elementary(&ignore);
+			}
+
+			*result = max(*result, res);
+		}
+
+		return ret;
+	}
+
+	ExprNode *simplify_step(char *result) {
+		ExprNode *ret = this;
+		RETURN_IF_SUCCESS(simplify_evaluative  (result));
+		RETURN_IF_SUCCESS(simplify_elementary  (result));
+		RETURN_IF_SUCCESS(simplify_strange     (result));
+		RETURN_IF_SUCCESS(reorder_absolute     (result));
+		RETURN_IF_SUCCESS(linearize_absolute   (result));
+		RETURN_IF_SUCCESS(simplify_structure (result));
+		return ret;
+	}
+
+	ExprNode *prettify() { //todo make it work
+		ExprNode *ret = this;
+
+		char ignore = 0;
+		ret = ret->reorder_absolute(&ignore, +1, +1);
+
+		return ret;
 	}
 
 //=============================================================================
