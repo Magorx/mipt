@@ -7,7 +7,7 @@
 #include "general/cpp/common.hpp"
 
 #include "expression_node_interface.h"
-#include "expression_node_decender_interface.h"
+#include "expression_node_decender.h"
 
 #include "lang.dsl"
 
@@ -56,7 +56,7 @@ private:
 	}
 
 	double evaluate_variable(const double *var_table, const size_t var_table_len) {
-		int var = cval;
+		int var = ival;
 		if (var_table_len <= (size_t) var) {
 			return (double) KCTF_POISON;
 		} else  {
@@ -323,6 +323,11 @@ public:
 		update();
 	}
 
+	void set_val(const double val_) {
+		val = val_;
+		update();
+	}
+
 	bool is_variadic() {
 		return variable_presented;
 	}
@@ -511,11 +516,8 @@ public:
 
 	bool add(ExprNode *other) {
 		if (IS_VAL(this) && IS_VAL(other)) {
-			val = val + other->val;
-			other->val = 0;
-
-			other->update();
-			update();
+			set_val(val + other->val);
+			other->set_val(0);
 			return true;
 		}
 
@@ -539,11 +541,8 @@ public:
 
 	bool multiply(ExprNode *other) {
 		if (IS_VAL(this) && IS_VAL(other)) {
-			val = val * other->val;
-			other->val = 1;
-
-			other->update();
-			update();
+			set_val(val * other->val);
+			other->set_val(1);
 			return true;
 		}
 
@@ -592,10 +591,8 @@ public:
 				// printf("|\n");
 
 				if (IS_VAL(term_1) && IS_VAL(term_2)) {
-					term_1->val += term_2->val;
-					term_2->val = 0;
-					term_1->update();
-					term_2->update();
+					term_1->set_val(term_1->val + term_2->val);
+					term_2->set_val(0);
 
 					*success = SIMPLIFIED_EVALUATIVE;
 					return *success;
@@ -839,9 +836,9 @@ public:
 		switch (cval) {
 			case '-' : {
 				if (IS_ZERO(L)) {
-					val = '*';
+					set_val('*');
 					prior = PRIOR_MUL;
-					L->val = -1;
+					L->set_val(-1);
 
 					*success = SIMPLIFIED_EVALUATIVE;
 					return this;

@@ -1,8 +1,6 @@
 #ifndef DIFFERENTIATOR
 #define DIFFERENTIATOR
 
-#pragma GCC diagnostic ignored "-Wnonnull-compare"
-
 #include "general/c/common.h"
 #include "general/c/strings_and_files.h"
 #include "general/warnings.h"
@@ -10,6 +8,11 @@
 #include <cctype>
 
 #include "expression_node.h"
+
+enum SHOW_OFF_WAY {
+	SIMPLIFY = 1,
+	DIFFERENCIATE = 2
+};
 
 //=====================================================================================================================
 // ExpressionTree =====================================================================================================
@@ -277,7 +280,7 @@ public:
 		fprintf(file, "$$\n");
 	}
 
-	void show_off(const char *file_name) {
+	void show_off(const char *file_name, const int mode) {
 		if (!root) {
 			printf("[ERR]<expr_swof>: [root](nullptr)\n");
 			return;
@@ -303,19 +306,27 @@ public:
 		root->latex_dump(file);
 		fprintf(file, "$$\n\n");
 
-		fprintf(file, "Let's differintiate it!\n");
+		ExpressionTree *show_tree = nullptr;
 
-		ExpressionTree *differed = differentiate();
+		if (mode == DIFFERENCIATE) {
+			fprintf(file, "Let's differintiate it!\n");
+			show_tree = differentiate();
+			fprintf(file, "$$ ");
+			show_tree->get_root()->latex_dump(file);
+			fprintf(file, "$$\n\n");
+			fprintf(file, "Uhhh, let's simplify it a bit...\n\n");
+		} else {
+			fprintf(file, "Let's simplify it!\n\n");
+			show_tree = NEW();
+			show_tree->set_root(root->deep_copy());
+		}
+		
 
-		fprintf(file, "$$ ");
-		differed->get_root()->latex_dump(file);
-		fprintf(file, "$$\n\n");
-
-		fprintf(file, "Uhhh, let's simplify it a bit...\n\n \\noindent\\makebox[\\linewidth]{\\rule{\\paperwidth}{0.4pt}}\n");
+		fprintf(file, "\\noindent\\makebox[\\linewidth]{\\rule{\\paperwidth}{0.4pt}}\n");
 
 		char result = 0;
 		while (true) {
-			result = differed->simplify_step();
+			result = show_tree->simplify_step();
 			if (!result) {
 				break;
 			}
@@ -359,18 +370,18 @@ public:
 			}
 
 			if (to_dump) {
-				differed->latex_dump_expression(file);
+				show_tree->latex_dump_expression(file);
 			}
 
 			// printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
-			// differed->dump();
+			// show_tree->dump();
 			// printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
 			//printf("\n");
 		}		
 
 		fprintf(file, "So finaly:\n");
 		fprintf(file, "$$ ");
-		differed->get_root()->latex_dump(file);
+		show_tree->get_root()->latex_dump(file);
 		fprintf(file, "$$\n");
 
 		fprintf(file, "\n\\end{document}");
@@ -381,17 +392,17 @@ public:
 		system(generate_pdf_command);
 
 		printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
-		differed->dump();
+		show_tree->dump();
 		printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
 		//printf("===\n");
-		//differed->root->get_L()->fold_multiplication(&a);
-		//differed->simplify_step();
+		//show_tree->root->get_L()->fold_multiplication(&a);
+		//show_tree->simplify_step();
 		// char ig;
-		// differed->get_root()->fold_addition(&ig);
-		// differed->dump();
+		// show_tree->get_root()->fold_addition(&ig);
+		// show_tree->dump();
 		// printf("`````````````````````````````````````````````````\n");
 
-		DELETE(differed);
+		DELETE(show_tree);
 	}
 
 	void dump(FILE *file_ptr = stdout) const {

@@ -60,13 +60,7 @@
 
     #pragma GCC diagnostic error       "-Wsizeof-array-argument"
 
-    #pragma GCC diagnostic ignored     "-Winline"
-    #pragma GCC diagnostic ignored     "-Wliteral-suffix"
-    #pragma GCC diagnostic ignored     "-Wmissing-field-initializers"
     #pragma GCC diagnostic ignored     "-Wnonnull-compare"
-    #pragma GCC diagnostic ignored     "-Wold-style-cast"
-    #pragma GCC diagnostic ignored     "-Wunreachable-code"
-    #pragma GCC diagnostic ignored     "-Wunused-const-variable"
 
     #pragma GCC diagnostic warning     "-Wpragmas"
 #endif
