@@ -453,7 +453,7 @@ public:
 		if (type == VALUE || type == VARIABLE) {
 			return fabs(val - other->val) < GENERAL_EPS;
 		} else {
-			if (fabs(val - other->val) < GENERAL_EPS) {
+			if (fabs(val - other->val) > GENERAL_EPS) {
 				return false;
 			} else {
 				return (!L || L->equivalent_absolute(other->get_L())) && (!R || R->equivalent_absolute(other->get_R()));
