@@ -623,6 +623,8 @@ public:
 					factor_two.ctor(term_2);
 
 					while (factor_two.next()) {
+						// *result = PUT_OUT_OF_BRACKETS;
+						// return *result;
 						//=========================================================
 
 						ExprNode *fact_1 = factor_one.get_elem_node();
@@ -638,7 +640,7 @@ public:
 							continue;
 						}
 
-						DELETE(fact_2);
+						DELETE(fact_2, true);
 						factor_two.set_operand(NEW_ONE());
 						factor_one.set_operand(NEW_ONE());
 
@@ -895,8 +897,6 @@ public:
 	}
 
 	ExprNode *reorder_absolute(char *result, const int order_add = ORDER_ADD, const int order_mul = ORDER_MUL) {
-		dump_space();
-		printf("\n");
 		if (L) set_L(L->reorder_absolute(result));
 		if (R) set_R(R->reorder_absolute(result));
 
@@ -907,7 +907,7 @@ public:
 			res = 0;
 			char ignore = 0;
 
-			if (val == '+') {
+			if (cval == '+') {
 				ret->commutative_reorder('+', &res, order_add);
 				ret = ret->simplify_evaluative(&ignore)->simplify_elementary(&ignore);
 			} else {
@@ -928,7 +928,7 @@ public:
 		RETURN_IF_SUCCESS(simplify_strange     (result));
 		RETURN_IF_SUCCESS(reorder_absolute     (result));
 		RETURN_IF_SUCCESS(linearize_absolute   (result));
-		RETURN_IF_SUCCESS(simplify_structure (result));
+		RETURN_IF_SUCCESS(simplify_structure   (result));
 		return ret;
 	}
 
@@ -1105,7 +1105,7 @@ bool ExprNodeDecender::decend() {
 		return false;
 	}
 
-	if (L->type != OPERATION || (L->cval != op && ! ((op == '*' && L->cval == '/') || (op == '/' && L->cval == '*')))) { //todo with /
+	if (L->type != OPERATION || (L->cval != op && ! ((op == '*' && L->cval == '/') || (op == '/' && L->cval == '*')))) {
 		dtor();
 		return false;
 	}

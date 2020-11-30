@@ -19,10 +19,10 @@
 #define MUL(A, B)  NEW(OPERATION, '*', PRIOR_MUL, A, B)
 #define DIV(A, B)  NEW(OPERATION, '/', PRIOR_DIV, A, B)
 
-#define RETURN_ZERO()  DELETE(this, true); *result = SIMPLIFIED_ELEMENTARY; return NEW_ZERO();
-#define RETURN_ONE()   DELETE(this, true); *result = SIMPLIFIED_ELEMENTARY; return NEW_ONE();
-#define RETURN_LEFT()  ExprNode *left = L;  DELETE(R); DELETE(this); *result = SIMPLIFIED_ELEMENTARY; return left;
-#define RETURN_RIGHT() ExprNode *right = R; DELETE(L); DELETE(this); *result = SIMPLIFIED_ELEMENTARY; return right;
+#define RETURN_ZERO()  { DELETE(this, true); *result = SIMPLIFIED_ELEMENTARY; return NEW_ZERO(); }
+#define RETURN_ONE()   { DELETE(this, true); *result = SIMPLIFIED_ELEMENTARY; return NEW_ONE();  }
+#define RETURN_LEFT()  { ExprNode *left  = L; DELETE(R); DELETE(this); *result = SIMPLIFIED_ELEMENTARY; return left;  }
+#define RETURN_RIGHT() { ExprNode *right = R; DELETE(L); DELETE(this); *result = SIMPLIFIED_ELEMENTARY; return right; }
 
 #define RANDOM_CHANCE(x) rand() % x
 #define RAND90() RANDOM_CHANCE(9)

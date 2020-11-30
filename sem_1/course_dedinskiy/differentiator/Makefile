@@ -27,4 +27,4 @@ run: all
 	./$(CUR_PROG)
 
 valg: all
-	valgrind --leak-check=full -s ./$(CUR_PROG)
+	valgrind --leak-check=full --show-leak-kinds=all -s ./$(CUR_PROG)

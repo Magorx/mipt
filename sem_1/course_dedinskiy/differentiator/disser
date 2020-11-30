@@ -1,22 +1,26 @@
-\documentclass{article}
-\usepackage{hyperref}
-\begin{document}
+										\documentclass{article}
+				\usepackage{hyperref}
+				\begin{document}
 
-So we are given an expression:
+					So we are given an expression:
+		
 $$ \left(x+7\right)\cdot \left(3+x\right)+\left(3+x\right)\cdot 2+\left(x+7\right)\cdot \left(9+x\right)$$
 
 Let's simplify it!
 
 \noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
 Let's reshuffle operands a bit
+$$ 2\cdot \left(3+x\right)+\left(3+x\right)\cdot \left(7+x\right)+\left(7+x\right)\cdot \left(9+x\right)$$
 Sprinkling out-of-brackets magic!
 $$ \left(3+x\right)\cdot \left(2+7+x\right)+\left(7+x\right)\cdot \left(9+x\right)$$
 Sprinkling out-of-brackets magic!
 $$ \left(9+x\right)\cdot \left(3+x+7+x\right)$$
 Let's reshuffle operands a bit
+$$ \left(9+x\right)\cdot \left(10+x+x\right)$$
 Sprinkling out-of-brackets magic!
 $$ \left(9+x\right)\cdot \left(10+x\cdot 2\right)$$
 Let's reshuffle operands a bit
+$$ \left(9+x\right)\cdot \left(10+2\cdot x\right)$$
 And after final prettifing:
 $$ \left(9+x\right)\cdot \left(10+2\cdot x\right)$$
 

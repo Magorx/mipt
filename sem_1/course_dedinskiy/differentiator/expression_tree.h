@@ -8,6 +8,7 @@
 #include <cctype>
 
 #include "expression_node.h"
+#include "latex_parts.h"
 
 enum SHOW_OFF_WAY {
 	SIMPLIFY = 1,
@@ -298,10 +299,7 @@ public:
 			return;
 		}
 
-		fprintf(file, "\\documentclass{article}\n");
-		fprintf(file, "\\usepackage{hyperref}\n");
-		fprintf(file, "\\begin{document}\n\n");
-		fprintf(file, "So we are given an expression:\n");
+		fprintf(file, "%s\n", LATEX_ARTICLE_HEAD);
 
 		fprintf(file, "$$ ");
 		root->latex_dump(file);
@@ -351,7 +349,7 @@ public:
 
 				case REORDERED_TREE : {
 					fprintf(file, "Let's reshuffle operands a bit\n");
-					to_dump = false;
+					to_dump = true;
 					break;
 				}
 
@@ -375,9 +373,9 @@ public:
 				show_tree->latex_dump_expression(file);
 			}
 
-			printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
-			show_tree->dump();
-			printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
+			// printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
+			// show_tree->dump();
+			// printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n");
 			//printf("\n");
 		}
 
