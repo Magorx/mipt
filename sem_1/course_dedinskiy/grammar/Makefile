@@ -17,7 +17,7 @@ CFLAGS = $(STANDARD) $(WARNINGS) -lm -std=c++17
 
 all: gr
 
-gr: main.cpp $(GC)/announcement.h
+gr: main.cpp recursive_parser.h code_node.h $(GC)/announcement.h
 	$(CPP) $(CFLAGS) main.cpp -o gr
 
 run: all

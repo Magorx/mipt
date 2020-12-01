@@ -61,7 +61,8 @@
     #pragma GCC diagnostic error       "-Wsizeof-array-argument"
 
     #pragma GCC diagnostic ignored     "-Wnonnull-compare"
-    #pragma GCC diagnostic ignored     "-Weffc++"
+    #pragma GCC diagnostic ignored     "-Wcomment"
+    #pragma GCC diagnostic ignored     "-Wformat-nonliteral"
 
     #pragma GCC diagnostic warning     "-Wpragmas"
 #endif

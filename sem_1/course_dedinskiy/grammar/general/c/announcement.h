@@ -4,11 +4,11 @@
 #include <string.h>
 #include <cstdio>
 
-char *THE_LAST_ANNOUNCER     = nullptr;
-int   THE_LAST_ANNOUNCER_LEN = 0 ;
+const char *THE_LAST_ANNOUNCER     = nullptr;
+int         THE_LAST_ANNOUNCER_LEN = 0 ;
 
-char *THE_LAST_CODE          = nullptr;
-int   THE_LAST_CODE_LEN      = 0 ;
+const char *THE_LAST_CODE          = nullptr;
+int         THE_LAST_CODE_LEN      = 0 ;
 
 
 #define ANNOUNCEMENT(fileptr, code, announcer, format, ...)                                               \
@@ -17,14 +17,14 @@ int   THE_LAST_CODE_LEN      = 0 ;
         bool to_print_announcer = false;                                                                  \
                                                                                                           \
         if ((announcer) && (!(THE_LAST_ANNOUNCER) || strcmp(THE_LAST_ANNOUNCER, (announcer)))) {          \
-            THE_LAST_ANNOUNCER = (char *)(announcer);                                                     \
+            THE_LAST_ANNOUNCER = (const char *)(announcer);                                               \
             THE_LAST_ANNOUNCER_LEN = strlen((announcer));                                                 \
             to_print_code = true;                                                                         \
             to_print_announcer = true;                                                                    \
         }                                                                                                 \
                                                                                                           \
         if ((code) && (!(THE_LAST_CODE) || strcmp(THE_LAST_CODE, (code)))) {                              \
-            THE_LAST_CODE = (char *)(code);                                                               \
+            THE_LAST_CODE = (const char *)(code);                                                         \
             THE_LAST_CODE_LEN = strlen((code));                                                           \
             to_print_code = true;                                                                         \
             to_print_announcer = true;                                                                    \

@@ -4,13 +4,13 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include <cctype>
 
 class StringView {
 private:
-	char *buffer;
+	const char *buffer;
 	char null_char;
 	size_t size;
-	bool own_buffer;
 
 public:
 	StringView            (const StringView& other) = delete;
@@ -19,8 +19,7 @@ public:
 	StringView() :
 	buffer(nullptr),
 	null_char('\0'),
-	size(0),
-	own_buffer(false)
+	size(0)
 	{}
 
 	~StringView() {}
@@ -37,34 +36,30 @@ public:
 		return cake;
 	}
 
-	void ctor(char *c_string, bool own_buffer_ = false) {
+	void ctor(const char *c_string, bool to_count_len = true) {
 		if (c_string == nullptr) {
 			dtor();
 			return;
 		}
 
-		size = strlen(c_string);
+		if (to_count_len) {
+			size = strlen(c_string);
+		}
 		buffer = c_string;
-		own_buffer = own_buffer_;
 	}
 
-	static StringView *NEW(char *c_string, bool own_buffer_) {
+	static StringView *NEW(const char *c_string, bool to_count_len = true) {
 		StringView *cake = (StringView*) calloc(1, sizeof(StringView));
 		if (!cake) {
 			return nullptr;
 		}
 
-		cake->ctor(c_string, own_buffer_);
+		cake->ctor(c_string, to_count_len);
 		return cake;
 	}
 
 	void dtor() {
-		if (own_buffer && buffer) {
-			free(buffer);
-		}
-
 		buffer = nullptr;
-		own_buffer = false;
 		null_char = '\0';
 		size = 0;
 	}
@@ -87,14 +82,6 @@ public:
 	}
 
 	const char &operator[](size_t i) const {
-		if (i >= size) {
-			return null_char;
-		} else {
-			return buffer[i];
-		}
-	}
-
-	char &break_index(size_t i) {
 		if (i >= size) {
 			return null_char;
 		} else {
@@ -152,8 +139,12 @@ public:
 		}
 	}
 
-	char *get_buffer() const {
+	const char *get_buffer() const {
 		return buffer;
+	}
+
+	void set_length(const size_t length_) {
+		size = length_;
 	}
 
 	bool operator==(const StringView &other) const {
