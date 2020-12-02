@@ -1,9 +1,10 @@
 #ifndef CODENODE_H
 #define CODENODE_H
 
-#include <cstdio>
-
 #include "general/cpp/stringview.hpp"
+#include "general/constants.h"
+
+#include <cstdio>
 
 //=============================================================================
 // CodeNode ===================================================================
@@ -48,10 +49,10 @@ public:
 	~CodeNode() {}
 
 	void ctor() {
-		type = NONE;
+		type     = NONE;
 		data.val = 0;
-		L = nullptr;
-		R = nullptr;
+		L        = nullptr;
+		R        = nullptr;
 	}
 
 	static CodeNode *NEW() {
@@ -86,10 +87,10 @@ public:
 	}
 
 	void ctor(const char type_, const double val_, CodeNode *L_=nullptr, CodeNode *R_=nullptr) {
-		type = type_;
+		type     = type_;
 		data.val = val_;
-		L = L_;
-		R = R_;
+		L        = L_;
+		R        = R_;
 	}
 
 	static CodeNode *NEW(const char type_, const double val_, CodeNode *L_=nullptr, CodeNode *R_=nullptr) {
@@ -103,10 +104,10 @@ public:
 	}
 
 	void ctor(const char type_, StringView *id_, CodeNode *L_=nullptr, CodeNode *R_=nullptr) {
-		type = type_;
+		type    = type_;
 		data.id = id_;
-		L = L_;
-		R = R_;
+		L       = L_;
+		R       = R_;
 	}
 
 	static CodeNode *NEW(const char type_, StringView *id_, CodeNode *L_=nullptr, CodeNode *R_=nullptr) {
@@ -120,10 +121,10 @@ public:
 	}
 
 	void dtor() {
-		type = NONE;
+		type     = NONE;
 		data.val = 0;
-		L = nullptr;
-		R = nullptr;
+		L        = nullptr;
+		R        = nullptr;
 	}
 
 	static void DELETE(CodeNode *node, bool recursive = false) {
@@ -140,6 +141,8 @@ public:
 		free(node);
 	}
 
+//=============================================================================
+// Setters & Getters ==========================================================
 //=============================================================================
 
 	void set_L(CodeNode *L_) {
@@ -213,6 +216,91 @@ public:
 
 	bool is_id() {
 		return type == ID;
+	}
+
+//=============================================================================
+// Executing ==================================================================
+//=============================================================================
+
+	double evaluate_maths(const double *var_table = nullptr, const size_t var_table_len = 0) {
+		if (is_val()) {
+			return data.val;
+		} else if (is_var()) {
+			return evaluate_variable(var_table, var_table_len);
+		} else if (is_op()) {
+			return evaluate_operation(var_table, var_table_len);
+		} else if (is_id()) {
+			return evaluate_id(var_table, var_table_len);
+		} else {
+			return 0;
+		}
+	}
+
+	double evaluate_operation(const double *var_table, const size_t var_table_len) {
+		int op = data.op;
+		double L_res = L ? L->evaluate_maths(var_table, var_table_len) : 0;
+		double R_res = R ? R->evaluate_maths(var_table, var_table_len) : 0;
+
+		switch (op) {
+			case '+' : {
+				return L_res + R_res;
+				break;
+			}
+
+			case '-' : {
+				return L_res - R_res;
+				break;
+			}
+
+			case '*' : {
+				return L_res * R_res;
+				break;
+			}
+
+			case '/' : {
+				return L_res / R_res;
+				break;
+			}
+
+			case '^' : {
+				return pow(L_res, R_res);
+				break;
+			}
+
+			default: {
+				return 0;
+			}
+		}
+	}
+
+	double evaluate_id(const double *var_table, const size_t var_table_len) {
+		if (!R && !L) {
+			return evaluate_variable(var_table, var_table_len);
+		} else {
+			StringView &id = *data.id;
+			double R_res = R ? R->evaluate_maths(var_table, var_table_len) : 0;
+
+			if (id.starts_with("sin")) {
+				return sin(R_res);
+			} else if (id.starts_with("cos")) {
+				return cos(R_res);
+			} else if (id.starts_with("ln")) {
+				return log(R_res);
+			} else if (id.starts_with("log")) {
+				return log10(R_res);
+			} else {
+				return R_res;
+			}
+		}
+	}
+
+	double evaluate_variable(const double *var_table, const size_t var_table_len) {
+		int var = data.id->get_buffer()[0];
+		if (var_table_len <= (size_t) var) {
+			return (double) KCTF_POISON;
+		} else  {
+			return var_table[var];
+		}
 	}
 	
 // ============================================================================

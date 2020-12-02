@@ -77,6 +77,18 @@ public:
 		return buffer == nullptr;
 	}
 
+	bool starts_with(const StringView &other) {
+		size_t len_1 = size;
+		size_t len_2 = other.length();
+		return len_1 < len_2 ? false : memcmp(buffer, other.get_buffer(), len_2) == 0;
+	}
+
+	bool starts_with(const char *other) {
+		size_t len_1 = size;
+		size_t len_2 = strlen(other);
+		return len_1 < len_2 ? false : memcmp(buffer, other, len_2) == 0;
+	}
+
 	size_t length() const {
 		return size;
 	}

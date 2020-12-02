@@ -41,7 +41,7 @@ private:
         			return 0;                                                                                         \
             	}                                                                                                     \
                                                                                                                       \
-            	return calculation;                                                                                   \
+            	return (calculation);                                                                                 \
             }                                                                                                         \
 		}
 
