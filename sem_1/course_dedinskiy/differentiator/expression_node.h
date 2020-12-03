@@ -14,7 +14,7 @@
 
 const char *TO_SIMPLIFY = "+-*/^";
 
-const int ORDER_ADD = +1;
+const int ORDER_ADD = -1;
 const int ORDER_MUL = +1;
 
 //=============================================================================
@@ -413,6 +413,24 @@ public:
 		}
 	}
 
+	#define PRINT_DIFFERENTIATION_RESULT(file, expr, differed)      \
+		do {                                                        \
+			if (file) {                                             \
+				fprintf(file, "$$ \\left(");                        \
+				(expr)->latex_dump(file);                           \
+				fprintf(file, "\\right) ' = ");                     \
+				(ret)->latex_dump(file);                            \
+				fprintf(file, "$$\n\n");                            \
+			}                                                       \
+		} while(0)
+
+	#define PRINT_IF_FILE(file, str)   \
+		do {                            \
+			if (file) {                 \
+				fprintf(file, str);     \
+			}                           \
+		} while (0)
+
 	#define OPDEF(name, sign, arg_cnt, prior, calculation, differed, ig1, ig2, ig3) {                             \
         case #sign[0]: {                                                                                          \
         	if (!((arg_cnt == 2 && L && R) || (arg_cnt == 1 && !L && R) || (arg_cnt == 0 && !L && !R))) {         \
@@ -420,16 +438,29 @@ public:
     			return 0;                                                                                         \
         	}                                                                                                     \
                                                                                                                   \
-        	return &(differed);                                                                                   \
+        	ExprNode *ret = &(differed);                                                                          \
+        	PRINT_IF_FILE(file, "So, coming back to our operation\n\n");                                          \
+        	PRINT_DIFFERENTIATION_RESULT(file, this, ret);                                                        \
+        	return ret;                                                                                           \
         }                                                                                                         \
 	}
 
-	ExprNode *differentiate() {
+	ExprNode *differentiate(FILE *file = nullptr) {
 		if (type == VALUE) {
-			return NEW(VALUE, 0, PRIOR_VALUE);
+			PRINT_IF_FILE(file, "Differentiating number is no problem\n\n");
+			ExprNode *ret = NEW(VALUE, 0, PRIOR_VALUE);
+			PRINT_DIFFERENTIATION_RESULT(file, this, ret);
+			return ret;
 		} else if (type == VARIABLE) {
-			return NEW(VALUE, 1, PRIOR_VALUE);
+			PRINT_IF_FILE(file, "Variable is quite an easy thing to work with\n\n");
+			ExprNode *ret = NEW(VALUE, 1, PRIOR_VALUE);
+			PRINT_DIFFERENTIATION_RESULT(file, this, ret);
+			return ret;
 		} else {
+			PRINT_IF_FILE(file, "An operation is a hard thing to undestand, but let's try\n\n");
+			PRINT_IF_FILE(file, "$$ \\left(");
+			latex_dump(file);
+			PRINT_IF_FILE(file, "\\right) ' $$\n\n");
 			switch (cval) {
 
 				#include "ops.dsl"
@@ -851,6 +882,20 @@ public:
 				break;
 			}
 
+			case '+' : {
+				if (L->equivalent_absolute(R)) {
+					DELETE(L, true);
+					set_L(NEW(VALUE, 2, PRIOR_VALUE));
+					prior = PRIOR_MUL;
+					set_val('*');
+					update();
+
+					*result = SIMPLIFIED_EVALUATIVE;
+					return this;
+				}
+				break;
+			}
+
 			case '/' : {
 				if (IS_OP(L) && L->cval == '/') {
 					ExprNode *prev_L = L;
@@ -997,6 +1042,8 @@ public:
 	}
 
 	void latex_dump(FILE *file = stdout) const {
+		if (!file) return;
+
 		if (type == VALUE) {
 			if (val < 0) {
 				fprintf(file, "\\left(");
@@ -1017,6 +1064,12 @@ public:
 					return;
 			}
 		}
+	}
+
+	void latex_dump_expression(FILE *file = stdout) {
+		fprintf(file, "$$ ");
+		latex_dump(file);
+		fprintf(file, " $$\n");
 	}
 
 	#undef OPDEF

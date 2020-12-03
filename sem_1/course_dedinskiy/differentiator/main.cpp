@@ -3,7 +3,7 @@
 const int table_size = 257;
 
 int main() {
-	int mode = SIMPLIFY;
+	int mode = DIFFERENCIATE;
 
 	ExpressionTree tree;
 	tree.ctor();

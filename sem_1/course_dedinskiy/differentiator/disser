@@ -1,27 +1,143 @@
-										\documentclass{article}
-				\usepackage{hyperref}
-				\begin{document}
+\documentclass{article}               
+\usepackage{hyperref}
+				
+\begin{document}
 
-					So we are given an expression:
-		
-$$ \left(x+7\right)\cdot \left(3+x\right)+\left(3+x\right)\cdot 2+\left(x+7\right)\cdot \left(9+x\right)$$
+					
 
-Let's simplify it!
+\begin{titlepage}
+\begin{center}
+\LARGE
+Moscow Institute of Physics and Technology
+\large
+Phystech Skola of Applied Mathematics and Informatics
+\Large
+\textit{Gorishniy Maxim Pavlovich}
+\end{center}
+\begin{center}
+\Huge
+\textbf{Complex methods of continuum differentiation applied in deep learning through time and space manipulations}
+\end{center}
+\begin{center}
+\large
+\textit{\underline{Nobel Prize presentation}}
+\end{center}
+\begin{center}
+2020-12-31
+\end{center}
+\section{\Large{Intoduction}}
 
+The inaccuracy problem of solving high-prioritized expressions throw Alpha-Gauss method has not been raised for the past few years due to inability of derivating such because of the time span caused in 4-dimensional vortex by each of variables influating a final answer.
+
+A77-expression are believed to be impossible to solve in our time-space. This speculation is based on numerous tries of Poenix law complementation in localy undisturbed inclosed triplecies. But recent researches uncovered the unseen chances of such statement to be false.
+
+This work presents a solution for a particular A77-expression found by Zenkovich A. in 2018. Using TTA and SUAinterminations it unfolds all the candy-peaks into numbers and variables giving us the clear vision of your mom.
+
+\section{\Large{The work}}
+
+So we are given an expression to differenciate and simplify:
+
+
+$$ \frac{x\cdot \log _{x} {7}}{x^{\sin { x}}\cdot 5}$$
+\end{titlepage} \newpage
+\section{\Large{Differentiating}}
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\frac{x\cdot \log _{x} {7}}{x^{\sin { x}}\cdot 5}\right) ' $$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(x^{\sin { x}}\cdot 5\right) ' $$
+
+Differentiating number is no problem
+
+$$ \left(5\right) ' = 0$$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(x^{\sin { x}}\right) ' $$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\sin { x}\right) ' $$
+
+Variable is quite an easy thing to work with
+
+$$ \left(x\right) ' = 1$$
+
+So, coming back to our operation
+
+$$ \left(\sin { x}\right) ' = \cos { x}\cdot 1$$
+
+So, coming back to our operation
+
+$$ \left(x^{\sin { x}}\right) ' = x^{\sin { x}}\cdot \left(\cos { x}\cdot 1\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)$$
+
+So, coming back to our operation
+
+$$ \left(x^{\sin { x}}\cdot 5\right) ' = x^{\sin { x}}\cdot \left(\cos { x}\cdot 1\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\cdot 5+0\cdot x^{\sin { x}}$$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(x\cdot \log _{x} {7}\right) ' $$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\log _{x} {7}\right) ' $$
+
+Variable is quite an easy thing to work with
+
+$$ \left(x\right) ' = 1$$
+
+Differentiating number is no problem
+
+$$ \left(7\right) ' = 0$$
+
+So, coming back to our operation
+
+$$ \left(\log _{x} {7}\right) ' = \frac{\frac{\left(7^{\left(-1\right)}\cdot 0\cdot \ln {x}-\ln {7}\cdot 1\cdot x^{\left(-1\right)}\right)}{\ln {x}}}{\ln {x}}$$
+
+Variable is quite an easy thing to work with
+
+$$ \left(x\right) ' = 1$$
+
+So, coming back to our operation
+
+$$ \left(x\cdot \log _{x} {7}\right) ' = 1\cdot \log _{x} {7}+\frac{\frac{\left(7^{\left(-1\right)}\cdot 0\cdot \ln {x}-\ln {7}\cdot 1\cdot x^{\left(-1\right)}\right)}{\ln {x}}}{\ln {x}}\cdot x$$
+
+So, coming back to our operation
+
+$$ \left(\frac{x\cdot \log _{x} {7}}{x^{\sin { x}}\cdot 5}\right) ' = \frac{\frac{\left(\left(1\cdot \log _{x} {7}+\frac{\frac{\left(7^{\left(-1\right)}\cdot 0\cdot \ln {x}-\ln {7}\cdot 1\cdot x^{\left(-1\right)}\right)}{\ln {x}}}{\ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-\left(x^{\sin { x}}\cdot \left(\cos { x}\cdot 1\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\cdot 5+0\cdot x^{\sin { x}}\right)\cdot x\cdot \log _{x} {7}\right)}{x^{\sin { x}}\cdot 5}}{x^{\sin { x}}\cdot 5}$$
+
+And that's the answer! \newpage \section{\Large{Simplifying}}
+Finaly we were able to calculate difference! Let's simplify it now.
+
+$$ \frac{\frac{\left(\left(1\cdot \log _{x} {7}+\frac{\frac{\left(7^{\left(-1\right)}\cdot 0\cdot \ln {x}-\ln {7}\cdot 1\cdot x^{\left(-1\right)}\right)}{\ln {x}}}{\ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-\left(x^{\sin { x}}\cdot \left(\cos { x}\cdot 1\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\cdot 5+0\cdot x^{\sin { x}}\right)\cdot x\cdot \log _{x} {7}\right)}{x^{\sin { x}}\cdot 5}}{x^{\sin { x}}\cdot 5}$$
 \noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
+Some evaluations leave us with
+$$ \frac{\frac{\left(\left(1\cdot \log _{x} {7}+\frac{\frac{\left(0\cdot \ln {x}-\ln {7}\cdot 1\cdot x^{\left(-1\right)}\right)}{\ln {x}}}{\ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-\left(x^{\sin { x}}\cdot \left(\cos { x}\cdot 1\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\cdot 5+0\cdot x^{\sin { x}}\right)\cdot x\cdot \log _{x} {7}\right)}{x^{\sin { x}}\cdot 5}}{x^{\sin { x}}\cdot 5}$$
+No big brains are needed to get
+$$ \frac{\frac{\left(\left(\log _{x} {7}+\frac{\frac{\left(0-\ln {7}\cdot x^{\left(-1\right)}\right)}{\ln {x}}}{\ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-x^{\sin { x}}\cdot \left(\cos { x}\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\cdot 5\cdot x\cdot \log _{x} {7}\right)}{x^{\sin { x}}\cdot 5}}{x^{\sin { x}}\cdot 5}$$
+Some evaluations leave us with
+$$ \frac{\frac{\left(\left(\log _{x} {7}+\frac{\frac{\left(-1\right)\cdot \ln {7}\cdot x^{\left(-1\right)}}{\ln {x}}}{\ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-x^{\sin { x}}\cdot \left(\cos { x}\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\cdot 5\cdot x\cdot \log _{x} {7}\right)}{x^{\sin { x}}\cdot 5}}{x^{\sin { x}}\cdot 5}$$
+Some evaluations leave us with
+$$ \frac{\frac{\left(\left(\log _{x} {7}+\frac{\left(-1\right)\cdot \ln {7}\cdot x^{\left(-1\right)}}{\ln {x}\cdot \ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-x^{\sin { x}}\cdot \left(\cos { x}\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\cdot 5\cdot x\cdot \log _{x} {7}\right)}{x^{\sin { x}}\cdot 5}}{x^{\sin { x}}\cdot 5}$$
+Some evaluations leave us with
+$$ \frac{\left(\left(\log _{x} {7}+\frac{\left(-1\right)\cdot \ln {7}\cdot x^{\left(-1\right)}}{\ln {x}\cdot \ln {x}}\cdot x\right)\cdot x^{\sin { x}}\cdot 5-x^{\sin { x}}\cdot \left(\cos { x}\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\cdot 5\cdot x\cdot \log _{x} {7}\right)}{x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}\cdot 5}$$
 Let's reshuffle operands a bit
-$$ 2\cdot \left(3+x\right)+\left(3+x\right)\cdot \left(7+x\right)+\left(7+x\right)\cdot \left(9+x\right)$$
-Sprinkling out-of-brackets magic!
-$$ \left(3+x\right)\cdot \left(2+7+x\right)+\left(7+x\right)\cdot \left(9+x\right)$$
-Sprinkling out-of-brackets magic!
-$$ \left(9+x\right)\cdot \left(3+x+7+x\right)$$
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(x\cdot \frac{\left(-1\right)\cdot x^{\left(-1\right)}\cdot \ln {7}}{\ln {x}\cdot \ln {x}}+\log _{x} {7}\right)-5\cdot x^{\sin { x}}\cdot x\cdot \log _{x} {7}\cdot \left(\cos { x}\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\right)}{5\cdot x^{\sin { x}}\cdot 5\cdot x^{\sin { x}}}$$
 Let's reshuffle operands a bit
-$$ \left(9+x\right)\cdot \left(10+x+x\right)$$
-Sprinkling out-of-brackets magic!
-$$ \left(9+x\right)\cdot \left(10+x\cdot 2\right)$$
-Let's reshuffle operands a bit
-$$ \left(9+x\right)\cdot \left(10+2\cdot x\right)$$
-And after final prettifing:
-$$ \left(9+x\right)\cdot \left(10+2\cdot x\right)$$
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(x\cdot \frac{\left(-1\right)\cdot x^{\left(-1\right)}\cdot \ln {7}}{\ln {x}\cdot \ln {x}}+\log _{x} {7}\right)-5\cdot x^{\sin { x}}\cdot x\cdot \log _{x} {7}\cdot \left(\cos { x}\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\right)}{25\cdot x^{\sin { x}}\cdot x^{\sin { x}}}$$
+Here we fold in half the expression:
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(x\cdot \frac{\left(-1\right)\cdot x^{\left(-1\right)}\cdot \ln {7}}{\ln {x}^{2}}+\log _{x} {7}\right)-5\cdot x^{\sin { x}}\cdot x\cdot \log _{x} {7}\cdot \left(\cos { x}\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\right)}{25\cdot x^{\sin { x}}\cdot x^{\sin { x}}}$$
+Here we fold in half the expression:
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(x\cdot \frac{\left(-1\right)\cdot x^{\left(-1\right)}\cdot \ln {7}}{\ln {x}^{2}}+\log _{x} {7}\right)-5\cdot x^{\left(\sin { x}+1\right)}\cdot \log _{x} {7}\cdot \left(\cos { x}\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\right)}{25\cdot x^{\sin { x}}\cdot x^{\sin { x}}}$$
+Here we fold in half the expression:
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(x\cdot \frac{\left(-1\right)\cdot x^{\left(-1\right)}\cdot \ln {7}}{\ln {x}^{2}}+\log _{x} {7}\right)-5\cdot x^{\left(\sin { x}+1\right)}\cdot \log _{x} {7}\cdot \left(\cos { x}\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\right)}{25\cdot x^{\left(\sin { x}+\sin { x}\right)}}$$
+Some evaluations leave us with
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(x\cdot \frac{\left(-1\right)\cdot x^{\left(-1\right)}\cdot \ln {7}}{\ln {x}^{2}}+\log _{x} {7}\right)-5\cdot x^{\left(\sin { x}+1\right)}\cdot \log _{x} {7}\cdot \left(\cos { x}\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\right)}{25\cdot x^{\left(2\cdot \sin { x}\right)}}$$
+\section{\Large{Conclusion}}         
+After getting these oustanding results, let's try to abstract away a bit and think of their usability. It's clearly undestandable, that in next 10 years more and more A77-expressions will be solved. Judging by the latest decryption of the Bible, that's exaclty what humanity is meant to perform before transcending and returning to Edem once and for all. And this work is only the begging of the newest Age of Saints.Thank you for the attenting and let's have a last look at this magnificent expression we got
+$$ \frac{\left(5\cdot x^{\sin { x}}\cdot \left(x\cdot \frac{\left(-1\right)\cdot x^{\left(-1\right)}\cdot \ln {7}}{\ln {x}^{2}}+\log _{x} {7}\right)-5\cdot x^{\left(\sin { x}+1\right)}\cdot \log _{x} {7}\cdot \left(\cos { x}\cdot \ln {x}+x^{\left(-1\right)}\cdot \sin { x}\right)\right)}{25\cdot x^{\left(2\cdot \sin { x}\right)}}$$
 
 \end{document}

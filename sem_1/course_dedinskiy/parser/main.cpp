@@ -11,7 +11,7 @@
 int main() {
 	RecursiveParser p;
 	const char *expr = (const char*) "sin(x+15*-y^z)+ln(z-y)^(2*y);";
-	printf("%s\n|\nY\n", expr);
+	printf("%s\n    |\n    Y\n", expr);
 	CodeNode *ret = p.parse(expr);
 
 	if (!ret) {
@@ -39,7 +39,7 @@ int main() {
 			}
 		}
 		printf("+---+------------+\n");
-		printf("|\nY\n");
+		printf("    |\n    Y\n");
 
 		printf("res = [%10lf]\n", ret->evaluate_maths(var_table, var_tabe_size));
 	}

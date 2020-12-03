@@ -1,8 +1,8 @@
 #define L_COPY *(L->deep_copy())
 #define R_COPY *(R->deep_copy())
 
-#define DL *(L->differentiate())
-#define DR *(R->differentiate())
+#define DL *(L->differentiate(file))
+#define DR *(R->differentiate(file))
 
 #define COS(N) *NEW(OPERATION, (double) 'c', PRIOR_COS, (N))
 #define SIN(N) *NEW(OPERATION, (double) 's', PRIOR_SIN, (N))

@@ -6,7 +6,7 @@
 G    ::= EXPR;
 EXPR ::= TERM{[+-]TERM}*
 TERM ::= FACT{{/|*}FACT}*
-FACT ::= -FACT | +FACT | UNIT^FACT | UNIT
+FACT ::= [+-]FACT | UNIT^FACT | UNIT
 UNIT ::= ID(EXPR) | ID | (EXPR) | NUMB
 NUMB ::= [+-]?[0-9]+{.[0-9]+}?{[eE][0-9]+}?
 ID   ::= [a-zA-Z_][a-zA-Z_0-9]*
@@ -19,6 +19,8 @@ ID   ::= [a-zA-Z_][a-zA-Z_0-9]*
 #include <cmath>
 
 #include "code_node.h"
+
+typedef CodeNode ParseNode;
 
 enum PARSER_ERROR {
 	OK = 0,
@@ -50,7 +52,7 @@ private:
 		} while (0)
 
 	#define IF_PARSED(cur_expr, ret_name, code)            \
-		CodeNode *ret_name = (code);                       \
+		ParseNode *ret_name = (code);                      \
 		if (ERROR) {                                       \
 			expr = cur_expr;                               \
 			SET_ERR(0, init_expr_ptr);                     \
@@ -75,7 +77,7 @@ private:
 		return c == '*' || c == '/';
 	}
 
-	CodeNode *parse_ID() {
+	ParseNode *parse_ID() {
 		if (!is_id_char(*expr)) {
 			SET_ERR(ERROR_SYNTAX, expr);
 			return nullptr;
@@ -89,10 +91,10 @@ private:
 		}
 		id->set_length(len);
 
-		return CodeNode::NEW(ID, id);
+		return ParseNode::NEW(ID, id);
 	}
 
-	CodeNode *parse_NUMB() {
+	ParseNode *parse_NUMB() {
 		if (!(is_digit(*expr) || is_sign(*expr))) {
 			SET_ERR(ERROR_SYNTAX, expr);
 			return nullptr;
@@ -164,10 +166,10 @@ private:
 			val *= -1;
 		}
 
-		return CodeNode::NEW(VALUE, val);
+		return ParseNode::NEW(VALUE, val);
 	}
 
-	CodeNode *parse_UNIT() {
+	ParseNode *parse_UNIT() {
 		IF_PARSED (expr, unit_id, parse_ID()) {
 			if (*expr == '(') {
 				NEXT();
@@ -180,7 +182,7 @@ private:
 				}
 				NEXT();
 				SET_ERR(ERROR_SYNTAX, expr);
-				CodeNode::DELETE(unit_id);
+				ParseNode::DELETE(unit_id);
 				return nullptr;
 			} else {
 				return unit_id;
@@ -194,7 +196,7 @@ private:
 					NEXT();
 					return expr_in_brackets;
 				} else {
-					CodeNode::DELETE(expr_in_brackets);
+					ParseNode::DELETE(expr_in_brackets);
 				}
 			}
 			NEXT();
@@ -210,12 +212,12 @@ private:
 		return nullptr;
 	}
 
-	CodeNode *parse_FACT() {
+	ParseNode *parse_FACT() {
 		if (is_sign(*expr)) {
 			char sign = *expr;
 			NEXT();
 			IF_PARSED (expr, fact, parse_FACT()) {
-				return CodeNode::NEW(OPERATION, sign, nullptr, fact);
+				return ParseNode::NEW(OPERATION, sign, nullptr, fact);
 			}
 			SET_ERR(ERROR_SYNTAX, expr);
 			return nullptr;
@@ -225,9 +227,9 @@ private:
 			if (*expr == '^') {
 				NEXT();
 				IF_PARSED (expr, fact, parse_FACT()) {
-					return CodeNode::NEW(OPERATION, '^', unit, fact);
+					return ParseNode::NEW(OPERATION, '^', unit, fact);
 				}
-				CodeNode::DELETE(unit);
+				ParseNode::DELETE(unit);
 				SET_ERR(ERROR_SYNTAX, expr);
 				return nullptr;
 			} else {
@@ -239,18 +241,18 @@ private:
 		return nullptr;
 	}
 
-	CodeNode *parse_TERM() {
+	ParseNode *parse_TERM() {
 		IF_PARSED (expr, fact, parse_FACT()) {
 			while (is_multiplicative(*expr)) {
 				char op = *expr;
 				NEXT();
 
 				IF_PARSED (expr, next_fact, parse_FACT()) {
-					fact = CodeNode::NEW(OPERATION, op, fact, next_fact);
+					fact = ParseNode::NEW(OPERATION, op, fact, next_fact);
 					continue;
 				}
 
-				CodeNode::DELETE(fact, true);
+				ParseNode::DELETE(fact, true);
 				SET_ERR(ERROR_SYNTAX, expr);
 				return nullptr;
 			}
@@ -262,18 +264,18 @@ private:
 		return nullptr;
 	}
 
-	CodeNode *parse_EXPR() {
+	ParseNode *parse_EXPR() {
 		IF_PARSED (expr, term, parse_TERM()) {
 			while (is_sign(*expr)) {
 				char op = *expr;
 				NEXT();
 
 				IF_PARSED (expr, next_term, parse_TERM()) {
-					term = CodeNode::NEW(OPERATION, op, term, next_term);
+					term = ParseNode::NEW(OPERATION, op, term, next_term);
 					continue;
 				}
 
-				CodeNode::DELETE(term, true);
+				ParseNode::DELETE(term, true);
 				SET_ERR(ERROR_SYNTAX, expr);
 				return nullptr;
 			}
@@ -285,7 +287,7 @@ private:
 		return nullptr;
 	}       
 
-	CodeNode *parse_G() {
+	ParseNode *parse_G() {
 
 		IF_PARSED (expr, ret, parse_EXPR()) {
 			if (*expr == ';') {
@@ -293,7 +295,7 @@ private:
 				return ret;
 			} else {
 				NEXT();
-				CodeNode::DELETE(ret);
+				ParseNode::DELETE(ret);
 			}
 		}
 
@@ -348,11 +350,11 @@ public:
 
 //=============================================================================
 
-	CodeNode *parse(const char *expression) {
+	ParseNode *parse(const char *expression) {
 		expr = expression;
 		init_expr_ptr = expression;
 
-		CodeNode *res = parse_G();
+		ParseNode *res = parse_G();
 		if (!ERROR) {
 			return res;
 		} else {

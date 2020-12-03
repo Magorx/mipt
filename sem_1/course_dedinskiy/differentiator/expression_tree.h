@@ -11,7 +11,7 @@
 #include "latex_parts.h"
 
 enum SHOW_OFF_WAY {
-	SIMPLIFY = 1,
+	SIMPLIFY      = 1,
 	DIFFERENCIATE = 2
 };
 
@@ -260,10 +260,10 @@ public:
 		return root ? root->evaluate(var_table, var_table_len) : 0.0;
 	}
 
-	ExpressionTree *differentiate() {
+	ExpressionTree *differentiate(FILE *file = nullptr) {
 		ExpressionTree *tree = NEW();
 		if (root) {
-			tree->set_root(root->differentiate());
+			tree->set_root(root->differentiate(file));
 		}
 
 		return tree;
@@ -277,6 +277,8 @@ public:
 	}
 
 	void latex_dump_expression(FILE *file) {
+		if (!file) return;
+
 		fprintf(file, "$$ ");
 		get_root()->latex_dump(file);
 		fprintf(file, "$$\n");
@@ -300,25 +302,24 @@ public:
 		}
 
 		fprintf(file, "%s\n", LATEX_ARTICLE_HEAD);
+		fprintf(file, "%s\n", LATEX_ARTICLE_INTRODUCTION);
 
-		fprintf(file, "$$ ");
-		root->latex_dump(file);
-		fprintf(file, "$$\n\n");
+		latex_dump_expression(file);
+		fprintf(file, "\\end{titlepage} \\newpage\n");
+		fprintf(file, "\\section{\\Large{Differentiating}}\n");
 
 		ExpressionTree *show_tree = nullptr;
 
 		if (mode == DIFFERENCIATE) {
-			fprintf(file, "Let's differintiate it!\n");
-			show_tree = differentiate();
-			fprintf(file, "$$ ");
-			show_tree->get_root()->latex_dump(file);
-			fprintf(file, "$$\n\n");
-			fprintf(file, "Uhhh, let's simplify it a bit...\n\n");
+			show_tree = differentiate(file);
 		} else {
-			fprintf(file, "Let's simplify it!\n\n");
 			show_tree = NEW();
 			show_tree->set_root(root->deep_copy());
 		}
+
+		fprintf(file, "And that's the answer! \\newpage \\section{\\Large{Simplifying}}\n");
+		fprintf(file, "Finaly we were able to calculate difference! Let's simplify it now.\n\n");
+		show_tree->latex_dump_expression(file);
 		
 
 		fprintf(file, "\\noindent\\makebox[\\linewidth]{\\rule{\\paperwidth}{0.4pt}}\n");
@@ -381,7 +382,7 @@ public:
 
 		//show_tree->set_root(show_tree->get_root()->prettify());
 
-		fprintf(file, "And after final prettifing:\n");
+		fprintf(file, "%s\n", LATEX_RESULTS_AND_CONCLUSION);
 		show_tree->latex_dump_expression(file);
 		fprintf(file, "\n\\end{document}");
 		fclose(file);
