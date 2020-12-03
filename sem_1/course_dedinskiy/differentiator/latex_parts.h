@@ -15,7 +15,7 @@ const char *LATEX_ARTICLE_INTRODUCTION =
 "\\end{center}\n"
 "\\begin{center}\n"
 "\\Huge\n"
-"\\textbf{Complex methods of continuum differentiation applied in deep learning through time and space manipulations}\n"
+"\\textbf{Complex methods of continuum differentiation applied in Bible undestandings through time and space manipulations}\n"
 "\\end{center}\n"
 "\\begin{center}\n"
 "\\large\n"
