@@ -15,7 +15,7 @@ const char *LATEX_ARTICLE_INTRODUCTION =
 "\\end{center}\n"
 "\\begin{center}\n"
 "\\Huge\n"
-"\\textbf{Complex methods of continuum differentiation applied in Bible undestandings through time and space manipulations}\n"
+"\\textbf{Complex methods of continuum differentiation applied in The Holy Bible undestandings through time and space manipulations}\n"
 "\\end{center}\n"
 "\\begin{center}\n"
 "\\large\n"
@@ -42,6 +42,6 @@ const char *LATEX_RESULTS_AND_CONCLUSION =
 "\\section{\\Large{Conclusion}}         \n"
 "After getting these oustanding results, let's try to abstract away a bit and think of their usability. "
 "It's clearly undestandable, that in next 10 years more and more A77-expressions will be solved. "
-"Judging by the latest decryption of the Bible, that's exaclty what humanity is meant to perform before "
+"Judging by the latest decryption of The Holy Bible, that's exaclty what humanity is meant to perform before "
 "transcending and returning to Edem once and for all. And this work is only the begging of the newest Age of Saints."
 "Thank you for the attenting and let's have a last look at this magnificent expression we got";
