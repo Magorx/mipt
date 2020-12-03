@@ -1,6 +1,8 @@
 const char *LATEX_ARTICLE_HEAD = 
 "\\documentclass{article}               \n"
-"\\usepackage{hyperref}\n				\n"
+"\\usepackage{hyperref} 				\n"
+"\\usepackage{graphicx}                 \n"
+"\\graphicspath{ {./samples/} }         \n"
 "\\begin{document}\n\n					\n";
 
 const char *LATEX_ARTICLE_INTRODUCTION = 

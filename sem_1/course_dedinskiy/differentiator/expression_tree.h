@@ -384,6 +384,9 @@ public:
 
 		fprintf(file, "%s\n", LATEX_RESULTS_AND_CONCLUSION);
 		show_tree->latex_dump_expression(file);
+
+		fprintf(file, "\\includegraphics[width=13cm, height=6cm]{welcome_to_the_internet.jpg}\n");
+
 		fprintf(file, "\n\\end{document}");
 		fclose(file);
 
