@@ -222,49 +222,58 @@ public:
 // Executing ==================================================================
 //=============================================================================
 
-	double evaluate_maths(const double *var_table = nullptr, const size_t var_table_len = 0) {
+	double evaluate_expr(double *var_table = nullptr, const size_t var_table_len = 0, void **ret_var = nullptr) {
 		if (is_val()) {
 			return data.val;
 		} else if (is_var()) {
-			return evaluate_variable(var_table, var_table_len);
+			return evaluate_variable(var_table, var_table_len, ret_var);
 		} else if (is_op()) {
-			return evaluate_operation(var_table, var_table_len);
+			return evaluate_operation(var_table, var_table_len, ret_var);
 		} else if (is_id()) {
-			return evaluate_id(var_table, var_table_len);
+			return evaluate_id(var_table, var_table_len, ret_var);
 		} else {
 			return 0;
 		}
 	}
 
-	double evaluate_operation(const double *var_table, const size_t var_table_len) {
+	double evaluate_operation(double *var_table, const size_t var_table_len, void **ret_var = nullptr) {
 		int op = data.op;
-		double L_res = L ? L->evaluate_maths(var_table, var_table_len) : 0;
-		double R_res = R ? R->evaluate_maths(var_table, var_table_len) : 0;
+		void *l_var = nullptr;
+		void *r_var = nullptr;
+		double L_res = L ? L->evaluate_expr(var_table, var_table_len, &l_var) : 0;
+		double R_res = R ? R->evaluate_expr(var_table, var_table_len, &r_var) : 0;
 
 		switch (op) {
 			case '+' : {
+				if (ret_var) *ret_var = nullptr;
 				return L_res + R_res;
-				break;
 			}
 
 			case '-' : {
+				if (ret_var) *ret_var = nullptr;
 				return L_res - R_res;
-				break;
 			}
 
 			case '*' : {
+				if (ret_var) *ret_var = nullptr;
 				return L_res * R_res;
-				break;
 			}
 
 			case '/' : {
+				if (ret_var) *ret_var = nullptr;
 				return L_res / R_res;
-				break;
 			}
 
 			case '^' : {
+				if (ret_var) *ret_var = nullptr;
 				return pow(L_res, R_res);
-				break;
+			}
+
+			case '=' : {
+				//printf("setting %lf to %lf\n", *((double*) l_var), R_res);
+				*((double*) l_var) = R_res;
+				if (ret_var) *ret_var = r_var;
+				return R_res;
 			}
 
 			default: {
@@ -273,12 +282,12 @@ public:
 		}
 	}
 
-	double evaluate_id(const double *var_table, const size_t var_table_len) {
+	double evaluate_id(double *var_table, const size_t var_table_len, void **ret_var = nullptr) {
 		if (!R && !L) {
-			return evaluate_variable(var_table, var_table_len);
+			return evaluate_variable(var_table, var_table_len, ret_var);
 		} else {
 			StringView &id = *data.id;
-			double R_res = R ? R->evaluate_maths(var_table, var_table_len) : 0;
+			double R_res = R ? R->evaluate_expr(var_table, var_table_len, ret_var) : 0;
 
 			if (id.starts_with("sin")) {
 				return sin(R_res);
@@ -294,11 +303,14 @@ public:
 		}
 	}
 
-	double evaluate_variable(const double *var_table, const size_t var_table_len) {
+	double evaluate_variable(double *var_table, const size_t var_table_len, void **ret_var = nullptr) {
 		int var = data.id->get_buffer()[0];
+		//printf("going to get %d [%c]: %lf\n", var, var, var_table[var]);
 		if (var_table_len <= (size_t) var) {
+			if (ret_var) *ret_var = &var_table[var];
 			return (double) KCTF_POISON;
 		} else  {
+			if (ret_var) *ret_var = &var_table[var];
 			return var_table[var];
 		}
 	}

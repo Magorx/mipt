@@ -4,7 +4,9 @@
 /* Grammar ================================\
 
 G    ::= EXPR;
-EXPR ::= TERM{[+-]TERM}*
+
+EXPR ::= CALC{=CALC}*
+CALC ::= TERM{[+-]TERM}*
 TERM ::= FACT{{/|*}FACT}*
 FACT ::= [+-]FACT | UNIT^FACT | UNIT
 UNIT ::= ID(EXPR) | ID | (EXPR) | NUMB
@@ -59,7 +61,7 @@ private:
 		} else
 
 	#define SET_ERR(errcode, errpos) do {ERROR = errcode; ERRPOS = errpos;} while (0)
-	#define NEXT() ++expr
+	#define NEXT() ++expr; while(*expr==' ') ++expr
 
 	bool is_id_char(const char c) {
 		return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || c == '_';
@@ -264,8 +266,8 @@ private:
 		return nullptr;
 	}
 
-	ParseNode *parse_EXPR() {
-		IF_PARSED (expr, term, parse_TERM()) {
+	ParseNode *parse_CALC() {
+		IF_PARSED(expr, term, parse_TERM()) {
 			while (is_sign(*expr)) {
 				char op = *expr;
 				NEXT();
@@ -285,7 +287,30 @@ private:
 
 		SET_ERR(ERROR_SYNTAX, expr);
 		return nullptr;
-	}       
+	} 
+
+	ParseNode *parse_EXPR() {
+		IF_PARSED(expr, calc, parse_CALC()) {
+			while (*expr == '=') {
+				char op = *expr;
+				NEXT();
+
+				IF_PARSED (expr, next_calc, parse_EXPR()) {
+					calc = ParseNode::NEW(OPERATION, op, calc, next_calc);
+					continue;
+				}
+
+				ParseNode::DELETE(calc, true);
+				SET_ERR(ERROR_SYNTAX, expr);
+				return nullptr;
+			}
+
+			return calc;
+		}
+
+		SET_ERR(ERROR_SYNTAX, expr);
+		return nullptr;		
+	}      
 
 	ParseNode *parse_G() {
 
@@ -351,7 +376,7 @@ public:
 //=============================================================================
 
 	ParseNode *parse(const char *expression) {
-		expr = expression;
+		expr          = expression;
 		init_expr_ptr = expression;
 
 		ParseNode *res = parse_G();
