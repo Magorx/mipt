@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.11.25)  3 DEC 2020 16:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.11.25)  4 DEC 2020 00:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -258,60 +258,59 @@ ination with the same identifier (name{page.1}) has been already used, duplicat
 e ignored
 <to be read again> 
                    \relax 
-l.99 $
-      $ \left(\log _{x} {7}\right) ' = \frac{\frac{\left(7^{\left(-1\right)}...
-[1]
-Overfull \hbox (112.84973pt too wide) detected at line 111
+l.99 ...ln {3}+3^{\left(-1\right)}\cdot x\right)$$
+                                                   [1]
+Overfull \hbox (132.36496pt too wide) detected at line 107
 [][] \OT1/cmr/m/n/10 = []
  []
 
 [2]
-Overfull \hbox (42.03322pt too wide) detected at line 116
+Overfull \hbox (51.45128pt too wide) detected at line 112
 []
  []
 
 
-Overfull \hbox (21.60242pt too wide) detected at line 119
+Overfull \hbox (27.33998pt too wide) detected at line 115
 []
  []
 
 
-Overfull \hbox (40.50346pt too wide) detected at line 127
+Overfull \hbox (23.8289pt too wide) detected at line 117
 []
  []
 
 
-Overfull \hbox (40.50346pt too wide) detected at line 129
+Overfull \hbox (111.98764pt too wide) detected at line 119
 []
  []
 
 
-Overfull \hbox (40.50346pt too wide) detected at line 131
+Overfull \hbox (111.98764pt too wide) detected at line 121
 []
  []
 
 
-Overfull \hbox (40.50346pt too wide) detected at line 133
+Overfull \hbox (111.98764pt too wide) detected at line 123
 []
  []
 
 
-Overfull \hbox (43.94115pt too wide) detected at line 135
+Overfull \hbox (111.98764pt too wide) detected at line 125
+[]
+ []
+
+
+Overfull \hbox (111.98764pt too wide) detected at line 127
+[]
+ []
+
+
+Overfull \hbox (111.98764pt too wide) detected at line 129
 []
  []
 
 [3]
-Overfull \hbox (43.94115pt too wide) detected at line 137
-[]
- []
-
-
-Overfull \hbox (43.94115pt too wide) detected at line 139
-[]
- []
-
-
-Overfull \hbox (43.94115pt too wide) detected at line 142
+Overfull \hbox (111.98764pt too wide) detected at line 132
 []
  []
 
@@ -319,31 +318,31 @@ Overfull \hbox (43.94115pt too wide) detected at line 142
 File: ./samples/welcome_to_the_internet.jpg Graphic file (type jpg)
 <use ./samples/welcome_to_the_internet.jpg>
 Package pdftex.def Info: ./samples/welcome_to_the_internet.jpg  used on input l
-ine 143.
+ine 133.
 (pdftex.def)             Requested size: 369.8991pt x 170.71545pt.
 
-Overfull \hbox (24.8991pt too wide) in paragraph at lines 142--144
+Overfull \hbox (24.8991pt too wide) in paragraph at lines 132--134
 [] 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 145.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 135.
 [4 <./samples/welcome_to_the_internet.jpg>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 145.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 135.
  (latex_output/disser.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 145.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 145.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 135.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 135.
 Package rerunfilecheck Info: File `disser.out' has not changed.
 (rerunfilecheck)             Checksum: <no file>.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 145.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 135.
  ) 
 Here is how much of TeX's memory you used:
  5202 strings out of 483183
  80624 string characters out of 5966291
- 336916 words of memory out of 5000000
+ 337916 words of memory out of 5000000
  20136 multiletter control sequences out of 15000+600000
  537278 words of font info for 40 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 34i,9n,29p,523b,353s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 34i,9n,29p,555b,353s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
@@ -357,7 +356,7 @@ cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy1
 0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/sh
 are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on latex_output/disser.pdf (5 pages, 221078 bytes).
+Output written on latex_output/disser.pdf (5 pages, 218883 bytes).
 PDF statistics:
  108 PDF objects out of 1000 (max. 8388607)
  85 compressed objects within 1 object stream

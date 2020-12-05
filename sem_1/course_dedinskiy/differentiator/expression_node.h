@@ -12,7 +12,7 @@
 #include "lang.dsl"
 
 
-const char *TO_SIMPLIFY = "+-*/^";
+const char *TO_SIMPLIFY = "+-*/";
 
 const int ORDER_ADD = -1;
 const int ORDER_MUL = +1;
