@@ -297,7 +297,7 @@ public:
 
 		FILE *file = fopen(file_name, "w");
 		if (!file) {
-			printf("[ERR]<detexpr_swofree>: [file_name](%s) can't be opened\n", file_name);
+			printf("[ERR]<expr_swof>: [file_name](%s) can't be opened\n", file_name);
 			return;
 		}
 

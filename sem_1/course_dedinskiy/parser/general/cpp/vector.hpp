@@ -11,11 +11,17 @@ private:
 	size_t capacity;
 
 	void realloc_bufer(const size_t new_capacity) {
-		capacity = new_capacity;
-		T* ptr = (T*) realloc(buffer, capacity * sizeof(T));
+		T* ptr = (T*) calloc(new_capacity, sizeof(T));
 		if (!ptr) {
 			throw std::length_error("[ERR]<vector>: realloc fail");
 		}
+
+		for (size_t i = 0; i < cur_size; ++i) {
+			ptr[i] = buffer[i];
+		}
+		free(buffer);
+
+		capacity = new_capacity;
 		buffer= ptr;
 	}
 

@@ -13,8 +13,19 @@ private:
 	size_t size;
 
 public:
-	StringView            (const StringView& other) = delete;
-	StringView& operator= (const StringView& other) = delete;
+	StringView(const StringView& other) :
+	buffer(other.buffer),
+	null_char(other.null_char),
+	size(other.size)
+	{}
+
+	StringView& operator=(const StringView& other) {
+		buffer = other.buffer;
+		null_char = other.null_char;
+		size = other.size;
+
+		return *this;
+	}
 
 	StringView() :
 	buffer(nullptr),
@@ -71,6 +82,12 @@ public:
 
 		stringview->dtor();
 		free(stringview);
+	}
+
+	static bool starts_with(const char *first, const char *second) {
+		size_t len_1 = strlen(first);
+		size_t len_2 = strlen(second);
+		return len_1 < len_2 ? false : memcmp(first, second, len_2) == 0;
 	}
 
 	bool is_null() const {

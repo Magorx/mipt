@@ -6,10 +6,15 @@
 
 #include "general/c/announcement.h"
 
-#include "recursive_parser.h"
+#include "compiler.h"
 
 int main() {
-	RecursiveParser p;
+	Compiler comp = {};
+	comp.read_to_nodes("prog.wzr");
+
+	return 0;
+
+	RecursiveParser p = {};
 	const char *expr = (const char*) "x = (((a = 5) + (b = 7)) * 0 + (a = a + b^2) * 0) * 0 + (a + b * sin(15 + -a^+b));";
 	printf("%s\n    |\n    Y\n", expr);
 	CodeNode *ret = p.parse(expr);
