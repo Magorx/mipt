@@ -19,6 +19,9 @@ int main() {
 	Compiler comp = {};
 	CodeNode *prog = comp.read_to_nodes(&file);
 
+	prog->space_dump();
+	printf("\n");
+
 	if (!prog) {
 	} else {
 		const int var_tabe_size = 257;

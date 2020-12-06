@@ -1,0 +1,265 @@
+\documentclass{article}               
+\usepackage{hyperref} 				
+\usepackage{graphicx}                 
+\graphicspath{ {./samples/} }         
+\begin{document}
+
+					
+
+\begin{titlepage}
+\begin{center}
+\LARGE
+Moscow Institute of Physics and Technology
+\large
+Phystech Skola of Applied Mathematics and Informatics
+\Large
+\textit{Gorishniy Maxim Pavlovich}
+\end{center}
+\begin{center}
+\Huge
+\textbf{Complex methods of continuum differentiation applied in The Holy Bible undestandings through time and space manipulations}
+\end{center}
+\begin{center}
+\large
+\textit{\underline{Nobel Prize presentation}}
+\end{center}
+\begin{center}
+2020-12-31
+\end{center}
+\section{\Large{Intoduction}}
+
+The inaccuracy problem of solving high-prioritized expressions throw Alpha-Gauss method has not been raised for the past few years due to inability of derivating such because of the time span caused in 4-dimensional vortex by each of variables influating a final answer.
+
+A77-expression are believed to be impossible to solve in our time-space. This speculation is based on numerous tries of Poenix law complementation in localy undisturbed inclosed triplecies. But recent researches uncovered the unseen chances of such statement to be false.
+
+This work presents a solution for a particular A77-expression found by Zenkovich A. in 2018. Using TTA and SUAinterminations it unfolds all the candy-peaks into numbers and variables giving us the clear vision of your mom.
+
+\section{\Large{The work}}
+
+So we are given an expression to differenciate and simplify:
+
+
+$$ \frac{\left(\frac{1}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+10\cdot 65\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+\end{titlepage} \newpage
+\section{\Large{Differentiating}}
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\frac{\left(\frac{1}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+10\cdot 65\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}\right) ' $$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\right) ' $$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right) ' $$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right) ' $$
+
+Differentiating number is no problem
+
+$$ \left(2.7\right) ' = 0$$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\frac{12\cdot x}{7}+y\right) ' $$
+
+Variable is quite an easy thing to work with
+
+$$ \left(y\right) ' = 1$$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\frac{12\cdot x}{7}\right) ' $$
+
+Differentiating number is no problem
+
+$$ \left(7\right) ' = 0$$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(12\cdot x\right) ' $$
+
+Variable is quite an easy thing to work with
+
+$$ \left(x\right) ' = 1$$
+
+Differentiating number is no problem
+
+$$ \left(12\right) ' = 0$$
+
+So, coming back to our operation
+
+$$ \left(12\cdot x\right) ' = 0\cdot x+1\cdot 12$$
+
+So, coming back to our operation
+
+$$ \left(\frac{12\cdot x}{7}\right) ' = \frac{\frac{\left(\left(0\cdot x+1\cdot 12\right)\cdot 7-0\cdot 12\cdot x\right)}{7}}{7}$$
+
+So, coming back to our operation
+
+$$ \left(\frac{12\cdot x}{7}+y\right) ' = \frac{\frac{\left(\left(0\cdot x+1\cdot 12\right)\cdot 7-0\cdot 12\cdot x\right)}{7}}{7}+1$$
+
+So, coming back to our operation
+
+$$ \left(\log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right) ' = \frac{\frac{\left(\left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}\cdot \left(\frac{\frac{\left(\left(0\cdot x+1\cdot 12\right)\cdot 7-0\cdot 12\cdot x\right)}{7}}{7}+1\right)\cdot \ln {2.7}-\ln {\left(\frac{12\cdot x}{7}+y\right)}\cdot 0\cdot 2.7^{\left(-1\right)}\right)}{\ln {2.7}}}{\ln {2.7}}$$
+
+Differentiating number is no problem
+
+$$ \left(365\right) ' = 0$$
+
+So, coming back to our operation
+
+$$ \left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right) ' = 0\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+\frac{\frac{\left(\left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}\cdot \left(\frac{\frac{\left(\left(0\cdot x+1\cdot 12\right)\cdot 7-0\cdot 12\cdot x\right)}{7}}{7}+1\right)\cdot \ln {2.7}-\ln {\left(\frac{12\cdot x}{7}+y\right)}\cdot 0\cdot 2.7^{\left(-1\right)}\right)}{\ln {2.7}}}{\ln {2.7}}\cdot 365$$
+
+So, coming back to our operation
+
+$$ \left(e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\right) ' = e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\left(0\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+\frac{\frac{\left(\left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}\cdot \left(\frac{\frac{\left(\left(0\cdot x+1\cdot 12\right)\cdot 7-0\cdot 12\cdot x\right)}{7}}{7}+1\right)\cdot \ln {2.7}-\ln {\left(\frac{12\cdot x}{7}+y\right)}\cdot 0\cdot 2.7^{\left(-1\right)}\right)}{\ln {2.7}}}{\ln {2.7}}\cdot 365\right)\cdot \ln {e}+e^{\left(-1\right)}\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)$$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\frac{1}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+10\cdot 65\right) ' $$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(10\cdot 65\right) ' $$
+
+Differentiating number is no problem
+
+$$ \left(65\right) ' = 0$$
+
+Differentiating number is no problem
+
+$$ \left(10\right) ' = 0$$
+
+So, coming back to our operation
+
+$$ \left(10\cdot 65\right) ' = 0\cdot 65+0\cdot 10$$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\frac{1}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)\right) ' $$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right) ' $$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\cos { \left(x-y\right)}\right) ' $$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(x-y\right) ' $$
+
+Variable is quite an easy thing to work with
+
+$$ \left(y\right) ' = 1$$
+
+Variable is quite an easy thing to work with
+
+$$ \left(x\right) ' = 1$$
+
+So, coming back to our operation
+
+$$ \left(x-y\right) ' = 1+1$$
+
+So, coming back to our operation
+
+$$ \left(\cos { \left(x-y\right)}\right) ' = \sin { \left(x-y\right)}\cdot \left(1+1\right)\cdot \left(-1\right)$$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\cos { \left(x+y\right)}\right) ' $$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(x+y\right) ' $$
+
+Variable is quite an easy thing to work with
+
+$$ \left(y\right) ' = 1$$
+
+Variable is quite an easy thing to work with
+
+$$ \left(x\right) ' = 1$$
+
+So, coming back to our operation
+
+$$ \left(x+y\right) ' = 1+1$$
+
+So, coming back to our operation
+
+$$ \left(\cos { \left(x+y\right)}\right) ' = \sin { \left(x+y\right)}\cdot \left(1+1\right)\cdot \left(-1\right)$$
+
+So, coming back to our operation
+
+$$ \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right) ' = \sin { \left(x+y\right)}\cdot \left(1+1\right)\cdot \left(-1\right)+\sin { \left(x-y\right)}\cdot \left(1+1\right)\cdot \left(-1\right)$$
+
+An operation is a hard thing to undestand, but let's try
+
+$$ \left(\frac{1}{2}\right) ' $$
+
+Differentiating number is no problem
+
+$$ \left(2\right) ' = 0$$
+
+Differentiating number is no problem
+
+$$ \left(1\right) ' = 0$$
+
+So, coming back to our operation
+
+$$ \left(\frac{1}{2}\right) ' = \frac{\frac{\left(0\cdot 2-0\cdot 1\right)}{2}}{2}$$
+
+So, coming back to our operation
+
+$$ \left(\frac{1}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)\right) ' = \frac{\frac{\left(0\cdot 2-0\cdot 1\right)}{2}}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+\left(\sin { \left(x+y\right)}\cdot \left(1+1\right)\cdot \left(-1\right)+\sin { \left(x-y\right)}\cdot \left(1+1\right)\cdot \left(-1\right)\right)\cdot \frac{1}{2}$$
+
+So, coming back to our operation
+
+$$ \left(\frac{1}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+10\cdot 65\right) ' = \frac{\frac{\left(0\cdot 2-0\cdot 1\right)}{2}}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+\left(\sin { \left(x+y\right)}\cdot \left(1+1\right)\cdot \left(-1\right)+\sin { \left(x-y\right)}\cdot \left(1+1\right)\cdot \left(-1\right)\right)\cdot \frac{1}{2}+0\cdot 65+0\cdot 10$$
+
+So, coming back to our operation
+
+$$ \left(\frac{\left(\frac{1}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+10\cdot 65\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}\right) ' = \frac{\frac{\left(\left(\frac{\frac{\left(0\cdot 2-0\cdot 1\right)}{2}}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+\left(\sin { \left(x+y\right)}\cdot \left(1+1\right)\cdot \left(-1\right)+\sin { \left(x-y\right)}\cdot \left(1+1\right)\cdot \left(-1\right)\right)\cdot \frac{1}{2}+0\cdot 65+0\cdot 10\right)\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\left(0\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+\frac{\frac{\left(\left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}\cdot \left(\frac{\frac{\left(\left(0\cdot x+1\cdot 12\right)\cdot 7-0\cdot 12\cdot x\right)}{7}}{7}+1\right)\cdot \ln {2.7}-\ln {\left(\frac{12\cdot x}{7}+y\right)}\cdot 0\cdot 2.7^{\left(-1\right)}\right)}{\ln {2.7}}}{\ln {2.7}}\cdot 365\right)\cdot \ln {e}+e^{\left(-1\right)}\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)\cdot \left(\frac{1}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+10\cdot 65\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+
+And that's the answer! \newpage \section{\Large{Simplifying}}
+Finaly we were able to calculate difference! Let's simplify it now.
+
+$$ \frac{\frac{\left(\left(\frac{\frac{\left(0\cdot 2-0\cdot 1\right)}{2}}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+\left(\sin { \left(x+y\right)}\cdot \left(1+1\right)\cdot \left(-1\right)+\sin { \left(x-y\right)}\cdot \left(1+1\right)\cdot \left(-1\right)\right)\cdot \frac{1}{2}+0\cdot 65+0\cdot 10\right)\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\left(0\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+\frac{\frac{\left(\left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}\cdot \left(\frac{\frac{\left(\left(0\cdot x+1\cdot 12\right)\cdot 7-0\cdot 12\cdot x\right)}{7}}{7}+1\right)\cdot \ln {2.7}-\ln {\left(\frac{12\cdot x}{7}+y\right)}\cdot 0\cdot 2.7^{\left(-1\right)}\right)}{\ln {2.7}}}{\ln {2.7}}\cdot 365\right)\cdot \ln {e}+e^{\left(-1\right)}\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)\cdot \left(\frac{1}{2}\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+10\cdot 65\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+\noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
+Some evaluations leave us with
+$$ \frac{\frac{\left(\left(0\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+\left(\sin { \left(x+y\right)}\cdot 2\cdot \left(-1\right)+\sin { \left(x-y\right)}\cdot 2\cdot \left(-1\right)\right)\cdot 0.5+0\right)\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\left(0\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+\frac{\frac{\left(\left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}\cdot \left(\frac{\frac{\left(\left(0\cdot x+12\right)\cdot 7-0\cdot 12\cdot x\right)}{7}}{7}+1\right)\cdot \ln {2.7}-\ln {\left(\frac{12\cdot x}{7}+y\right)}\cdot 0\cdot 2.7^{\left(-1\right)}\right)}{\ln {2.7}}}{\ln {2.7}}\cdot 365\right)\cdot \ln {e}+e^{\left(-1\right)}\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)\cdot \left(0.5\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+650\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+No big brains are needed to get
+$$ \frac{\frac{\left(\left(\sin { \left(x+y\right)}\cdot 2\cdot \left(-1\right)+\sin { \left(x-y\right)}\cdot 2\cdot \left(-1\right)\right)\cdot 0.5\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\frac{\frac{\left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}\cdot \left(\frac{\frac{12\cdot 7}{7}}{7}+1\right)\cdot \ln {2.7}}{\ln {2.7}}}{\ln {2.7}}\cdot 365\cdot \ln {e}+e^{\left(-1\right)}\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)\cdot \left(0.5\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+650\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+Some evaluations leave us with
+$$ \frac{\frac{\left(\left(\sin { \left(x+y\right)}\cdot 2\cdot \left(-1\right)+\sin { \left(x-y\right)}\cdot 2\cdot \left(-1\right)\right)\cdot 0.5\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\frac{\frac{\left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}\cdot 2.71429\cdot \ln {2.7}}{\ln {2.7}}}{\ln {2.7}}\cdot 365\cdot \ln {e}+e^{\left(-1\right)}\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)\cdot \left(0.5\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+650\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+Some evaluations leave us with
+$$ \frac{\frac{\left(\left(\sin { \left(x+y\right)}\cdot 2\cdot \left(-1\right)+\sin { \left(x-y\right)}\cdot 2\cdot \left(-1\right)\right)\cdot 0.5\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\frac{\left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}\cdot 2.71429\cdot \ln {2.7}}{\ln {2.7}\cdot \ln {2.7}}\cdot 365\cdot \ln {e}+e^{\left(-1\right)}\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)\cdot \left(0.5\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+650\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+Some evaluations leave us with
+$$ \frac{\left(\left(\sin { \left(x+y\right)}\cdot 2\cdot \left(-1\right)+\sin { \left(x-y\right)}\cdot 2\cdot \left(-1\right)\right)\cdot 0.5\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\frac{\left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}\cdot 2.71429\cdot \ln {2.7}}{\ln {2.7}\cdot \ln {2.7}}\cdot 365\cdot \ln {e}+e^{\left(-1\right)}\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)\cdot \left(0.5\cdot \left(\cos { \left(x+y\right)}-\cos { \left(x-y\right)}\right)+650\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(0.5\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\left(-2\right)\cdot \sin { \left(y+x\right)}+\left(-2\right)\cdot \sin { \left(x-y\right)}\right)-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(0.5\cdot \left(\cos { \left(y+x\right)}-\cos { \left(x-y\right)}\right)+650\right)\cdot \left(e^{\left(-1\right)}\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+365\cdot \frac{2.71429\cdot \ln {2.7}\cdot \left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}}{\ln {2.7}\cdot \ln {2.7}}\cdot \ln {e}\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+Sprinkling out-of-brackets magic!
+$$ \frac{\left(0.5\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(-2\right)\cdot \left(\sin { \left(y+x\right)}+\sin { \left(x-y\right)}\right)-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(0.5\cdot \left(\cos { \left(y+x\right)}-\cos { \left(x-y\right)}\right)+650\right)\cdot \left(e^{\left(-1\right)}\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+365\cdot \frac{2.71429\cdot \ln {2.7}\cdot \left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}}{\ln {2.7}\cdot \ln {2.7}}\cdot \ln {e}\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(\left(-1\right)\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\sin { \left(y+x\right)}+\sin { \left(x-y\right)}\right)-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(0.5\cdot \left(\cos { \left(y+x\right)}-\cos { \left(x-y\right)}\right)+650\right)\cdot \left(e^{\left(-1\right)}\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+365\cdot \frac{2.71429\cdot \ln {2.7}\cdot \left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}}{\ln {2.7}\cdot \ln {2.7}}\cdot \ln {e}\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+Here we fold in half the expression:
+$$ \frac{\left(\left(-1\right)\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\sin { \left(y+x\right)}+\sin { \left(x-y\right)}\right)-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(0.5\cdot \left(\cos { \left(y+x\right)}-\cos { \left(x-y\right)}\right)+650\right)\cdot \left(e^{\left(-1\right)}\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+365\cdot \frac{2.71429\cdot \ln {2.7}\cdot \left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}}{\ln {2.7}^{2}}\cdot \ln {e}\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+Sprinkling out-of-brackets magic!
+$$ \frac{\left(\left(-1\right)\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\sin { \left(y+x\right)}+\sin { \left(x-y\right)}\right)-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(0.5\cdot \left(\cos { \left(y+x\right)}-\cos { \left(x-y\right)}\right)+650\right)\cdot 365\cdot \left(e^{\left(-1\right)}\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+\frac{2.71429\cdot \ln {2.7}\cdot \left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}}{\ln {2.7}^{2}}\cdot \ln {e}\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+Let's reshuffle operands a bit
+$$ \frac{\left(\left(-1\right)\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\sin { \left(y+x\right)}+\sin { \left(x-y\right)}\right)-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot 365\cdot \left(0.5\cdot \left(\cos { \left(y+x\right)}-\cos { \left(x-y\right)}\right)+650\right)\cdot \left(e^{\left(-1\right)}\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+\frac{2.71429\cdot \ln {2.7}\cdot \left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}}{\ln {2.7}^{2}}\cdot \ln {e}\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+Here we fold in half the expression:
+$$ \frac{\left(\left(-1\right)\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\sin { \left(y+x\right)}+\sin { \left(x-y\right)}\right)-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot 365\cdot \left(0.5\cdot \left(\cos { \left(y+x\right)}-\cos { \left(x-y\right)}\right)+650\right)\cdot \left(e^{\left(-1\right)}\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+\frac{2.71429\cdot \ln {2.7}\cdot \left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}}{\ln {2.7}^{2}}\cdot \ln {e}\right)\right)}{e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+Some evaluations leave us with
+$$ \frac{\left(\left(-1\right)\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\sin { \left(y+x\right)}+\sin { \left(x-y\right)}\right)-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot 365\cdot \left(0.5\cdot \left(\cos { \left(y+x\right)}-\cos { \left(x-y\right)}\right)+650\right)\cdot \left(e^{\left(-1\right)}\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+\frac{2.71429\cdot \ln {2.7}\cdot \left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}}{\ln {2.7}^{2}}\cdot \ln {e}\right)\right)}{e^{\left(2\cdot 365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+\section{\Large{Conclusion}}         
+After getting these oustanding results, let's try to abstract away a bit and think of their usability. It's clearly undestandable, that in next 10 years more and more A77-expressions will be solved. Judging by the latest decryption of The Holy Bible, that's exaclty what humanity is meant to perform before transcending and returning to Edem once and for all. And this work is only the begging of the newest Age of Saints.Thank you for the attenting and let's have a last look at this magnificent expression we got
+$$ \frac{\left(\left(-1\right)\cdot e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot \left(\sin { \left(y+x\right)}+\sin { \left(x-y\right)}\right)-e^{\left(365\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}\cdot 365\cdot \left(0.5\cdot \left(\cos { \left(y+x\right)}-\cos { \left(x-y\right)}\right)+650\right)\cdot \left(e^{\left(-1\right)}\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}+\frac{2.71429\cdot \ln {2.7}\cdot \left(\frac{12\cdot x}{7}+y\right)^{\left(-1\right)}}{\ln {2.7}^{2}}\cdot \ln {e}\right)\right)}{e^{\left(730\cdot \log _{2.7} {\left(\frac{12\cdot x}{7}+y\right)}\right)}}$$
+\includegraphics[width=13cm, height=6cm]{welcome_to_the_internet.jpg}
+
+\end{document}
