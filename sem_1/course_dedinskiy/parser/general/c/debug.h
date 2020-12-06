@@ -1,8 +1,6 @@
 #ifndef GENERAL_DEBUG
 #define GENERAL_DEBUG
 
-#include "common.h"
-
 //=============================================================================
 //<KCTF> Debug ================================================================
 
@@ -15,6 +13,7 @@ unsigned char DEBUG_LETTER = 'a'; ///< Just a char for debugging
 #define DEBUG_LETTER_PRINT() printf("[deb] %c [deb]\n", DEBUG_LETTER++);
 
 #define DEBUG_PRINTF() DEBUG_NUMBER_PRINT();
+#define DP DEBUG_PRINTF();
 
 #define DEBUG_NUMBER_INCR() DEBUG_NUMBER++;
 #define DEBUG_LETTER_INCR() DEBUG_LETTER++;

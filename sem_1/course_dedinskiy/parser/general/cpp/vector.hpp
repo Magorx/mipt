@@ -114,6 +114,10 @@ public:
 		return cur_size;
 	}
 
+	T *get_buffer() {
+		return buffer;
+	}
+
 	void quadratic_pointer_sort() {
 		bool flag = false;
 		for (size_t i = 0; i < size(); ++i) {

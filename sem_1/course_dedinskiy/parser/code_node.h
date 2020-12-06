@@ -127,14 +127,18 @@ public:
 		R        = nullptr;
 	}
 
-	static void DELETE(CodeNode *node, bool recursive = false) {
+	static void DELETE(CodeNode *node, bool recursive = false, bool to_delete_id = false) {
 		if (!node) {
 			return;
 		}
 
 		if (recursive) {
-			if (node->L) DELETE(node->L, recursive);
-			if (node->R) DELETE(node->R, recursive);
+			if (node->L) DELETE(node->L, recursive, to_delete_id);
+			if (node->R) DELETE(node->R, recursive, to_delete_id);
+		}
+
+		if (to_delete_id && node->type == ID) {
+			StringView::DELETE(node->data.id);
 		}
 
 		node->dtor();

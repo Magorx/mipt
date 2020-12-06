@@ -4,25 +4,25 @@
 #include "general/constants.h"
 #include "general/warnings.h"
 
-#include "general/c/announcement.h"
-
 #include "compiler.h"
 
 int main() {
+	const char *file_name = "prog.wzr";
+
+	File file = {};
+	file.ctor(file_name);
+	if (!file.data) {
+		ANNOUNCE("ERR", "compiler", "problems with input file [%s]", file_name);
+		return 0;
+	}
+
 	Compiler comp = {};
-	comp.read_to_nodes("prog.wzr");
+	CodeNode *prog = comp.read_to_nodes(&file);
 
-	return 0;
-
-	RecursiveParser p = {};
-	const char *expr = (const char*) "x = (((a = 5) + (b = 7)) * 0 + (a = a + b^2) * 0) * 0 + (a + b * sin(15 + -a^+b));";
-	printf("%s\n    |\n    Y\n", expr);
-	CodeNode *ret = p.parse(expr);
-
-	if (!ret) {
+	if (!prog) {
 		//RAISE_ERROR("Something happened!\n");
 	} else {
-		//ret->space_dump();
+		//prog->space_dump();
 		//printf("\n");
 		const int var_tabe_size = 257;
 		double var_table[var_tabe_size];
@@ -45,7 +45,7 @@ int main() {
 		printf("+---+------------+\n");
 		printf("    |\n    Y\n");
 
-		printf("res = [%10lf]\n", ret->evaluate_expr(var_table, var_tabe_size));
+		printf("res = [%10lf]\n", prog->evaluate_expr(var_table, var_tabe_size));
 		printf("+---+------------+\n");
 		for (int i = 0; i < var_tabe_size; ++i) {
 			if (fabs(var_table[i] - KCTF_POISON) > GENERAL_EPS) {
@@ -54,6 +54,9 @@ int main() {
 		}
 		printf("+---+------------+\n");
 	}
+
+	CodeNode::DELETE(prog, true, true);
+	file.dtor();
 
 	printf(".doned.\n");
 	return 0;

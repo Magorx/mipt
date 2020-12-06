@@ -17,10 +17,14 @@ ID   ::= [a-zA-Z_][a-zA-Z_0-9]*
 
 #include "general/c/announcement.h"
 #include "general/cpp/stringview.hpp"
+#include "general/cpp/vector.hpp"
+
+#include "general/c/debug.h"
 
 #include <cmath>
 
 #include "code_node.h"
+#include "lex_token.h"
 
 typedef CodeNode ParseNode;
 
@@ -36,32 +40,35 @@ enum PARSER_ERROR {
 class RecursiveParser {
 private:
 // data =======================================================================
-	const char *expr;
-	const char *init_expr_ptr;
-	      int   ERROR;
-	const char *ERRPOS;
-//=============================================================================
+	Vector<Token> *expr;
+	int            cur_index;
+	Token         *cur;
 
-	#define REQUIRE(c)                  \
-		do {                            \
-			if (*expr != c) {           \
-				ERROR  = ERROR_SYNTAX;  \
-				ERRPOS = expr;          \
-				return nullptr;         \
-			} else {                    \
-				++expr;                 \
-			}                           \
+	int            ERROR;
+	const Token   *ERRPOS;
+//=============================================================================
+	#define NEXT() ++cur_index; cur = &(*expr)[cur_index]
+
+	#define REQUIRE_OP(op)                                  \
+		do {                                                \
+			if (cur->type != T_OP || cur->data.op != op) {  \
+				ERROR  = ERROR_SYNTAX;                      \
+				ERRPOS = cur;                               \
+				return nullptr;                             \
+			} else {                                        \
+				NEXT();                                     \
+			}                                               \
 		} while (0)
 
-	#define IF_PARSED(cur_expr, ret_name, code)            \
-		ParseNode *ret_name = (code);                      \
-		if (ERROR) {                                       \
-			expr = cur_expr;                               \
-			SET_ERR(0, init_expr_ptr);                     \
+	#define IF_PARSED(index, ret_name, code)          \
+		ParseNode *ret_name = (code);                 \
+		if (ERROR) {                                  \
+			cur_index = index;                        \
+			cur = &(*expr)[cur_index];                \
+			SET_ERR(0, &(*expr)[0]);                  \
 		} else
 
 	#define SET_ERR(errcode, errpos) do {ERROR = errcode; ERRPOS = errpos;} while (0)
-	#define NEXT() ++expr; while(*expr==' ') ++expr
 
 	bool is_id_char(const char c) {
 		return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || c == '_';
@@ -75,115 +82,52 @@ private:
 		return c == '+' || c == '-';
 	}
 
+	bool is_sign(const Token *t) {
+		return t->is_op('+') || t->is_op('-');
+	}
+
 	bool is_multiplicative(const char c) {
 		return c == '*' || c == '/';
 	}
 
+	bool is_multiplicative(const Token *t) {
+		return t->is_op('*') || t->is_op('/');
+	}
+
 	ParseNode *parse_ID() {
-		if (!is_id_char(*expr)) {
-			SET_ERR(ERROR_SYNTAX, expr);
+		if (!cur->is_id()) {
+			SET_ERR(ERROR_SYNTAX, cur);
 			return nullptr;
 		}
 
-		StringView *id = StringView::NEW(expr);
-		size_t len = 0;
-		while (is_id_char(*expr) || is_digit(*expr)) {
-			++len;
-			NEXT();
-		}
-		id->set_length(len);
-
-		return ParseNode::NEW(ID, id);
+		CodeNode *ret = ParseNode::NEW(ID, cur->data.id);
+		NEXT();
+		return ret;
 	}
 
 	ParseNode *parse_NUMB() {
-		if (!(is_digit(*expr) || is_sign(*expr))) {
-			SET_ERR(ERROR_SYNTAX, expr);
+		if (!cur->is_number()) {
+			SET_ERR(ERROR_SYNTAX, cur);
 			return nullptr;
 		}
-
-		char sign = '+';
-		if (is_sign(*expr)) {
-			sign = *expr;
-			NEXT();
-		}
-
-		if (!is_digit(*expr)) {
-			SET_ERR(ERROR_SYNTAX, expr);
-			return nullptr;
-		}
-
-		double val = 0;
-		while (is_digit(*expr)) {
-			val = val * 10 + (*expr - '0');
-			NEXT();
-		}
-
-		if (*expr == '.') {
-			NEXT();
-			if (!is_digit(*expr)) {
-				SET_ERR(ERROR_SYNTAX, expr);
-				return nullptr;
-			}
-
-			double frac = 0;
-			int len_frac = 1;
-			while (is_digit(*expr)) {
-				len_frac *= 10;
-				frac = frac * 10 + (*expr - '0');
-				NEXT();
-			}
-
-			val = val + frac / (len_frac);
-		}
-
-		if (*expr == 'e' || *expr == 'E') {
-			NEXT();
-
-			char exp_sign = '+';
-			if (is_sign(*expr)) {
-				exp_sign = *expr;
-				NEXT();
-			}
-
-			if (!is_digit(*expr)) {
-				SET_ERR(ERROR_SYNTAX, expr);
-				return nullptr;
-			}
-
-			double ten_pow = 0;
-			while (is_digit(*expr)) {
-				ten_pow = ten_pow * 10 + (*expr - '0');
-				NEXT();
-			}
-
-			if (exp_sign == '-') {
-				ten_pow *= -1;
-			}
-
-			val = val * pow(10, ten_pow);
-		}
-
-		if (sign == '-') {
-			val *= -1;
-		}
-
-		return ParseNode::NEW(VALUE, val);
+		CodeNode *ret = ParseNode::NEW(VALUE, cur->data.num);
+		NEXT();
+		return ret;
 	}
 
 	ParseNode *parse_UNIT() {
-		IF_PARSED (expr, unit_id, parse_ID()) {
-			if (*expr == '(') {
+		IF_PARSED (cur_index, unit_id, parse_ID()) {
+			if (cur->is_op('(')) {
 				NEXT();
-				IF_PARSED (expr, bracket_expr, parse_EXPR()) {
-					if (*expr == ')') {
+				IF_PARSED (cur_index, bracket_expr, parse_EXPR()) {
+					if (cur->is_op(')')) {
 						NEXT();
 						unit_id->set_R(bracket_expr);
 						return unit_id;
 					}
 				}
 				NEXT();
-				SET_ERR(ERROR_SYNTAX, expr);
+				SET_ERR(ERROR_SYNTAX, cur);
 				ParseNode::DELETE(unit_id);
 				return nullptr;
 			} else {
@@ -191,10 +135,10 @@ private:
 			}
 		}
 
-		if (*expr == '(') {
+		if (cur->is_op('(')) {
 			NEXT();
-			IF_PARSED (expr, expr_in_brackets, parse_EXPR()) {
-				if (*expr == ')') {
+			IF_PARSED (cur_index, expr_in_brackets, parse_EXPR()) {
+				if (cur->is_op(')')) {
 					NEXT();
 					return expr_in_brackets;
 				} else {
@@ -202,129 +146,128 @@ private:
 				}
 			}
 			NEXT();
-			SET_ERR(ERROR_SYNTAX, expr);
+			SET_ERR(ERROR_SYNTAX, cur);
 			return nullptr;
 		}
 
-		IF_PARSED (expr, numb, parse_NUMB()) {
-			return numb;
+		IF_PARSED (cur_index, number, parse_NUMB()) {
+			return number;
 		}
 
-		SET_ERR(ERROR_SYNTAX, expr);
+		SET_ERR(ERROR_SYNTAX, cur);
 		return nullptr;
 	}
 
 	ParseNode *parse_FACT() {
-		if (is_sign(*expr)) {
-			char sign = *expr;
+		if (is_sign(cur)) {
+			int sign = cur->get_op();
 			NEXT();
-			IF_PARSED (expr, fact, parse_FACT()) {
+			IF_PARSED (cur_index, fact, parse_FACT()) {
 				return ParseNode::NEW(OPERATION, sign, nullptr, fact);
 			}
-			SET_ERR(ERROR_SYNTAX, expr);
+			SET_ERR(ERROR_SYNTAX, cur);
 			return nullptr;
 		}
 
-		IF_PARSED (expr, unit, parse_UNIT()) {
-			if (*expr == '^') {
+		IF_PARSED (cur_index, unit, parse_UNIT()) {
+			if (cur->is_op('^')) {
 				NEXT();
-				IF_PARSED (expr, fact, parse_FACT()) {
+				IF_PARSED (cur_index, fact, parse_FACT()) {
 					return ParseNode::NEW(OPERATION, '^', unit, fact);
 				}
 				ParseNode::DELETE(unit);
-				SET_ERR(ERROR_SYNTAX, expr);
+				SET_ERR(ERROR_SYNTAX, cur);
 				return nullptr;
 			} else {
 				return unit;
 			}
 		}
 		
-		SET_ERR(ERROR_SYNTAX, expr);
+		SET_ERR(ERROR_SYNTAX, cur);
 		return nullptr;
 	}
 
 	ParseNode *parse_TERM() {
-		IF_PARSED (expr, fact, parse_FACT()) {
-			while (is_multiplicative(*expr)) {
-				char op = *expr;
+		IF_PARSED (cur_index, fact, parse_FACT()) {
+			while (is_multiplicative(cur)) {
+				int op = cur->get_op();
 				NEXT();
 
-				IF_PARSED (expr, next_fact, parse_FACT()) {
+				IF_PARSED (cur_index, next_fact, parse_FACT()) {
 					fact = ParseNode::NEW(OPERATION, op, fact, next_fact);
 					continue;
 				}
 
 				ParseNode::DELETE(fact, true);
-				SET_ERR(ERROR_SYNTAX, expr);
+				SET_ERR(ERROR_SYNTAX, cur);
 				return nullptr;
 			}
 
 			return fact;
 		}
 
-		SET_ERR(ERROR_SYNTAX, expr);
+		SET_ERR(ERROR_SYNTAX, cur);
 		return nullptr;
 	}
 
 	ParseNode *parse_CALC() {
-		IF_PARSED(expr, term, parse_TERM()) {
-			while (is_sign(*expr)) {
-				char op = *expr;
+		IF_PARSED (cur_index, term, parse_TERM()) {
+			while (is_sign(cur)) {
+				int op = cur->get_op();
 				NEXT();
 
-				IF_PARSED (expr, next_term, parse_TERM()) {
+				IF_PARSED (cur_index, next_term, parse_TERM()) {
 					term = ParseNode::NEW(OPERATION, op, term, next_term);
 					continue;
 				}
 
 				ParseNode::DELETE(term, true);
-				SET_ERR(ERROR_SYNTAX, expr);
+				SET_ERR(ERROR_SYNTAX, cur);
 				return nullptr;
 			}
 
 			return term;
 		}
 
-		SET_ERR(ERROR_SYNTAX, expr);
+		SET_ERR(ERROR_SYNTAX, cur);
 		return nullptr;
 	} 
 
 	ParseNode *parse_EXPR() {
-		IF_PARSED(expr, calc, parse_CALC()) {
-			while (*expr == '=') {
-				char op = *expr;
+		IF_PARSED (cur_index, calc, parse_CALC()) {
+			while (cur->is_op('=')) {
+				int op = cur->get_op();
 				NEXT();
 
-				IF_PARSED (expr, next_calc, parse_EXPR()) {
+				IF_PARSED (cur_index, next_calc, parse_EXPR()) {
 					calc = ParseNode::NEW(OPERATION, op, calc, next_calc);
 					continue;
 				}
 
 				ParseNode::DELETE(calc, true);
-				SET_ERR(ERROR_SYNTAX, expr);
+				SET_ERR(ERROR_SYNTAX, cur);
 				return nullptr;
 			}
 
 			return calc;
 		}
 
-		SET_ERR(ERROR_SYNTAX, expr);
+		SET_ERR(ERROR_SYNTAX, cur);
 		return nullptr;		
 	}      
 
 	ParseNode *parse_G() {
-
-		IF_PARSED (expr, ret, parse_EXPR()) {
-			if (*expr == ';') {
+		IF_PARSED (cur_index, ret, parse_EXPR()) {
+			if (cur->is_op(';')) {
 				NEXT();
 				return ret;
 			} else {
 				NEXT();
-				ParseNode::DELETE(ret);
+				ParseNode::DELETE(ret, true);
 			}
 		}
 
-		SET_ERR(ERROR_SYNTAX, expr);
+		SET_ERR(ERROR_SYNTAX, cur);
 
 		return nullptr;
 	}
@@ -335,7 +278,8 @@ public:
 
 	RecursiveParser():
 	expr(nullptr),
-	init_expr_ptr(nullptr),
+	cur_index(0),
+	cur(nullptr),
 	ERROR(0),
 	ERRPOS(nullptr)
 	{}
@@ -344,8 +288,10 @@ public:
 
 	void ctor() {
 		expr = nullptr;
-		init_expr_ptr = nullptr;
+		cur_index = 0;
+		cur = nullptr;
 		ERROR = 0;
+		ERRPOS = nullptr;
 	}
 
 	static RecursiveParser *NEW() {
@@ -360,8 +306,11 @@ public:
 
 	void dtor() {
 		expr = nullptr;
-		init_expr_ptr = nullptr;
-		ERROR = 0;
+		cur_index = 0;
+		cur = nullptr;
+
+		ERROR  = 0;
+		ERRPOS = 0;
 	}
 
 	static void DELETE(RecursiveParser *classname) {
@@ -375,15 +324,17 @@ public:
 
 //=============================================================================
 
-	ParseNode *parse(const char *expression) {
-		expr          = expression;
-		init_expr_ptr = expression;
+	ParseNode *parse(Vector<Token> *expression) {
+		expr      = expression;
+		cur_index = 0;
+		cur       = &(*expr)[cur_index];
 
 		ParseNode *res = parse_G();
 		if (!ERROR) {
 			return res;
 		} else {
-			RAISE_ERROR_SYNTAX(init_expr_ptr, ERRPOS - init_expr_ptr);
+			//RAISE_ERROR_SYNTAX(init_expr_ptr, ERRPOS - init_expr_ptr);
+			ANNOUNCE("ERR", "parser", "grammar unfit expression, check pos [%ld]", ERRPOS - expr->get_buffer());
 			return nullptr;
 		}
 	}
