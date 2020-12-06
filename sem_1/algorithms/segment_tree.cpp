@@ -1,10 +1,3 @@
-/*
-В начальный момент времени последовательность an задана следующей формулой: an=n2mod12345+n3mod23456. Требуется много раз отвечать на запросы следующего вида:
-
-Найти разность между максимальным и минимальным значениями среди элементов ai,ai+1,…,aj.
-Присвоить элементу ai значение j.
-*/
-
 #include <cstdlib>
 #include <cstdio>
 #include <climits>
@@ -164,10 +157,7 @@ public:
 	Node operator()(const Node &a, const Node &b) {
 		return Node(a.x, min(a.mn, b.mn), max(a.mx, b.mx));
 	}
-}; 
-
-
-// Используем ДО и будем радоваться жизни
+};
 
 int main() {
 	int n = 100009;
@@ -180,27 +170,5 @@ int main() {
 	SegmentTree<Node, functor_sum> tree;
 	tree.ctor(arr, n, Node(-7777777, 99999999, -99999999));
 
-	int k;
-	scanf("%d", &k);
-
-	for (int z = 0; z < k; ++z) {
-		long long type, l, r;
-		scanf("%lld %lld", &l, &r);		
-
-		if (l >= 0) {
-			++r;
-			Node x = tree.find(l, r);
-			//printf("%lld | %lld\n", x.mn, x.mx);
-			printf("%lld\n", x.mx - x.mn);
-		} else {
-			tree.set(-l, Node(r));
-		}
-	}
-
-	tree.dtor();
-	free(arr);
-
 	return 0;
 }
-
-// Запросов много... Времени мало... Значит, O(klogn)
