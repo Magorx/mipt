@@ -9,7 +9,6 @@ long long randlong() {
 template <typename T_KEY>
 struct DecaTreeNode {
     T_KEY key;
-    long long cnt;
     long long prior;
 
     DecaTreeNode<T_KEY> *L;
@@ -19,7 +18,7 @@ struct DecaTreeNode {
 
     //-task-based
 
-    long long sum;
+    long long sqrsum;
 
     //-----------
 
@@ -29,63 +28,65 @@ public:
         L = nullptr;
         R = nullptr;
         de_size = 1;
-        sum = 0;
+        sqrsum = 0;
     }
 
     ~DecaTreeNode() {}
 
     DecaTreeNode(T_KEY key_) {
         key = key_;
-        cnt = 1;
         prior = randlong();
         L = nullptr;
         R = nullptr;
         de_size = 1;
 
         //-task-based
-        sum = key;
+        sqrsum = key * key;
         //-----------
     }
 
     void update() { // update this when children are already up-to-date
         de_size = (L ? L->de_size : 0) + (R ? R->de_size : 0) + 1;
         //-task-based
-        sum  = (L ? L->sum : 0)  + (R ? R->sum  : 0) + key * cnt;
+        sqrsum  = (L ? L->sqrsum : 0)  + (R ? R->sqrsum  : 0) + key * key;
         //-----------
     }
 
     void push() { // push segment operations into children
         //-task-based
+
         //-----------
     }
 
-    DecaTreeNode<T_KEY> *find(const T_KEY &k) {
-        if (key == k) {
+    DecaTreeNode<T_KEY> *find(const long long key_de_size) {
+        if (de_size < key_de_size) {
+            return nullptr;
+        }
+
+        long long left_de_size = L ? L->de_size : 0;
+        if (left_de_size == key_de_size) {
             return this;
-        } else if (key > k) {
-            return L ? L->find(k) : nullptr;
+        } else if (left_de_size > key_de_size) {
+            return L->find(key_de_size);
         } else {
-            return R ? R->find(k) : nullptr;
+            return R->find(key_de_size - left_de_size - 1);
         }
     }
 
-    void set_cnt(const T_KEY &k, const long long new_cnt) {
-        if (key == k) {
-            cnt = new_cnt;
-            update();
-        } else if (key > k) {
-            if (!L) {
-                return;
-            }
+    void set(const long long key_de_size, const T_KEY &val) {
+        if (de_size < key_de_size) {
+            return;
+        }
 
-            L->set_cnt(k, new_cnt);
+        long long left_de_size = L ? L->de_size : 0;
+        if (left_de_size == key_de_size) {
+            key = val;
+            update();
+        } else if (left_de_size > key_de_size) {
+            L->set(key_de_size, val);
             update();
         } else {
-            if (!R) {
-                return;
-            }
-
-            R->set_cnt(k, new_cnt);
+            R->set(key_de_size - left_de_size - 1, val);
             update();
         }
     }
@@ -113,7 +114,7 @@ public:
         for (int i = 0; i < depth; ++i) {
             printf("         |");
         }
-        printf("%03lld><%03lld>|", key, sum);
+        printf("%03lld><%03lld>|", key, sqrsum);
         printf("\n");
         if (L) L->dump(depth + 1);
     }
@@ -123,7 +124,7 @@ public:
 template <typename T_KEY>
 class DecaTree {
 private:
-    void split(DecaTreeNode<T_KEY> *node, const T_KEY &key, DecaTreeNode<T_KEY> **L, DecaTreeNode<T_KEY> **R) {
+    void split(DecaTreeNode<T_KEY> *node, long long de_size, DecaTreeNode<T_KEY> **L, DecaTreeNode<T_KEY> **R) {
         if (!node) {
             *L = nullptr;
             *R = nullptr;
@@ -132,18 +133,19 @@ private:
             node->push();
         }
 
+        long long left_de_size = (node->L ? node->L->de_size : 0);
         DecaTreeNode<T_KEY> *ret_l = nullptr;
         DecaTreeNode<T_KEY> *ret_r = nullptr;
 
-        if (node->key <= key) {
-            split(node->R, key, &ret_l, &ret_r);
+        if (left_de_size < de_size) {
+            split(node->R, de_size - left_de_size - 1, &ret_l, &ret_r);
             node->R = ret_l;
             node->update();
             
             *L = node;
             *R = ret_r;
         } else {
-            split(node->L, key, &ret_l, &ret_r);
+            split(node->L, de_size, &ret_l, &ret_r);
             node->L = ret_r;
             node->update();
 
@@ -197,12 +199,12 @@ public:
         }
     }
 
-    DecaTree<T_KEY> *split(const T_KEY &key) {
+    DecaTree<T_KEY> *split(long long de_size) {
         DecaTree<T_KEY> *right_tree = new DecaTree<T_KEY>();
         
         DecaTreeNode<T_KEY> *left  = nullptr;
         DecaTreeNode<T_KEY> *right = nullptr;
-        split(root, key, &left, &right);
+        split(root, de_size, &left, &right);
 
         right_tree->root = right;
         root = left;
@@ -220,27 +222,12 @@ public:
         right_tree->root = nullptr;
     }
 
-    void insert(const T_KEY &key) {
-        if (!root) {
-            root = new DecaTreeNode<T_KEY>(key);
-            return;
-        }
-
-        if (DecaTreeNode<T_KEY>* node = root->find(key)) {
-            root->set_cnt(key, node->cnt + 1);
-            return;
-        }
-
-        DecaTree<T_KEY> *tree_right = split(key);
-        push_back(key);
+    void insert(const long long pos, const T_KEY &val) {
+        DecaTree<T_KEY> *tree_right = split(pos);
+        push_back(val);
         merge(tree_right);
 
         delete tree_right;
-    }
-
-    void push_back(const T_KEY &val) {
-        DecaTreeNode<T_KEY> *node = new DecaTreeNode<T_KEY>(val);
-        root = root ? root->merge(node) : node;
     }
 
     void erase(const long long pos) {
@@ -250,6 +237,16 @@ public:
 
         delete tree_mid;
         delete tree_right;
+    }
+
+    void push_back(const T_KEY &val) {
+        DecaTreeNode<T_KEY> *node = new DecaTreeNode<T_KEY>(val);
+        root = root ? root->merge(node) : node;
+    }
+
+    void pop_back() {
+        DecaTree<T_KEY> *last = split(root->de_size - 1);
+        delete last;
     }
 
     void dump() {

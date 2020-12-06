@@ -1,3 +1,9 @@
+/*
+Нужно отвечать на запросы вида
+• + x – добавить в мультимножество число x.
+• ? x – посчитать сумму чисел не больших x.
+*/
+
 #include <cstdlib>
 #include <cstdio>
 #include <ctime>
@@ -261,8 +267,36 @@ public:
 
 };
 
+// Ну, в задаче просят написать ДД, я написал ДД
+
 int main() {
     DecaTree<long long> tree;
 
+    int n = 0;
+    scanf("%d", &n);
+    getchar();
+
+    for (int z = 0; z < n; ++z) {
+        char c = 0;
+        long long x = 0;
+        scanf("%c %lld", &c, &x);
+        getchar();
+        //printf("x = %lld\n", x);
+
+        if (c == '+') {
+            tree.insert(x);
+        } else {
+            DecaTree<long long> *tree_right = tree.split(x);
+            printf("%lld\n", tree.root ? tree.root->sum : 0);
+
+            tree.merge(tree_right);
+            delete tree_right;
+        }
+    }
+
+    //tree.dump();
+
     return 0;
 }
+
+//O(быстро)
