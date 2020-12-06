@@ -20,10 +20,7 @@ int main() {
 	CodeNode *prog = comp.read_to_nodes(&file);
 
 	if (!prog) {
-		//RAISE_ERROR("Something happened!\n");
 	} else {
-		//prog->space_dump();
-		//printf("\n");
 		const int var_tabe_size = 257;
 		double var_table[var_tabe_size];
 		for (int i = 0; i < var_tabe_size; ++i) {

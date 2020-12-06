@@ -3,9 +3,13 @@
 
 /* Grammar ================================\
 
-G    ::= EXPR;
+G ::= PROG'\0'
+
+PROG       ::= CODE_BLOCK;{CODE_BLOCK;}*
+CODE_BLOCK ::= EXPR; | { CODE_BLOCK;{CODE_BLOCK;}* }
 
 EXPR ::= CALC{=CALC}*
+
 CALC ::= TERM{[+-]TERM}*
 TERM ::= FACT{{/|*}FACT}*
 FACT ::= [+-]FACT | UNIT^FACT | UNIT
@@ -254,16 +258,57 @@ private:
 
 		SET_ERR(ERROR_SYNTAX, cur);
 		return nullptr;		
+	}
+
+	ParseNode *parse_CODE_BLOCK() {
+		if (cur->is_op('{')) {
+			NEXT();
+			IF_PARSED (cur_index, code_block, parse_CODE_BLOCK()) {
+				while (!cur->is_op('}')) {
+					IF_PARSED(cur_index, next_block, parse_CODE_BLOCK()) {
+						code_block = ParseNode::NEW(OPERATION, ';', code_block, next_block);
+						continue;
+					}
+
+					ParseNode::DELETE(code_block, true);
+					SET_ERR(ERROR_SYNTAX, cur);
+					return nullptr;
+				}
+
+				NEXT();
+				return code_block;
+			}
+
+			ParseNode::DELETE(code_block, true);
+			SET_ERR(ERROR_SYNTAX, cur);
+			return nullptr;
+		}
+
+		IF_PARSED (cur_index, expr_node, parse_EXPR()) {
+			if (!cur->is_op(';')) {
+				ParseNode::DELETE(expr_node, true);
+				SET_ERR(ERROR_SYNTAX, cur);
+				return nullptr;
+			}
+
+			NEXT();
+			return expr_node;
+		}
+
+		SET_ERR(ERROR_SYNTAX, cur);
+		return nullptr;
+	}
+
+	ParseNode *parse_PROG() {
+		return parse_CODE_BLOCK();
 	}      
 
 	ParseNode *parse_G() {
-		IF_PARSED (cur_index, ret, parse_EXPR()) {
-			if (cur->is_op(';')) {
-				NEXT();
-				return ret;
+		IF_PARSED (cur_index, prog, parse_PROG()) {
+			if (cur->type == T_END) {
+				return prog;
 			} else {
-				NEXT();
-				ParseNode::DELETE(ret, true);
+				ParseNode::DELETE(prog, true);
 			}
 		}
 
@@ -335,6 +380,9 @@ public:
 		} else {
 			//RAISE_ERROR_SYNTAX(init_expr_ptr, ERRPOS - init_expr_ptr);
 			ANNOUNCE("ERR", "parser", "grammar unfit expression, check pos [%ld]", ERRPOS - expr->get_buffer());
+			printf(">>> ");
+			ERRPOS->dump();
+			printf(" <<<\n");
 			return nullptr;
 		}
 	}

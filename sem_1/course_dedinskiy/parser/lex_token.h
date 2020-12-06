@@ -151,7 +151,7 @@ struct Token {
 		return type == T_END;
 	}
 
-	void dump(bool bracked = true) {
+	void dump(bool bracked = true) const {
 		if (bracked) {
 			printf("[");
 		}

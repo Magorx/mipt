@@ -280,6 +280,10 @@ public:
 				return R_res;
 			}
 
+			case ';' : {
+				return R_res;
+			}
+
 			default: {
 				return 0;
 			}

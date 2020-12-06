@@ -1,1 +1,8 @@
-x = (((a = 5) + (b = 7)) * 0 + (a = a + b^2) * 0) * 0 + (a + b * sin(15 + -a^+b));
+{
+	a = 5; /* set a to a value 5*/
+	b = 7; /*
+	~~~here we set b to some value~~~
+	*/
+	x = a^(b / 30) + sin(7-a);
+}
+
