@@ -7,9 +7,9 @@ const int table_size = 257;
 int stress();
 
 int main() {
-	int mode = DIFFERENCIATE;
+	int mode = SIMPLIFY;
 
-	ExpressionTree tree;
+	ExpressionTree tree = {};
 	tree.ctor();
 
 	if (mode == SIMPLIFY) {
@@ -24,6 +24,21 @@ int main() {
 
 	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int stress() {
 	int mode = DIFFERENCIATE;
