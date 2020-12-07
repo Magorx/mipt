@@ -5,9 +5,9 @@
 #include <sys/stat.h>
 
 //=============================================================================
-// File =======================================================================
+// Filepp =======================================================================
 
-class File {
+class Filepp {
 public:
 // data =======================================================================
 	char *data;
@@ -16,17 +16,17 @@ public:
 	struct stat info;
 //=============================================================================
 
-	File            (const File&) = delete;
-	File &operator= (const File&) = delete;
+	Filepp            (const Filepp&) = delete;
+	Filepp &operator= (const Filepp&) = delete;
 
-	File():
+	Filepp():
 	data(nullptr),
 	name(nullptr),
 	fileptr(nullptr),
 	info()
 	{}
 
-	~File() {}
+	~Filepp() {}
 
 	void ctor() {
 		data = nullptr;
@@ -34,8 +34,8 @@ public:
 		fileptr = nullptr;
 	}
 
-	static File *NEW() {
-		File *cake = (File*) calloc(1, sizeof(File));
+	static Filepp *NEW() {
+		Filepp *cake = (Filepp*) calloc(1, sizeof(Filepp));
 		if (!cake) {
 			return nullptr;
 		}
@@ -66,8 +66,8 @@ public:
 		fread(data, (size_t) info.st_size, 1, fileptr);
 	}
 
-	static File *NEW(const char *name_) {
-		File *cake = (File*) calloc(1, sizeof(File));
+	static Filepp *NEW(const char *name_) {
+		Filepp *cake = (Filepp*) calloc(1, sizeof(Filepp));
 		if (!cake) {
 			return nullptr;
 		}
@@ -92,7 +92,7 @@ public:
 		}
 	}
 
-	static void DELETE(File *file) {
+	static void DELETE(Filepp *file) {
 		if (!file) {
 			return;
 		}

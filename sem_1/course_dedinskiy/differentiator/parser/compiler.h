@@ -63,7 +63,7 @@ public:
 
 //=============================================================================
 
-	CodeNode *read_to_nodes(const File *file) {
+	CodeNode *read_to_nodes(const Filepp *file) {
 		Vector<Token> *tokens = lex_parser.parse(file->data);
 		for (size_t i = 0; i < tokens->size(); ++i) {
 			(*tokens)[i].dump(false);

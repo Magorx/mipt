@@ -11,9 +11,7 @@
 
 enum CODE_NODE_TYPE {
 	NONE        = 0,
-	OPERATION   = 1,
-	VARIABLE    = 2,
-	VALUE       = 3,
+	
 	ID          = 4,
 };
 
@@ -328,8 +326,10 @@ public:
 	void space_dump(FILE *file = stdout) {
 		if (L) {
 			fprintf(file, "(");
-			L->space_dump();
+			L->space_dump(file);
 			fprintf(file, ")");
+		} else if (is_op() || is_id() && data.id->length() != 1) {
+			fprintf(file, "()");
 		}
 
 		//fprintf(file, "(");
@@ -340,7 +340,7 @@ public:
 		} else if (is_val()) {
 			fprintf(file, "%lg", data.val);
 		} else if (is_id()) {
-			data.id->print();
+			data.id->print(file);
 		} else {
 			fprintf(file, "ERR");
 		}
@@ -348,8 +348,10 @@ public:
 
 		if (R) {
 			fprintf(file, "(");
-			R->space_dump();
+			R->space_dump(file);
 			fprintf(file, ")");
+		} else if (is_op() || is_id() && data.id->length() != 1) {
+			fprintf(file, "()");
 		}
 	}
 

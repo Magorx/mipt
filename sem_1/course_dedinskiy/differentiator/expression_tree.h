@@ -10,6 +10,9 @@
 #include "expression_node.h"
 #include "latex_parts.h"
 
+#include "parser/compiler.h"
+#include "parser/general/cpp/file.hpp"
+
 enum SHOW_OFF_WAY {
 	SIMPLIFY      = 1,
 	DIFFERENCIATE = 2
@@ -220,6 +223,38 @@ public:
 //=============================================================================
 
 	int load(const char *file_name) {
+#ifdef TEST_MODE
+		if (file_name == nullptr) {
+			printf("[ERR]<detree>: [file_name](nullptr)\n");
+			return -1;
+		}
+
+		//=================================================
+		Filepp input_file = {};
+		input_file.ctor(file_name);
+		Compiler comp = {};
+		CodeNode *expr = comp.read_to_nodes(&input_file);
+
+		FILE *tmp = fopen("tmp.tmp", "w");
+		if (!tmp) {
+			printf("sht\n");
+			exit(0);
+		}
+		fprintf(tmp, "(");
+		expr->space_dump(tmp);
+		//fprintf(tmp, ")");
+		fclose(tmp);
+		//==================================================*/
+
+		File file;
+		if (File_construct(&file, "tmp.tmp") < 0) {
+			printf("[ERR]<detree>: [file_name](%s) unexistance\n", file_name);
+		}
+
+		root = load_node((char**) &file.cc);
+		File_destruct(&file);
+		return 0;
+#else
 		if (file_name == nullptr) {
 			printf("[ERR]<detree>: [file_name](nullptr)\n");
 			return -1;
@@ -234,6 +269,7 @@ public:
 		File_destruct(&file);
 
 		return 0;
+#endif
 	}
 
 	int save(const char *file_name) {

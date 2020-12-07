@@ -2,6 +2,8 @@
 
 const int table_size = 257;
 
+//#define TEST_MODE
+
 int stress();
 
 int main() {
