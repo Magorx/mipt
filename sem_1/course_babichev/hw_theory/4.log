@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.6)  7 DEC 2020 22:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.6)  7 DEC 2020 23:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -512,15 +512,15 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 44.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 59.
  [2]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 44.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 59.
  (./4.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 44.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 44.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 59.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 59.
 Package rerunfilecheck Info: File `4.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 44.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 59.
  ) 
 Here is how much of TeX's memory you used:
  6080 strings out of 482657
@@ -529,11 +529,11 @@ Here is how much of TeX's memory you used:
  21031 multiletter control sequences out of 15000+600000
  538300 words of font info for 37 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
- 34i,4n,33p,1113b,328s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/kctf/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1000.600pk>
- </home/kctf/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1200.600pk> <
-/home/kctf/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1200.600pk> </h
-ome/kctf/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm2074.600pk></usr/
+ 34i,4n,33p,1422b,409s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/kctf/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1200.600pk>
+ </home/kctf/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1000.600pk> <
+/home/kctf/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm2074.600pk> </h
+ome/kctf/.texlive2019/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1200.600pk></usr/
 share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf
@@ -541,9 +541,9 @@ e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf
 onts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
 lic/amsfonts/cm/cmsy8.pfb>
-Output written on 4.pdf (2 pages, 88019 bytes).
+Output written on 4.pdf (2 pages, 93514 bytes).
 PDF statistics:
- 138 PDF objects out of 1000 (max. 8388607)
+ 149 PDF objects out of 1000 (max. 8388607)
  49 compressed objects within 1 object stream
  3 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
