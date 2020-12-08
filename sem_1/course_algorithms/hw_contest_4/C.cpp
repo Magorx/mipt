@@ -1,6 +1,24 @@
+/*
+Дан массив a из n чисел. Нужно обрабатывать запросы:
+0. set(i, x) – a[i] = x;
+1. get(i, x) – найти min k : k > i и ak > x.
+*/
+
 #include <cstdlib>
 #include <cstdio>
 #include <ctime>
+
+const long long inf = 1000000000;
+
+template <typename T>
+const T &min(const T &first, const T &second) {
+    return first < second ? first : second;
+}
+
+template <typename T>
+const T &max(const T &first, const T &second) {
+    return second < first ? first : second;
+}
 
 long long randlong() {
   return (rand() << 16) ^ rand();
@@ -17,6 +35,7 @@ struct DecaTreeNode {
     long long de_size; // for implicit keys
 
     //-task-based
+    T_KEY mx;
     //-----------
 
 public:
@@ -25,6 +44,8 @@ public:
         L = nullptr;
         R = nullptr;
         de_size = 1;
+
+        mx = -inf;
     }
 
     ~DecaTreeNode() {}
@@ -37,12 +58,14 @@ public:
         de_size = 1;
 
         //-task-based
+        mx = key;
         //-----------
     }
 
     void update() { // update this when children are already up-to-date
         de_size = (L ? L->de_size : 0) + (R ? R->de_size : 0) + 1;
         //-task-based
+        mx = max(max(L ? L->mx : -inf, R ? R->mx : -inf), key);
         //-----------
     }
 
@@ -103,6 +126,8 @@ public:
         }
     }
 
+
+
     void dump(int depth = 0) {
         if (R) R->dump(depth + 1);
         for (int i = 0; i < depth; ++i) {
@@ -113,6 +138,25 @@ public:
         if (L) L->dump(depth + 1);
     }
 
+    T_KEY find_ans(T_KEY x) {
+        if (L) {
+            if (L->mx >= x) {
+                return L->find_ans(x);
+            }
+        }
+
+        if (key >= x) {
+            return (L ? L->de_size : 0);
+        }
+
+        if (R) {
+            if (R->mx >= x) {
+                return (L ? L->de_size : 0) + 1 + R->find_ans(x);
+            }
+        }
+
+        return -999999999;
+    }
 };
 
 template <typename T_KEY>
@@ -243,6 +287,19 @@ public:
         delete last;
     }
 
+    T_KEY find_ans(T_KEY x) {
+        if (!root) {
+            return -1;
+        } else {
+            T_KEY node = root->find_ans(x);
+            if (node < 0) {
+                return -1;
+            } else {
+                return node;
+            }
+        }
+    }
+
     void dump() {
         if (root) {
             root->dump();
@@ -252,8 +309,47 @@ public:
 
 };
 
+// Меня просят написать неявный декартач с хитрым спуском - я его пишу. Сплитим по данному индексу 
+// И спускаемся в правом дереве как можно левее, пока максимум в поддереве не станет меньше X
+
 int main() {
     DecaTree<long long> tree;
 
+    long long n, m;
+    scanf("%lld %lld", &n, &m);
+
+    for (int i = 0; i < n; ++i) {
+        long long x = 0;
+        scanf("%lld", &x);
+        tree.push_back(x);
+    }
+
+    for (int i = 0; i < m; ++i) {
+        //tree.dump();
+        long long mode, a, x;
+        scanf("%lld %lld %lld", &mode, &a, &x);
+
+        if (mode == 0) {
+            --a;
+            tree.set(a, x);
+        } else {
+            --a;
+            DecaTree<long long> *right = tree.split(a);
+            //right->dump();
+            if (!right->root || right->root->mx < x) {
+                printf("-1\n");
+            } else {
+                long long ret = right->find_ans(x);
+                //printf("ret = %lld\n", ret);
+                printf("%lld\n", tree.size() + ret + 1);
+            }
+
+            tree.merge(right);
+            delete right;
+        }
+    }
+
     return 0;
 }
+
+// O(mlogn)
