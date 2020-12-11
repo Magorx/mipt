@@ -41,7 +41,7 @@ public:
 	FenvikTree3d () {}
 	~FenvikTree3d() {}
 
-	void ctor(const T *arr, const size_t arr_size, const  T &neutral_) {
+	void ctor(const T ***arr, const size_t arr_size, const  T &neutral_) {
 		buffer = (T***) calloc(arr_size + 1, sizeof(T**));
 		for (int i = 0; i < arr_size + 1; ++i) {
 			buffer[i] = (T**) calloc(arr_size + 1, sizeof(T*));
@@ -54,7 +54,7 @@ public:
 			for (int i = 0; i < arr_size; ++i) {
 				for (int j = 0; j < arr_size; ++j) {
 					for (int k = 0; k < arr_size; ++k) {
-						upd(i, j, k, arr[i, j, k]);
+						upd(i, j, k, arr[i][j][k]);
 					}
 				}
 			}

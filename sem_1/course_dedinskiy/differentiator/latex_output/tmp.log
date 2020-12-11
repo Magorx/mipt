@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.6)  7 DEC 2020 16:09
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.6)  11 DEC 2020 12:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -241,15 +241,21 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <24.88> on input line 20.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <20.74> on input line 20.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <17.28> on input line 20.
+LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 24.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 24.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 24.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 42.
+(Font)              <7> on input line 31.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 42.
+(Font)              <5> on input line 31.
 
 [1
 
@@ -260,7 +266,7 @@ e ignored
                    \relax 
 l.45 And that's the answer! \newpage
                                      \section{\Large{Simplifying}} [1]
-<./samples/welcome_to_the_internet.jpg, id=39, 602.25pt x 568.1225pt>
+<./samples/welcome_to_the_internet.jpg, id=40, 602.25pt x 568.1225pt>
 File: ./samples/welcome_to_the_internet.jpg Graphic file (type jpg)
 <use ./samples/welcome_to_the_internet.jpg>
 Package pdftex.def Info: ./samples/welcome_to_the_internet.jpg  used on input l
@@ -271,35 +277,37 @@ Overfull \hbox (24.8991pt too wide) in paragraph at lines 62--64
 [] 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 65.
-[2] [3 <./samples/welcome_to_the_internet.jpg>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 65.
+[2]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 75.
+ [3 <./samples/welcome_to_the_internet.jpg>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 75.
  (latex_output/tmp.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 65.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 65.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 75.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 75.
 Package rerunfilecheck Info: File `tmp.out' has not changed.
 (rerunfilecheck)             Checksum: <no file>.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 65.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 75.
  ) 
 Here is how much of TeX's memory you used:
- 5201 strings out of 482657
- 80570 string characters out of 5957838
+ 5211 strings out of 482657
+ 80749 string characters out of 5957838
  331799 words of memory out of 5000000
- 20149 multiletter control sequences out of 15000+600000
- 537278 words of font info for 40 fonts, out of 8000000 for 9000
+ 20159 multiletter control sequences out of 15000+600000
+ 539422 words of font info for 47 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
- 34i,4n,29p,520b,353s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 34i,5n,29p,528b,353s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmti12.pfb>
-Output written on latex_output/tmp.pdf (4 pages, 159125 bytes).
+fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmti12.pfb>
+Output written on latex_output/tmp.pdf (4 pages, 169448 bytes).
 PDF statistics:
- 76 PDF objects out of 1000 (max. 8388607)
- 61 compressed objects within 1 object stream
+ 80 PDF objects out of 1000 (max. 8388607)
+ 64 compressed objects within 1 object stream
  9 named destinations out of 1000 (max. 500000)
  46 words of extra memory for PDF output out of 10000 (max. 10000000)
 
