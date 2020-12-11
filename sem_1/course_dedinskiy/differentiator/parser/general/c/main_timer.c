@@ -1,7 +1,0 @@
-#include "general_timer.h"
-
-int main() {
-
-
-	return 0;
-}
