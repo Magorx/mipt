@@ -1,58 +1,185 @@
-#include <cstdio>
 #include <cstdlib>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
-int main() {
-    int n;
-    scanf("%d", &n);
-
-    int *arr = (int*) calloc(n, sizeof(int));
-    for (int i = 0; i < n; ++i) {
-        scanf("%d", &arr[i]);
+#include <cstdio>
+#include <cassert>
+#include <cstring>
+ 
+// hash =======================================================================
+ 
+#define ull unsigned long long
+ 
+const ull P = 273;
+const ull M = 1e9 + 9;
+ull *pows = nullptr;
+ 
+ull hashed(char *s) {
+    size_t l = strlen(s);
+    ull h = s[0];
+    for (int i = 1; i < l; ++i) {
+        h = (h * P + s[i]) % M;
     }
-
-    int *dp = (int*) calloc(n, sizeof(int));
-    int *parents = (int*) calloc(n, sizeof(int));
-    for (int i = 0; i < n; ++i) {
-        parents[i] = -1;
+    return h;
+}
+ 
+// list =======================================================================
+ 
+int node_cnt = 0;
+ 
+template <typename T>
+class Node {
+public:
+    T data;
+    Node *next;
+    Node *prev;
+ 
+    Node(const T val):
+    data(copy(val)),
+    next(this),
+    prev(this)
+    {}
+ 
+    void destroy_and_free(bool recursive = true) {
+        for (Node<T> *n = next; n && n != this; n = n->next) {
+            delete n;
+        }
+        delete this;
     }
-    int max_len = 0;
-    int max_index = 0;
-
-    for (int i = 0; i < n; ++i) {
-        dp[i] = 1;
-        parents[i] = -1;
-        for (int j = 0; j < i; ++j) {
-            if (arr[j] < arr[i]) {
-                if (dp[i] < dp[j] + 1) {
-                    dp[i] = dp[j] + 1;
-                    parents[i] = j;
-
-                    if (dp[i] > max_len) {
-                        max_len = dp[i];
-                        max_index = i;
-                    }
+ 
+    void connect(Node<T> *left, Node<T> *right) {
+        if (left) {
+            left->next = this;
+            this->prev = left;
+        }
+        if (right) {
+            right->prev = this;
+            this->next = right;
+        }
+    }
+ 
+    Node<T> *erase() {
+        Node<T> *l = prev;
+        Node<T> *r = next;
+        if (prev) {
+            prev->next = next;
+        }
+        if (next) {
+            next->prev = prev;
+        }
+        delete this;
+ 
+        if (this == r) {
+            return nullptr;
+        } else {
+            return r;
+        }
+    }
+ 
+    Node<T> *push_back(const T val) {
+        Node<T> *node = new Node(val);
+        node->connect(this, next);
+        return this;
+    }
+ 
+    Node<T> *push_front(const T val) {
+        Node<T> *node = new Node(val);
+        node->connect(prev, this);
+        return node;
+    }
+};
+ 
+// hash-table =================================================================
+ 
+template <typename T>
+class HashTable {
+    Node<T> **data;
+public:
+    int capacity;
+ 
+    HashTable(const int capacity_ = 1000000):
+    data((Node<T>**) calloc(capacity_, sizeof(Node<T>**))),
+    capacity(capacity_)
+    {}
+ 
+    ~HashTable() {
+        for (int i = 0; i < capacity; ++i) {
+            if (data[i]) {
+                data[i]->destroy_and_free();
+            }
+        }
+        free(data);
+    }
+ 
+    T *get(const T val, ull h = -1) {
+        if (h == -1)    {
+            ull h = hashed(val) % capacity;
+        }
+        if (!data[h]) {
+            return nullptr;
+        } else {
+            Node<T> *head = data[h];
+            if (head->data == val) {
+                return &head->data;
+            }
+ 
+            for (Node<T> *n = head->next; n != head; n = n->next) {
+                if (n->data == val) {
+                    return &n->data;
                 }
             }
         }
+        return nullptr;
     }
-
-    int cur = max_index;
-    vector<int> ans;
-    while (cur != -1) {
-        ans.push_back(cur);
-        cur = parents[cur];
+ 
+    T *insert(const T val) {
+        ull h = hashed(val) % capacity;
+        T *stored = get(val, h);
+        if (stored) {
+            return stored;
+        }
+ 
+        if (!data[h]) {
+            return &(data[h] = new Node<T>(val))->data;
+        } else {
+            Node<T> *n = data[h] = data[h]->push_front(val);
+            return &n->data;
+        }
     }
-    reverse(ans.begin(), ans.end());
-
-    printf("%d\n", ans.size());
-    for (auto x : ans) {
-        printf("%d ", x);
+};
+ 
+// my pair ====================================================================
+ 
+struct Pair {
+    char *str;
+    long long val;
+ 
+    bool operator==(const Pair &other) {
+        return !(strcmp(str, other.str));
     }
-    printf("\n");
-
+};
+ 
+Pair copy(const Pair p) {
+    size_t len = strlen(p.str);
+    char *cp = (char*) malloc(len + 1);
+    strcpy(cp, p.str);
+    return {cp, p.val};
+}
+ 
+ull hashed(const Pair p) {
+    return hashed(p.str);
+}
+ 
+int main() {
+    HashTable<Pair> htable;
+ 
+    char str[100001] = "";
+    long long val;
+ 
+    while(scanf("%s", str) == 1) {
+        scanf("%lld", &val);
+ 
+        Pair *p = htable.insert({str, 0});
+        p->val += val;
+        printf("%lld\n", p->val);
+    }
+ 
     return 0;
 }

@@ -1,12 +1,24 @@
 #include <cstdlib>
 #include <cstdio>
-#include <cassert>
+#include <cctype>
 #include <cstring>
-#include <algorithm>
  
 // hash =======================================================================
  
 #define ull unsigned long long
+ 
+const ull P = 273;
+const ull M = 1e9 + 9;
+ull *pows = nullptr;
+ 
+ull hashed(char *s) {
+	size_t l = strlen(s);
+    ull h = s[0];
+    for (int i = 1; i < l; ++i) {
+        h = (h * P + s[i]) % M;
+    }
+    return h;
+}
  
 // list =======================================================================
  
@@ -80,24 +92,26 @@ class HashTable {
 	Node<T> **data;
 public:
 	int capacity;
+	int cur_size;
  
 	HashTable(const int capacity_ = 1000000):
 	data((Node<T>**) calloc(capacity_, sizeof(Node<T>**))),
-	capacity(capacity_)
+	capacity(capacity_),
+	cur_size(0)
 	{}
  
 	~HashTable() {
-		for (int i = 0; i < capacity; ++i) {
-			if (data[i]) {
-				data[i]->destroy_and_free();
-			}
-		}
+		// for (int i = 0; i < capacity; ++i) {
+		// 	if (data[i]) {
+		// 		data[i]->destroy_and_free();
+		// 	}
+		// }
 		free(data);
 	}
  
-	T *get(const T val, ull h = -1) {
-		if (h == -1) 	{
-			ull h = hashed(val) % capacity;
+	T *get(const T val, ull h = 0) {
+		if (h == 0) {
+			h = hashed(val) % capacity;
 		}
 		if (!data[h]) {
 			return nullptr;
@@ -123,49 +137,85 @@ public:
 			return stored;
 		}
  
+		++cur_size;
+ 
 		if (!data[h]) {
-			return &(data[h] = new Node<T>(val))->data;
+			data[h] = new Node<T>(val);
+			return &data[h]->data;
 		} else {
 			Node<T> *n = data[h] = data[h]->push_front(val);
 			return &n->data;
 		}
+	}
+ 
+	int size() {
+		return cur_size;
 	}
 };
  
 // my pair ====================================================================
  
 struct Pair {
-	long long key;
-	long long val;
+	char *key;
+	char *val;
  
-	bool operator==(const Pair other) {
-		return key == other.key;
+	bool operator==(const Pair &other) {
+		return !(strcmp(key, other.key));
 	}
 };
  
+char *copy(const char *str) {
+	size_t len = strlen(str);
+	char *cp = (char*) calloc(len + 1, sizeof(char));
+	strcpy(cp, str);
+	return cp;
+}
+ 
 Pair copy(const Pair p) {
-	return {p.key, p.val};
+	return {copy(p.key), copy(p.val)};
 }
  
 ull hashed(const Pair p) {
-	return p.key;
+	return hashed(p.key);
 }
  
 int main() {
+	FILE *fin  = fopen("map.in", "r");
+	FILE *fout = fopen("map.out", "w");
+ 
 	HashTable<Pair> htable;
  
-	int q = 0;
-	scanf("%d", &q);
+	char opr[10] = "";
+	char key[25] = "";
+	char val[25] = "";
  
-	while (q--) {
-		long long x, y;
-		scanf("%lld %lld", &x, &y);
+	while (fscanf(fin, "%s", opr) == 1) {
+		if (opr[0] == 'p') {
+			fscanf(fin, "%s %s", key, val);
  
-		Pair *p1 = htable.insert({x, x});
-		Pair *p2 = htable.insert({y, y});
-		printf("%d\n", abs(p1->val - p2->val));
-		std::swap(p1->val, p2->val);
+			Pair *p = htable.insert({key, val});
+			free(p->val);
+			p->val = copy(val);
+		} else if (opr[0] == 'd') {
+			fscanf(fin, "%s", key);
+ 
+			Pair *p = htable.insert({key, val});
+			free(p->val);
+			p->val = copy("none");
+		} else {
+			fscanf(fin, "%s", key);
+ 
+			Pair *p = htable.get({key, val});
+			if (!p) {
+				fprintf(fout, "none\n");
+			} else {
+				fprintf(fout, "%s\n", p->val);
+			}
+		}
 	}
+ 
+	fclose(fin);
+	fclose(fout);
  
     return 0;
 }

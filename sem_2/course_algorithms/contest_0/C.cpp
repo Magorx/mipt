@@ -1,12 +1,12 @@
 #include <cstdlib>
 #include <cstdio>
-#include <cassert>
-#include <cstring>
-#include <algorithm>
+#include <cctype>
  
 // hash =======================================================================
  
 #define ull unsigned long long
+const ull P = 273;
+const ull M = 1e9 + 9;
  
 // list =======================================================================
  
@@ -80,18 +80,20 @@ class HashTable {
 	Node<T> **data;
 public:
 	int capacity;
+	int cur_size;
  
 	HashTable(const int capacity_ = 1000000):
 	data((Node<T>**) calloc(capacity_, sizeof(Node<T>**))),
-	capacity(capacity_)
+	capacity(capacity_),
+	cur_size(0)
 	{}
  
 	~HashTable() {
-		for (int i = 0; i < capacity; ++i) {
-			if (data[i]) {
-				data[i]->destroy_and_free();
-			}
-		}
+		// for (int i = 0; i < capacity; ++i) {
+		// 	if (data[i]) {
+		// 		data[i]->destroy_and_free();
+		// 	}
+		// }
 		free(data);
 	}
  
@@ -123,6 +125,8 @@ public:
 			return stored;
 		}
  
+		++cur_size;
+ 
 		if (!data[h]) {
 			return &(data[h] = new Node<T>(val))->data;
 		} else {
@@ -130,42 +134,93 @@ public:
 			return &n->data;
 		}
 	}
+ 
+	int size() {
+		return cur_size;
+	}
 };
  
 // my pair ====================================================================
  
 struct Pair {
-	long long key;
-	long long val;
+	long long x;
+	long long y;
  
 	bool operator==(const Pair other) {
-		return key == other.key;
+		return x == other.x && y == other.y;
 	}
 };
  
 Pair copy(const Pair p) {
-	return {p.key, p.val};
+	return {p.x, p.y};
 }
  
 ull hashed(const Pair p) {
-	return p.key;
+	return (107 + (2971215073 * p.x + 2971215073 * p.y) % M + p.y * p.x * 2971215073);
+}
+ 
+bool check_xy(const int w, const int h, const int x, const int y) {
+	return x >= 1 && x <= w && y >= 1 && y <= h;
+}
+ 
+unsigned long long read_next_long_long(char **buffer) {
+    char *c = *buffer;
+    while (c && isspace(*c)) ++c;
+ 
+    unsigned long long l = 0;
+    while (*c >= '0' && *c <= '9') {
+        l = l * 10 + *c - '0';
+        ++c;
+    }
+ 
+    *buffer = c;
+    return l;
 }
  
 int main() {
+	FILE *fin = stdin;
+ 
+    fseek(fin, 0, SEEK_END);
+    long input_size = ftell(fin);
+    fseek(fin, 0, SEEK_SET);
+ 
+    char *buffer = (char*) calloc(input_size + 1, sizeof(char));
+    char *input_init_pointer_for_free = buffer;
+    fread(buffer, sizeof(char), input_size, fin);
+    fclose(fin);
+//---------------------------------------------------------------
 	HashTable<Pair> htable;
  
-	int q = 0;
-	scanf("%d", &q);
+	long long w, h, n;
+	w = read_next_long_long(&buffer);
+	h = read_next_long_long(&buffer);
+	n = read_next_long_long(&buffer);
+	// scanf("%lld %lld %lld", &w, &h, &n);
  
-	while (q--) {
+	while (n--) {
 		long long x, y;
-		scanf("%lld %lld", &x, &y);
+		x = read_next_long_long(&buffer);
+		y = read_next_long_long(&buffer);
+		// scanf("%lld %lld", &x, &y);
  
-		Pair *p1 = htable.insert({x, x});
-		Pair *p2 = htable.insert({y, y});
-		printf("%d\n", abs(p1->val - p2->val));
-		std::swap(p1->val, p2->val);
+		if (x > 1 && y > 1 && x < w && y < h) {
+			htable.insert({x    , y    });
+			htable.insert({x + 1, y    });
+			htable.insert({x - 1, y    });
+			htable.insert({x    , y + 1});
+			htable.insert({x    , y - 1});
+		} else if (x < 0 || y < 0 || x > w + 1 || y > h + 1) {
+			continue;
+		} else {
+			if (check_xy(w, h, x    , y    )) htable.insert({x    , y    });
+			if (check_xy(w, h, x + 1, y    )) htable.insert({x + 1, y    });
+			if (check_xy(w, h, x - 1, y    )) htable.insert({x - 1, y    });
+			if (check_xy(w, h, x    , y + 1)) htable.insert({x    , y + 1});
+			if (check_xy(w, h, x    , y - 1)) htable.insert({x    , y - 1});
+		}
 	}
+ 
+	printf("%s\n", htable.size() == w * h ? "Yes" : "No");
  
     return 0;
 }
