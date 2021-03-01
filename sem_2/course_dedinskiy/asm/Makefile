@@ -1,4 +1,4 @@
-CUR_PROG = pprintf
+CUR_PROG = out
 
 ifndef VERBOSE
 .SILENT:
@@ -15,14 +15,13 @@ WARNINGS = -Wall -Wextra -Wno-multichar
 STANDARD = -std=c++17
 CFLAGS = $(STANDARD) $(WARNINGS) -lm -O3
 
-all: compile
+all: run
 
-compile: printf.s
-	nasm -f elf64 -l printf.lst printf.s
-	ld -s -o pprintf printf.o
-
-run: compile clear
+run:
+	nasm -f elf64 -o pprintf.o printf.s 
+	g++ -c main.cpp -o main.o
+	g++ main.o pprintf.o -o out -no-pie
 	./$(CUR_PROG)
 
 clear:
-	rm *.lst *.o
+	rm *.o

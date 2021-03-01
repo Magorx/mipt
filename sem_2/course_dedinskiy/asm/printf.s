@@ -1,36 +1,120 @@
 section .text
 
-global _start                  ; predefined entry point name for ld
+; global _start                  ; predefined entry point name for ld
+global k_printf
+global k_sum_wrap
+extern k_sum
 
-_start:
-		push Str1
-		push '&'
-		push Msg1
-		call printf
-		add rsp, 3*8
+; _start:
+; 		mov rax, 5
+; 		mov rbx, 6
+; 		call k_sum_wrap
 
-		push 0b0bah
-		push 0b0bah
-		push 0b0bah
-		push 0b0bah
-		push Msg2
-		call printf
-		add rsp, 3*8
-
-		push -0b0bah
-		push -0b0bah
-		push -0b0bah
-		push -0b0bah
-		push Msg3
-		call printf
-		add rsp, 3*8
+; 		push rax
+; 		push Str1
+; 		call k_printf_real
 		
-		mov rax, 0x3C
-		xor rdi, rdi
-		syscall
+; 		mov rax, 0x3C
+; 		xor rdi, rdi
+; 		syscall
 
-printf:
-		ENTER 0, 0
+k_sum_wrap:
+		inc rdi
+		call k_sum
+		ret
+
+k_count_char:
+		push rax
+
+		xor rcx, rcx
+.while:
+		lodsb
+		cmp al, 0
+		je .while_end
+
+		cmp al, bl
+		jne .continue
+
+		mov al, byte[rsi]
+		cmp al, bl
+		jne .ok
+		inc rsi
+.ok:
+
+		inc rcx
+		.continue:
+		jmp .while
+
+.while_end:
+		pop rax
+		ret
+
+
+k_printf:
+		enter 0, 0
+
+		mov r10, rcx
+		mov r11, rbx
+
+		; mov rax, 0x01
+		; mov rsi, rdi
+		; mov rdi, 1
+		; mov rdx, 15
+		; syscall
+
+		; leave
+		; ret
+
+		push rcx
+		push rsi
+
+		mov rsi, rdi
+		mov rbx, '%'
+		call k_count_char
+
+		pop rsi
+
+		sub rcx, 6
+		test rcx, rcx
+
+		js .push_from_stack
+
+		mov rbx, rbp
+		add rbx, 16
+		shl rcx, 3
+		add rbx, rcx
+		shr rcx, 3
+		inc rcx
+.while:
+		mov rax, [rbx]
+		sub rbx, 8
+		push rax
+		loop .while
+
+.push_from_stack:
+		mov rcx, r10
+
+		push r9
+		push r8
+		push rcx
+		push rdx
+		push rsi
+		push rdi
+
+		call k_printf_real
+		mov rbx, r11
+
+		push rdi
+		push rsi
+
+		pop rdi
+		pop rsi
+
+		leave
+		ret
+
+k_printf_real:
+		enter 0, 0
 		; [bp - 4] - symbol_cnt before next %
 		; []
 
@@ -39,12 +123,12 @@ printf:
 
 		mov rbx, 0 ; shift from msg begin
 		mov rcx, 0 ; length of last fragment
-		mov r13, 24
+		mov r10, 24
 
-		mov r11, [rbp + 16]
+		mov rsi, [rbp + 16]
 
 printf_loop:
-		mov rax, r11
+		mov rax, rsi
 		add rax, rcx
 
 		mov dl, byte[rax]
@@ -59,62 +143,64 @@ printf_loop:
 
 		printf_handle_percent:
 
-		push r11
+		push rsi
 		push rcx
 		push rax
 
 		; output part that was before %
 		mov rax, 0x01
 		mov rdi, 1
-		mov rsi, r11
+		mov rsi, rsi
 		mov rdx, rcx
 		syscall
 		; ===
 
 		pop rax
 		pop rcx
-		pop r11
+		pop rsi
 
-		add r11, rcx
-		inc r11 ; now r11 is pointing right after %
+		add rsi, rcx
+		inc rsi ; now rsi is pointing right after %
 		xor rcx, rcx
 
 		inc rax
-		mov dh, byte[rax]
+		mov rdx, 0
+		mov dl, byte[rax]
 
+		jmp [printf_jump_table + rdx * 8]
 
 
 ;======================================
 printf_try_char:
-		cmp dh, 'c'
+		cmp dl, 'c'
 		jne printf_try_string
 
-		push r11
+		push rsi
 		push rcx
 
 		mov rax, 0x01
 		mov rdi, 1
 		mov rsi, rbp
-		add rsi, r13
+		add rsi, r10
 		mov rdx, 1
 		syscall
 
-		add r13, 8
+		add r10, 8
 		pop rcx
-		pop r11
-		inc r11
+		pop rsi
+		inc rsi
 
 		jmp printf_loop
 
 ;======================================
 printf_try_string:
-		cmp dh, 's'
+		cmp dl, 's'
 		jne printf_try_dec
 
-		push r11
+		push rsi
 		push rcx
 
-		mov rdi, [rbp + r13]
+		mov rdi, [rbp + r10]
 		
 		push rax
 		push rbx
@@ -127,29 +213,29 @@ printf_try_string:
 
 		mov rax, 0x01
 		mov rdi, 1
-		mov rsi, [rbp + r13]
+		mov rsi, [rbp + r10]
 		; rdx is already the length of the string
 		syscall
 
-		add r13, 8
+		add r10, 8
 		pop rcx
-		pop r11
-		inc r11
+		pop rsi
+		inc rsi
 
 		jmp printf_loop
 
 ;======================================
 printf_try_dec:
-		cmp dh, 'd'
+		cmp dl, 'd'
 		jne printf_try_hex
 
-		push r11
+		push rsi
 		push rcx
 
-		mov rax, [rbp + r13]
+		mov rax, [rbp + r10]
 		mov rbx, printf_buffer
 		call to_dec
-		add r13, 8
+		add r10, 8
 
 		mov rax, 0x01
 		mov rdi, 1
@@ -160,24 +246,24 @@ printf_try_dec:
 		syscall
 
 		pop rcx
-		pop r11
-		inc r11
+		pop rsi
+		inc rsi
 
 		jmp printf_loop
 
 ;======================================
 
 printf_try_hex:
-		cmp dh, 'x'
+		cmp dl, 'x'
 		jne printf_try_bin
 
-		push r11
+		push rsi
 		push rcx
 
-		mov rax, [rbp + r13]
+		mov rax, [rbp + r10]
 		mov rbx, printf_buffer
 		call to_hex
-		add r13, 8
+		add r10, 8
 
 		mov rax, 0x01
 		mov rdi, 1
@@ -188,24 +274,24 @@ printf_try_hex:
 		syscall
 
 		pop rcx
-		pop r11
-		inc r11
+		pop rsi
+		inc rsi
 
 		jmp printf_loop
 
 ;======================================
 
 printf_try_bin:
-		cmp dh, 'b'
+		cmp dl, 'b'
 		jne printf_try_oct
 
-		push r11
+		push rsi
 		push rcx
 
-		mov rax, [rbp + r13]
+		mov rax, [rbp + r10]
 		mov rbx, printf_buffer
 		call to_bin
-		add r13, 8
+		add r10, 8
 
 		mov rax, 0x01
 		mov rdi, 1
@@ -216,24 +302,24 @@ printf_try_bin:
 		syscall
 
 		pop rcx
-		pop r11
-		inc r11
+		pop rsi
+		inc rsi
 
 		jmp printf_loop
 
 ;======================================
 
 printf_try_oct:
-		cmp dh, 'o'
+		cmp dl, 'o'
 		jne printf_try_percent
 
-		push r11
+		push rsi
 		push rcx
 
-		mov rax, [rbp + r13]
+		mov rax, [rbp + r10]
 		mov rbx, printf_buffer
 		call to_oct
-		add r13, 8
+		add r10, 8
 
 		mov rax, 0x01
 		mov rdi, 1
@@ -244,42 +330,56 @@ printf_try_oct:
 		syscall
 
 		pop rcx
-		pop r11
-		inc r11
+		pop rsi
+		inc rsi
 
 		jmp printf_loop
 
 ;======================================
 
 printf_try_percent:
-		cmp dh, '%'
+		cmp dl, '%'
 		jne printf_try_failed
 
-		push r11
+		push rsi
 		push rcx
 
 		mov rax, 0x01
 		mov rdi, 1
-		mov rsi, r11
+		mov rsi, rsi
 		mov rdx, 1
 		syscall
 
 		pop rcx
-		pop r11
-		inc r11
+		pop rsi
+		inc rsi
 
 		jmp printf_loop
 
 ;======================================
 
 printf_try_failed:
+		push rsi
+		push rcx
+
+		dec rsi
+
+		mov rax, 0x01
+		mov rdi, 1
+		mov rsi, rsi
+		mov rdx, 1
+		syscall
+
+		pop rcx
+		pop rsi
+
 		jmp printf_loop
 
 printf_loop_end:
 
 		mov rax, 0x01      ; write64 (rdi, rsi, rdx) ... r10, r8, r9
 		mov rdi, 1         ; stdout
-		mov rsi, r11
+		mov rsi, rsi
 		mov rdx, rcx    ; strlen (Msg)
 		syscall
 
@@ -493,12 +593,26 @@ rlb_while_end:
 		ret
 
             
-section     .data
+section     .text
             
 Msg1:        db "@General: prc[%%] smb[%c] str[%s]", 0x0a, 0x0
 Msg2:        db "+Numbers: hex[ %x] dec[ %d] oct[ %o] bin [ %b]", 0x0a, 0x0
 Msg3:        db "-Numbers: hex[%x] dec[%d] oct[%o] bin [%b]", 0x0a, 0x0
 
-Str1:        db "I own you", 0x0
+Str1:        db "I own you [%d]", 0x0
 
-printf_buffer db "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+printf_jump_table:		 times 37 dq printf_try_failed
+					  dq printf_try_percent
+			 times 60 dq printf_try_failed
+			 		  dq printf_try_bin
+			 		  dq printf_try_char
+			 		  dq printf_try_dec
+			 times 10 dq printf_try_failed
+			 		  dq printf_try_oct
+			 times  3 dq printf_try_failed
+			 		  dq printf_try_string
+			 times  4 dq printf_try_failed
+			 		  dq printf_try_hex
+
+section .bss
+printf_buffer resb 1024
