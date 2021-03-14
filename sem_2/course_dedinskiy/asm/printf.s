@@ -167,14 +167,18 @@ printf_loop:
 		mov rdx, 0
 		mov dl, byte[rax]
 
-		jmp [printf_jump_table + rdx * 8]
+		sub dl, 37
+
+		test dl, dl
+		jnz .jtbl
+		jmp printf_try_percent
+
+.jtbl:
+		jmp [printf_jump_table + rdx * 8 - 61 * 8]
 
 
 ;======================================
 printf_try_char:
-		cmp dl, 'c'
-		jne printf_try_string
-
 		push rsi
 		push rcx
 
@@ -194,9 +198,6 @@ printf_try_char:
 
 ;======================================
 printf_try_string:
-		cmp dl, 's'
-		jne printf_try_dec
-
 		push rsi
 		push rcx
 
@@ -226,13 +227,11 @@ printf_try_string:
 
 ;======================================
 printf_try_dec:
-		cmp dl, 'd'
-		jne printf_try_hex
-
 		push rsi
 		push rcx
 
 		mov rax, [rbp + r10]
+		movsx rax, eax
 		mov rbx, printf_buffer
 		call to_dec
 		add r10, 8
@@ -254,13 +253,11 @@ printf_try_dec:
 ;======================================
 
 printf_try_hex:
-		cmp dl, 'x'
-		jne printf_try_bin
-
 		push rsi
 		push rcx
 
 		mov rax, [rbp + r10]
+		movsx rax, eax
 		mov rbx, printf_buffer
 		call to_hex
 		add r10, 8
@@ -282,13 +279,11 @@ printf_try_hex:
 ;======================================
 
 printf_try_bin:
-		cmp dl, 'b'
-		jne printf_try_oct
-
 		push rsi
 		push rcx
 
 		mov rax, [rbp + r10]
+		movsx rax, eax
 		mov rbx, printf_buffer
 		call to_bin
 		add r10, 8
@@ -310,13 +305,11 @@ printf_try_bin:
 ;======================================
 
 printf_try_oct:
-		cmp dl, 'o'
-		jne printf_try_percent
-
 		push rsi
 		push rcx
 
 		mov rax, [rbp + r10]
+		movsx rax, eax
 		mov rbx, printf_buffer
 		call to_oct
 		add r10, 8
@@ -338,9 +331,6 @@ printf_try_oct:
 ;======================================
 
 printf_try_percent:
-		cmp dl, '%'
-		jne printf_try_failed
-
 		push rsi
 		push rcx
 
@@ -601,18 +591,15 @@ Msg3:        db "-Numbers: hex[%x] dec[%d] oct[%o] bin [%b]", 0x0a, 0x0
 
 Str1:        db "I own you [%d]", 0x0
 
-printf_jump_table:		 times 37 dq printf_try_failed
-					  dq printf_try_percent
-			 times 60 dq printf_try_failed
-			 		  dq printf_try_bin
-			 		  dq printf_try_char
-			 		  dq printf_try_dec
-			 times 10 dq printf_try_failed
-			 		  dq printf_try_oct
-			 times  3 dq printf_try_failed
-			 		  dq printf_try_string
-			 times  4 dq printf_try_failed
-			 		  dq printf_try_hex
+printf_jump_table:		 		  dq printf_try_bin
+						 		  dq printf_try_char
+						 		  dq printf_try_dec
+						 times 10 dq printf_try_failed
+						 		  dq printf_try_oct
+						 times  3 dq printf_try_failed
+						 		  dq printf_try_string
+						 times  4 dq printf_try_failed
+						 		  dq printf_try_hex
 
 section .bss
 printf_buffer resb 1024
