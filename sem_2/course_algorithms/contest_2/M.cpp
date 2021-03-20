@@ -95,9 +95,9 @@ struct Matrix {
   }
 
   void read() {
-  	char c = 0;
-  	scanf("%c", &c);
-  	for (int i = 0; i < row_count; ++i) {
+    char c = 0;
+    scanf("%c", &c);
+    for (int i = 0; i < row_count; ++i) {
       for (int j = 0; j < column_count; ++j) {
         scanf("%c", &c);
         matrix[i][j] = c == 'Y' ? 1 : 0;
@@ -107,7 +107,7 @@ struct Matrix {
   }
 
   void print() {
-  	for (int i = 0; i < row_count; ++i) {
+    for (int i = 0; i < row_count; ++i) {
       for (int j = 0; j < column_count; ++j) {
         printf("%lld ", matrix[i][j]);
       }
@@ -136,40 +136,40 @@ Matrix<T> operator*(const Matrix<T> &first, const Matrix<T> &second) {
 const int BIBASE = 10;
 class BigInt {
 public:
-	vector<int> digits;
+  vector<int> digits;
 
-	BigInt():
-	digits()
-	{}
+  BigInt():
+  digits()
+  {}
 
-	BigInt(int x) {
-		digits.resize(0);
-		while (x) {
-			digits.push_back(x % BIBASE);
-			x /= BIBASE;
-		}
-		reverse(digits.begin(), digits.end());
-	}
+  BigInt(int x) {
+    digits.resize(0);
+    while (x) {
+      digits.push_back(x % BIBASE);
+      x /= BIBASE;
+    }
+    reverse(digits.begin(), digits.end());
+  }
 
-	void read_by_scanf() {
-		digits.resize(0);
-		char d = ' ';
-		while (isspace(d)) {
-			scanf("%c", &d);
-		}
-		while (isdigit(d)) {
-			digits.push_back(d - '0');
-			scanf("%c", &d);
-		}
-	}
+  void read_by_scanf() {
+    digits.resize(0);
+    char d = ' ';
+    while (isspace(d)) {
+      scanf("%c", &d);
+    }
+    while (isdigit(d)) {
+      digits.push_back(d - '0');
+      scanf("%c", &d);
+    }
+  }
 
-	void print(char end_symb = ' ') const {
-		int l = digits.size();
-		for (int i = 0; i < l; ++i) {
-			printf("%d", digits[i]);
-		}
-		printf("%c", end_symb);
-	}
+  void print(char end_symb = ' ') const {
+    int l = digits.size();
+    for (int i = 0; i < l; ++i) {
+      printf("%d", digits[i]);
+    }
+    printf("%c", end_symb);
+  }
 
   void fix() {
     if (digits[0]) {
@@ -183,10 +183,10 @@ public:
     reverse(digits.begin(), digits.end());
   }
 
-	BigInt &operator=(const BigInt &other) {
-		digits = other.digits;
-		return *this;
-	}
+  BigInt &operator=(const BigInt &other) {
+    digits = other.digits;
+    return *this;
+  }
 
   void dec_1() {
     int i = digits.size() - 1;
@@ -216,18 +216,18 @@ public:
   }
 
   bool is_1() {
-  	return digits.size() == 1 && digits[0] == 1;
+    return digits.size() == 1 && digits[0] == 1;
   }
 
   bool is_0() {
-  	return digits.size() == 1 && digits[0] == 0;
+    return digits.size() == 1 && digits[0] == 0;
   }
 
   bool is_even() {
-  	if (digits.size() == 0) {
-  		printf("EROR\n");
-  	}
-  	return digits[digits.size() - 1] % 2 == 0;
+    if (digits.size() == 0) {
+      printf("EROR\n");
+    }
+    return digits[digits.size() - 1] % 2 == 0;
   }
 };
 
@@ -248,16 +248,16 @@ bool ok_seq(const int m1, const int m2, const int len=32) {
 
 template <typename T>
 T big_binpow(const T &obj, long long pow) {
-	T ans = T::E(obj.row_count);
-	T powed = obj;
-	while (pow) {
-		if (pow % 2) {
-			ans = ans * powed;
-		}
-		powed = powed * powed;
-		pow /= 2;
-	}
-	return ans;
+  T ans = T::E(obj.row_count);
+  T powed = obj;
+  while (pow) {
+    if (pow % 2) {
+      ans = ans * powed;
+    }
+    powed = powed * powed;
+    pow /= 2;
+  }
+  return ans;
 }
 
 const int MAX_C = 17;
@@ -304,10 +304,10 @@ int main() {
     cur = muled * cur;
   }
 
-  // cur = matrs[1] * cur;
+  cur = matrs[1] * cur;
   printf("%lld\n", cur[MAX_C - 1][0]);
 
-	return 0;
+  return 0;
 }
 
 // cur - столбец высоты 17, в котором i-я снизу клеточка хранит кол-во способов добраться до нее из (0, 0)
