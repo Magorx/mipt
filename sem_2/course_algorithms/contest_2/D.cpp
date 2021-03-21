@@ -196,6 +196,7 @@ int main() {
   for (int i = 1; i < m; ++i) {
     dp[i] = shifted_down(dp[i - 1]);
   }
+  dp.print();
 
   dp = big_binpow(dp, l - 2);
   auto cur = dp * inp;
