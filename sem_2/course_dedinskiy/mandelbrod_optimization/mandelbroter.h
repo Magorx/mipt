@@ -2,6 +2,7 @@
 #define MANDELBRODER
 
 #include "color_map.h"
+#include "intrinsic_types.h"
 
 #define PACK_4 4
 #define PACK_8 8
@@ -24,9 +25,9 @@ void render_mandelbrot_float4(ColorMap *cmap,
 							  const float width, const float height,
 							  const int max_itter = MAX_ITTER, const float max_radius = 10);
 
-void render_mandelbrot_float8(ColorMap *cmap,
-							  const float center_x, const float center_y,
-							  const float width, const float height,
-							  const int max_itter = MAX_ITTER, const float max_radius = 10);
+void render_mandelbrot_intrinsics(ColorMap *cmap,
+								  const float center_x, const float center_y,
+								  const float width, const float height,
+								  const int max_itter = MAX_ITTER, const float max_radius = 10);
 
 #endif // MANDELBRODER

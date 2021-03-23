@@ -7,7 +7,7 @@ enum MODES {
     TIMETEST_MODE,
     REAL_MODE
 };
-const int MODE = TIMETEST_MODE;
+const int MODE = REAL_MODE;
 
 const float SCR_RATIO = 16 / 9;
 
@@ -54,10 +54,10 @@ int main()
         }
         TIMER_END_AND_PRINT();
 
-        printf("Testing float8 render ---\n");
+        printf("Testing intrinsic render ---\n");
         TIMER_START();
         for (int i = 0; i < test_itters; ++i) {
-            render_mandelbrot_float8(&cmap, cur_x, cur_y, INIT_W * cur_scale, INIT_H * cur_scale);
+            render_mandelbrot_intrinsics(&cmap, cur_x, cur_y, INIT_W * cur_scale, INIT_H * cur_scale);
         }
         TIMER_END_AND_PRINT();
 
@@ -65,7 +65,7 @@ int main()
         sf::RenderWindow window(sf::VideoMode(SCR_W, SCR_H), "Mandaloter");
         while (window.isOpen())
         {
-            render_mandelbrot_float4(&cmap, cur_x, cur_y, INIT_W * cur_scale, INIT_H * cur_scale);
+            render_mandelbrot_intrinsics(&cmap, cur_x, cur_y, INIT_W * cur_scale, INIT_H * cur_scale);
 
             sf::Event event;
             while (window.pollEvent(event))

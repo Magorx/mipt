@@ -9,8 +9,8 @@ long vec3d_randlong() {
     return ret > 0 ? ret : -ret;
 }
 
-double vec3d_randdouble(double dmin, double dmax) {
-    double x = (double)rand() / RAND_MAX;
+int vec3d_randint(int dmin, int dmax) {
+    int x = (int)rand() / RAND_MAX;
     return dmin + x * (dmax - dmin);
 }
 
@@ -20,22 +20,22 @@ y(0.0),
 z(0.0)
 {}
 
-Vec3d::Vec3d(double x_, double y_, double z_):
+Vec3d::Vec3d(int x_, int y_, int z_):
 x(x_),
 y(y_),
 z(z_)
 {}
 
-double Vec3d::len() const {
+int Vec3d::len() const {
     return sqrt(x * x + y * y + z * z);
 }
 
-double Vec3d::len_squared() const {
+int Vec3d::len_squared() const {
     return x * x + y * y + z * z;
 }
 
 Vec3d Vec3d::normal() const {
-    double l = len();
+    int l = len();
     if (l < VEC3_EPS) {
         return {0, 0, 0};
     } else {
@@ -47,18 +47,18 @@ bool Vec3d::is_zero() const {
     return fabs(x) < VEC3_EPS && fabs(y) < VEC3_EPS && fabs(z) < VEC3_EPS;
 }
 
-double Vec3d::dot(const Vec3d &other) const {
+int Vec3d::dot(const Vec3d &other) const {
     return x * other.x + y * other.y + z * other.z;
 }
 
 Vec3d Vec3d::cross(const Vec3d &other) const {
-    double res_x = y * other.z - z * other.y;
-    double res_y = z * other.x - x * other.z;
-    double res_z = x * other.y - y * other.x;
+    int res_x = y * other.z - z * other.y;
+    int res_y = z * other.x - x * other.z;
+    int res_z = x * other.y - y * other.x;
     return {res_x, res_y, res_z};
 }
 
-double &Vec3d::operator[](const int i) {
+int &Vec3d::operator[](const int i) {
     switch(i) {
         case 0:
             return x;
@@ -71,7 +71,7 @@ double &Vec3d::operator[](const int i) {
     }
 }
 
-double Vec3d::operator[](const int i) const {
+int Vec3d::operator[](const int i) const {
     switch(i) {
         case 0:
             return x;
@@ -118,15 +118,15 @@ Vec3d operator*=(Vec3d &first, const Vec3d &second) {
     return first;
 }
 
-Vec3d operator*(const Vec3d &first, const double k) {
+Vec3d operator*(const Vec3d &first, const int k) {
     return {first.x * k, first.y * k, first.z * k};
 }
 
-Vec3d operator*(const double k, const Vec3d &first) {
+Vec3d operator*(const int k, const Vec3d &first) {
     return {first.x * k, first.y * k, first.z * k};
 }
 
-Vec3d operator*=(Vec3d &first, const double k) {
+Vec3d operator*=(Vec3d &first, const int k) {
     first.x *= k;
     first.y *= k;
     first.z *= k;
@@ -137,7 +137,7 @@ Vec3d operator/(const Vec3d &first, const Vec3d &second) {
     return {first.x / second.x, first.y / second.y, first.z / second.z};
 }
 
-Vec3d operator/(const Vec3d &first, const double k) {
+Vec3d operator/(const Vec3d &first, const int k) {
     return {first.x / k, first.y / k, first.z / k};
 }
 
@@ -146,11 +146,11 @@ bool operator==(const Vec3d &first, const Vec3d &second) {
 }
 
 Vec3d sqrt(const Vec3d &first) {
-    return {sqrt(first.x), sqrt(first.y), sqrt(first.z)};
+    return {(int) sqrt(first.x), (int) sqrt(first.y), (int) sqrt(first.z)};
 }
 
-Vec3d pow (const Vec3d &first, const double power) {
-    return {pow(first.x, power), pow(first.y, power), pow(first.z, power)};
+Vec3d pow (const Vec3d &first, const int power) {
+    return {(int) pow(first.x, power), (int) pow(first.y, power), (int) pow(first.z, power)};
 }
 
 bool operator<(const Vec3d &first, const Vec3d &second) {
@@ -171,28 +171,28 @@ Vec3d Vec3d::orient(const Vec3d &axis) {
     return *this;
 }
 
-Vec3d rotx(const Vec3d vec, double ang) {
-    double x = vec.x;
-    double y = vec.y * cos(ang) - vec.z * sin(ang);
-    double z = vec.z * cos(ang) + vec.y * sin(ang);
+Vec3d rotx(const Vec3d vec, int ang) {
+    int x = vec.x;
+    int y = vec.y * cos(ang) - vec.z * sin(ang);
+    int z = vec.z * cos(ang) + vec.y * sin(ang);
     return {x, y, z};
 }
 
-Vec3d roty(const Vec3d vec, double ang) {
-    double x = vec.x * cos(ang) + vec.z * sin(ang);
-    double y = vec.y;
-    double z = vec.z * cos(ang) - vec.x * sin(ang);
+Vec3d roty(const Vec3d vec, int ang) {
+    int x = vec.x * cos(ang) + vec.z * sin(ang);
+    int y = vec.y;
+    int z = vec.z * cos(ang) - vec.x * sin(ang);
     return {x, y, z};
 }
 
-Vec3d rotz(const Vec3d vec, double ang) {
-    double x = vec.x * cos(ang) - vec.y * sin(ang);
-    double y = vec.y * cos(ang) - vec.x * sin(ang);
-    double z = vec.z;
+Vec3d rotz(const Vec3d vec, int ang) {
+    int x = vec.x * cos(ang) - vec.y * sin(ang);
+    int y = vec.y * cos(ang) - vec.x * sin(ang);
+    int z = vec.z;
     return {x, y, z};
 }
 
-Vec3d rotate(const Vec3d vec, double dx, double dy, double dz) {
+Vec3d rotate(const Vec3d vec, int dx, int dy, int dz) {
     return rotz(roty(rotx(vec, dx), dy), dz);
 }
 
@@ -205,7 +205,7 @@ Vec3d reflect(const Vec3d vec, Vec3d normal) {
     return vec - 2 * vec.dot(normal) * normal;
 }
 
-Vec3d refract(const Vec3d vec, const Vec3d &normal, const double eta_from_over_eta_to) {
+Vec3d refract(const Vec3d vec, const Vec3d &normal, const int eta_from_over_eta_to) {
     Vec3d uv = vec.normal();
     Vec3d n = normal.normal();
 
@@ -215,10 +215,10 @@ Vec3d refract(const Vec3d vec, const Vec3d &normal, const double eta_from_over_e
     return r_out_perp + r_out_parallel;
 }
 
-double vec3d_deg_to_rad(const double deg) {
+int vec3d_deg_to_rad(const int deg) {
     return deg / 180 * VEC3D_PI;
 }
 
-double vec3d_rad_to_deg(const double rad) {
+int vec3d_rad_to_deg(const int rad) {
     return rad / VEC3D_PI * 180;
 }

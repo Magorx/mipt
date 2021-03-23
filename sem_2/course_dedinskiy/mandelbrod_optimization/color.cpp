@@ -6,13 +6,13 @@ const int 	 i_MINRGB = 0;
 const double d_MINRGB = 0.0;
 
 Color randcolor(const int min, const int max) {
-	return {(double) ((rand() % max) + min), (double) ((rand() % max) + min), (double) ((rand() % max) + min)};
+	return {((rand() % max) + min), ((rand() % max) + min), ((rand() % max) + min)};
 }
 
 Color rand_color_shift(const size_t module) {
-	double rgb[3] = {};
+	int rgb[3] = {};
 	for (int i = 0; i < 3; ++i) {
-		rgb[i] = (double) (rand() % module);
+		rgb[i] = rand() % module;
 		rgb[i] *= rand() % 2 ? 1 : -1;
 	}
 	return {rgb[0], rgb[1], rgb[2]};
@@ -20,7 +20,7 @@ Color rand_color_shift(const size_t module) {
 
 Color rand_shifted_color(Color color, const size_t module) {
 	color += rand_color_shift(module);
-	double rgb[3] = {color.x, color.y, color.z};
+	int rgb[3] = {color.x, color.y, color.z};
 	for (int i = 0; i < 3; ++i) {
 		if (rgb[i] < 0) {
 			rgb[i] = 0;
@@ -42,21 +42,21 @@ bool is_valid_color(Color color) {
 }
 
 Color clamped_rgb(const Color color) {
-	return {std::min(std::max(color.x, 0.0), 255.0),
-			std::min(std::max(color.y, 0.0), 255.0),
-			std::min(std::max(color.z, 0.0), 255.0)
+	return {std::min(std::max(color.x, 0), 255),
+			std::min(std::max(color.y, 0), 255),
+			std::min(std::max(color.z, 0), 255)
 		   };
 }
 
-void print_rgb(Color color, const double gamma_correction, FILE *file) {
+void print_rgb(Color color, const int gamma_correction, FILE *file) {
 	color = clamped_rgb(color);
 	color *= 1 / d_MAXRGB;
 	color = pow(color, gamma_correction);
 	color *= d_MAXRGB;
-	fprintf(file, "%d %d %d\n", (int) color.x, (int) color.y, (int) color.z);
+	fprintf(file, "%d %d %d\n", color.x, color.y, color.z);
 }
 
-void save_rgb_to_ppm_image(FILE *fout, const Color *image, const size_t width, const size_t height, const double gamma_correction) {
+void save_rgb_to_ppm_image(FILE *fout, const Color *image, const size_t width, const size_t height, const int gamma_correction) {
 	if (!fout) {
 		fprintf(stderr, "[ERR]<save_rgb_to_ppm_image> fileptr[nullptr]\n");
 		return;
@@ -75,7 +75,7 @@ void save_rgb_to_ppm_image(FILE *fout, const Color *image, const size_t width, c
 	}
 }
 
-void save_rgb_to_ppm_image(const char *filename, const Color *image, const size_t width, const size_t height, const double gamma_correction) {
+void save_rgb_to_ppm_image(const char *filename, const Color *image, const size_t width, const size_t height, const int gamma_correction) {
 	if (!filename) {
 		fprintf(stderr, "[ERR]<save_rgb_to_ppm_image> filename[nullptr]\n");
 		return;
