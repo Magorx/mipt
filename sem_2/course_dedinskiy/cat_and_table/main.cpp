@@ -9,7 +9,6 @@ const size_t   SCR_W = 800;
 const size_t   SCR_H = SCR_W * SCR_RATIO;
 
 int main() {
-	printf("%lu %lu\n", sizeof(ColorP4), sizeof(ARGB));
 	// ===========================
 	sf::Texture texture;
     texture.create(SCR_W, SCR_H);
@@ -20,6 +19,21 @@ int main() {
 
 	ColorMapP4 cmap = {};
 	cmap.ctor(SCR_W, SCR_H);
+	for (size_t i = 0; i < cmap.height; ++i) {
+		for (size_t j = 0; j < cmap.width; ++j) {
+			cmap[i][j] = ARGB(255 * i / cmap.height, 255 * j / cmap.width, 125);
+		}
+	}
+
+	ColorMapP4 cm = {};
+	cm.ctor(SCR_W, SCR_H);
+	for (size_t i = 0; i < cm.height; ++i) {
+		for (size_t j = 0; j < cm.width; ++j) {
+			cm[i][j] = ARGB(120 * (j % 2), 255 * (j % 2) - 255 * j / cm.width, 255 - 255 * 255 * j * i / cm.width / cm.height, 255.0f / cm.width * j);
+		}
+	}
+
+	cmap.superimpose_alpha(cm, 0, 0);
 
 	while (window.isOpen()) {
 		sf::Event event;

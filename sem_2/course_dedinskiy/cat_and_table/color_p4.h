@@ -27,6 +27,14 @@ union ARGB{
 };
 
 inline ARGB::operator int() const { return i; }
+inline ARGB mult     (const float num, const ARGB argb) { return {(unsigned char) (argb.r * num),
+																		  (unsigned char) (argb.g * num),
+																		  (unsigned char) (argb.b * num),
+																		  (unsigned char) (argb.a      )}; }
+inline ARGB operator+(const ARGB other, const ARGB argb) { return {(unsigned char) (argb.r + other.r),
+																   (unsigned char) (argb.g + other.g),
+																   (unsigned char) (argb.b + other.b),
+																   (unsigned char) (argb.a          )}; }
 
 union ColorP4 {
 	__m128i m;
