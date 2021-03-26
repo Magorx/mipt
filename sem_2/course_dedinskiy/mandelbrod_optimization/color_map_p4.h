@@ -4,19 +4,28 @@
 #include <SFML/Graphics.hpp>
 #include "color_p4.h"
 
-class ColorMap {
+class ColorMapP4 {
 public:
 	size_t 	 real_width;
 	size_t   width;
 	size_t   height;
-	ColorP4 *data;
-	char is_broken;
+	ARGB *data;
 
-	ColorMap           (const ColorMap& other) = delete;
-	ColorMap& operator=(const ColorMap& other) = delete;
+	ColorMapP4           (const ColorMapP4& other) = delete;
+	ColorMapP4& operator=(const ColorMapP4& other) = delete;
 
-	ColorMap();
-	bool ctor(const size_t width_, const size_t height_, ColorP4 *data_ = nullptr);
+	ColorMapP4();
+	bool ctor(const size_t width_, const size_t height_);
+
+	ARGB *operator[](const size_t i);
+	const ARGB *operator[](const size_t i) const;
+
+	void force_align_4(size_t &x) const;
+	void crop_rectangle(size_t &x0, size_t &y0, size_t &x1, size_t &y1) const;
+
+	bool is_valid() const;
+
+	void superimpose_alpha(const ColorMapP4 &cmap, size_t x0, size_t y0);
 
 	void flush_to_texture(sf::Texture &texture);
 };

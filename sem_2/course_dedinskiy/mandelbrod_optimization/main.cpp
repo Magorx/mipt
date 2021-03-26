@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "general/general_c.h"
-#include "color_map.h"
+#include "color_map_p4.h"
 #include "mandelbroter.h"
 
 enum MODES {
@@ -14,7 +14,7 @@ const float SCR_RATIO = 16 / 9;
 const int SCR_H = 800;
 const int SCR_W = SCR_H * SCR_RATIO;
 
-const float INIT_H = 4;
+const float INIT_H = 2;
 const float INIT_W = INIT_H * SCR_RATIO;
 
 const float STEP_SCALE  = 0.25;
@@ -29,7 +29,7 @@ int main()
 
     // ============
 
-    ColorMap cmap;
+    ColorMapP4 cmap;
     cmap.ctor(SCR_W, SCR_H);
 
     float cur_scale = 1;
@@ -47,10 +47,10 @@ int main()
         }
         TIMER_END_AND_PRINT();
 
-        printf("Testing float4 render ---\n");
+        printf("Testing v_float_4 render ---\n");
         TIMER_START();
         for (int i = 0; i < test_itters; ++i) {
-            render_mandelbrot_float4(&cmap, cur_x, cur_y, INIT_W * cur_scale, INIT_H * cur_scale);
+            render_mandelbrot_v_float_4(&cmap, cur_x, cur_y, INIT_W * cur_scale, INIT_H * cur_scale);
         }
         TIMER_END_AND_PRINT();
 
@@ -98,12 +98,21 @@ int main()
                     }
                     if (event.key.code == sf::Keyboard::E) {
                         cur_scale *= SCALE_SCALE;
+                        if (cur_scale < 0.000000001) {
+                            cur_scale = 1000;
+                        }
                     }
                     if (event.key.code == sf::Keyboard::Q) {
                         cur_scale /= SCALE_SCALE;
+                        if (cur_scale > 1000) {
+                            cur_scale = 0.000000001;
+                        }
                     }
                     if (event.key.code == sf::Keyboard::Z) {
                         render_option ^= 1;
+                    }
+                    if (event.key.code == sf::Keyboard::F) {
+                        texture.copyToImage().saveToFile("scr.png");
                     }
                 }
             }
