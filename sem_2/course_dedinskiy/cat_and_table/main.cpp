@@ -29,7 +29,7 @@ int main() {
 	cm.ctor(SCR_W, SCR_H);
 	for (size_t i = 0; i < cm.height; ++i) {
 		for (size_t j = 0; j < cm.width; ++j) {
-			cm[i][j] = ARGB(120 * (j % 2), 255 * (j % 2) - 255 * j / cm.width, 255 - 255 * 255 * j * i / cm.width / cm.height, 255.0f / cm.width * j);
+			cm[i][j] = ARGB(120, 255 * j / cm.width, 255 - 255 * 255 * j * i / cm.width / cm.height, 255.0f / cm.width * j);
 		}
 	}
 

@@ -62,10 +62,20 @@ int main()
         TIMER_END_AND_PRINT();
 
     } else {
+        int render_option = 0;
+
         sf::RenderWindow window(sf::VideoMode(SCR_W, SCR_H), "Mandaloter");
         while (window.isOpen())
         {
-            render_mandelbrot_intrinsics(&cmap, cur_x, cur_y, INIT_W * cur_scale, INIT_H * cur_scale);
+            TIMER_START();
+            if (render_option == 0) {
+                render_mandelbrot_intrinsics(&cmap, cur_x, cur_y, INIT_W * cur_scale, INIT_H * cur_scale);
+            } else {
+                render_mandelbrot(&cmap, cur_x, cur_y, INIT_W * cur_scale, INIT_H * cur_scale);
+            }
+            TIMER_END();
+
+            printf("[FPS]: %lg\n", 1 / GLOBAL_TIMER_INTERVAL);
 
             sf::Event event;
             while (window.pollEvent(event))
@@ -91,6 +101,9 @@ int main()
                     }
                     if (event.key.code == sf::Keyboard::Q) {
                         cur_scale /= SCALE_SCALE;
+                    }
+                    if (event.key.code == sf::Keyboard::Z) {
+                        render_option ^= 1;
                     }
                 }
             }
