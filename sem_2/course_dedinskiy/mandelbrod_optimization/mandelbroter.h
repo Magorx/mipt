@@ -14,17 +14,17 @@ const int MAX_ITTER = 256;
 
 void render_mandelbrot(ColorMapP4 *cmap,
 					   const float center_x, const float center_y,
-					   const float width, const float height,
+					   const float width,    const float height,
 					   const int max_itter = MAX_ITTER, const float max_radius = 10);
 
 void render_mandelbrot_v_float_4(ColorMapP4 *cmap,
-							  const float center_x, const float center_y,
-							  const float width, const float height,
-							  const int max_itter = MAX_ITTER, const float max_radius = 10);
+							  	 const float center_x, const float center_y,
+							  	 const float width,    const float height,
+							  	 const int max_itter = MAX_ITTER, const float max_radius = 10);
 
 void render_mandelbrot_intrinsics(ColorMapP4 *cmap,
 								  const float center_x, const float center_y,
-								  const float width, const float height,
+								  const float width,    const float height,
 								  const int max_itter = MAX_ITTER, const float max_radius = 10);
 
 #endif // MANDELBRODER

@@ -20,6 +20,25 @@ bool ColorMapP4::ctor(const size_t width_, const size_t height_) {
 	}
 }
 
+bool ColorMapP4::ctor(const char *file) {
+	sf::Image img;
+	img.loadFromFile(file);
+
+	auto size = img.getSize();
+	size_t Width = size.x;
+	size_t Height = size.y;
+	ctor(Width, Height);
+
+	for (size_t y = 0; y < height; ++y) {
+		for (size_t x = 0; x < real_width; ++x) {
+			sf::Color color = img.getPixel(x, y);
+			data[y * width + x] = {color.r, color.g, color.b, color.a};
+		}
+	}
+
+	return true;
+}
+
 void ColorMapP4::flush_to_texture(sf::Texture &texture) {
 	sf::Image image;
 	image.create(real_width, height);
@@ -100,6 +119,99 @@ void ColorMapP4::superimpose_alpha(const ColorMapP4 &cmap, size_t x0, size_t y0)
 			ARGB c1 = data[y * width + x];
 			ARGB c2 = cmap[yy][xx];
 			data[y * width + x] = mult((255 - c2.a) / 255.0f, c1) + mult(c2.a / 255.0f, c2);
+		}
+	}
+
+}
+
+void ColorMapP4::superimpose_alpha_intr(const ColorMapP4 &cmap, size_t x0, size_t y0) {
+	if (!is_valid() || !cmap.is_valid()) {
+		printf("[ERR]<superimpose>: bad imagies provided\n");
+		return;
+	}
+	
+	force_align_4(x0);
+	size_t x1 = x0 + cmap.width;
+	size_t y1 = y0 + cmap.height;
+	crop_rectangle(x0, y0, x1, y1);
+
+	const char ZZ = 0x80;
+
+	__m256i pack_mask = _mm256_set_epi8(		ZZ, ZZ, ZZ, ZZ, ZZ, ZZ, ZZ, ZZ,
+                                                31, 29, 27, 25, 23, 21, 19, 17,
+                                                ZZ, ZZ, ZZ, ZZ, ZZ, ZZ, ZZ, ZZ,
+                                                15, 13, 11, 9, 7, 5, 3, 1);
+
+	__m256i alpha_mask = _mm256_set_epi8(		ZZ, 24, ZZ, 24, ZZ, 24, ZZ, 24,
+                                                ZZ, 16, ZZ, 16, ZZ, 16, ZZ, 16,
+                                                ZZ,  8, ZZ,  8, ZZ,  8, ZZ,  8,
+                                                ZZ,  0, ZZ,  0, ZZ,  0, ZZ,  0);
+
+	// __m256i zero = _mm256_setzero_si256();
+    __m256i imax = _mm256_set1_epi16(255);
+
+	for (size_t y = y0, yy = 0; y < y1; ++y, ++yy) {
+		for (size_t x = x0, xx = 0; x < x1; x += 4, xx += 4) {
+			__m128i fg_pxls = _mm_load_si128((__m128i*)(cmap.data + yy * cmap.width + xx));
+			__m128i bg_pxls = _mm_load_si128((__m128i*)(data + y * width + x));
+
+			__m256i fg = _mm256_cvtepu8_epi16(fg_pxls);
+			__m256i bg = _mm256_cvtepu8_epi16(bg_pxls);
+
+			__m256i alpha_fg = _mm256_shuffle_epi8(fg, alpha_mask);
+            __m256i alpha_bg = _mm256_sub_epi16(imax, alpha_fg);
+
+            // printf(") ");
+            // for (int i = 0; i < 32; ++i) {
+            // 	printf("%d ", ((unsigned char*)&fg)[i]);
+            // }
+            // printf("\n");
+
+            // printf("* ");
+            // for (int i = 0; i < 32; ++i) {
+            // 	printf("%d ", ((unsigned char*)&alpha_fg)[i]);
+            // }
+            // printf("\n");
+
+
+			fg = _mm256_mullo_epi16(fg, alpha_fg);
+
+			// printf("> ");
+   //          for (int i = 0; i < 32; ++i) {
+   //          	printf("%d ", ((unsigned char*)&fg)[i]);
+   //          }
+   //          printf("\n");
+
+			bg = _mm256_mullo_epi16(bg, alpha_bg);
+
+			__m256i result_wide = _mm256_add_epi16(fg, bg);
+
+			// printf("& ");
+   //          for (int i = 0; i < 32; ++i) {
+   //          	printf("%d ", ((unsigned char*)&result_wide)[i]);
+   //          }
+   //          printf("\n");
+			result_wide = _mm256_shuffle_epi8(result_wide, pack_mask);
+			// printf("] ");
+   //          for (int i = 0; i < 32; ++i) {
+   //          	printf("%d ", ((unsigned char*)&result_wide)[i]);
+   //          }
+   //          printf("\n");
+
+			__m128i result_low  = _mm256_extractf128_si256(result_wide, 0);
+            __m128i result_high = _mm256_extractf128_si256(result_wide, 1);
+
+            __m128i result = (__m128i)_mm_movelh_ps((__m128)result_low, (__m128)result_high);
+
+            unsigned char *result_ptr = (unsigned char*)&result;
+
+            for (int i = 0; i < 4; ++i) {
+            	unsigned char a = result_ptr[4 * i + 0];
+                unsigned char r = result_ptr[4 * i + 1];
+                unsigned char g = result_ptr[4 * i + 2];
+                unsigned char b = result_ptr[4 * i + 3];
+                data[y * width + x + i] = {r, g, b, a};
+            }
 		}
 	}
 

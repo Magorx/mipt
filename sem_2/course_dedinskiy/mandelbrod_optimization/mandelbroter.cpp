@@ -2,8 +2,8 @@
 
 void render_mandelbrot_v_float_4(ColorMapP4 *cmap,
 							  const float center_x, const float center_y,
-							  const float width, const float height,
-							  const int max_itter, const float max_radius) {
+							  const float width,    const float height,
+							  const int max_itter,  const float max_radius) {
 	float mr2 = max_radius * max_radius;
 	v_float_4 maxrad2 = {mr2, mr2, mr2, mr2};
 	float sx = center_x - width  / 2;
@@ -57,8 +57,8 @@ void render_mandelbrot_v_float_4(ColorMapP4 *cmap,
 
 void render_mandelbrot_intrinsics(ColorMapP4 *cmap,
 								  const float center_x, const float center_y,
-								  const float width, const float height,
-								  const int max_itter, const float max_radius) {
+								  const float width,    const float height,
+								  const int max_itter,  const float max_radius) {
 	float mr2 = max_radius * max_radius;
 	float4 maxrad2 = {mr2, mr2, mr2, mr2};
 	float sx = center_x - width  / 2;
@@ -94,7 +94,6 @@ void render_mandelbrot_intrinsics(ColorMapP4 *cmap,
 				float4 x2 = X * X;
 				float4 y2 = Y * Y;
 				float4 xy = X * Y;
-
 				float4 r2 = x2 + y2;
 
 				int4 cmp = r2 <= maxrad2;
@@ -119,8 +118,8 @@ void render_mandelbrot_intrinsics(ColorMapP4 *cmap,
 
 void render_mandelbrot(ColorMapP4 *cmap,
 					   const float center_x, const float center_y,
-					   const float width, const float height,
-					   const int max_itter, const float max_radius) {
+					   const float width,    const float height,
+					   const int max_itter,  const float max_radius) {
 	float mr2 = max_radius * max_radius;
 	float sx = center_x - width  / 2;
 	float sy = center_y - height / 2;

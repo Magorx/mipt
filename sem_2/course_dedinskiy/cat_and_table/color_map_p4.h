@@ -16,6 +16,7 @@ public:
 
 	ColorMapP4();
 	bool ctor(const size_t width_, const size_t height_);
+	bool ctor(const char *file);
 
 	ARGB *operator[](const size_t i);
 	const ARGB *operator[](const size_t i) const;
@@ -26,6 +27,7 @@ public:
 	bool is_valid() const;
 
 	void superimpose_alpha(const ColorMapP4 &cmap, size_t x0, size_t y0);
+	void superimpose_alpha_intr(const ColorMapP4 &cmap, size_t x0, size_t y0);
 
 	void flush_to_texture(sf::Texture &texture);
 };

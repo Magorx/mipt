@@ -1,7 +1,7 @@
 #ifndef COLOR_PACK4
 #define COLOR_PACK4
 
-#include <emmintrin.h>
+#include "intrinsic_types.h"
 
 union ARGB{
 	unsigned char argb[4];
