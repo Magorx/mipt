@@ -55,6 +55,9 @@ int main() {
 	        window.draw(sprite);
 	        window.display();
 	    }
+
+	    cmap.detr();
+	    cm.detr();
 	} else {
 		ColorMapP4 cm = {};
 		cm.ctor(SCR_W, SCR_H);
@@ -86,6 +89,9 @@ int main() {
 			cmap.superimpose_alpha_intr(cm, cmap.real_width * 0, cmap.height * 0);
 		}
 		TIMER_END_AND_PRINT();
+
+		cmap.detr();
+	    cm.detr();
 	}
 
 	printf("doned\n");

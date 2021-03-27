@@ -18,6 +18,8 @@ public:
 	bool ctor(const size_t width_, const size_t height_);
 	bool ctor(const char *file);
 
+	bool detr();
+
 	ARGB *operator[](const size_t i);
 	const ARGB *operator[](const size_t i) const;
 

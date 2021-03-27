@@ -39,6 +39,12 @@ bool ColorMapP4::ctor(const char *file) {
 	return true;
 }
 
+bool ColorMapP4::detr() {
+	free(data);
+	width  = 0;
+	height = 0;
+}
+
 void ColorMapP4::flush_to_texture(sf::Texture &texture) {
 	sf::Image image;
 	image.create(real_width, height);
