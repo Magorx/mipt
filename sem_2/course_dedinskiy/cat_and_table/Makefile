@@ -13,7 +13,7 @@ CPP = g++
 
 WARNINGS = -Wall -Wextra -Wno-multichar
 STANDARD = -std=c++17
-CFLAGS = $(STANDARD) $(WARNINGS) -lm -O1 -march=native
+CFLAGS = $(STANDARD) $(WARNINGS) -lm -O3 -march=native
 
 all: sfml
 

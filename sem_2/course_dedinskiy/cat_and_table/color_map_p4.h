@@ -21,7 +21,7 @@ public:
 	ARGB *operator[](const size_t i);
 	const ARGB *operator[](const size_t i) const;
 
-	void force_align_4(size_t &x) const;
+	size_t force_align_4(size_t x) const;
 	void crop_rectangle(size_t &x0, size_t &y0, size_t &x1, size_t &y1) const;
 
 	bool is_valid() const;
