@@ -14,32 +14,27 @@ using Row = vector<T>;
 template<typename T>
 using MatrixMap = vector<Row<T>>;
 
-vector<int>  tin;
-vector<int>  tout;
-vector<bool> used;
-int time;
-
-void dfs(const MatrixMap<int> &g, const int v) {
+void dfs(const MatrixMap<int> &g, const int v, vector<int> &tin, vector<int> &tout, vector<int> &used, int &dtime) {
 	if (used[v]) {
 		return;
 	}
 	used[v] = 1;
 
-	tin[v] = time++;
+	tin[v] = dtime++;
 	for (auto u : g[v]) {
-		dfs(g, u);
+		dfs(g, u, tin, tout, used, dtime);
 	}
 
-	tout[v] = time++;
+	tout[v] = dtime++;
 }
 
 int main() {
 	int n, m;
 	scanf("%d", &n);
-	tin.resize (n, -1);
-	tout.resize(n, -1);
-	used.resize(n, 0);
-	time = 1;
+	vector<int>  tin (n, -1);
+	vector<int>  tout(n, -1);
+	vector<int>  used(n,  0);
+	int dtime = 1;
 
 	int s = -1;
 	MatrixMap<int> g(n);
@@ -54,7 +49,7 @@ int main() {
 		}
 	}
 
-	dfs(g, s);
+	dfs(g, s, tin, tout, used, dtime);
 
 	scanf("%d", &m);
 	for (int i = 0; i < m; ++i) {

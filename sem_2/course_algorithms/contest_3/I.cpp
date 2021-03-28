@@ -1,7 +1,7 @@
 /*
-Найти мосты
+Найти точки сочленения
 
-Решение: ищем мосты
+Решение: ищем точки сочленения
 */
 
 #include <cstdio>
@@ -23,28 +23,8 @@ using Row = vector<T>;
 template<typename T>
 using MatrixMap = vector<Row<T>>;
 
-struct Pair {
-	int x;
-	int y;
-
-	Pair(int a, int b):
-	x(min(a, b)),
-	y(max(a, b))
-	{}
-};
-
-bool operator<(const Pair &a, const Pair &b) {
-	if (a.x < b.x) {
-		return true;
-	} else if (a.x > b.x) {
-		return false;
-	} else {
-		return a.y < b.y;
-	}
-}
-
 void dfs(const MatrixMap<int> &g, const int v, vector<int> &tin, vector<int> &tout, vector<int> &used, int &dtime,
-		 vector<int> &ret, set<Pair> &ans, const int p = -1) {
+		 vector<int> &ret, set<int> &ans, const int p = -1) {
 	if (used[v]) {
 		return;
 	}
@@ -52,15 +32,21 @@ void dfs(const MatrixMap<int> &g, const int v, vector<int> &tin, vector<int> &to
 	ret[v] = tin[v];
 	used[v] = 1;
 
+	int us = 0;
 	for (auto u : g[v]) {
 		if (u == p) continue;
 
 		if (used[u]) {
-			ret[v] = min(ret[v], ret[u]);
+			ret[v] = min(ret[v], tin[u]);
 		} else {
 			dfs(g, u, tin, tout, used, dtime, ret, ans, v);
-			if (ret[u] >= tin[u]) {
-				ans.insert({v, u});
+			++us;
+			if (p != -1) {
+				if (ret[u] >= tin[v]) {
+					ans.insert(v);
+				}
+			} else if (us == 2) {
+				ans.insert(v);
 			}
 			ret[v] = min(ret[v], ret[u]);
 		}
@@ -77,10 +63,9 @@ int main() {
 	vector<int>  used(n,  0);
 	vector<int>  ret (n,  -1);
 	int dtime = 1;
-	set<Pair> ans;
+	set<int> ans;
 
 	MatrixMap<int> g(n);
-	std::vector<Pair> edges;
 	for (int i = 0; i < m; ++i) {
 		int a, b;
 		scanf("%d %d", &a, &b);
@@ -89,8 +74,6 @@ int main() {
 
 		g[a].push_back(b);
 		g[b].push_back(a);
-
-		edges.push_back({a, b});
 	}
 
 	for (int i = 0; i < n; ++i) {
@@ -99,12 +82,10 @@ int main() {
 	}
 
 	printf("%lu\n", ans.size());
-	for (int i = 0; i < m; ++i) {
-		Pair e = edges[i];
-		if (ans.find(e) != ans.end()) {
-			printf("%d\n", i + 1);
-		}
+	for (auto v : ans) {
+		printf("%d ", v + 1);
 	}
+	printf("\n");
 
 	return 0;
 }

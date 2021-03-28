@@ -22,28 +22,20 @@ using Row = vector<T>;
 template<typename T>
 using MatrixMap = vector<Row<T>>;
 
-vector<int>  tin;
-vector<int>  tout;
-vector<int> used;
-int time;
-int comp = 1;
-vector<int> topsort;
-
-void dfs(const MatrixMap<int> &g, const int v, const int use_mark = -1) {
-	// printf("> %d\n", v);
+void dfs(const MatrixMap<int> &g, const int v, vector<int> &tin, vector<int> &tout, vector<int> &used, int &dtime,
+		 vector<int> &ans, const int use_mark = -1) {
 	if (used[v]) {
 		return;
 	}
 	used[v] = use_mark;
 
-	//tin[v] = time++;
+	tin[v] = dtime++;
 	for (auto u : g[v]) {
-		// printf("%d <\n", u);
-		if (!used[u]) dfs(g, u, use_mark);
+		if (!used[u]) dfs(g, u, tin, tout, used, dtime, ans, use_mark);
 	}
 
-	//tout[v] = time++;
-	if (use_mark < 0) topsort.push_back(v);
+	tout[v] = dtime++;
+	if (use_mark < 0) ans.push_back(v);
 }
 
 struct Pair {
@@ -54,8 +46,11 @@ struct Pair {
 int main() {
 	int n, m;
 	scanf("%d %d", &n, &m);
-	used.resize(n, 0);
-	time = 1;
+	vector<int>  tin (n, -1);
+	vector<int>  tout(n, -1);
+	vector<int>  used(n,  0);
+	int dtime = 1;
+	vector<int> topsort;
 
 	MatrixMap<int> g(n);
 	MatrixMap<int> gr(n);
@@ -77,7 +72,7 @@ int main() {
 
 	for (int i = 0; i < n; ++i) {
 		if (!used[i]) {
-			dfs(g, i);
+			dfs(g, i, tin, tout, used, dtime, topsort);
 		}
 	}
 
@@ -88,7 +83,7 @@ int main() {
 
 	for (int v : topsort) {
 		if (!used[v]) {
-			dfs(gr, v, v + 1);
+			dfs(gr, v, tin, tout, used, dtime, topsort, v + 1);
 		}
 	}
 
