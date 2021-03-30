@@ -23,14 +23,14 @@ catable: main.cpp figure.hpp parametric_line.hpp pixel.hpp
 run: sfml
 	./$(CUR_PROG)
 
-sfml: main.cpp color.o color_map.o
+sfml: main.cpp color.o color_map.o m256.h
 	$(CPP) $(CFLAGS) -c main.cpp
 	$(CPP) $(CFLAGS) main.o color.o color_map.o -o catable -lsfml-graphics -lsfml-window -lsfml-system
 
-color.o: color_p4.cpp color_p4.h
+color.o: color_p4.cpp color_p4.h m256.h
 	$(CPP) $(CFLAGS) color_p4.cpp -c -o color.o
 
-color_map.o: color_map_p4.cpp color_map_p4.h
+color_map.o: color_map_p4.cpp color_map_p4.h m256.h
 	$(CPP) $(CFLAGS) color_map_p4.cpp -c -o color_map.o
 
 clear:

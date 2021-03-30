@@ -35,11 +35,11 @@ union m256 {
 	m256(const int4 val);
 
 	m256 zero_extend_256_epi16();
-	m256 shuffle_256_epi8(const m256 mask);
+	m256 shuffle_256_epi8(const m256 &mask);
 
-	m256 sub_256_epi16(const m256 other);
-	m256 add_256_epi16(const m256 other);
-	m256 mul_256_epi16(const m256 other);
+	m256 sub_256_epi16(const m256 &other);
+	m256 add_256_epi16(const m256 &other);
+	m256 mul_256_epi16(const m256 &other);
 };
 
 inline m256::m256(const int val):
@@ -83,19 +83,19 @@ mi(_mm256_set_epi8(v1 , v2 , v3 , v4 , v5 , v6 , v7 , v8 ,
 
 //=============================================================================
 
-inline m256 m256::shuffle_256_epi8(const m256 mask) {
+inline m256 m256::shuffle_256_epi8(const m256 &mask) {
 	return _mm256_shuffle_epi8(mi, mask.mi);
 }
 
-inline m256 m256::sub_256_epi16(const m256 other) {
+inline m256 m256::sub_256_epi16(const m256 &other) {
 	return _mm256_sub_epi16(mi, other.mi);
 }
 
-inline m256 m256::add_256_epi16(const m256 other) {
+inline m256 m256::add_256_epi16(const m256 &other) {
 	return _mm256_add_epi16(mi, other.mi);
 }
 
-inline m256 m256::mul_256_epi16(const m256 other) {
+inline m256 m256::mul_256_epi16(const m256 &other) {
 	return _mm256_mullo_epi16(mi, other.mi);
 }
 

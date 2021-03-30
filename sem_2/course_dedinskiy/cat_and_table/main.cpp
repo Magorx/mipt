@@ -3,6 +3,7 @@
 
 #include "color_map_p4.h"
 #include "general/c/timer.h"
+// #include "general/warnings.h"
 
 
 const int RUN_GRAD = 1;

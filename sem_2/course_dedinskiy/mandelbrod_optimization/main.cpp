@@ -11,8 +11,8 @@ const int MODE = REAL_MODE;
 
 const float SCR_RATIO = 16 / 9;
 
-const int SCR_H = 800;
-const int SCR_W = SCR_H * SCR_RATIO;
+const int SCR_H = 300;
+const int SCR_W = 300;
 
 const float INIT_H = 2;
 const float INIT_W = INIT_H * SCR_RATIO;
@@ -37,7 +37,7 @@ int main()
     float cur_y = 0;
 
     if (MODE == TIMETEST_MODE) {
-        int test_itters = 50;
+        int test_itters = 100;
         printf("tes_itters: %d\n", test_itters);
         
         printf("Testing ussual render ---\n");

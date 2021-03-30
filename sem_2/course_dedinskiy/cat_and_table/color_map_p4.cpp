@@ -43,6 +43,7 @@ bool ColorMapP4::detr() {
 	free(data);
 	width  = 0;
 	height = 0;
+	return true;
 }
 
 void ColorMapP4::flush_to_texture(sf::Texture &texture) {
@@ -133,8 +134,8 @@ void ColorMapP4::superimpose_alpha_intr(const ColorMapP4 &cmap, size_t x0, size_
 		return;
 	}
 	
-	force_align_4(x0);
-	size_t x1 = x0 + cmap.width;
+	x0 = force_align_4(x0);
+	size_t x1 = x0 + cmap.width ;
 	size_t y1 = y0 + cmap.height;
 	crop_rectangle(x0, y0, x1, y1);
 
@@ -143,7 +144,7 @@ void ColorMapP4::superimpose_alpha_intr(const ColorMapP4 &cmap, size_t x0, size_
 	m256 msk_prep_for_mix (	ZZ, ZZ, ZZ, ZZ, ZZ, ZZ, ZZ, ZZ,
                     		23, 21, 19, 17, 31, 29, 27, 25,
                     		ZZ, ZZ, ZZ, ZZ, ZZ, ZZ, ZZ, ZZ,
-                    		7 , 5 , 3 ,  1, 15, 13, 11, 9 );
+                    		 7,  5,  3,  1, 15, 13, 11,  9 );
 
 	m256 msk_alpha        (	ZZ, 24, ZZ, 24, ZZ, 24, ZZ, 24,
 							ZZ, 16, ZZ, 16, ZZ, 16, ZZ, 16,
