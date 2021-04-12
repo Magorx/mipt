@@ -1,0 +1,1 @@
+/usr/bin/c++ -pthread CMakeFiles/tabeletka.dir/src/main.cpp.o CMakeFiles/tabeletka.dir/src/hashtable.cpp.o -o tabeletka 
