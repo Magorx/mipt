@@ -114,9 +114,9 @@ struct HT_Node {
 
 };
 
-// inline bool operator==(const HT_Node &first, const HT_Node &second) {
-// 	return memcmp(first.key, second.key, 32) == 0;
-// }
+inline bool operator==(const HT_Node &first, const HT_Node &second) {
+	return memcmp(first.key, second.key, 32) == 0;
+}
 
 // inline bool operator==(const HT_Node &first, const HT_Node &second) {
 //     bool ret = 0;
@@ -130,30 +130,30 @@ struct HT_Node {
 //     return ret;
 // }
 
-inline bool operator==(const HT_Node &first, const HT_Node &second) {
-    asm goto (
-    	 "mov rax, [%0]\n"
-         "mov rbx, [%1]\n"
-         "cmp rax, rbx\n"
-         "jne %l2\n"
-         "mov rax, [%0 + 8]\n"
-         "mov rbx, [%1 + 8]\n"
-         "cmp rax, rbx\n"
-         "jne %l2\n"
-         "mov rax, [%0 + 16]\n"
-         "mov rbx, [%1 + 16]\n"
-         "cmp rax, rbx\n"
-         "jne %l2\n"
-         "mov rax, [%0 + 24]\n"
-         "mov rbx, [%1 + 24]\n"
-         "cmp rax, rbx\n"
-         "jne %l2\n"
-    ::"p"(first.key), "p"(second.key): "cc", "memory", "rax", "rbx": label_false);
-	return 1;
+// inline bool operator==(const HT_Node &first, const HT_Node &second) {
+//     asm goto (
+//     	 "mov rax, [%0]\n"
+//          "mov rbx, [%1]\n"
+//          "cmp rax, rbx\n"
+//          "jne %l2\n"
+//          "mov rax, [%0 + 8]\n"
+//          "mov rbx, [%1 + 8]\n"
+//          "cmp rax, rbx\n"
+//          "jne %l2\n"
+//          "mov rax, [%0 + 16]\n"
+//          "mov rbx, [%1 + 16]\n"
+//          "cmp rax, rbx\n"
+//          "jne %l2\n"
+//          "mov rax, [%0 + 24]\n"
+//          "mov rbx, [%1 + 24]\n"
+//          "cmp rax, rbx\n"
+//          "jne %l2\n"
+//     ::"p"(first.key), "p"(second.key): "cc", "memory", "rax", "rbx": label_false);
+// 	return 1;
 
-label_false:
-    return 0;
-}
+// label_false:
+//     return 0;
+// }
 
 // inline bool operator==(const HT_Node &first, const HT_Node &second) {
 // 	int ret = 1;
