@@ -1,7 +1,7 @@
 #ifndef HASHTABLE
 #define HASHTABLE
 
-#include "general/c/common.h"
+#include "../general/c/common.h"
 
 #include "ht_node.h"
 

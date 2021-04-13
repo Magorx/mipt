@@ -1,17 +1,23 @@
 #include <cstdio>
 #include <cstdlib>
-#include <clocale>
+
+#define NO_PRINTS
 
 #include "general/c/timer.h"
 
-#include "hashtable.h"
-#include "ht_tests.h"
+#include "opt/hashtable.h"
+#include "opt/ht_tests.h"
+
+const int RAND_CONST_SEED = 123;
 
 int main() {
-	srand(123);
+	srand(RAND_CONST_SEED);
 	
-	test_hashtable_find();
-	test_hashtable_insert();
+	float find_time   = test_hashtable_find  ();
+	float insert_time = test_hashtable_insert();
+
+	printf("[TST]<find  >: %g\n", find_time  );
+	printf("[TST]<insert>: %g\n", insert_time);
 
 	return 0;
 }
