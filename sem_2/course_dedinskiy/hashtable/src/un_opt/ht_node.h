@@ -91,7 +91,7 @@ struct HT_Node {
 		val = node.val;
 	}
 
-	uint64_t hash() {
+	uint64_t __attribute__ ((noinline)) hash() {
 		if (hashed) return hashed;
 
 		hashed = 14695981039346656037llu;

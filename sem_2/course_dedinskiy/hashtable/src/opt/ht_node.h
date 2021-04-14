@@ -25,8 +25,8 @@ struct HT_Node {
 
 		// printf("NODE %s | %s\n", string, value);
 
-		memset (key, 0, 	 MAX_KEY_LEN);
-		strncpy(key, string, MAX_KEY_LEN - 1);
+		memset (key, 0, 	 MAX_KEY_LEN + 1);
+		strncpy(key, string, MAX_KEY_LEN);
 		val = value;
 		is_alive = IS_ALIVE;
 
@@ -36,8 +36,8 @@ struct HT_Node {
 	HT_Node(const char *string, const char *value) {
 		assert(string != nullptr);
 
-		memset (key, 0, 	 MAX_KEY_LEN);
-		strncpy(key, string, MAX_KEY_LEN - 1);
+		memset (key, 0, 	 MAX_KEY_LEN + 1);
+		strncpy(key, string, MAX_KEY_LEN);
 		val = value;
 		is_alive = IS_ALIVE;
 
@@ -48,8 +48,8 @@ struct HT_Node {
 	HT_Node(const char *string, const int) {
 		assert(string != nullptr);
 
-		memset (key, 0, 	 MAX_KEY_LEN);
-		strncpy(key, string, MAX_KEY_LEN - 1);
+		memset (key, 0, 	 MAX_KEY_LEN + 1);
+		strncpy(key, string, MAX_KEY_LEN);
 		val = nullptr;
 		is_alive = IS_ALIVE;
 
@@ -59,8 +59,8 @@ struct HT_Node {
 	HT_Node(const char *string) {
 		assert(string != nullptr);
 
-		memset (key, 0, 	 MAX_KEY_LEN);
-		strncpy(key, string, MAX_KEY_LEN - 1);
+		memset (key, 0, 	 MAX_KEY_LEN + 1);
+		strncpy(key, string, MAX_KEY_LEN);
 		val = nullptr;
 		is_alive = IS_ALIVE;
 
@@ -91,18 +91,26 @@ struct HT_Node {
 		val = node.val;
 	}
 
-	uint64_t hash() {
-		if (hashed) return hashed;
+	uint64_t hash();
 
-		hashed = 14695981039346656037llu;
-		uint64_t prime = 1099511628211llu;
-		for (size_t i = 0; i < MAX_KEY_LEN; ++i) {
-			hashed = hashed ^ key[i];
-			hashed = hashed * prime;
-		}
+	// uint64_t __attribute__ ((noinline)) hash_() {
+	// 	hash();
+	// 	printf("key = %s | hash = %lu\n", key, hashed);
+	// 	return hashed;
+	// }
 
-		return hashed;
-	}
+	// uint64_t __attribute__ ((noinline)) hash() {
+	// 	if (hashed) return hashed;
+
+	// 	hashed = 14695981039346656037llu;
+	// 	uint64_t prime = 1099511628211llu;
+	// 	for (size_t i = 0; i < MAX_KEY_LEN; ++i) {
+	// 		hashed = hashed ^ key[i];
+	// 		hashed = hashed * prime;
+	// 	}
+
+	// 	return hashed;
+	// }
 
 	inline char is() const {
 		return is_alive;
@@ -132,6 +140,8 @@ inline bool operator==(const HT_Node &first, const HT_Node &second) {
 label_false:
     return 0;
 }
+
+#undef RDMEMCMPJNE_0_1_RAX_RBX_L2
 
 // inline bool operator==(const HT_Node &first, const HT_Node &second) {
 //     asm goto (

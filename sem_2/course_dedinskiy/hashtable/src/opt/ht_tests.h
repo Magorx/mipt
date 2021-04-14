@@ -84,6 +84,7 @@ HT_Node *prepare_random_find_test(HT_Node *nodes, const size_t node_cnt, const s
 
     for (size_t i = 0; i < test_size; ++i) {
         test[i].copy_from(nodes[randlong() % node_cnt]);
+        test[i].hashed = 0;
     }
 
     return test;
@@ -124,6 +125,9 @@ float test_hashtable_find() {
     for (int i = 0; i < TEST_CNT; ++i) {
         HT_Node *test = tests[i];
         ht.execute_queue(test, HT_Q_FIND_ONLY, TEST_SIZE, find_results);
+        // for (int i = 0; i < 10; ++i) {
+        //     printf("%s -> %s\n", (char*) test[i].key, find_results[i]);
+        // }
         free(test);
     }
     TIMER_BREAK();
@@ -148,6 +152,7 @@ HT_Node *prepare_random_insert_test(HT_Node *nodes, const size_t node_cnt, const
     for (size_t i = 0; i < test_size; ++i) {
         test[i].copy_from(nodes[randlong() % node_cnt]);
         test[i].key[rand() % MAX_KEY_LEN] += 1;
+        test[i].hashed = 0;
     }
 
     return test;

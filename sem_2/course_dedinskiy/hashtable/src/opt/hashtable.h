@@ -69,6 +69,7 @@ public:
 
 	RETURN_CODE insert (const HT_Node &node, bool to_check_loadrate = true);
 	RETURN_CODE erase  (const HT_Node &node);
+	
 	HT_RET_TYPE	find   (const HT_Node &node) const;
 
 	RETURN_CODE execute_queue(HT_Node *nodes, char *operations, size_t queue_size, HT_RET_TYPE *result);

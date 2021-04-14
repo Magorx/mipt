@@ -84,6 +84,7 @@ HT_Node *prepare_random_find_test(HT_Node *nodes, const size_t node_cnt, const s
 
     for (size_t i = 0; i < test_size; ++i) {
         test[i].copy_from(nodes[randlong() % node_cnt]);
+        test[i].hashed = 0;
     }
 
     return test;
@@ -148,6 +149,7 @@ HT_Node *prepare_random_insert_test(HT_Node *nodes, const size_t node_cnt, const
     for (size_t i = 0; i < test_size; ++i) {
         test[i].copy_from(nodes[randlong() % node_cnt]);
         test[i].key[rand() % MAX_KEY_LEN] += 1;
+        test[i].hashed = 0;
     }
 
     return test;

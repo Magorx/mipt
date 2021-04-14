@@ -3,10 +3,10 @@
 
 #define NO_PRINTS
 
-#include "general/c/timer.h"
+#include "../general/c/timer.h"
 
-#include "opt/hashtable.h"
-#include "opt/ht_tests.h"
+#include "hashtable.h"
+#include "ht_tests.h"
 
 const int RAND_CONST_SEED = 123;
 
