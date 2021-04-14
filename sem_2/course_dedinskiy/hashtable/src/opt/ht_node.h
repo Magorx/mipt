@@ -91,12 +91,6 @@ struct HT_Node {
 		val = node.val;
 	}
 
-	// uint64_t __attribute__ ((noinline)) hash_() {
-	// 	hash();
-	// 	printf("key = %s | hash = %lu\n", key, hashed);
-	// 	return hashed;
-	// }
-
 	uint64_t __attribute__ ((noinline)) hash();
 
 	// uint64_t __attribute__ ((noinline)) hash() {
