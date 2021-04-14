@@ -91,13 +91,13 @@ struct HT_Node {
 		val = node.val;
 	}
 
-	uint64_t hash();
-
 	// uint64_t __attribute__ ((noinline)) hash_() {
 	// 	hash();
 	// 	printf("key = %s | hash = %lu\n", key, hashed);
 	// 	return hashed;
 	// }
+
+	uint64_t __attribute__ ((noinline)) hash();
 
 	// uint64_t __attribute__ ((noinline)) hash() {
 	// 	if (hashed) return hashed;
@@ -121,6 +121,10 @@ struct HT_Node {
 	}
 
 };
+
+// inline bool operator==(const HT_Node &first, const HT_Node &second) {
+// 	return memcmp(first.key, second.key, 32) == 0;
+// }
 
 #define RDMEMCMPJNE_0_1_RAX_RBX_L2(shift) \
 	"mov rax, [%0 + " shift "]\n" \
