@@ -120,10 +120,10 @@ struct HT_Node {
 // 	return memcmp(first.key, second.key, 32) == 0;
 // }
 
-#define RDMEMCMPJNE_0_1_RAX_RBX_L2(shift) \
-	"mov rax, [%0 + " shift "]\n" \
-    "mov rbx, [%1 + " shift "]\n" \
-    "cmp rax, rbx\n"  \
+#define RDMEMCMPJNE_0_1_RAX_RBX_L2(shift) 	\
+	"mov rax, [%0 + " shift "]\n" 			\
+    "mov rbx, [%1 + " shift "]\n" 			\
+    "cmp rax, rbx\n"  						\
     "jne %l2\n"
 
 inline bool operator==(const HT_Node &first, const HT_Node &second) {
