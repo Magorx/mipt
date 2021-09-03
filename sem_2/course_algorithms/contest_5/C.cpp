@@ -17,6 +17,41 @@ vector<long long> dsu_size;
 
 const long long inf = 100000000000000000;
 
+struct DSU {
+	vector<long long> data;
+	vector<long long> prior;
+
+	DSU(int n) {
+		data.resize(n);
+		prior.resize(n);
+
+		for (long long i = 0; i < n; ++i) {
+			data[i] = i;
+			prior[i] = 1;
+		}
+	}
+
+	long long get(long long v) {
+	  if (data[v] == v) {
+	    return v;
+	  } else {
+	    return data[v] = get(data[v]);
+	  }
+	}
+
+	void unite(long long first, long long second) {
+	  first = get(first);
+	  second = get(second);
+	  if (prior[first] > prior[second]) {
+	    data[second] = first;
+	    prior[first] += prior[second];
+	  } else {
+	    data[first] = second;
+	    prior[second] += prior[first];
+	  }
+	}
+};
+
 struct Pair {
 	long long x;
 	long long y;
@@ -53,36 +88,13 @@ bool operator<(const Pair &a, const Pair &b) {
 void dsu_init(long long n) {
 	dsu.resize(n);
 	dsu_size.resize(n);
-	for (long long i = 0; i < n; ++i) {
-		dsu[i] = i;
-		dsu_size[i] = 1;
-	}
-}
-
-long long dsu_get(long long v) {
-  if (dsu[v] == v) {
-    return v;
-  } else {
-    return dsu[v] = dsu_get(dsu[v]);
-  }
-}
-
-void dsu_unite(long long first, long long second) {
-  first = dsu_get(first);
-  second = dsu_get(second);
-  if (dsu_size[first] > dsu_size[second]) {
-    dsu[second] = first;
-    dsu_size[first] += dsu_size[second];
-  } else {
-    dsu[first] = second;
-    dsu_size[second] += dsu_size[first];
-  }
+	
 }
 
 int main() {
 	long long n, m;
 	scanf("%lld %lld", &n, &m);
-	dsu_init(n);
+	DSU dsu(n);
 
 	long long min_v = 0;
 	long long min_v_d = +inf;
@@ -115,8 +127,8 @@ int main() {
 
 	long long ans = 0;
 	for (auto e : edges) {
-		if (dsu_get(e.x) != dsu_get(e.y)) {
-			dsu_unite(e.x, e.y);
+		if (dsu.get(e.x) != dsu.get(e.y)) {
+			dsu.unite(e.x, e.y);
 			ans += e.w;
 		}
 	}

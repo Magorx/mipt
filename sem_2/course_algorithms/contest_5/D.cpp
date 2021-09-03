@@ -60,7 +60,7 @@ int main() {
 	long long a, b;
 	scanf("%d %d %lld %lld\n", &n, &m, &a, &b);
 
-	char most[101][101];
+	vector<vector<char>> most(n + 1, vector<char>(m + 1, 0));
 	char c;
 	long long free = 0;
 	for (int i = 0; i < n; ++i) {
