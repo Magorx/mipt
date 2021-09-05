@@ -6,7 +6,7 @@
 #include "showcase_funcs.h"
 
 const size_t SCR_W = 1200;
-const size_t SCR_H = 800; 
+const size_t SCR_H = 800;
 
 int main()
 {
