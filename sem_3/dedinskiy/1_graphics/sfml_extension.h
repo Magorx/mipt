@@ -7,20 +7,24 @@
 
 const float SFML_EXT_EPS = 1e-6;
 
+struct Range2f {
+    float x_min;
+    float x_max;
+    float y_min;
+    float y_max;
+};
+
 class CoordinateSystem {
     sf::Vector2f bias;
     float width;
     float height;
 
-    float x_coef;
-    float y_coef;
-
-    float x_min;
-    float x_max;
-    float y_min;
-    float y_max;
+    Range2f range;
 
     float angle;
+
+    float x_scale;
+    float y_scale;
 
     sf::RenderWindow  *sf_window;
     sf::RenderTexture  sf_texture;
@@ -30,12 +34,15 @@ class CoordinateSystem {
     sf::Color fill_color;
 
 public:
-    CoordinateSystem(sf::Vector2f _bias  = {0, 0}, float _width = 150, float _height = 100);
+    CoordinateSystem(sf::Vector2f _bias  = {0, 0}, float _width = 150, float _height = 100, 
+                     sf::RenderWindow *_sf_window = nullptr,
+                     Range2f _range = {-1, 1, -1, 1},
+                     float _angle = 0);
 
     void clear();
 
     void set_bias  (sf::Vector2f _bias);
-    void set_ranges(float _x_min, float _x_max, float _y_min, float _y_max);
+    void set_ranges(Range2f _range);
     void set_angle (float _angle);
 
     void rotate(float _angle);

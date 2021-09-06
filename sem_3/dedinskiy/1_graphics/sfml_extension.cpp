@@ -1,36 +1,30 @@
 #include "sfml_extension.h"
 
-CoordinateSystem::CoordinateSystem(sf::Vector2f _bias, float _width, float _height) :
+CoordinateSystem::CoordinateSystem(sf::Vector2f _bias, float _width, float _height, sf::RenderWindow *_sf_window, Range2f _range, float _angle) :
 bias(_bias),
 width(_width),
 height(_height),
 
-x_min(-1),
-x_max( 1),
-y_min(-1),
-y_max( 1),
+range(_range),
 
-x_coef(1),
-y_coef(1),
+x_scale(_width  / (_range.x_max - _range.x_min)),
+y_scale(_height / (_range.y_max - _range.y_min)),
 
-angle(0),
+angle(_angle),
 
-sf_window(nullptr),
+sf_window(_sf_window),
 sf_texture(),
 sf_sprite(),
 
 draw_color({0, 0, 0}),
 fill_color({225, 225, 225})
 {
-    if (x_min > x_max + SFML_EXT_EPS) {
-        std::swap(x_min, x_max);
+    if (range.x_min > range.x_max + SFML_EXT_EPS) {
+        std::swap(range.x_min, range.x_max);
     }
-    if (y_min > y_max + SFML_EXT_EPS) {
-        std::swap(y_min, y_max);
+    if (range.y_min > range.y_max + SFML_EXT_EPS) {
+        std::swap(range.y_min, range.y_max);
     }
-
-    x_coef = width  / (x_max - x_min);
-    y_coef = height / (y_max - y_min);
 
     sf_texture.create(width, height);
     sf_sprite.setTexture(sf_texture.getTexture());
@@ -42,17 +36,14 @@ fill_color({225, 225, 225})
 
 void CoordinateSystem::set_bias(sf::Vector2f _bias) {
     bias = _bias;
-    sf_sprite.setPosition(bias + sf::Vector2f(width / 2, height / 2));
+    sf_sprite.setPosition(bias);
 }
 
-void CoordinateSystem::set_ranges(float _x_min, float _x_max, float _y_min, float _y_max) {
-    x_min = _x_min;
-    x_max = _x_max;
-    y_min = _y_min;
-    y_max = _y_max;
+void CoordinateSystem::set_ranges(Range2f _range) {
+    range = _range;
 
-    x_coef = width  / (x_max - x_min);
-    y_coef = height / (y_max - y_min);
+    x_scale = width  / (range.x_max - range.x_min);
+    y_scale = height / (range.y_max - range.y_min);
 }
 
 void CoordinateSystem::set_angle(float _angle) {
@@ -124,11 +115,11 @@ void CoordinateSystem::draw_vector(sf::Vector2f p1, sf::Vector2f p2, float head_
 }
 
 sf::Vector2f CoordinateSystem::to_window_coords(sf::Vector2f point) {
-    point.x *= x_coef;
-    point.y *= y_coef;
+    point.x *= x_scale;
+    point.y *= y_scale;
 
-    point.x -= x_min * x_coef;
-    point.y -= y_min * y_coef;
+    point.x -= range.x_min * x_scale;
+    point.y -= range.y_min * y_scale;
     
     // point += bias;
 
@@ -136,19 +127,19 @@ sf::Vector2f CoordinateSystem::to_window_coords(sf::Vector2f point) {
 }
 
 void CoordinateSystem::draw_coord_lines() {
-    draw_vector({x_min, 0}, {x_max, 0});
-    draw_vector({0, y_min}, {0, y_max});
+    draw_vector({range.x_min, 0}, {range.x_max, 0});
+    draw_vector({0, range.y_min}, {0, range.y_max});
 }
 
 void CoordinateSystem::draw_graph(float (*func)(float), int xs_per_pixel) {
     int ox_steps = width * xs_per_pixel;
-    float x_step = (x_max - x_min) / ox_steps;
+    float x_step = (range.x_max - range.x_min) / ox_steps;
 
-    sf::Vertex points[] = {{to_window_coords({x_min, func(x_min)}), draw_color}, 
-                           {to_window_coords({x_min, func(x_min)}), draw_color}};
+    sf::Vertex points[] = {{to_window_coords({range.x_min, func(range.x_min)}), draw_color}, 
+                           {to_window_coords({range.x_min, func(range.x_min)}), draw_color}};
 
     for (int i = 0; i < ox_steps; ++i) {
-        float x = x_min + x_step * i;
+        float x = range.x_min + x_step * i;
         float y = func(x);
 
         points[1].position = to_window_coords({x, y});
