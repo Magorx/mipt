@@ -1,6 +1,9 @@
 #include "sfml_extension.h"
 
-CoordinateSystem::CoordinateSystem(sf::Vector2f _bias, float _width, float _height, sf::RenderWindow *_sf_window, Range2f _range, float _angle) :
+CoordinateSystem::CoordinateSystem(sf::Vector2f _bias, float _width, float _height,
+                                   sf::RenderWindow *_sf_window,
+                                   Range2f _range,
+                                   float _angle) :
 bias(_bias),
 width(_width),
 height(_height),
