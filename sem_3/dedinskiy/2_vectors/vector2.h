@@ -7,7 +7,7 @@
 #include <exception>
 
 const int DIM_2 = 2;
-
+// pragma pack
 template <typename T>
 struct Vector2 {
     T x = 0;
@@ -112,6 +112,16 @@ struct Vector2 {
         y /= other.y;
     }
 
+    Vector2<T> operator*=(const T &coef) {
+        x *= coef;
+        y *= coef;
+    }
+
+    Vector2<T> operator*=(const T &coef) {
+        x /= coef;
+        y /= coef;
+    }
+
     Vector2<T> operator*(const T &coef) const {
         return {x * coef, y * coef};
     }
@@ -141,10 +151,12 @@ struct Vector2 {
         return {x / l, y / l};
     }
 
-    void normalize() {
+    Vector2<T> &normalize() {
         T l = len();
         x /= l;
         y /= l;
+
+        return *this;
     }
 
     void inline roted(T angle) const {
@@ -154,7 +166,7 @@ struct Vector2 {
         return {ang_cos * x - ang_sin * y, ang_sin * x + ang_cos * y};
     }
 
-    void rot(T angle) {
+    Vector2<T> & rot(T angle) {
         float ang_sin = sin(angle);
         float ang_cos = cos(angle);
 
@@ -163,6 +175,8 @@ struct Vector2 {
 
         x = new_x;
         y = new_y;
+
+        return *this;
     }
 
     Vector2<T> reflected(const Vector2<T> &normal) const {

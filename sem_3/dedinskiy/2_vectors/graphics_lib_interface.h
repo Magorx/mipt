@@ -32,6 +32,12 @@ inline GlibColor gext_to_glib(GlibColor color) {
 }
 #endif
 
+template <typename T, typename G>
+T gext_to_glib(T gext, G glib) {
+    
+}
+
+
 void inline sync_canvas(sf::Sprite &sprite, GextVector position, float angle) {
     sprite.setPosition(gext_to_glib(position));
     sprite.setRotation(angle);
