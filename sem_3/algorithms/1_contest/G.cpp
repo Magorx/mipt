@@ -94,28 +94,50 @@ struct Trie {
 
 
 template <typename T>
-bool solvable(Trie<T> bor, int v) {
-    TrieNode<T> &node = bor.data[v];
-    if (node.visited) {
-        return false;
-    } node.visited = true;
-
-    if (node.ret != -1) {
-        return ret;
+bool check(Trie<T> &bor, int v) { // we can't use code that can reach bad vertex by suff links
+    if (!v) {
+        return true;
     }
 
-    if (node.term) {
+    TrieNode<T> &node = bor.data[v];
+    if (node.term || !node.ret) {
         node.ret = 0;
+        return false;
+    } else {
+        return check(bor, bor.get_link(v));
+    }
+}
+
+
+template <typename T>
+bool solvable(Trie<T> &bor, int v) {
+    TrieNode<T> &node = bor.data[v];
+    if (node.visited == 1) {
+        return true;
+    } else if (node.visited == 2) {
+        return node.ret;
+    }
+    node.visited = 1;
+
+    if (node.ret != -1) {
+        node.visited = 2;
+        return node.ret;
+    }
+
+    if (!check(bor, v)) {
+        node.visited = 2;
+        node.ret = 0;
+        return node.ret;
     }
 
     int cur_ret = 0;
     for (char d = '0'; d <= '1'; ++d) {
-        if (node.to.find(d) == node.to.end()) {
-            cur_ret |= solvable(bor, bor.next(v, d));
-        } else {
-            cur_ret |= solvable(bor, node.to[d]);
-        }
+        cur_ret |= solvable(bor, bor.next(v, d));
     }
+    node.ret = cur_ret;
+
+    node.visited = 2;
+    return node.ret;
 }
 
 
