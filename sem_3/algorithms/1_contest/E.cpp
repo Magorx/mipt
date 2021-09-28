@@ -19,9 +19,6 @@ struct TrieNode {
 
     std::vector<int> ans_index;
 
-    int ret;
-    int visited;
-
     TrieNode(int parent = 0, T own_letter = 0):
     to(),
     term(0),
@@ -29,9 +26,7 @@ struct TrieNode {
     own_letter(own_letter),
     link(-1),
     transition(),
-    ans_index(),
-    ret(-1),
-    visited(0)
+    ans_index()
     {}
 };
 
@@ -93,34 +88,11 @@ struct Trie {
 };
 
 
-template <typename T>
-bool solvable(Trie<T> bor, int v) {
-    TrieNode<T> &node = bor.data[v];
-    if (node.visited) {
-        return false;
-    } node.visited = true;
-
-    if (node.ret != -1) {
-        return ret;
-    }
-
-    if (node.term) {
-        node.ret = 0;
-    }
-
-    int cur_ret = 0;
-    for (char d = '0'; d <= '1'; ++d) {
-        if (node.to.find(d) == node.to.end()) {
-            cur_ret |= solvable(bor, bor.next(v, d));
-        } else {
-            cur_ret |= solvable(bor, node.to[d]);
-        }
-    }
-}
-
-
 int main() {
     Trie<char> bor;
+
+    char *inp = (char*) malloc(1000005);
+    scanf("%1000004s", inp);
 
     int n = 0;
     scanf("%d", &n);
@@ -134,7 +106,38 @@ int main() {
     }
     free(str);
 
-    printf("%s\n", solvable(bor, 0) ? "TAK" : "NIE");
+    int l = strlen(inp);
+    int v = 0;
+    std::vector<std::vector<int>> ans(n);
+    for (int i = 0; i < l; ++i) {
+        char c = inp[i];
+
+        v = bor.next(v, c);
+
+        int cur = v;
+        while (cur) {
+            if (bor.data[cur].term) {
+                auto ans_idx = bor.data[cur].ans_index;
+                
+                for (auto idx : ans_idx) { // **** cf for ***** tasks
+                    ans[idx].push_back(i - lens[idx] + 2);
+                }
+            }
+
+            int link = bor.get_link(cur);
+            cur = link;
+        }
+    }
+
+    for (int i = 0; i < n; ++i) {
+        printf("%ld ", ans[i].size());
+        for (auto x : ans[i]) {
+            printf("%d ", x);
+        }
+        printf("\n");
+    }
+
+    free(inp);
 
     return 0;
 }
