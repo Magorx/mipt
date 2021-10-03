@@ -6,14 +6,11 @@
 #include <vector>
 #include <algorithm>
 #include <string>
-#include <iostream>
 #include <unordered_map>
 #include <set>
 #include <unordered_set>
 
 
-using std::cin;
-using std::cout;
 using std::string;
 using std::vector;
 using std::unordered_map;
@@ -68,7 +65,7 @@ namespace std {
 
 
 struct TrieNode {
-    std::unordered_map<char, int> to;
+    int to[27];
     int term;
 
     set<DNA> to_proc;
@@ -77,7 +74,10 @@ struct TrieNode {
     to(),
     term(0),
     to_proc()
-    {}
+    {
+        for (int i = 0; i < 27; ++i)
+            to[i] = -1;
+    }
 };
 
 
@@ -94,15 +94,15 @@ struct Trie {
         to_propel.reserve(1000);
     }
 
-    void add(const DNA &d, const size_t len) {
+    void add(const DNA d, const size_t len) {
         size_t v = 0;
         char *s = d.str;
         vector<DNA> to_prop;
         for (size_t i = 0; i < len; ++i) {
             char c = s[i];
-            if (data[v].to.find(c) == data[v].to.end()) {
+            if (data[v].to[c - 'a'] == -1) {
                 data.push_back(TrieNode(v, c));
-                data[v].to[c] = data.size() - 1;
+                data[v].to[c - 'a'] = data.size() - 1;
             }
 
             for (const auto x : data[v].to_proc) {
@@ -118,9 +118,10 @@ struct Trie {
             }
             to_prop.clear();
             
-            v = data[v].to[c];
+            v = data[v].to[c - 'a'];
         }
 
+        // printf("v%d\n", v);
         data[v].term++;
     }
 
@@ -136,19 +137,21 @@ struct Trie {
         return ret;
     }
 
-    int propel(DNA &dna) {
+    int propel(DNA dna) {
         int v = dna.v;
         char c = *dna.str;
 
         while (c) {            
+            // printf("a");
             if (data[v].term) {
+                // printf("%d \n", v);
                 v = 0;
                 continue;
             }
 
-            if (data[v].to.find(c) != data[v].to.end()) {
+            if (data[v].to[c - 'a'] != -1) {
                 dna.str++;
-                v = data[v].to[c];
+                v = data[v].to[c - 'a'];
                 c = *dna.str;
                 // printf("ok -> %d\n", v);
                 continue;
@@ -210,11 +213,11 @@ int main() {
 
         auto ans = bor.prop_all();
         k = ans.size();
-        cout << k << ' ';
-        for (auto x : ans) {
-            cout << x << ' ';
+        printf("%d ", k);
+        for (const auto &x : ans) {
+            printf("%d ", x);
         }
-        cout << '\n';
+        printf("\n");
 
 
         // bor.add(str, q);
