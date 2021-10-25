@@ -1,3 +1,9 @@
+#pragma GCC optimize("Ofast,no-stack-protector")
+#pragma GCC optimize("unroll-loops")
+#pragma GCC optimize("fast-math")
+#pragma GCC optimize("move-loop-invariants")
+#pragma GCC optimize("unswitch-loops")
+
 #include <cstdlib>
 #include <cstdio>
 #include <cassert>
@@ -68,12 +74,12 @@ struct TrieNode {
     int to[27];
     int term;
 
-    set<DNA> to_proc;
+    std::vector<set<DNA>> to_proc;
 
     TrieNode(int parent = 0, char own_letter = 0):
     to(),
     term(0),
-    to_proc()
+    to_proc(27)
     {
         for (int i = 0; i < 27; ++i)
             to[i] = -1;
@@ -105,7 +111,7 @@ struct Trie {
                 data[v].to[c - 'a'] = data.size() - 1;
             }
 
-            for (const auto x : data[v].to_proc) {
+            for (const auto x : data[v].to_proc[c - 'a']) {
                 if (*x.str == c) {
                     to_prop.push_back(x);
                 }
@@ -114,7 +120,7 @@ struct Trie {
             for (auto x : to_prop) {
                 x.v = v;
                 to_propel.push_back(x);
-                data[v].to_proc.erase(x);
+                data[v].to_proc[c - 'a'].erase(x);
             }
             to_prop.clear();
             
@@ -156,7 +162,7 @@ struct Trie {
                 // printf("ok -> %d\n", v);
                 continue;
             } else {
-                data[v].to_proc.insert(dna);
+                data[v].to_proc[c - 'a'].insert(dna);
                 return 0;
             }
         }
