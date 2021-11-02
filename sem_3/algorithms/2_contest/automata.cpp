@@ -438,7 +438,7 @@ int main() {
 
     free(inp);
 
-    automat.dump();
+    // automat.dump();
 
     return 0;
 }

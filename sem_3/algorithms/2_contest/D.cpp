@@ -257,12 +257,12 @@ public:
         // if (v->terminal) {
         //     fprintf(out, "\\nTERMINAL");
         // }
-        fprintf(out, "\\n");
-        std::vector<char> str;
-        get_str(v, str);
-        for (int i = str.size() - 1; i >= 0; --i) {
-            fprintf(out, "%c", str[i]);
-        }
+        // fprintf(out, "\\n");
+        // std::vector<char> str;
+        // get_str(v, str);
+        // for (int i = str.size() - 1; i >= 0; --i) {
+        //     fprintf(out, "%c", str[i]);
+        // }
 
         fprintf(out, "\"];\n");
         for (int i = 'a'; i < 'a' + ALPHABET_SIZE; ++i) {
@@ -390,7 +390,7 @@ int main() {
 
     free(inp);
 
-    // automat.dump();
+    automat.dump();
 
     return 0;
 }

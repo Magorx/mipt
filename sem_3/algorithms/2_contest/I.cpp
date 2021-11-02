@@ -8,18 +8,22 @@
 #include <set>
 
 
-const int ALPHABET_SIZE = 27;
+#define ll int
+
+
+const ll ALPHABET_SIZE = 27;
+
 
 
 template <typename KEY_T, typename TASK_DATA> 
 class SuffixAutomat {
 public:
     struct Node;
-    using NodePtr = int;
+    using NodePtr = ll;
 
 private:
     Node *new_node(const KEY_T &key = 0, NodePtr prev = -1) {
-        nodes.push_back({this, (int) nodes.size(), key});
+        nodes.push_back({this, (ll) nodes.size(), key});
         Node *ret = &nodes[nodes.size() - 1];
 
         if (prev >= 0) {
@@ -66,9 +70,9 @@ private:
             RETURN;
         }
 
-        int upper_idx = upper->idx;
-        int cur_idx = cur->idx;
-        int child_idx = child->idx;
+        ll upper_idx = upper->idx;
+        ll cur_idx = cur->idx;
+        ll child_idx = child->idx;
 
         auto tmp = new_node(child->idx); // invalidates current Node*
         upper = node(upper_idx);
@@ -98,38 +102,58 @@ public:
         NodePtr idx;
 
         KEY_T c = 0;
-        long long len = 0;
+        ll len = 0;
         
         NodePtr link = -1;
         NodePtr next[ALPHABET_SIZE] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
         
-        long long l = 0;
-        long long r = 0;
+        ll l = 0;
+        ll r = 0;
 
         bool terminal = false;
         bool visited = false;
 
         TASK_DATA data;
 
-        int task_update() {
-            if (data.supref != -1) {
-                return data.supref;
+        char get_first(char *str, int n) {
+            int rev_r = r - 1;
+            int rev_l = rev_r - len + 1;
+
+            int l = n - rev_r - 1;
+            int r = n - rev_l - 1;
+
+            l = r - ((len) - node(link)->len) + 1;
+            r += 1;
+
+            return str[l];
+        }
+
+        ll task_update(char *str, int l) {
+            if (data.dp != -1) {
+                return data.dp;
+            }
+            if (link != -1) {
+                node(link)->data.to_visit.insert({get_first(str, l), idx});
             }
 
-            int t = r - l + len;
-            if (l != r) {
-                data.supref = t + len * len;
-            } else {
-                data.supref = t;
-            }
-            for (int c = 0; c < ALPHABET_SIZE; ++c) {
+            data.dp = 0;
+            for (ll c = 0; c < ALPHABET_SIZE; ++c) {
                 if (!has_next(c)) continue;
 
                 Node *v = go(c);
-                v->task_update();
+                data.dp += v->task_update(str, l);
+
+                if (!v->data.p || v->data.p->len < len) {
+                    v->data.p = this;
+                }
+
+                data.cnt += v->data.cnt;
             }
+            data.dp += data.cnt;
+
+            // if (link != -1) node(link)->data.prior = node(link)->data.prior || data.prior;
             
-            return data.supref;
+            return data.dp;
         }
 
         bool is_leaf() {
@@ -157,7 +181,7 @@ public:
 public:
     NodePtr root;
 
-    SuffixAutomat(int nodes_to_reserve = 1000000) :
+    SuffixAutomat(ll nodes_to_reserve = 100000) :
     nodes(),
     last(0),
     root(0)
@@ -178,24 +202,25 @@ public:
         auto v = node(last);
         while (v) {
             v->terminal = true;
+            v->data.cnt = 1;
             v = node(v->link);
         }
     }
 
     void add_string(const KEY_T *str) {
-        int l = strlen(str);
+        ll l = strlen(str);
 
-        for (int i = 0; i < l; ++i) {
+        for (ll i = 0; i < l; ++i) {
             add_key(str[i] - 'a');
         }
         put_terminals();
     }
 
     bool contatins(const KEY_T *str) {
-        int l = strlen(str);
+        ll l = strlen(str);
 
         Node *cur = node(root);
-        for (int i = 0; i < l; ++i) {
+        for (ll i = 0; i < l; ++i) {
             cur = cur->go(str[i]);
             if (!cur) {
                 return false;
@@ -206,7 +231,7 @@ public:
     }
 
     void print_max(Node *node) {
-        for (int c = 'z'; c >= 'a'; --c) {
+        for (ll c = 'z'; c >= 'a'; --c) {
             if (node->has_next(c - 'a')) {
                 printf("%c", c);
                 print_max(node->go(c - 'a'));
@@ -215,7 +240,7 @@ public:
         }
     }
 
-    bool get_nth(Node *node, int n, std::vector<char> &ans) {
+    bool get_nth(Node *node, ll n, std::vector<char> &ans) {
         if (!node) return false;
 
         if (n <= node->data.cnt) {
@@ -227,7 +252,7 @@ public:
         }
 
         bool ret = false;
-        for (int i = 0; i < ALPHABET_SIZE; ++i)
+        for (ll i = 0; i < ALPHABET_SIZE; ++i)
         {
             if (node->has_next(i) && n - node->data.cnt <= node->go(i)->data.dp) {
                 ans.push_back('a' + i);
@@ -244,16 +269,16 @@ public:
 
     void dump_one(Node *v, FILE *out)
     {
-        static int num = 0;
+        static ll num = 0;
 
         if (v->visited)
             return;
         v->visited = true;
 
-        fprintf(out, "struct%p[label=\"[%d] (l=%d, r=%d)", v, v->idx, v->l, v->r);//v->data.p ? v->data.p->idx : -1);
+        fprintf(out, "struct%p[label=\"[%d](%d)", v, v->idx, v->data.p ? v->data.p->idx : -1);
         // fprintf(out, "cnt = %d\\n", v->data.cnt);
         fprintf(out, "\\nlen = %d", v->len);
-        // fprintf(out, "dp = %intd\\n", v->data.dp);
+        // fprintf(out, "dp = %lld\\n", v->data.dp);
         // if (v->terminal) {
         //     fprintf(out, "\\nTERMINAL");
         // }
@@ -265,7 +290,7 @@ public:
         }
 
         fprintf(out, "\"];\n");
-        for (int i = 'a'; i < 'a' + ALPHABET_SIZE; ++i) {
+        for (ll i = 'a'; i < 'a' + ALPHABET_SIZE; ++i) {
             if (v->has_next(i - 'a'))
             {
                 fprintf(out, "struct%p -> struct%p [label=\"%c\"];\n", v, node(v->next[i - 'a']), (char)i);
@@ -300,8 +325,8 @@ public:
     void print_str(Node *v) {
         std::vector<char> str;
         get_str(v, str);
-        for (int i = str.size() - 1; i >= 0; --i) {
-        // for (int i = 0; i < str.size(); ++i) {
+        // for (int i = str.size() - 1; i >= 0; --i) {
+        for (int i = 0; i < str.size(); ++i) {
             printf("%c", str[i]);
         }
         printf("\n");
@@ -343,9 +368,27 @@ public:
 };
 
 
+struct King {
+    char chr;
+    int idx;
+};
+
+bool operator<(const King &one, const King &other) {
+        if (one.chr < other.chr) {
+            return true;
+        } else if (one.chr > other.chr) {
+            return false;
+        } else {
+            return one.idx < other.idx;
+        }
+    }
 
 struct TaskData {
-    long long supref = -1;
+    SuffixAutomat<char, TaskData>::Node *p = nullptr;
+    ll dp = -1;
+    ll cnt = 0;
+    std::set<King> to_visit;
+    int num;
 };
 
 
@@ -361,32 +404,37 @@ void tolower(char *str) {
     }
 }
 
+
 int main() {
     TaskSuffixAutomat automat;
 
-    char *inp = (char*) calloc(1000000, sizeof(char));
+    char *inp = (char*) calloc(100001, sizeof(char));
     scanf("%1000000s", inp);
     int l = strlen(inp);
 
+    std::reverse(inp, inp + l);
+    // printf("---\n%s\n", inp);
+
+    inp[0] = 'a' - 1;
+    for (int i = 0; i < l; ++i) {
+        inp[i] += 1;
+    }
+
     automat.add_string(inp);
 
-    automat.node(automat.root)->task_update();
+    automat.node(automat.root)->data.cnt = 0;
+    automat.node(automat.root)->data.dp  = -1;
 
+    std::reverse(inp, inp + l);
 
-    long long maxf = 0;
-    TaskSuffixAutomat::Node *maxnode;
+    automat.node(automat.root)->task_update(inp, l);
 
-    for (auto &v : automat.nodes) {
-        // printf("%d) %d\n", v.idx, v.data.supref);
-        if (maxf < v.data.supref) {
-            // automat.print_str(&v);
-            maxf = v.data.supref;
-            maxnode = &v;
-        }
-    }
-    // automat.print_str(maxnode);
+    automat.node(automat.root)->data.cnt = 0;
+    automat.node(automat.root)->data.dp  = 0;
 
-    printf("%lld\n", maxf);
+    printf("%lu\n", automat.nodes.size());
+    automat.print_tree(automat.node(automat.root), l);
+
 
     free(inp);
 
