@@ -73,11 +73,11 @@ std::vector<ll> eratosthenes_sieve(ll n) {
     for (ll prime = 2; prime < max_prime; ++prime) {
         if (ret[prime]) continue;
 
-        ll max_k = n / prime;
-        for (ll k = 1; k <= max_k; ++k) {
-            if (ret[prime * k]) continue;
+        ll p_i = prime;
+        for (ll p_i = prime; p_i < n; p_i += prime) {
+            if (ret[p_i]) continue;
 
-            ret[prime * k] = prime;
+            ret[p_i] = prime;
         }
     }
 
