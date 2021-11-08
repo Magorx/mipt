@@ -18,11 +18,11 @@ const ll MOD = 1000000007;
 
 
 template <typename T>
-inline long long binpow(T x, long long p, long long mod) {
+inline ll binpow(T x, ll p, ll mod) {
     if (!p) return 1;
     x %= mod;
 
-    long long ret = 1;
+    ll ret = 1;
     while (p > 0) {
         if (p & 1) {
             ret = ret * x % mod;
@@ -94,13 +94,6 @@ std::vector<ll> eratosthenes_sieve(ll n) {
     }
 
     return ret;
-}
-
-inline void mark_used(std::vector<bool> &used, const std::vector<ll> &erat, ll x) {
-    while (x != 1) {
-        used[erat[x]] = true;
-        x /= erat[x];
-    }
 }
 
 ll C_n_k(const std::vector<ll> &facts, ll n, ll k, ll mod) {
