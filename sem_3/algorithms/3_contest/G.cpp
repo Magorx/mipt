@@ -95,37 +95,37 @@ std::vector<ll> eratosthenes_sieve(ll n) {
 }
  
 void fft(std::vector<cplx> &coef, bool invert = false) {
-	size_t coef_size = (size_t) coef.size();
+    size_t coef_size = (size_t) coef.size();
  
-	for (size_t i = 1, j = 0; i < coef_size; ++i) {
-		size_t bit = coef_size >> 1;
-		for (; j >= bit; bit = bit >> 1) { j -= bit; }
+    for (size_t i = 1, j = 0; i < coef_size; ++i) {
+        size_t bit = coef_size >> 1;
+        for (; j >= bit; bit = bit >> 1) { j -= bit; }
 
-		j += bit;
-		if (i < j) {
-			std::swap(coef[i], coef[j]);
+        j += bit;
+        if (i < j) {
+            std::swap(coef[i], coef[j]);
         }
-	}
+    }
  
     double invert_sign = invert ? -1 : +1;
-	for (size_t idx = 2; idx <= coef_size; idx = idx << 1) {
-		double ang = invert_sign * 2 * M_PI / idx;
+    for (size_t idx = 2; idx <= coef_size; idx = idx << 1) {
+        double ang = invert_sign * 2 * M_PI / idx;
 
-		cplx root_len(cos(ang), sin(ang));
-		for (size_t i = 0; i < coef_size; i += idx) {
-			cplx root = 1;
-			for (size_t j = 0; j < idx / 2; ++j) {
-				cplx a = coef[i + j];
+        cplx root_len(cos(ang), sin(ang));
+        for (size_t i = 0; i < coef_size; i += idx) {
+            cplx root = 1;
+            for (size_t j = 0; j < idx / 2; ++j) {
+                cplx a = coef[i + j];
                 cplx b = root * coef[i + j + idx / 2];
 
-				coef[i + j] = a + b;
-				coef[i + j + idx / 2] = a - b;
-				root *= root_len;
-			}
-		}
-	}
+                coef[i + j] = a + b;
+                coef[i + j + idx / 2] = a - b;
+                root *= root_len;
+            }
+        }
+    }
 
-	if (!invert) return;
+    if (!invert) return;
 
     for (size_t i = 0; i < coef_size; ++i)
         coef[i] /= coef_size;
@@ -147,29 +147,29 @@ double sign(const T &x) {
 }
 
 std::vector<ll> multiply_polynomials(const std::vector<ll> &a, const std::vector<ll> &b) {
-	std::vector<cplx> fft_a;
+    std::vector<cplx> fft_a;
     std::vector<cplx> fft_b;
     copy_vec(fft_a, a);
     copy_vec(fft_b, b);
 
     size_t max_size = std::max(fft_a.size(), fft_b.size());
-	size_t fft_size = 1;
-	while (fft_size < max_size) fft_size = fft_size << 1;
-	fft_size = fft_size << 1;
-	fft_a.resize(fft_size);
+    size_t fft_size = 1;
+    while (fft_size < max_size) fft_size = fft_size << 1;
+    fft_size = fft_size << 1;
+    fft_a.resize(fft_size);
     fft_b.resize(fft_size);
  
-	fft(fft_a);
+    fft(fft_a);
     fft(fft_b);
-	for (size_t i = 0; i < fft_size; ++i) {
-		fft_a[i] *= fft_b[i];
+    for (size_t i = 0; i < fft_size; ++i) {
+        fft_a[i] *= fft_b[i];
     }
-	fft(fft_a, true);
+    fft(fft_a, true);
  
     std::vector<ll> ret(fft_size);
-	for (size_t i = 0; i < fft_size; ++i) {
+    for (size_t i = 0; i < fft_size; ++i) {
         auto res = fft_a[i].real();
-		ret[i] = (ll)(sign(res) * 0.5 + res);
+        ret[i] = (ll)(sign(res) * 0.5 + res);
     }
 
     size_t last_first_zero = 0;

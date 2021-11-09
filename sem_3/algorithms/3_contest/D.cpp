@@ -107,68 +107,68 @@ inline void mark_used(std::vector<bool> &used, const std::vector<ll> &erat, ll x
 
 int main() {
     int n = 0;
-	scanf("%d", &n);
+    scanf("%d", &n);
     auto erat = eratosthenes_sieve(10000009);
 
     std::vector<ll> arr(n);
-	for (int i = 0; i < n; i++) {
-		scanf("%lld", &arr[i]);
+    for (int i = 0; i < n; i++) {
+        scanf("%lld", &arr[i]);
     }
 
     std::vector<bool> used(erat.size() + 1);
 
-	int idx = 0;
-	while (idx < n) {
-		bool flag = true; // if we can just use arr[idx]
-		int x = arr[idx];
+    int idx = 0;
+    while (idx < n) {
+        bool flag = true; // if we can just use arr[idx]
+        int x = arr[idx];
 
-		while (x != 1) {
-			if (used[erat[x]]) {
+        while (x != 1) {
+            if (used[erat[x]]) {
                 flag = false;
                 break;
             }
 
-			x /= erat[x];
-		}
+            x /= erat[x];
+        }
 
-		if (flag) {
-			mark_used(used, erat, arr[idx++]);
-			continue;
-		}
+        if (flag) {
+            mark_used(used, erat, arr[idx++]);
+            continue;
+        }
 
-		while (!flag) {
-			flag = true;
-			x = ++arr[idx];
-			while (x != 1) {
-				if (used[erat[x]]) {
+        while (!flag) {
+            flag = true;
+            x = ++arr[idx];
+            while (x != 1) {
+                if (used[erat[x]]) {
                     flag = false;
                     break;
                 }
 
-				x /= erat[x];
-			}
-		}
+                x /= erat[x];
+            }
+        }
 
-		mark_used(used, erat, arr[idx++]);
-		break;
-	}
-	
-	int p = 2; // find any unused prime number, our posledovatelnost' is already bigger
-	while (idx < n) {
-		while (true) {
-			if (used[p] || erat[p] != p) {
+        mark_used(used, erat, arr[idx++]);
+        break;
+    }
+    
+    int p = 2; // find any unused prime number, our posledovatelnost' is already bigger
+    while (idx < n) {
+        while (true) {
+            if (used[p] || erat[p] != p) {
                 p++;
                 continue;
             }
 
-			arr[idx++] = p++;
+            arr[idx++] = p++;
             break;
-		}
-	}
-	
-	for (int i = 0; i < n; i++) {
+        }
+    }
+    
+    for (int i = 0; i < n; i++) {
         printf("%lld ", arr[i]);
     }
 
-	return 0;
+    return 0;
 }

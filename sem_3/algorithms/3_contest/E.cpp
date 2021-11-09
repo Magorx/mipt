@@ -116,11 +116,11 @@ ll StirlingNumber(const std::vector<ll> &facts, ll n, ll k, ll mod) {
 
 int main() {
     int n = 0, k = 0;
-	scanf("%d %d", &n, &k);
+    scanf("%d %d", &n, &k);
 
     std::vector<ll> arr(n);
-	for (int i = 0; i < n; i++) {
-		scanf("%lld", &arr[i]);
+    for (int i = 0; i < n; i++) {
+        scanf("%lld", &arr[i]);
     }
 
     std::vector<ll> facts(n + 10, 1);
@@ -138,5 +138,5 @@ int main() {
 
     printf("%lld\n", ans);
 
-	return 0;
+    return 0;
 }
