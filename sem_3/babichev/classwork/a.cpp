@@ -1,13 +1,11 @@
+#include <vector>
+#include <algorithm>
+
 #include <cstdlib>
 #include <cstdio>
 #include <cassert>
 
-
-#ifndef GENERAL_VEC3D
-#define GENERAL_VEC3D
-
 #include <cmath>
-#include <iostream>
 
 const double VEC3_EPS = 1e-6;
 const double VEC3_MAX_RANDOM_TRIES_CNT = 50;
@@ -31,6 +29,7 @@ double vec3d_randdouble(double dmin = 0.0, double dmax = 1.0);
 
 struct Vec3d {
     typedef double content3 __attribute__((ext_vector_type(4)));
+    int i = 0;
 
     content3 content;
 
@@ -91,9 +90,9 @@ struct Vec3d {
         return content[i];
     }
 
-    inline void set(uint8_t ind, const double &value) {
-        content[ind] = value;
-    }
+    // inline void set(uint8_t ind, const double &value) {
+    //     content[ind] = value;
+    // }
 
     static Vec3d random_in_unit_sphere();
 
@@ -117,9 +116,9 @@ inline Vec3d operator+(const Vec3d &first) {
     return first;
 }
 
-inline Vec3d operator-(const Vec3d &first) {
-    return {first.content * -1};
-}
+// inline Vec3d operator-(const Vec3d &first) {
+//     return {first.content * -1};
+// }
 
 inline Vec3d operator+(const Vec3d &first, const Vec3d &second) {
     return {first.content + second.content};
@@ -220,8 +219,6 @@ Vec3d refract(const Vec3d vec, const Vec3d &normal, const double eta_from_over_e
 double vec3d_deg_to_rad(const double deg);
 
 double vec3d_rad_to_deg(const double rad);
-
-#endif // GENERAL_VEC3D
 
 
 double vec3d_randdouble(double dmin, double dmax) {
@@ -331,26 +328,123 @@ bool different_side(const Segment &a, const Segment &b) {
     return cross_sign(b.p1 - p, a.p2 - p) * cross_sign(b.p2 - p, a.p2 - p) < 0;
 }
 
-int main() {
-    double x1, y1, x2, y2;
+const double EPS = 1e-6;
 
-    scanf("%lg %lg %lg %lg", &x1, &y1, &x2, &y2);
-    Segment s1 {{x1, y1, 0}, {x2, y2, 0}};
+double vec2cross(const Vec3d &a, const Vec3d &b) {
+    return a.x() * b.y() - a.y() * b.x();
+}
 
-    scanf("%lg %lg %lg %lg", &x1, &y1, &x2, &y2);
-    Segment s2 {{x1, y1, 0}, {x2, y2, 0}};
-
-    if (s1.contains(s2.p1) || s1.contains(s2.p2) || s2.contains(s1.p1) || s2.contains(s1.p2)) {
-        printf("YES\n");
-        return 0;
+struct AngleComparator {
+    AngleComparator(Vec3d p) : p(p) {}
+    bool operator () (Vec3d p1, Vec3d p2) {
+        double cross = vec2cross((p1 - p),(p2 - p));
+        if (cross > EPS) { return true; }
+        else if (cross < -EPS) { return false; }
+        else return (p1 - p).len_squared() < (p2 - p).len_squared();
     }
 
-    if (!(different_side(s1, s2) && different_side(s2, s1))) {
-        printf("NO\n");
-        return 0;
-    }
+    Vec3d p;
+};
+
+std::vector<Vec3d> convex(std::vector<Vec3d> &points) {
+    std::vector<Vec3d> ret;
     
-    printf("YES\n");
+    Vec3d ld = points[0];
+    for (size_t i = 0; i < points.size(); ++i) {
+        if (ld.x() > points[i].x()) {
+            ld = points[i];
+        } else if (fabs(ld.x() - points[i].x()) < EPS && ld.y() > points[i].y()) {
+            ld = points[i];
+        }
+    }
+
+    std::sort(points.begin(), points.end(), AngleComparator(ld));
+
+    ret.push_back(points[0]);
+    ret.push_back(points[1]);
+    for (int i = 2; i < points.size(); ++i) {
+        const Vec3d &p = points[i];
+
+        while (ret.size() > 2) {
+            const Vec3d &p1 = ret[ret.size() - 1];
+            const Vec3d &p2 = ret[ret.size() - 2];
+
+            double c1 = vec2cross(p1 - p2, p - p2);
+            if (c1 > 0) break;
+            else ret.pop_back();
+        }
+        ret.push_back(p);
+    }
+    ret.push_back(points[0]);
+
+    return ret;
+}
+
+std::pair<int, int> radius(std::vector<Vec3d> &points) {
+    auto conv = convex(points);
+    conv.pop_back();
+
+    Vec3d lp = conv[0];
+    Vec3d rp = conv[0];
+    int l = 0;
+    int r = 0;
+    for (size_t i = 0; i < conv.size(); ++i) {
+        if (lp.x() > conv[i].x()) {
+            lp = conv[i];
+            l = (int) i;
+        }
+        if (rp.x() < conv[i].x()) {
+            rp = conv[i];
+            r = (int) i;
+        }
+    }
+
+    int il = conv[l].i;
+    int ir = conv[r].i;
+    double dmx = (conv[l] - conv[r]).len();
+
+    for (int i = 0; i < 10 * conv.size(); ++i) {
+        int nxl = (l + 1) % conv.size();
+        int nxr = (r + 1) % conv.size();
+
+        Vec3d vl = conv[nxl] - conv[l];
+        Vec3d vr = conv[nxr] - conv[r];
+
+        if (vec2cross(vl, vr) < 0) {
+            l = nxl;
+        } else {
+            r = nxr;
+        }
+
+        double d = (conv[l] - conv[r]).len();
+        if (d > dmx) {
+            dmx = d;
+            il = conv[l].i;
+            ir = conv[r].i;
+        }
+    }
+
+    return {il, ir};
+}
+
+int main() {
+    int n = 0;
+    scanf("%d", &n);
+
+    std::vector<Vec3d> points(n);
+    for (int i = 0; i < n; ++i) {
+        double x, y;
+        scanf("%lg %lg", &x, &y);
+        points[i] = {x, y, 0};
+        points[i].i = i;
+    }
+
+    auto dm = radius(points);
+    if (dm.first > dm.second) {
+        std::swap(dm.first, dm.second);
+    }
+
+    printf("%d %d\n", dm.first, dm.second);
 
     return 0;
 }
