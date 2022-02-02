@@ -6,16 +6,30 @@
 #include "visual/renderer/renderer.h"
 
 
-struct Range2f {
+struct Range2d {
     double x_min;
     double x_max;
     double y_min;
     double y_max;
+
+    Range2d(double x_min, double x_max, double y_min, double y_max):
+    x_min(x_min),
+    x_max(x_max),
+    y_min(y_min),
+    y_max(y_max)
+    {}
+
+    Range2d(Vec2d min, Vec2d max):
+    x_min(min.x()),
+    x_max(max.x()),
+    y_min(min.y()),
+    y_max(max.y())
+    {}
 };
 
 
 class v_Plottet : public v_Highlighter {
-    Range2f range;
+    Range2d range;
 
     double angle;
 
@@ -29,7 +43,7 @@ class v_Plottet : public v_Highlighter {
     RColor draw_color;
 
 public:
-    v_Plottet(const ViewBody &body, RColor _background_color, Range2f _range = {-1, 1, -1, 1});
+    v_Plottet(const ViewBody &body, RColor _background_color, Range2d _range = {-1, 1, -1, 1});
     
     ~v_Plottet();
     
@@ -37,20 +51,23 @@ public:
 
     void clear();
 
-    void set_ranges(Range2f _range);
+    void set_ranges(Range2d _range);
+    void set_draw_color(RColor color);
 
     void fill(RColor color);
+    void draw_point(Vec2d p, double radius = 3);
     void draw_line(Vec2d p1, Vec2d p2);
     void draw_vector(Vec2d p1, Vec2d p2, double head_angle = M_PI / 8, double head_length = 15);
     
-    void draw_coord_lines();
+    void draw_coord_lines(RColor color={0, 0, 0});
+
     void draw_graph(double (*func)(double), int xs_per_pixel = 10);
-    void draw_graph_parametric(double (*func_x)(double), double (*func_y)(double), RColor (*func_color)(double), double t_min, double t_max, int steps);
+    void draw_graph(const std::vector<Vec2d> &points, bool to_draw_points = true, bool to_draw_columns = true);
+    void draw_graph(Vec2d (*func)(double), Vec2d t_range, double step, RColor (*func_color)(double)=nullptr);
 
-    void graphicate(double (*func)(double), int xs_per_pixel = 10, bool to_fill = true);
-    void graphicate(double (*func)(double), int xs_per_pixel, RColor _fill_color, RColor _draw_color, bool to_fill);
-
-    void graphicate_parametric(double (*func_x)(double), double (*func_y)(double), RColor (*func_color)(double), double t_min, double t_max, int steps);
+    void graphicate(double (*func)(double), int xs_per_pixel = 10);
+    void graphicate(const std::vector<Vec2d> &points, bool to_draw_points = true, bool to_draw_columns = true);
+    void graphicate(Vec2d (*func)(double), Vec2d t_range, double step, RColor (*func_color)(double)=nullptr);
 
     void flush_to_window();
 

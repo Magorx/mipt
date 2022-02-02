@@ -4,7 +4,7 @@
 #include "redactor/engine.h"
 
 
-v_Plottet::v_Plottet(const ViewBody &body, RColor _background_color, Range2f _range) :
+v_Plottet::v_Plottet(const ViewBody &body, RColor _background_color, Range2d _range) :
 v_Highlighter(body),
 range(_range),
 
@@ -43,7 +43,7 @@ void v_Plottet::render(Renderer *renderer)  {
     v_Highlighter::render(renderer);
 }
 
-void v_Plottet::set_ranges(Range2f _range) { range = _range; }
+void v_Plottet::set_ranges(Range2d _range) { range = _range; }
 
 void v_Plottet::clear() {
     fill(background_color);
@@ -65,6 +65,14 @@ Vec2d v_Plottet::to_window_coords(Vec2d point) {
     point.content[1] -= range.y_min * y_scale;
 
     return point;
+}
+
+void v_Plottet::draw_point(Vec2d p, double radius) {
+    rend->push_target(texture);
+
+    rend->draw_circle(to_window_coords(p), radius, draw_color);
+
+    rend->pop_target();
 }
 
 void v_Plottet::draw_line(Vec2d p1, Vec2d p2) {
@@ -94,9 +102,19 @@ void v_Plottet::draw_vector(Vec2d p1, Vec2d p2, double head_angle, double head_l
     rend->pop_target();
 }
 
-void v_Plottet::draw_coord_lines() {
+void v_Plottet::draw_coord_lines(RColor color) {
+    const RColor default_draw_color = draw_color;
+
+    set_draw_color(color);
+
     draw_vector({range.x_min, 0}, {range.x_max, 0});
     draw_vector({0, range.y_min}, {0, range.y_max});
+
+    set_draw_color(default_draw_color);
+}
+
+void v_Plottet::set_draw_color(RColor color) {
+    draw_color = color;
 }
 
 void v_Plottet::draw_graph(double (*func)(double), int xs_per_pixel) {
@@ -104,7 +122,7 @@ void v_Plottet::draw_graph(double (*func)(double), int xs_per_pixel) {
     double x_step = (range.x_max - range.x_min) / ox_steps;
 
     Vec2d p1 = {range.x_min, func(range.x_min)};
-    Vec2d p2 = {range.x_min, func(range.x_min)};
+    Vec2d p2 = p1;
 
     for (int i = 0; i < ox_steps; ++i) {
         double x = range.x_min + x_step * i;
@@ -118,9 +136,83 @@ void v_Plottet::draw_graph(double (*func)(double), int xs_per_pixel) {
     }
 }
 
-void v_Plottet::graphicate(double (*func)(double), int xs_per_pixel, bool to_fill) {
+void v_Plottet::graphicate(double (*func)(double), int xs_per_pixel) {
     clear();
     
     draw_coord_lines();
     draw_graph(func, xs_per_pixel);
+}
+
+void v_Plottet::draw_graph(const std::vector<Vec2d> &points, bool to_draw_points, bool to_draw_columns) {
+    const RColor default_draw_color = draw_color;
+    const RColor complementary_draw_color = draw_color * 0.7 + (!background_color) * 0.3;
+
+    for (size_t i = 1; i < points.size(); ++i) {
+        const Vec2d &p1 = points[i - 1];
+        const Vec2d &p2 = points[i];
+
+        draw_line(p1, p2);
+
+        if (to_draw_points) {
+            set_draw_color(complementary_draw_color);
+            draw_point(p1);
+            set_draw_color(default_draw_color);
+        }
+
+        if (to_draw_columns) {
+            set_draw_color(complementary_draw_color);
+            draw_line(p1, {p1.x(), 0});
+            set_draw_color(default_draw_color);
+        }
+    }
+
+    if (to_draw_points) {
+        set_draw_color(complementary_draw_color);
+        draw_point(points.back());
+        set_draw_color(default_draw_color);
+    }
+
+    if (to_draw_columns) {
+            set_draw_color(complementary_draw_color);
+            draw_line(points.back(), {points.back().x(), 0});
+            set_draw_color(default_draw_color);
+        }
+}
+
+void v_Plottet::graphicate(const std::vector<Vec2d> &points, bool to_draw_points, bool to_draw_columns) {
+    clear();
+    
+    draw_coord_lines();
+    draw_graph(points, to_draw_points, to_draw_columns);
+}
+
+void v_Plottet::draw_graph(Vec2d (*func)(double), Vec2d t_range, double step, RColor (*func_color)(double)) {
+    double t_step = step;
+    double t_min = t_range.x();
+    double t_max = t_range.y();
+
+    int steps = (t_max - t_min) / t_step;
+
+    Vec2d p1 = func(t_min);
+    Vec2d p2 = p1;
+
+    for (int i = 0; i < steps; ++i) {
+        double t = t_min + t_step * i;
+
+        p2 = func(t);
+
+        if (func_color) {
+            set_draw_color(func_color(t));
+        }
+        draw_line(p1, p2);
+
+        p1 = p2;
+    }
+}
+
+void v_Plottet::graphicate(Vec2d (*func)(double), Vec2d t_range, double step, RColor (*func_color)(double)) {
+    clear();
+    
+    draw_coord_lines();
+    draw_graph(func, t_range, step, func_color);
 }

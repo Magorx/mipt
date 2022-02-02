@@ -7,7 +7,7 @@
 
 const float SFML_EXT_EPS = 1e-6;
 
-struct Range2f {
+struct Range2d {
     float x_min;
     float x_max;
     float y_min;
@@ -19,7 +19,7 @@ class CoordinateSystem {
     float width;
     float height;
 
-    Range2f range;
+    Range2d range;
 
     float angle;
 
@@ -36,13 +36,13 @@ class CoordinateSystem {
 public:
     CoordinateSystem(sf::Vector2f _bias  = {0, 0}, float _width = 150, float _height = 100, 
                      sf::RenderWindow *_sf_window = nullptr,
-                     Range2f _range = {-1, 1, -1, 1},
+                     Range2d _range = {-1, 1, -1, 1},
                      float _angle = 0);
 
     void clear();
 
     void set_bias  (sf::Vector2f _bias);
-    void set_ranges(Range2f _range);
+    void set_ranges(Range2d _range);
     void set_angle (float _angle);
 
     void rotate(float _angle);

@@ -15,6 +15,13 @@ b(b_),
 a(a_)
 {}
 
+RGBA::RGBA(const int r_, const int g_, const int b_, const int a_):
+r((unsigned char) (r_ % 256)),
+g((unsigned char) (g_ % 256)),
+b((unsigned char) (b_ % 256)),
+a((unsigned char) (a_ % 256))
+{}
+
 RGBA RGBA::operator!() const {
     return {(unsigned char) (255 - r),
             (unsigned char) (255 - g),

@@ -24,6 +24,7 @@ union RGBA {
 	RGBA();
 	RGBA(const int x);
 	RGBA(const unsigned char r_, const unsigned char g_, const unsigned char b_, const unsigned char a_ = 255);
+	RGBA(const int r_, const int g_, const int b_, const int a_ = 255);
 
 	RGBA operator!() const;
 
