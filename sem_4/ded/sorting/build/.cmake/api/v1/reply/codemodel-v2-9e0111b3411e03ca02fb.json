@@ -1,0 +1,122 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "moga_engine",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "bloor::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-bloor-Debug-8d6ff2b96a212122d720.json",
+					"name" : "bloor",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "invasion::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-invasion-Debug-a0dd8b17c0fb7c49998b.json",
+					"name" : "invasion",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "kctf_widget_library_extension::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-kctf_widget_library_extension-Debug-2563f40485298a45af81.json",
+					"name" : "kctf_widget_library_extension",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "moga::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-moga-Debug-3a8b7d685f796afcc0f7.json",
+					"name" : "moga",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "negative::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-negative-Debug-784443c6eaafe5c57fb0.json",
+					"name" : "negative",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "rainbow_stamp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-rainbow_stamp-Debug-f182d3c186cacd54d384.json",
+					"name" : "rainbow_stamp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sharp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sharp-Debug-95ea8c642c4f002f1009.json",
+					"name" : "sharp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sharpy::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sharpy-Debug-65128d14220f72e4a85d.json",
+					"name" : "sharpy",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/kctf/Repositories/moga_engine/build",
+		"source" : "/home/kctf/Repositories/moga_engine"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

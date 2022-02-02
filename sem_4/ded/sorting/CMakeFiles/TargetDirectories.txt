@@ -1,0 +1,3 @@
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/CMakeFiles/rebuild_cache.dir
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/CMakeFiles/edit_cache.dir
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/CMakeFiles/moga.dir

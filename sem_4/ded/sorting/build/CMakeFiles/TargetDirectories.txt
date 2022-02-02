@@ -1,0 +1,10 @@
+/home/kctf/Repositories/moga_engine/build/CMakeFiles/rebuild_cache.dir
+/home/kctf/Repositories/moga_engine/build/CMakeFiles/edit_cache.dir
+/home/kctf/Repositories/moga_engine/build/CMakeFiles/invasion.dir
+/home/kctf/Repositories/moga_engine/build/CMakeFiles/kctf_widget_library_extension.dir
+/home/kctf/Repositories/moga_engine/build/CMakeFiles/sharp.dir
+/home/kctf/Repositories/moga_engine/build/CMakeFiles/bloor.dir
+/home/kctf/Repositories/moga_engine/build/CMakeFiles/negative.dir
+/home/kctf/Repositories/moga_engine/build/CMakeFiles/rainbow_stamp.dir
+/home/kctf/Repositories/moga_engine/build/CMakeFiles/sharpy.dir
+/home/kctf/Repositories/moga_engine/build/CMakeFiles/moga.dir

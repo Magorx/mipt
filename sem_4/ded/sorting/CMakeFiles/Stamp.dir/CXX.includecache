@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/kctf/Repositories/moga_engine/src/collections/plugins/stamp.cpp
+redactor/plugin_std.h
+/home/kctf/Repositories/moga_engine/src/collections/plugins/redactor/plugin_std.h
+cstdlib
+-
+ctime
+-
+cmath
+-
+
+src/redactor/plugin_std.h
+cstdint
+-
+cmath
+-
+

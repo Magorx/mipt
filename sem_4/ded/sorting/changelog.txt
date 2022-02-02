@@ -1,0 +1,32 @@
+0.0.1
+
+//=============================================================================
+[0.1] Quality of life invasion ================================================
+
+1) Hotkeys (with up to 8 special keys detect) are available
+1.1) Brush is [b]
+1.2) Eraser is [e]
+1.3) Color Pipette is [q]
+
+2) Alt-tools available, currently [Alt]+[Click] will use pipette
+
+3) All the sliders are scrolling-draggable with [Alt] as X3 speed and [Shift] as horizontal scrolling
+
+4) Change the size of the active tool by scrolling wheel out of any sliders
+
+5) Define the size of a canvas you create as well as its name
+5.1) Saved images don't have additional layer number in their name
+
+6) Open images from the disk with beautiful dialog!
+
+7) Enter fullscreen mode by running app with any cmd options
+
+8) [Ctrl]+[Left] / [Ctrl]+[Right] in text input work as they should
+
+9) [Ctrl]+[Z] work for canvas!
+
+//=============================================================================
+[0.2] Plugins are alive with std_v = 1 ========================================
+
+1) You can use plugin_std.h to programm you own a) Tools and b) Effects with ability to draw on chosen layer. See collections/plugins for examples and a small template.
+

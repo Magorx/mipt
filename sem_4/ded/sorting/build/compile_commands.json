@@ -1,0 +1,462 @@
+[
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++  -Dinvasion_EXPORTS -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g -fPIC   -std=gnu++2a -o CMakeFiles/invasion.dir/src/collections/plugins/invasion.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/plugins/invasion.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/plugins/invasion.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++  -Dkctf_widget_library_extension_EXPORTS -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g -fPIC   -std=gnu++2a -o CMakeFiles/kctf_widget_library_extension.dir/src/collections/plugins/kctf_widget_library_extension.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/plugins/kctf_widget_library_extension.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/plugins/kctf_widget_library_extension.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++  -Dsharp_EXPORTS -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g -fPIC   -std=gnu++2a -o CMakeFiles/sharp.dir/src/collections/plugins/sharp.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/plugins/sharp.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/plugins/sharp.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++  -Dbloor_EXPORTS -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g -fPIC   -std=gnu++2a -o CMakeFiles/bloor.dir/src/collections/plugins/bloor.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/plugins/bloor.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/plugins/bloor.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++  -Dnegative_EXPORTS -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g -fPIC   -std=gnu++2a -o CMakeFiles/negative.dir/src/collections/plugins/negative.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/plugins/negative.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/plugins/negative.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++  -Drainbow_stamp_EXPORTS -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g -fPIC   -std=gnu++2a -o CMakeFiles/rainbow_stamp.dir/src/collections/plugins/rainbow_stamp.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/plugins/rainbow_stamp.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/plugins/rainbow_stamp.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++  -Dsharpy_EXPORTS -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g -fPIC   -std=gnu++2a -o CMakeFiles/sharpy.dir/src/collections/plugins/sharpy.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/plugins/sharpy.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/plugins/sharpy.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/utils/vec3d.cpp.o -c /home/kctf/Repositories/moga_engine/src/utils/vec3d.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/utils/vec3d.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/utils/timer.cpp.o -c /home/kctf/Repositories/moga_engine/src/utils/timer.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/utils/timer.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/utils/interpolator/catmullrom.cpp.o -c /home/kctf/Repositories/moga_engine/src/utils/interpolator/catmullrom.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/utils/interpolator/catmullrom.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/utils/logger.cpp.o -c /home/kctf/Repositories/moga_engine/src/utils/logger.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/utils/logger.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/utils/text_line/line.cpp.o -c /home/kctf/Repositories/moga_engine/src/utils/text_line/line.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/utils/text_line/line.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/utils/text_line/line_pos.cpp.o -c /home/kctf/Repositories/moga_engine/src/utils/text_line/line_pos.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/utils/text_line/line_pos.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/utils/text_line/cursor.cpp.o -c /home/kctf/Repositories/moga_engine/src/utils/text_line/cursor.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/utils/text_line/cursor.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/utils/text_line/line_history.cpp.o -c /home/kctf/Repositories/moga_engine/src/utils/text_line/line_history.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/utils/text_line/line_history.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/utils/state_history/history.cpp.o -c /home/kctf/Repositories/moga_engine/src/utils/state_history/history.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/utils/state_history/history.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/view/view.cpp.o -c /home/kctf/Repositories/moga_engine/src/view/view.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/view/view.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/engine/object.cpp.o -c /home/kctf/Repositories/moga_engine/src/engine/object.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/engine/object.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/engine/moga_engine.cpp.o -c /home/kctf/Repositories/moga_engine/src/engine/moga_engine.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/engine/moga_engine.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/device/keyboard.cpp.o -c /home/kctf/Repositories/moga_engine/src/device/keyboard.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/device/keyboard.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/visual/renderer/gate_type_aliases.cpp.o -c /home/kctf/Repositories/moga_engine/src/visual/renderer/gate_type_aliases.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/visual/renderer/gate_type_aliases.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/visual/color/color.cpp.o -c /home/kctf/Repositories/moga_engine/src/visual/color/color.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/visual/color/color.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/visual/color/rgba.cpp.o -c /home/kctf/Repositories/moga_engine/src/visual/color/rgba.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/visual/color/rgba.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/visual/color/smart_color.cpp.o -c /home/kctf/Repositories/moga_engine/src/visual/color/smart_color.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/visual/color/smart_color.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/visual/renderer/renderer.cpp.o -c /home/kctf/Repositories/moga_engine/src/visual/renderer/renderer.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/visual/renderer/renderer.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/visual/animation/animation.cpp.o -c /home/kctf/Repositories/moga_engine/src/visual/animation/animation.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/visual/animation/animation.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/visual/renderer/appearence/texture.cpp.o -c /home/kctf/Repositories/moga_engine/src/visual/renderer/appearence/texture.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/visual/renderer/appearence/texture.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/visual/renderer/appearence/animation.cpp.o -c /home/kctf/Repositories/moga_engine/src/visual/renderer/appearence/animation.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/visual/renderer/appearence/animation.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/physics/physics_engine.cpp.o -c /home/kctf/Repositories/moga_engine/src/physics/physics_engine.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/physics/physics_engine.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/physics/solid_body/solid_body.cpp.o -c /home/kctf/Repositories/moga_engine/src/physics/solid_body/solid_body.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/physics/solid_body/solid_body.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/physics/collision/coll_circle_circle.cpp.o -c /home/kctf/Repositories/moga_engine/src/physics/collision/coll_circle_circle.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/physics/collision/coll_circle_circle.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/physics/collision/coll_circle_line.cpp.o -c /home/kctf/Repositories/moga_engine/src/physics/collision/coll_circle_line.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/physics/collision/coll_circle_line.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/physics/solid_body/sb_circle.cpp.o -c /home/kctf/Repositories/moga_engine/src/physics/solid_body/sb_circle.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/physics/solid_body/sb_circle.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/physics/solid_body/sb_line.cpp.o -c /home/kctf/Repositories/moga_engine/src/physics/solid_body/sb_line.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/physics/solid_body/sb_line.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/smart_colors/smart_colors.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/smart_colors/smart_colors.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/smart_colors/smart_colors.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/renderables/renderables.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/renderables/renderables.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/renderables/renderables.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/objects/objects.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/objects/objects.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/objects/objects.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/styles/button.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/styles/button.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/styles/button.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/styles/util_bar.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/styles/util_bar.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/styles/util_bar.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/styles/window.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/styles/window.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/styles/window.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/styles/text.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/styles/text.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/styles/text.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/button.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/button.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/button.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/toggler.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/toggler.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/toggler.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/highlighter.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/highlighter.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/highlighter.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/mouse_catcher.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/mouse_catcher.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/mouse_catcher.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/vertical_layout.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/vertical_layout.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/vertical_layout.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/horizontal_layout.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/horizontal_layout.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/horizontal_layout.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/text.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/text.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/text.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/hideable.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/hideable.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/hideable.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/menu.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/menu.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/menu.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/submenu.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/submenu.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/submenu.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/labeled_view.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/labeled_view.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/labeled_view.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/repeater.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/repeater.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/repeater.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/magnetic.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/magnetic.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/magnetic.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/utility_tab.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/utility_tab.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/utility_tab.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/window.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/window.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/window.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/dialog_window.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/dialog_window.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/dialog_window.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/text_field.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/text_field.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/text_field.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/views/spline.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/views/spline.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/views/spline.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/redactor_views/canvas.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/redactor_views/canvas.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/redactor_views/canvas.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/redactor_views/color_picker.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/redactor_views/color_picker.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/redactor_views/color_picker.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/actions/toggle.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/actions/toggle.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/actions/toggle.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/effects/rgb_splined.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/effects/rgb_splined.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/effects/rgb_splined.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/collections/effects/layer_permanent.cpp.o -c /home/kctf/Repositories/moga_engine/src/collections/effects/layer_permanent.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/collections/effects/layer_permanent.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/visual/visual_engine.cpp.o -c /home/kctf/Repositories/moga_engine/src/visual/visual_engine.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/visual/visual_engine.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/engine/Resources.cpp.o -c /home/kctf/Repositories/moga_engine/src/engine/Resources.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/engine/Resources.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/tools/brush.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/tools/brush.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/tools/brush.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/tools/color_pipette.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/tools/color_pipette.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/tools/color_pipette.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/tools/plugin_tool.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/tools/plugin_tool.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/tools/plugin_tool.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/tools/tool_manager.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/tools/tool_manager.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/tools/tool_manager.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/canvas/canvas.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/canvas/canvas.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/canvas/canvas.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/canvas/canvas_history.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/canvas/canvas_history.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/canvas/canvas_history.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/plugin.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/plugin.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/plugin.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/plugin_manager.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/plugin_manager.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/plugin_manager.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/app_plugin_interface.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/app_plugin_interface.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/app_plugin_interface.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/target.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/target.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/target.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/plugin_shader.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/plugin_shader.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/plugin_shader.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/target_factory.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/target_factory.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/target_factory.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/widget_factory.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widget_factory.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widget_factory.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/shader_factory.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/shader_factory.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/shader_factory.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/widgets/pwidget.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/pwidget.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/pwidget.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/widgets/pwindow.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/pwindow.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/pwindow.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/widgets/pbutton.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/pbutton.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/pbutton.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/widgets/pslider.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/pslider.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/pslider.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/widgets/plabel.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/plabel.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/plabel.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/widgets/ptext_field.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/ptext_field.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/ptext_field.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/widgets/pcolor_picker.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/pcolor_picker.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/widgets/pcolor_picker.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/extensions/extension_manager.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/extensions/extension_manager.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/extensions/extension_manager.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/plugins/interface/plugin_extension.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/plugin_extension.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/plugins/interface/plugin_extension.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/layer/layer.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/layer/layer.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/layer/layer.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/redactor/engine.cpp.o -c /home/kctf/Repositories/moga_engine/src/redactor/engine.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/redactor/engine.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/moga_engine/build",
+  "command": "clang++   -I/home/kctf/Repositories/moga_engine/src -I/home/kctf/Repositories/moga_engine/src/engine -I/home/kctf/Repositories/moga_engine/src/visual -I/home/kctf/Repositories/moga_engine/src/physics -I/home/kctf/Repositories/moga_engine/src/collections  -O3 -Wall -Wextra -Wno-multichar -Wno-unused-result -fdeclspec -march=native -g   -std=gnu++2a -o CMakeFiles/moga.dir/src/main.cpp.o -c /home/kctf/Repositories/moga_engine/src/main.cpp",
+  "file": "/home/kctf/Repositories/moga_engine/src/main.cpp"
+}
+]

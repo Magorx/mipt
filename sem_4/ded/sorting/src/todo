@@ -1,0 +1,12 @@
+--- close ---
+BoolRect | safely leaving hover toggle not one chidren
+TextProp {label, size, color, background, font_filename}
+
+--- far ---
+replace vector with list in sub_event_systems
+global bool affector for ES
+SmartColor -> RGBA
+photoshop
+
+--- FAR ---
+logging

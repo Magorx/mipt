@@ -1,0 +1,133 @@
+uniform sampler2D texture;
+
+uniform int ker_size;
+uniform float kernel[10000];
+uniform float tx_w;
+uniform float tx_h;
+
+vec3 rgb2hsl(vec3 color) {
+ 	vec3 hsl; 
+
+ 	float fmin = min(min(color.r, color.g), color.b); 
+ 	float fmax = max(max(color.r, color.g), color.b); 
+ 	float delta = fmax - fmin; 
+
+ 	hsl.z = (fmax + fmin) / 2.0; 
+
+ 	if (delta == 0.0) 
+ 	{
+ 		hsl.x = 0.0; 
+ 		hsl.y = 0.0; 
+ 	} else 
+ 	{
+ 		if (hsl.z < 0.5)
+ 			hsl.y = delta / (fmax + fmin); 
+ 		else
+ 			hsl.y = delta / (2.0 - fmax - fmin); 
+
+ 		float deltaR = (((fmax - color.r) / 6.0) + (delta / 2.0)) / delta;
+ 		float deltaG = (((fmax - color.g) / 6.0) + (delta / 2.0)) / delta;
+ 		float deltaB = (((fmax - color.b) / 6.0) + (delta / 2.0)) / delta;
+
+ 		if (color.r == fmax)
+ 			hsl.x = deltaB - deltaG; 
+ 		else if (color.g == fmax)
+ 			hsl.x = (1.0 / 3.0) + deltaR - deltaB; 
+ 		else if (color.b == fmax)
+ 			hsl.x = (2.0 / 3.0) + deltaG - deltaR; 
+
+ 		if (hsl.x < 0.0)
+ 			hsl.x += 1.0; 
+ 		else if (hsl.x > 1.0)
+ 			hsl.x -= 1.0; 
+ 	}
+
+ 	return hsl;
+ }
+
+
+  
+float hue2rgb(float f1, float f2, float hue) {
+    if (hue < 0.0)
+        hue += 1.0;
+    else if (hue > 1.0)
+        hue -= 1.0;
+    float res;
+    if ((6.0 * hue) < 1.0)
+        res = f1 + (f2 - f1) * 6.0 * hue;
+    else if ((2.0 * hue) < 1.0)
+        res = f2;
+    else if ((3.0 * hue) < 2.0)
+        res = f1 + (f2 - f1) * ((2.0 / 3.0) - hue) * 6.0;
+    else
+        res = f1;
+    return res;
+}
+
+vec3 hsl2rgb(vec3 hsl) {
+    vec3 rgb;
+    
+    if (hsl.y == 0.0) {
+        rgb = vec3(hsl.z);
+    } else {
+        float f2;
+        
+        if (hsl.z < 0.5)
+            f2 = hsl.z * (1.0 + hsl.y);
+        else
+            f2 = hsl.z + hsl.y - hsl.y * hsl.z;
+            
+        float f1 = 2.0 * hsl.z - f2;
+        
+        rgb.r = hue2rgb(f1, f2, hsl.x + (1.0/3.0));
+        rgb.g = hue2rgb(f1, f2, hsl.x);
+        rgb.b = hue2rgb(f1, f2, hsl.x - (1.0/3.0));
+    }   
+    return rgb;
+}
+
+vec3 rgb2hsv(vec3 c)
+{
+    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+
+    float d = q.x - min(q.w, q.y);
+    float e = 1.0e-10;
+    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
+
+vec3 hsv2rgb(vec3 c)
+{
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+void main() {
+    vec2 pos = gl_TexCoord[0].xy;
+    vec2 pixel_size = 1.0 / vec2(tx_w, tx_h);
+
+    vec3 sum_color = vec3(0.0, 0.0, 0.0);
+    float sum_weight = 0.0;
+
+    for (int dy = -ker_size, y = 0; dy <= ker_size; dy += 1, y += 1) {
+        for (int dx = -ker_size, x = 0; dx <= ker_size; dx = dx + 1, x += 1) {
+            vec2  cur_pos = pos + vec2(dx, dy) * pixel_size;
+            vec4  cur_col = texture2D(texture, cur_pos);
+            float cur_coef = kernel[(ker_size * 2 + 1) * y + x];
+
+            sum_color = sum_color + rgb2hsl(cur_col.xyz) * cur_coef;
+            sum_weight = sum_weight + cur_coef;
+        }
+    }
+
+    vec3 blur_color = sum_color / sum_weight;
+    vec3 init_color = rgb2hsl(texture2D(texture, gl_TexCoord[0].xy).xyz);
+
+    vec3 color = init_color - (blur_color - init_color) * 0.1;
+
+    vec3 final = vec3(init_color.xy, color.z);
+
+    gl_FragColor = vec4(hsl2rgb(final), texture2D(texture, gl_TexCoord[0].xy).w);
+}

@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/kctf/Repositories/moga_engine/src/collections/plugins/shdr.cpp
+redactor/plugin_std.h
+/home/kctf/Repositories/moga_engine/src/collections/plugins/redactor/plugin_std.h
+utils.h
+/home/kctf/Repositories/moga_engine/src/collections/plugins/utils.h
+cstdlib
+-
+ctime
+-
+cmath
+-
+
+/home/kctf/Repositories/moga_engine/src/collections/plugins/utils.h
+cmath
+-
+
+src/redactor/plugin_std.h
+cstdint
+-
+cmath
+-
+
