@@ -7,6 +7,12 @@ const int SCR_H  = 800;
 #include "scene_generation.h"
 #include "responses.h"
 
+// == task ==
+
+#include "observer/observed.h"
+
+// ==========
+
 
 double parab(double x) {
     return x * x;
@@ -26,13 +32,11 @@ RColor param_color(double t) {
     return {c, c * 2, c * 3};
 }
 
-// Vec2d param(double t) {
-//     double rad = 10;
-//     return {
-//         rad * cos(t),
-//         rad * sin(t)
-//     };
-// }
+
+void func(const OperatorSignal<int> &sig) {
+    printf("operator[%s] on [%p] and [%p]\n", to_str(sig.op), sig.first, sig.second);
+}
+
 
 void initialize_photoshop(RedactorEngine &moga) {
     const double scr_width = moga.get_screen_width();
@@ -67,4 +71,14 @@ void initialize_photoshop(RedactorEngine &moga) {
     plotter->set_draw_color({255, 0, 0});
     plotter->graphicate(pts);
 
+    // ==================================================================================
+
+    ObservedPool<int> int_pool;
+
+    Observed<int> a(5, int_pool);
+    Observed<int> b(7, int_pool);
+
+    int_pool.push_observer(func);
+
+    a + b;
 }

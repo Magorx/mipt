@@ -13,12 +13,22 @@ scene_generation.h
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/scene_generation.h
 responses.h
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/responses.h
+observer/observed.h
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/observed.h
 
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/main.cpp
 redactor/engine.h
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/redactor/engine.h
 app_initialization.h
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/app_initialization.h
+
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/observed.h
+operators.h
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/operators.h
+event_system/signal.h
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/event_system/signal.h
+
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/operators.h
 
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/redactor/effect_manager.h
 collections/effects/layer_permanent.h
@@ -569,6 +579,22 @@ visual/color/rgba.h
 src/event_system/visual/color/rgba.h
 device/keyboard.h
 src/event_system/device/keyboard.h
+
+src/event_system/signal.h
+vector
+-
+functional
+-
+cassert
+-
+signal_reaction.h
+src/event_system/signal_reaction.h
+cstring
+-
+
+src/event_system/signal_reaction.h
+functional
+-
 
 src/physics/collision/collision.h
 

@@ -1,4 +1,3 @@
-
 #include <vector>
 #include <functional>
 #include <cassert>
@@ -10,7 +9,7 @@
 template <typename ES_T, typename EVENT_T>
 class EventDispatcher {
     ES_T *es;
-    const char  *id;
+    const char *id;
 
     std::vector<EventReaction<EVENT_T>*> observers_before;
     std::vector<EventReaction<EVENT_T>*> observers_after;

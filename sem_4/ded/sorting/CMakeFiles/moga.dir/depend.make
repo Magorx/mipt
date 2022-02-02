@@ -1984,6 +1984,8 @@ CMakeFiles/moga.dir/src/engine/object.cpp.o: src/visual/style/style.h
 
 CMakeFiles/moga.dir/src/main.cpp.o: src/app_initialization.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/main.cpp
+CMakeFiles/moga.dir/src/main.cpp.o: src/observer/observed.h
+CMakeFiles/moga.dir/src/main.cpp.o: src/observer/operators.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/redactor/effect_manager.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/redactor/engine.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/redactor/plugins/plugin.h
@@ -2054,6 +2056,8 @@ CMakeFiles/moga.dir/src/main.cpp.o: src/event_system/dispatcher_end.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/event_system/event_reaction.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/event_system/event_system.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/event_system/event_types.h
+CMakeFiles/moga.dir/src/main.cpp.o: src/event_system/signal.h
+CMakeFiles/moga.dir/src/main.cpp.o: src/event_system/signal_reaction.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/physics/collision/collision.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/physics/phys_tickable.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/physics/physics_engine.h

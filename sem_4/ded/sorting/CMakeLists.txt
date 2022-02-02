@@ -166,10 +166,6 @@ add_executable(moga
 
         src/redactor/engine.cpp
 
-        # chemistry
-        # src/chemistry/chem_engine.cpp
-        # src/chemistry/chem_reactions.cpp
-
         src/main.cpp
         )
 

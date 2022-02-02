@@ -1985,6 +1985,8 @@ CMakeFiles/moga.dir/src/engine/object.cpp.o
 CMakeFiles/moga.dir/src/main.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/app_initialization.h
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/main.cpp
+ /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/observed.h
+ /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/operators.h
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/redactor/effect_manager.h
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/redactor/engine.h
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/redactor/plugins/plugin.h
@@ -2055,6 +2057,8 @@ CMakeFiles/moga.dir/src/main.cpp.o
  src/event_system/event_reaction.h
  src/event_system/event_system.h
  src/event_system/event_types.h
+ src/event_system/signal.h
+ src/event_system/signal_reaction.h
  src/physics/collision/collision.h
  src/physics/phys_tickable.h
  src/physics/physics_engine.h
