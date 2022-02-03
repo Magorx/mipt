@@ -8,6 +8,9 @@ enum Operator {
     div,
     mod,
 
+    un_add,
+    un_sub,
+
     pref_add,
     pref_sub,
     post_add,
@@ -56,6 +59,10 @@ enum Operator {
     a_del,
     a_del_arr,
 
+    ctor,
+    ctor_copy,
+    copy,
+
     MAX
 };
 
@@ -71,6 +78,11 @@ const char *to_str(Operator op) {
             return "/";
         case mod:
             return "%";
+
+        case un_add:
+            return "+.";
+        case un_sub:
+            return "-.";
 
         case pref_add:
             return "++.";
@@ -159,6 +171,13 @@ const char *to_str(Operator op) {
             return "delete";
         case a_del_arr:
             return "delete[]";
+        
+        case ctor:
+            return "ctor";
+        case ctor_copy:
+            return "ctor_copy";
+        case copy:
+            return "copy";
         
         default:
             return "ERR_OP";

@@ -34,7 +34,7 @@ RColor param_color(double t) {
 
 
 void func(const OperatorSignal<int> &sig) {
-    printf("operator[%s] on [%p] and [%p]\n", to_str(sig.op), sig.first, sig.second);
+    printf("operator[%s] on [%d] and [%d]\n", to_str(sig.op), sig.first->get_id(), sig.second->get_id());
 }
 
 
@@ -80,5 +80,6 @@ void initialize_photoshop(RedactorEngine &moga) {
 
     int_pool.push_observer(func);
 
-    a + b;
+    auto c = a + (b / a);
+    printf("%d\n", c.get_data());
 }

@@ -1985,6 +1985,7 @@ CMakeFiles/moga.dir/src/engine/object.cpp.o: src/visual/style/style.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/app_initialization.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/main.cpp
 CMakeFiles/moga.dir/src/main.cpp.o: src/observer/observed.h
+CMakeFiles/moga.dir/src/main.cpp.o: src/observer/operators.dsl
 CMakeFiles/moga.dir/src/main.cpp.o: src/observer/operators.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/redactor/effect_manager.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/redactor/engine.h
