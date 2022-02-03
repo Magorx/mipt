@@ -10,6 +10,8 @@ template <typename SIGNAL_T>
 class SignalDispatcher {
     const char *id;
 
+    bool is_active = true;
+
     std::vector<SignalReaction<SIGNAL_T>> observers;
 
     typedef std::function<SIGNAL_T(const SIGNAL_T &)> SignalAffector;
@@ -29,6 +31,8 @@ public:
     }
 
     void emit(const SIGNAL_T &signal) {
+        if (!is_active) return;
+
         SIGNAL_T affected_signal = signal_affector ? signal_affector(signal) : signal;
         dispatch(affected_signal);
     }
@@ -45,8 +49,14 @@ public:
 
     inline void pop_observer() {
         if (!observers.size()) return;
-
-        delete observers[observers.size() - 1];
         observers.pop_back();
     }
+
+    void clear_observers() {
+        while (observers.size()) {
+            pop_observer();
+        }
+    }
+
+    void set_active(bool flag) { is_active = flag; }
 };

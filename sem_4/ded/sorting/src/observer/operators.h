@@ -60,8 +60,10 @@ enum Operator {
     a_del_arr,
 
     ctor,
+    asgn_copy,
     ctor_copy,
-    copy,
+    asgn_move,
+    ctor_move,
 
     MAX
 };
@@ -176,9 +178,13 @@ const char *to_str(Operator op) {
             return "ctor";
         case ctor_copy:
             return "ctor_copy";
-        case copy:
-            return "copy";
-        
+        case asgn_copy:
+            return "asgn_copy";
+        case ctor_move:
+            return "ctor_move";
+        case asgn_move:
+            return "asgn_move";
+
         default:
             return "ERR_OP";
     }

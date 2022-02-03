@@ -22,10 +22,11 @@ struct OperatorSignal {
 template<typename T>
 class ObservedPool : public SignalDispatcher<OperatorSignal<T>> {
     size_t op_count[Operator::MAX];
-    int max_id;
+    
+    static int max_id;
 
 public:
-    ObservedPool() : max_id(0) {}
+    ObservedPool() {}
 
     void on_operator(Operator op, const Observed<T> *first, const Observed<T> *second) {    
         op_count[op]++;
@@ -44,6 +45,10 @@ public:
         return ret;
     }
 };
+
+
+template<typename T>
+int ObservedPool<T>::max_id = 0;
 
 
 #define OPERATOR_DEF_UNARY_PREF_SAME(op_sgn, op_code) \
@@ -82,7 +87,7 @@ friend Observed<T> operator op_sgn(Observed<T> first, const Observed<T> &second)
 #define OPERATOR_DEF_BINARY_TYPE(ret_type, op_sgn, op_code)                             \
 friend ret_type operator op_sgn(const Observed<T> &first, const Observed<T> &second) {  \
    first.pool.on_operator(Operator::op_code, &first, &second);                          \
-   return ret_type(first.get_data() op_sgn second.get_data(), first.pool);              \
+   return first.get_data() op_sgn second.get_data();              \
 }
 
 
@@ -93,7 +98,23 @@ class Observed {
 
     int id;
 
+    static ObservedPool<T> default_pool;
+
 public:
+    Observed() :
+    data(), pool(default_pool),
+    id(pool.get_unique_id())
+    {
+        pool.on_operator(Operator::ctor, this, nullptr);
+    }
+
+    Observed(const T &data) :
+    data(data), pool(default_pool),
+    id(pool.get_unique_id())
+    {
+        pool.on_operator(Operator::ctor, this, nullptr);
+    }
+
     Observed(const T &data, ObservedPool<T> &pool) :
     data(data), pool(pool),
     id(pool.get_unique_id())
@@ -109,8 +130,21 @@ public:
     }
 
     Observed<T> &operator=(const Observed<T> &other) {
-        pool.on_operator(Operator::copy, this, &other);
+        pool.on_operator(Operator::asgn_copy, this, &other);
         get_data() = other.get_data();
+        return *this;
+    }
+
+    Observed(Observed<T> &&other) :
+    data(std::move(other.get_data())), pool(other.get_pool()),
+    id(pool.get_unique_id())
+    {
+        pool.on_operator(Operator::ctor_move, this, &other);
+    }
+
+    Observed<T> &operator=(Observed<T> &&other) {
+        pool.on_operator(Operator::asgn_move, this, &other);
+        get_data() = std::move(other.get_data());
         return *this;
     }
 
@@ -132,7 +166,12 @@ public:
     inline int get_id() const {
         return id;
     }
+
+    static ObservedPool<T> &get_default_pool() { return default_pool; }
 };
+
+template<typename T>
+ObservedPool<T> Observed<T>::default_pool = {};
 
 #undef OPERATOR_DEF_UNARY_PREF_SAME
 #undef OPERATOR_DEF_UNARY_PREF_SAME_REF

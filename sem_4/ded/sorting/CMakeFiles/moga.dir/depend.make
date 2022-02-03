@@ -1987,6 +1987,7 @@ CMakeFiles/moga.dir/src/main.cpp.o: src/main.cpp
 CMakeFiles/moga.dir/src/main.cpp.o: src/observer/observed.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/observer/operators.dsl
 CMakeFiles/moga.dir/src/main.cpp.o: src/observer/operators.h
+CMakeFiles/moga.dir/src/main.cpp.o: src/observer/sort/sort.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/redactor/effect_manager.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/redactor/engine.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/redactor/plugins/plugin.h
@@ -2124,6 +2125,8 @@ CMakeFiles/moga.dir/src/main.cpp.o: src/visual/style/text_style.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/visual/style/utility_bar_style.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/visual/visual_engine.h
 CMakeFiles/moga.dir/src/main.cpp.o: src/visual/visual_engine_settings.h
+
+CMakeFiles/moga.dir/src/observer/sort/sort.cpp.o: src/observer/sort/sort.cpp
 
 CMakeFiles/moga.dir/src/physics/collision/coll_circle_circle.cpp.o: src/physics/collision/coll_circle_circle.cpp
 CMakeFiles/moga.dir/src/physics/collision/coll_circle_circle.cpp.o: src/physics/collision/coll_circle_circle.h

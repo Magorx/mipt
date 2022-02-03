@@ -35,6 +35,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/moga.dir/src/engine/moga_engine.cpp.o"
   "CMakeFiles/moga.dir/src/engine/object.cpp.o"
   "CMakeFiles/moga.dir/src/main.cpp.o"
+  "CMakeFiles/moga.dir/src/observer/sort/sort.cpp.o"
   "CMakeFiles/moga.dir/src/physics/collision/coll_circle_circle.cpp.o"
   "CMakeFiles/moga.dir/src/physics/collision/coll_circle_line.cpp.o"
   "CMakeFiles/moga.dir/src/physics/physics_engine.cpp.o"

@@ -1988,6 +1988,7 @@ CMakeFiles/moga.dir/src/main.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/observed.h
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/operators.dsl
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/operators.h
+ /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/sort/sort.h
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/redactor/effect_manager.h
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/redactor/engine.h
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/redactor/plugins/plugin.h
@@ -2125,6 +2126,8 @@ CMakeFiles/moga.dir/src/main.cpp.o
  src/visual/style/utility_bar_style.h
  src/visual/visual_engine.h
  src/visual/visual_engine_settings.h
+CMakeFiles/moga.dir/src/observer/sort/sort.cpp.o
+ /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/sort/sort.cpp
 CMakeFiles/moga.dir/src/physics/collision/coll_circle_circle.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/physics/collision/coll_circle_circle.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/physics/collision/coll_circle_circle.h

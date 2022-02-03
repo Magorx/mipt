@@ -216,3 +216,16 @@ void v_Plottet::graphicate(Vec2d (*func)(double), Vec2d t_range, double step, RC
     draw_coord_lines();
     draw_graph(func, t_range, step, func_color);
 }
+
+RColor v_Plottet::get_draw_color() {
+    return draw_color;
+}
+
+
+PlotterColorSet::PlotterColorSet(v_Plottet &plotter, RColor color) : plotter(plotter), prev_color(plotter.get_draw_color()) {
+    plotter.set_draw_color(color);
+}
+
+PlotterColorSet::~PlotterColorSet() {
+    plotter.set_draw_color(prev_color);
+}

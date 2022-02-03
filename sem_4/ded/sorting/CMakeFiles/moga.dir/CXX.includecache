@@ -15,6 +15,10 @@ responses.h
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/responses.h
 observer/observed.h
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/observed.h
+observer/sort/sort.h
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/sort/sort.h
+algorithm
+-
 
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/main.cpp
 redactor/engine.h
@@ -33,6 +37,12 @@ operators.dsl
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/operators.dsl
 
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/operators.h
+
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/sort/sort.h
+observer/observed.h
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/sort/observer/observed.h
+utils/vec2d.h
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/sort/utils/vec2d.h
 
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/redactor/effect_manager.h
 collections/effects/layer_permanent.h

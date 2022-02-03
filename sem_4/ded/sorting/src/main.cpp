@@ -10,7 +10,7 @@ int main(int argc, char*[]) {
     RWindow *window = nullptr;
     
     if (argc > 1) window = MogaEngine::create_window("MOGADACTOR", true);
-    else          window = MogaEngine::create_window("MOGADACTOR", {1200, 800});
+    else          window = MogaEngine::create_window("MOGADACTOR", {SCR_W, SCR_H});
 
     RedactorEngine moga(window, "MOGADACTOR");
     App.init(&moga);

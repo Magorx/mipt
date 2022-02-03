@@ -1095,6 +1095,33 @@ src/main.cpp.s:
 	$(MAKE) -f CMakeFiles/moga.dir/build.make CMakeFiles/moga.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/observer/sort/sort.o: src/observer/sort/sort.cpp.o
+
+.PHONY : src/observer/sort/sort.o
+
+# target to build an object file
+src/observer/sort/sort.cpp.o:
+	$(MAKE) -f CMakeFiles/moga.dir/build.make CMakeFiles/moga.dir/src/observer/sort/sort.cpp.o
+.PHONY : src/observer/sort/sort.cpp.o
+
+src/observer/sort/sort.i: src/observer/sort/sort.cpp.i
+
+.PHONY : src/observer/sort/sort.i
+
+# target to preprocess a source file
+src/observer/sort/sort.cpp.i:
+	$(MAKE) -f CMakeFiles/moga.dir/build.make CMakeFiles/moga.dir/src/observer/sort/sort.cpp.i
+.PHONY : src/observer/sort/sort.cpp.i
+
+src/observer/sort/sort.s: src/observer/sort/sort.cpp.s
+
+.PHONY : src/observer/sort/sort.s
+
+# target to generate assembly for a file
+src/observer/sort/sort.cpp.s:
+	$(MAKE) -f CMakeFiles/moga.dir/build.make CMakeFiles/moga.dir/src/observer/sort/sort.cpp.s
+.PHONY : src/observer/sort/sort.cpp.s
+
 src/physics/collision/coll_circle_circle.o: src/physics/collision/coll_circle_circle.cpp.o
 
 .PHONY : src/physics/collision/coll_circle_circle.o
@@ -2562,6 +2589,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/observer/sort/sort.o"
+	@echo "... src/observer/sort/sort.i"
+	@echo "... src/observer/sort/sort.s"
 	@echo "... src/physics/collision/coll_circle_circle.o"
 	@echo "... src/physics/collision/coll_circle_circle.i"
 	@echo "... src/physics/collision/coll_circle_circle.s"

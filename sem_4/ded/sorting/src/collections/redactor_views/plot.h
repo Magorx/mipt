@@ -53,6 +53,7 @@ public:
 
     void set_ranges(Range2d _range);
     void set_draw_color(RColor color);
+    RColor get_draw_color();
 
     void fill(RColor color);
     void draw_point(Vec2d p, double radius = 3);
@@ -72,4 +73,14 @@ public:
     void flush_to_window();
 
     Vec2d to_window_coords(Vec2d point);
+};
+
+
+class PlotterColorSet {
+    v_Plottet &plotter;
+    RColor prev_color;
+
+public:
+    PlotterColorSet(v_Plottet &plotter, RColor color);
+    ~PlotterColorSet();
 };

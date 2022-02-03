@@ -40,6 +40,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/engine/moga_engine.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/sorting/CMakeFiles/moga.dir/src/engine/moga_engine.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/engine/object.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/sorting/CMakeFiles/moga.dir/src/engine/object.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/main.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/sorting/CMakeFiles/moga.dir/src/main.cpp.o"
+  "/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/sort/sort.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/sorting/CMakeFiles/moga.dir/src/observer/sort/sort.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/physics/collision/coll_circle_circle.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/sorting/CMakeFiles/moga.dir/src/physics/collision/coll_circle_circle.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/physics/collision/coll_circle_line.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/sorting/CMakeFiles/moga.dir/src/physics/collision/coll_circle_line.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/physics/physics_engine.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/sorting/CMakeFiles/moga.dir/src/physics/physics_engine.cpp.o"
