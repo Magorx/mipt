@@ -40,7 +40,7 @@ const RColor NORMAL_GRAPHICS_COLOR = {10, 255, 10};
 
 
 const bool TO_SHOW_DOTS = true;
-const bool TO_SHOW_COLUMNS = false;
+const bool TO_SHOW_COLUMNS = true;
 
 
 const Range2d DEFAULT_RANGE = Range2d {
@@ -103,7 +103,7 @@ void initialize_photoshop(RedactorEngine &moga) {
     auto bubble    = dw->add_text_button("Bubble",     true);
     auto insertion = dw->add_text_button("Insertions", true);
     auto selection = dw->add_text_button("Selections", true);
-    auto std_sort  = dw->add_text_button("StdSort",  true);
+    auto std_sort  = dw->add_text_button("StdSort",    true);
     auto merge     = dw->add_text_button("Mergesort",  true);
 
     auto gr_quadratic  = dw->add_text_button("N^2", true);
