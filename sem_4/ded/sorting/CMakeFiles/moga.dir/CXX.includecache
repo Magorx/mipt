@@ -19,6 +19,12 @@ observer/sort/sort.h
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/observer/sort/sort.h
 algorithm
 -
+string
+-
+graph_reactions.h
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/graph_reactions.h
+
+/home/kctf/Repositories/mipt/sem_4/ded/sorting/src/graph_reactions.h
 
 /home/kctf/Repositories/mipt/sem_4/ded/sorting/src/main.cpp
 redactor/engine.h

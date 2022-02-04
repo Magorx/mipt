@@ -113,20 +113,43 @@ void v_Plottet::draw_coord_lines(RColor color) {
     set_draw_color(default_draw_color);
 }
 
+void v_Plottet::draw_coord_checkers(double step, RColor color) {
+    PlotterColorSet tmp_color(*this, color);
+
+    for (double offset = 0; offset < 0.95; offset += step) {
+        double x = offset * (range.x_max - range.x_min);
+        double y = offset * (range.y_max - range.y_min);
+
+        draw_line({+x, range.y_min}, {+x, range.y_max});
+        draw_line({-x, range.y_min}, {-x, range.y_max});
+
+        draw_line({range.x_min, +y}, {range.x_max, +y});
+        draw_line({range.x_min, -y}, {range.x_max, -y});
+    }
+}
+
 void v_Plottet::set_draw_color(RColor color) {
     draw_color = color;
 }
 
-void v_Plottet::draw_graph(double (*func)(double), int xs_per_pixel) {
+void v_Plottet::draw_graph(double (*func)(double), int xs_per_pixel, double min_x, double max_x) {
     int ox_steps = body.size.x() * xs_per_pixel;
     double x_step = (range.x_max - range.x_min) / ox_steps;
 
     Vec2d p1 = {range.x_min, func(range.x_min)};
     Vec2d p2 = p1;
 
+    if (!std::isnan(min_x) && range.x_min < min_x) {
+        p1 = {min_x, func(min_x)};
+        p2 = p1;
+    }
+
     for (int i = 0; i < ox_steps; ++i) {
         double x = range.x_min + x_step * i;
         double y = func(x);
+
+        if (!std::isnan(min_x) && x < min_x) continue;
+        if (!std::isnan(max_x) && x > max_x) break;
 
         p2 = {x, y};
 

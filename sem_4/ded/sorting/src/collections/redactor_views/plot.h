@@ -61,8 +61,9 @@ public:
     void draw_vector(Vec2d p1, Vec2d p2, double head_angle = M_PI / 8, double head_length = 15);
     
     void draw_coord_lines(RColor color={0, 0, 0});
+    void draw_coord_checkers(double step = 0.05, RColor color={0, 0, 0});
 
-    void draw_graph(double (*func)(double), int xs_per_pixel = 10);
+    void draw_graph(double (*func)(double), int xs_per_pixel = 10, double min_x=NAN, double max_x=NAN);
     void draw_graph(const std::vector<Vec2d> &points, bool to_draw_points = true, bool to_draw_columns = true);
     void draw_graph(Vec2d (*func)(double), Vec2d t_range, double step, RColor (*func_color)(double)=nullptr);
 

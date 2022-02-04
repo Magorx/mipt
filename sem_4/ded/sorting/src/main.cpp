@@ -5,7 +5,19 @@
 
 int main(int argc, char*[]) {
     srand(time(nullptr));
-    logger.set_verb_level(Logger::Level::warning);
+    logger.set_verb_level(Logger::Level::info);
+
+    Observed<int>::get_default_pool().push_observer(log_op_signals);
+
+    Observed<int> a = 7;
+    Observed<int> b = 20;
+
+    for (int i = 1; i < 10; ++i) {
+        Observed<int> c = a + b / i;
+        a = b - c;
+    }
+
+    Observed<int>::get_default_pool().pop_observer();
 
     RWindow *window = nullptr;
     

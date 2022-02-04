@@ -15,7 +15,7 @@ include_directories(src
                     src/collections)
 
 set(CMAKE_EXE_LINKER_FLAGS "-pthread")
-set(CMAKE_CXX_FLAGS   "-O3 ${WARNING_FLAGS} -fdeclspec -march=native -fsanitize=address")
+set(CMAKE_CXX_FLAGS   "-O3 ${WARNING_FLAGS} -fdeclspec -march=native") # -fsanitize=address
 
 find_package(SFML 2 COMPONENTS system window graphics network audio REQUIRED)
 find_package(OpenGL)
