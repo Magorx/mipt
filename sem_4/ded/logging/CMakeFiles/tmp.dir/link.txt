@@ -1,0 +1,1 @@
+g++  -O0 -Wall -Wextra -Wno-multichar -Wno-unused-result -fno-elide-constructors  -pthread CMakeFiles/tmp.dir/src/observer/sort/sort.cpp.o CMakeFiles/tmp.dir/src/main.cpp.o  -o tmp 

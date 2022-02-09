@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "cstdlib": "cpp",
+        "*.dsl": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
+}
