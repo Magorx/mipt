@@ -5,7 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/main.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/main.cpp.o"
-  "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/sort/sort.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/observer/sort/sort.cpp.o"
+  "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/logger.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/utils/logger.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/state_history/history.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/cursor.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o"

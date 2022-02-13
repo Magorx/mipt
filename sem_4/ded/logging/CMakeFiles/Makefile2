@@ -63,9 +63,37 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: CMakeFiles/run.dir/clean
 clean: CMakeFiles/prog.dir/clean
 
 .PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/run.dir
+
+# All Build rule for target.
+CMakeFiles/run.dir/all:
+	$(MAKE) -f CMakeFiles/run.dir/build.make CMakeFiles/run.dir/depend
+	$(MAKE) -f CMakeFiles/run.dir/build.make CMakeFiles/run.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num= "Built target run"
+.PHONY : CMakeFiles/run.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/run.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/run.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles 0
+.PHONY : CMakeFiles/run.dir/rule
+
+# Convenience name for target.
+run: CMakeFiles/run.dir/rule
+
+.PHONY : run
+
+# clean rule for target.
+CMakeFiles/run.dir/clean:
+	$(MAKE) -f CMakeFiles/run.dir/build.make CMakeFiles/run.dir/clean
+.PHONY : CMakeFiles/run.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/prog.dir

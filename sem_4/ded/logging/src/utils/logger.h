@@ -8,6 +8,9 @@
 #include <cstdarg>
 
 
+#define LOOG(format, ...) printf(format "\n", ##__VA_ARGS__);
+
+
 class Logger {
     FILE *fileptr;
     
@@ -23,6 +26,8 @@ class Logger {
     bool to_print_announcer;
     bool to_print_code;
 
+    int offset;
+
     int reset_max_lens_counter;
     int tick_timer;
 
@@ -35,8 +40,6 @@ class Logger {
     void update_code(const char *code);
 
     void reset_lasts();
-
-    void print_n_spaces(size_t n);
 
     void print_nullptr_passed_error() const;
 
@@ -57,6 +60,10 @@ public:
 
     Logger(FILE *fileptr = stdout, int log_level=5, int reset_max_lens_counter = 50);
 
+    void print(const char *message, ...);
+
+    void print_log_prefix(const char* code, const char* announcer);
+
     void log(const char* code, const char* announcer, const char *message, ...); // normal logging
     void log(int override_log_level, const char* code, const char* announcer, const char *message, ...);
     void logv(int override_log_level, const char* code, const char* announcer, const char *message, va_list args);
@@ -68,6 +75,7 @@ public:
     void warning (const char* announcer, const char *message, ...);
     void doubt   (const char* announcer, const char *message, ...);
 
+    void print_n_spaces(size_t n);
     void n();
     void page_cut(const char *page_name = nullptr, int page_len = 80, char symb = '=');
 
@@ -86,6 +94,9 @@ public:
     void set_verb_level(Logger::Level verb_level_);
 
     void reset_max_lens();
+
+    void set_offset(int new_offset);
+    void shift_offset(int shift);
 };
 
 extern Logger logger;

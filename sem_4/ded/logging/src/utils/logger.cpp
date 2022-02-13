@@ -14,6 +14,7 @@ max_code_len(0),
 max_announcer_len(0),
 to_print_announcer(false),
 to_print_code(true),
+offset(0),
 reset_max_lens_counter(reset_max_lens_counter),
 tick_timer(0),
 log_level(log_level),
@@ -93,6 +94,13 @@ void Logger::update_code(const char *code) {
     max_code_len = max_code_len > last_code_len ? max_code_len : last_code_len;
 }
 
+void Logger::print(const char *message, ...) {
+    va_list args;
+    va_start(args, message);
+    vfprintf(fileptr, message, args);
+    va_end(args);
+}
+
 void Logger::print_n_spaces(size_t n) {
     ++n;
     while (--n) {
@@ -100,14 +108,7 @@ void Logger::print_n_spaces(size_t n) {
     }
 }
 
-void Logger::_log(bool to_ignore_log_level, const char* code, const char* announcer, const char *message, va_list arglist) { // dirty code, I suppose it can be cleaned
-    if (log_level > verb_level && !to_ignore_log_level) return;
-
-    if (!announcer || !code || !message) {
-        print_nullptr_passed_error();
-        return;
-    }
-
+void Logger::print_log_prefix(const char* code, const char* announcer) {
     tick();
 
     update_announcer(announcer);
@@ -136,6 +137,18 @@ void Logger::_log(bool to_ignore_log_level, const char* code, const char* announ
     print_n_spaces(max_announcer_len - last_announcer_len);
     
     fprintf(fileptr, " : ");
+    print_n_spaces(offset);
+}
+
+void Logger::_log(bool to_ignore_log_level, const char* code, const char* announcer, const char *message, va_list arglist) { // dirty code, I suppose it can be cleaned
+    if (log_level > verb_level && !to_ignore_log_level) return;
+
+    if (!announcer || !code || !message) {
+        print_nullptr_passed_error();
+        return;
+    }
+
+    print_log_prefix(code, announcer);
 
     vfprintf(fileptr, message, arglist);
 
@@ -272,6 +285,14 @@ void Logger::set_verb_level(int verb_level_) {
 
 void Logger::set_verb_level(Logger::Level verb_level_) {
     verb_level = (int) verb_level_;
+}
+
+void Logger::set_offset(int new_offset) {
+    offset = new_offset;
+}
+
+void Logger::shift_offset(int shift) {
+    set_offset(offset + shift);
 }
 
 LogLevel::LogLevel(Logger &logger, int log_level, int verb_level):

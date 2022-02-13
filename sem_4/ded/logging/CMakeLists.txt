@@ -32,10 +32,15 @@ add_executable(prog
         src/utils/state_history/history.cpp
 
         # task
-        src/observer/sort/sort.cpp
+        src/micro_logger/func_logger.cpp
 
         src/main.cpp
 )
+
+add_custom_target(run
+        COMMAND make
+        COMMAND ./prog
+        )
 
 # target_link_libraries(moga sfml-graphics sfml-window sfml-system)
 # target_link_libraries(moga ${OPENGL_LIBRARIES} ${CMAKE_DL_LIBS})

@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named run
+
+# Build rule for target.
+run: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 run
+.PHONY : run
+
+# fast build rule for target.
+run/fast:
+	$(MAKE) -f CMakeFiles/run.dir/build.make CMakeFiles/run.dir/build
+.PHONY : run/fast
+
+#=============================================================================
 # Target rules for targets named prog
 
 # Build rule for target.
@@ -150,32 +163,32 @@ src/main.cpp.s:
 	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
-src/observer/sort/sort.o: src/observer/sort/sort.cpp.o
+src/micro_logger/func_logger.o: src/micro_logger/func_logger.cpp.o
 
-.PHONY : src/observer/sort/sort.o
+.PHONY : src/micro_logger/func_logger.o
 
 # target to build an object file
-src/observer/sort/sort.cpp.o:
-	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/observer/sort/sort.cpp.o
-.PHONY : src/observer/sort/sort.cpp.o
+src/micro_logger/func_logger.cpp.o:
+	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o
+.PHONY : src/micro_logger/func_logger.cpp.o
 
-src/observer/sort/sort.i: src/observer/sort/sort.cpp.i
+src/micro_logger/func_logger.i: src/micro_logger/func_logger.cpp.i
 
-.PHONY : src/observer/sort/sort.i
+.PHONY : src/micro_logger/func_logger.i
 
 # target to preprocess a source file
-src/observer/sort/sort.cpp.i:
-	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/observer/sort/sort.cpp.i
-.PHONY : src/observer/sort/sort.cpp.i
+src/micro_logger/func_logger.cpp.i:
+	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.i
+.PHONY : src/micro_logger/func_logger.cpp.i
 
-src/observer/sort/sort.s: src/observer/sort/sort.cpp.s
+src/micro_logger/func_logger.s: src/micro_logger/func_logger.cpp.s
 
-.PHONY : src/observer/sort/sort.s
+.PHONY : src/micro_logger/func_logger.s
 
 # target to generate assembly for a file
-src/observer/sort/sort.cpp.s:
-	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/observer/sort/sort.cpp.s
-.PHONY : src/observer/sort/sort.cpp.s
+src/micro_logger/func_logger.cpp.s:
+	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.s
+.PHONY : src/micro_logger/func_logger.cpp.s
 
 src/utils/logger.o: src/utils/logger.cpp.o
 
@@ -374,13 +387,14 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... run"
 	@echo "... prog"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... src/observer/sort/sort.o"
-	@echo "... src/observer/sort/sort.i"
-	@echo "... src/observer/sort/sort.s"
+	@echo "... src/micro_logger/func_logger.o"
+	@echo "... src/micro_logger/func_logger.i"
+	@echo "... src/micro_logger/func_logger.s"
 	@echo "... src/utils/logger.o"
 	@echo "... src/utils/logger.i"
 	@echo "... src/utils/logger.s"

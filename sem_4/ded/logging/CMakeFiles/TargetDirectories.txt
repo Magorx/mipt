@@ -1,3 +1,4 @@
 /home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/rebuild_cache.dir
 /home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/edit_cache.dir
+/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/run.dir
 /home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir

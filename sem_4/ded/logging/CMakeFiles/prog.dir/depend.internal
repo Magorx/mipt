@@ -3,14 +3,20 @@
 
 CMakeFiles/prog.dir/src/main.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/main.cpp
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/MicroLogger.h
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.h
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/logged.h
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/micro_logger.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/observed.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/operators.dsl
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/operators.h
  src/event_system/signal.h
  src/event_system/signal_reaction.h
  src/utils/logger.h
-CMakeFiles/prog.dir/src/observer/sort/sort.cpp.o
- /home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/sort/sort.cpp
+CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.cpp
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.h
+ src/utils/logger.h
 CMakeFiles/prog.dir/src/utils/logger.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/logger.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/logger.h
