@@ -23,6 +23,7 @@ add_executable(prog
         src/utils/timer.cpp
 
         src/utils/logger.cpp
+        src/utils/tag.cpp
 
         src/utils/text_line/line.cpp
         src/utils/text_line/line_pos.cpp

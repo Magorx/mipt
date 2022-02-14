@@ -14,19 +14,26 @@ CMakeFiles/prog.dir/src/main.cpp.o
  src/event_system/signal_reaction.h
  src/micro_logger/func_logger.h
  src/utils/logger.h
+ src/utils/tag.h
 CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.h
  src/event_system/signal.h
  src/event_system/signal_reaction.h
  src/utils/logger.h
+ src/utils/tag.h
 CMakeFiles/prog.dir/src/utils/logger.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/logger.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/logger.h
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/tag.h
 CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/state_history/history.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/state_history/history.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/state_history/state.h
+CMakeFiles/prog.dir/src/utils/tag.cpp.o
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/tag.cpp
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/tag.h
+ src/utils/logger.h
 CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/cursor.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/cursor.h
@@ -40,6 +47,7 @@ CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o
  src/utils/logger.h
  src/utils/state_history/history.h
  src/utils/state_history/state.h
+ src/utils/tag.h
 CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/cursor.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/line.h
@@ -49,6 +57,7 @@ CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o
  src/utils/logger.h
  src/utils/state_history/history.h
  src/utils/state_history/state.h
+ src/utils/tag.h
 CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/cursor.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/line.h
@@ -58,6 +67,7 @@ CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o
  src/utils/logger.h
  src/utils/state_history/history.h
  src/utils/state_history/state.h
+ src/utils/tag.h
 CMakeFiles/prog.dir/src/utils/timer.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/timer.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/timer.h

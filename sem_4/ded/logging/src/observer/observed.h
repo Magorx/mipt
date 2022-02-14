@@ -124,10 +124,17 @@ class Observed {
     std::string name;
     std::string history;
 
-    using one_line_log_type = std::function<void (const Observed<T>&,Logger)>;
+    using one_line_log_type = std::function<void (const Observed<T>&,Logger&)>;
+    using value_length_type = std::function<int (const Observed<T>&)>;
     static one_line_log_type one_line_log;
+    static value_length_type value_length;
 
     static ObservedPool<T> default_pool;
+
+    static int max_name_len;
+    static int max_value_len;
+    static int max_id_len;
+    static int max_addr_len;
 
     void set_default_ctor_history() {
         history = "$" + std::to_string(id);
@@ -223,22 +230,72 @@ public:
 
     static ObservedPool<T> &get_default_pool() { return default_pool; }
 
-    static void set_one_line_log(one_line_log_type oll) {
-        one_line_log = oll;
+    static void set_one_line_log(one_line_log_type new_one_line_log) {
+        one_line_log = new_one_line_log;
     }
 
-    void log(Logger logger=kctf::logger) const {
+    static void set_value_length(value_length_type new_value_length) {
+        value_length = new_value_length;
+    }
+
+    int get_value_length() {
+        if (value_length) {
+            return value_length(*this);
+        } else {
+            return -1;
+        }
+    }
+
+    #define _UPD_MAX_VALUE_LEN(value_name, spec, value) \
+    memset(str, 0, MAX_UNIT_LEN);\
+    snprintf(str, MAX_UNIT_LEN, spec, value); \
+    max_##value_name##_len = std::max(max_##value_name##_len, (int) strlen(str)); \
+    memset(str, 0, MAX_UNIT_LEN); \
+
+    void update_max_lens() const {
+        const int MAX_UNIT_LEN = 100;
+        char str[MAX_UNIT_LEN];
+
+        _UPD_MAX_VALUE_LEN(id, "%d", id);
+        _UPD_MAX_VALUE_LEN(name, "%s", name.c_str());
+        _UPD_MAX_VALUE_LEN(addr, "%p", this);
+
+        if (value_length) {
+            max_value_len = std::max(max_value_len, value_length(*this));
+        }
+    }
+
+    #undef _UPD_MAX_VALUE_LEN
+
+    #define _GET_MAX_VALUE_LEN(value_name) \
+    int get_max_##value_name##_len() const { return max_##value_name##_len; }
+
+    _GET_MAX_VALUE_LEN(id)
+    _GET_MAX_VALUE_LEN(name)
+    _GET_MAX_VALUE_LEN(addr)
+    _GET_MAX_VALUE_LEN(value)
+
+    void log(Logger &logger=kctf::logger) const {
         if (one_line_log) {
             one_line_log(*this, logger);
         }
     }
 
-    void logger_log(Logger logger=kctf::logger, bool to_show_history=false) const {
-        logger.print("%s<%d>[%p] | ", name.c_str(), id, this);
+    void logger_log(Logger &logger=kctf::logger, bool to_show_history=false) const {
+        update_max_lens();
+
+        logger.print_aligned(Logger::Align::left, max_name_len, "%s", name.c_str());
+
+        logger.print(" | <");
+        logger.print_aligned(Logger::Align::middle, max_id_len, "%d", id);
+        logger.print(">[");
+        logger.print_aligned(Logger::Align::middle, max_addr_len, "%p", this);
+        logger.print("] | ");
+        //%d>[%p] | ", name.c_str(), id, this);
         log(logger);
 
         if (to_show_history) {
-            logger.print(" | hist: %s", history.c_str());
+            logger.print(" | %s", history.c_str());
         }
 
         logger.print("\n");
@@ -266,6 +323,18 @@ ObservedPool<T> Observed<T>::default_pool = {};
 
 template<typename T>
 Observed<T>::one_line_log_type Observed<T>::one_line_log = nullptr;
+
+template<typename T>
+Observed<T>::value_length_type Observed<T>::value_length = nullptr;
+
+template<typename T>
+int Observed<T>::max_name_len = 0;
+template<typename T>
+int Observed<T>::max_value_len = 0;
+template<typename T>
+int Observed<T>::max_id_len = 0;
+template<typename T>
+int Observed<T>::max_addr_len = 0;
 
 #undef OPERATOR_DEF_UNARY_PREF_SAME
 #undef OPERATOR_DEF_UNARY_PREF_SAME_REF

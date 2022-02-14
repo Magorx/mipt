@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/logger.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/utils/logger.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/state_history/history.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o"
+  "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/tag.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/utils/tag.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/cursor.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/line.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/line_history.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o"

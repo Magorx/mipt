@@ -1,5 +1,4 @@
-#ifndef UTIL_LOGGER_H
-#define UTIL_LOGGER_H
+#pragma once
 
 
 #include <string.h>
@@ -7,12 +6,18 @@
 #include <cstdlib>
 #include <cstdarg>
 
+#include <string>
+#include <vector>
+
+#include "tag.h"
+
 
 #define LOOG(format, ...) printf(format "\n", ##__VA_ARGS__);
 
 
 class Logger {
     FILE *fileptr;
+    bool to_close_file;
     
     char  *last_announcer;
     size_t last_announcer_len;
@@ -36,6 +41,10 @@ class Logger {
 
     int page_cnt;
 
+    std::vector<Tag> tag_stack;
+
+    bool htlm_mode = false;
+
     void update_announcer(const char* announcer);
     void update_code(const char *code);
 
@@ -58,7 +67,19 @@ public:
         debug = 10,
     };
 
-    Logger(FILE *fileptr = stdout, int log_level=5, int reset_max_lens_counter = 50);
+    enum class Align {
+        left = -1,
+        middle = 0,
+        right = 1
+    };
+
+    Logger(const std::string &filename="", int log_level=5, int reset_max_lens_counter = 50);
+    Logger(FILE *fileptr, int log_level=5, int reset_max_lens_counter = 50);
+
+    ~Logger();
+
+    Logger(const Logger &other) = delete;
+    Logger &operator=(const Logger &other) = delete;
 
     void print(const char *message, ...);
 
@@ -75,8 +96,9 @@ public:
     void warning (const char* announcer, const char *message, ...);
     void doubt   (const char* announcer, const char *message, ...);
 
-    void print_n_spaces(size_t n);
+    void print_n_spaces(int n);
     void n();
+    void print_aligned(Align align, int size, const char *format, ...);
     void page_cut(const char *page_name = nullptr, int page_len = 80, char symb = '=');
 
     inline void resets() {
@@ -97,6 +119,15 @@ public:
 
     void set_offset(int new_offset);
     void shift_offset(int shift);
+
+    TagProxy tag(const std::string &name);
+    void tag_close(int tag_cnt=1);
+
+    void set_html_mode(bool new_html_mode) {
+        htlm_mode = new_html_mode;
+    }
+
+    inline FILE *get_log_file() { return fileptr; }
 };
 
 namespace kctf {
@@ -114,5 +145,3 @@ public:
     LogLevel(Logger &logger, int log_level = -1, int verb_level = -1);
     ~LogLevel();
 };
-
-#endif // UTIL_LOGGER_H

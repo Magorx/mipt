@@ -7,6 +7,7 @@ namespace kctf {
 
 Logger::Logger(FILE *fileptr, int log_level, int reset_max_lens_counter):
 fileptr(fileptr),
+to_close_file(false),
 last_announcer(nullptr),
 last_announcer_len(0),
 last_code(nullptr),
@@ -26,9 +27,28 @@ paging_mode(0)
     if (!reset_max_lens_counter) {
         reset_max_lens_counter = 1;
     }
+}
+
+Logger::Logger(const std::string &filename, int log_level, int reset_max_lens_counter):
+Logger(nullptr, log_level, reset_max_lens_counter)
+{
+    if (filename == "" || filename==":stdout:") {
+        fileptr = stdout;
+    } else if (filename == ":stderr:") {
+        fileptr = stderr;
+    } else {
+        fileptr = fopen(filename.c_str(), "w");
+        to_close_file = true;
+    }
 
     if (!fileptr) {
         print_nullptr_passed_error();
+    }
+}
+
+Logger::~Logger() {
+    if (to_close_file) {
+        fclose(fileptr);
     }
 }
 
@@ -102,10 +122,40 @@ void Logger::print(const char *message, ...) {
     va_end(args);
 }
 
-void Logger::print_n_spaces(size_t n) {
+void Logger::print_n_spaces(int n) {
     ++n;
-    while (--n) {
+    while (--n > 0) {
         fputc(' ', fileptr);
+    }
+}
+
+void Logger::print_aligned(Align align, int size, const char *format, ...) {
+    static const int BUFFER_LEN = 256;
+    static char BUFFER[BUFFER_LEN];
+
+    memset(BUFFER, 0, BUFFER_LEN);
+
+    va_list args;
+    va_start(args, format);
+    vsnprintf(BUFFER, BUFFER_LEN, format, args);
+    va_end(args);
+
+    size_t str_len = strlen(BUFFER);
+    size_t spare_spaces = size - str_len;
+
+    if ((int) align < 0) {
+        print("%s", BUFFER);
+        print_n_spaces(spare_spaces);
+    } else if ((int) align > 0) {
+        print("%s", BUFFER);
+        print_n_spaces(spare_spaces);
+    } else {
+        size_t left_spaces = spare_spaces / 2;
+        size_t right_spaces = spare_spaces - left_spaces;
+
+        print_n_spaces(left_spaces);
+        print("%s", BUFFER);
+        print_n_spaces(right_spaces);
     }
 }
 
@@ -116,26 +166,38 @@ void Logger::print_log_prefix(const char* code, const char* announcer) {
     update_code(code);
 
     if (to_print_code) {
-        fprintf(fileptr, "[%s]", code);
+        fputc('[', fileptr);
+        print_aligned(Align::middle, max_code_len, "%s", code);
+        fputc(']', fileptr);
     } else if (to_print_announcer) {
         fputc('[', fileptr);
-        print_n_spaces(last_code_len);
+        print_n_spaces(max_code_len);
         fputc(']', fileptr);
     } else {
-        print_n_spaces(last_code_len + 2);
+        print_n_spaces(max_code_len + 2);
     }
-    print_n_spaces(max_code_len - last_code_len);
+    // print_n_spaces(max_code_len - last_code_len);
 
     if (to_print_announcer) {
-        fprintf(fileptr, "<%s>", announcer);
+        if (!htlm_mode) {
+            fputc('<', fileptr);
+            print_aligned(Align::middle, max_announcer_len, "%s", announcer);
+            fputc('>', fileptr);
+            // fprintf(fileptr, "<%s>", announcer);
+        } else {
+            print("&lt;");
+            print_aligned(Align::middle, max_announcer_len, "%s", announcer);
+            print("&gt;");
+            // fprintf(fileptr, "%s", announcer);
+        }
     } else if (to_print_code) {
         fputc('<', fileptr);
-        print_n_spaces(last_announcer_len);
+        print_n_spaces(max_announcer_len);
         fputc('>', fileptr);
     } else {
-        print_n_spaces(last_announcer_len + 2);
+        print_n_spaces(max_announcer_len + 2);
     }
-    print_n_spaces(max_announcer_len - last_announcer_len);
+    // print_n_spaces(max_announcer_len - last_announcer_len);
     
     fprintf(fileptr, " : ");
     print_n_spaces(offset);
@@ -294,6 +356,18 @@ void Logger::set_offset(int new_offset) {
 
 void Logger::shift_offset(int shift) {
     set_offset(offset + shift);
+}
+
+TagProxy Logger::tag(const std::string &name) {
+    tag_stack.push_back({name, *this});
+    return tag_stack.back().open();
+}
+
+void Logger::tag_close(int tag_cnt) {
+    while (tag_stack.size() && tag_cnt--) {
+        tag_stack.back().close();
+        tag_stack.pop_back();
+    }
 }
 
 LogLevel::LogLevel(Logger &logger, int log_level, int verb_level):

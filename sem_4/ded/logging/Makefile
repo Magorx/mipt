@@ -244,6 +244,33 @@ src/utils/state_history/history.cpp.s:
 	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/utils/state_history/history.cpp.s
 .PHONY : src/utils/state_history/history.cpp.s
 
+src/utils/tag.o: src/utils/tag.cpp.o
+
+.PHONY : src/utils/tag.o
+
+# target to build an object file
+src/utils/tag.cpp.o:
+	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/utils/tag.cpp.o
+.PHONY : src/utils/tag.cpp.o
+
+src/utils/tag.i: src/utils/tag.cpp.i
+
+.PHONY : src/utils/tag.i
+
+# target to preprocess a source file
+src/utils/tag.cpp.i:
+	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/utils/tag.cpp.i
+.PHONY : src/utils/tag.cpp.i
+
+src/utils/tag.s: src/utils/tag.cpp.s
+
+.PHONY : src/utils/tag.s
+
+# target to generate assembly for a file
+src/utils/tag.cpp.s:
+	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/utils/tag.cpp.s
+.PHONY : src/utils/tag.cpp.s
+
 src/utils/text_line/cursor.o: src/utils/text_line/cursor.cpp.o
 
 .PHONY : src/utils/text_line/cursor.o
@@ -401,6 +428,9 @@ help:
 	@echo "... src/utils/state_history/history.o"
 	@echo "... src/utils/state_history/history.i"
 	@echo "... src/utils/state_history/history.s"
+	@echo "... src/utils/tag.o"
+	@echo "... src/utils/tag.i"
+	@echo "... src/utils/tag.s"
 	@echo "... src/utils/text_line/cursor.o"
 	@echo "... src/utils/text_line/cursor.i"
 	@echo "... src/utils/text_line/cursor.s"
