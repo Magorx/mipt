@@ -12,10 +12,13 @@ CMakeFiles/prog.dir/src/main.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/operators.h
  src/event_system/signal.h
  src/event_system/signal_reaction.h
+ src/micro_logger/func_logger.h
  src/utils/logger.h
 CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.h
+ src/event_system/signal.h
+ src/event_system/signal_reaction.h
  src/utils/logger.h
 CMakeFiles/prog.dir/src/utils/logger.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/logger.cpp

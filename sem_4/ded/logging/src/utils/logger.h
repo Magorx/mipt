@@ -99,7 +99,11 @@ public:
     void shift_offset(int shift);
 };
 
-extern Logger logger;
+namespace kctf {
+    extern Logger logger;
+}
+
+using namespace kctf;
 
 class LogLevel {
     Logger &logger;

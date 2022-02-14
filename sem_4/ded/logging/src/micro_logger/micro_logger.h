@@ -2,6 +2,7 @@
 
 
 #include "observer/observed.h"
+#include "micro_logger/func_logger.h"
 
 
 struct MicroLoggerSettings {
@@ -11,10 +12,13 @@ struct MicroLoggerSettings {
 
 template<typename T>
 class MicroLogger {
+    Logger logger;
+
     MicroLoggerSettings settings;
 
 public:
-    MicroLogger(MicroLoggerSettings settings={}) :
+    MicroLogger(Logger logger=kctf::logger, MicroLoggerSettings settings={}) :
+    logger(logger),
     settings(settings)
     {}
 
@@ -22,7 +26,7 @@ public:
         return op == Operator::asgn_copy || op == Operator::ctor_copy;
     }
 
-    void log(const OperatorSignal<T> &signal) {
+    void log_operator(const OperatorSignal<T> &signal) {
         logger.print_log_prefix("mclg", "observed");
         
         if (is_importand_operator(signal.op)) {
@@ -49,17 +53,32 @@ public:
         if (signal.first) {
             logger.print_log_prefix("mclg", "observed");
             logger.print("    ");
-            signal.first->logger_log(settings.to_show_history);
+            signal.first->logger_log(logger, settings.to_show_history);
         }
 
         if (signal.second) {
             logger.print_log_prefix("mclg", "observed");
             logger.print("    ");
-            signal.second->logger_log(settings.to_show_history);
+            signal.second->logger_log(logger, settings.to_show_history);
         }
 
         logger.print_log_prefix("mclg", "observed");
         logger.print("}\n");
         logger.n();
+    }
+
+    void log_func(const FuncCallSignal &signal) {
+        if (signal.is_called) {
+            logger.print_log_prefix("mclg", "  func  ");
+            logger.print("[%d] %s() <{\n", signal.recursion_cnt, signal.name.c_str());
+            logger.n();
+
+            logger.shift_offset(+FUNC_CALL_OFFSET_SHIFT);
+        } else {
+            logger.shift_offset(-FUNC_CALL_OFFSET_SHIFT);
+
+            logger.print_log_prefix("mclg", "  func  ");
+            logger.print("}> [%d] %s()\n", signal.recursion_cnt, signal.name.c_str());
+        }
     }
 };

@@ -1,12 +1,13 @@
 #include <cstdlib>
+#include <cstdio>
 
 
 #include "observer/observed.h"
 #include "micro_logger/MicroLogger.h"
 
 
-void observed_int_log(const Observed<int> &obj) {
-    printf("%d", obj.get_data());
+void observed_int_log(const Observed<int> &obj, Logger logger=kctf::logger) {
+    logger.print("%d", obj.get_data());
 }
 
 
@@ -28,13 +29,21 @@ int main() {
     logger.set_verb_level(Logger::Level::info);
 
     Observed<int>::set_one_line_log(observed_int_log);
-    MicroLogger<int> microlog({true});
 
-    Observed<int>::get_default_pool().push_observer([&microlog](const OperatorSignal<int> &signal){
-        microlog.log(signal);
+    FILE *file = fopen("log.log", "w");
+    MicroLogger<int> microlog({file}, {true});
+
+    Observed<int>::get_default_pool().push_observer([&microlog](const OperatorSignal<int> &signal) {
+        microlog.log_operator(signal);
+    });
+    
+    FuncLogger::get_signal_dispatcher().push_observer([&microlog](const FuncCallSignal &signal) {
+        microlog.log_func(signal);
     });
 
     func();
+
+    fclose(file);
 
     return 0;
 }

@@ -1,7 +1,8 @@
 #include "logger.h"
 
-
-Logger logger;
+namespace kctf {
+    Logger logger;
+}
 
 
 Logger::Logger(FILE *fileptr, int log_level, int reset_max_lens_counter):

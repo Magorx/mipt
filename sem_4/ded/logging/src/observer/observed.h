@@ -124,7 +124,7 @@ class Observed {
     std::string name;
     std::string history;
 
-    using one_line_log_type = std::function<void (const Observed<T>&)>;
+    using one_line_log_type = std::function<void (const Observed<T>&,Logger)>;
     static one_line_log_type one_line_log;
 
     static ObservedPool<T> default_pool;
@@ -227,21 +227,21 @@ public:
         one_line_log = oll;
     }
 
-    void log() const {
+    void log(Logger logger=kctf::logger) const {
         if (one_line_log) {
-            one_line_log(*this);
+            one_line_log(*this, logger);
         }
     }
 
-    void logger_log(bool to_show_history=false) const {
-        printf("%s<%d>[%p] | ", name.c_str(), id, this);
-        log();
+    void logger_log(Logger logger=kctf::logger, bool to_show_history=false) const {
+        logger.print("%s<%d>[%p] | ", name.c_str(), id, this);
+        log(logger);
 
         if (to_show_history) {
-            printf(" | hist: %s", history.c_str());
+            logger.print(" | hist: %s", history.c_str());
         }
 
-        printf("\n");
+        logger.print("\n");
     }
 
     void set_name(const std::string &new_name) {
