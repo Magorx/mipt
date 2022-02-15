@@ -1,0 +1,12 @@
+node%d[label=<<font face="Times">
+<table cellspacing="0" border="0">
+	<tr>
+		<td border="1" colspan="1" color="black" bgcolor="gray92" port="first">%s&lt;%d&gt;</td>
+	</tr>
+	<tr>
+		<td border="1" colspan="1" color="black" port="operator">%s</td>
+	</tr>
+	
+</table>
+</font>
+>, shape=none]

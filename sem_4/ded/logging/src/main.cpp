@@ -2,12 +2,11 @@
 #include <cstdio>
 
 
-#include "observer/observed.h"
 #include "micro_logger/MicroLogger.h"
 
 
 void observed_int_log(const Observed<int> &obj, Logger &logger=kctf::logger) {
-    logger.print_aligned(Logger::Align::left, obj.get_max_value_len(), "%d", obj.get_data());
+    logger.print_aligned(Logger::Align::middle, obj.get_max_value_len(), "%d", obj.get_data());
 }
 
 int observed_int_length(const Observed<int> &obj) {
@@ -23,19 +22,26 @@ int observed_int_length(const Observed<int> &obj) {
 }
 
 
-void func(int d = 3) {
+void func(int = 3) {
     FuncLogger flg("func");
 
-    if (!d) return;
-
-    OBSERVED(int, a, 1);
+    OBSERVED(int, a, 5);
     OBSERVED(int, b, 99);
-    OBSERVED(int, caca, 3);
-    a = b + caca;
+    OBSERVED(int, c, 99);
+    // OBSERVED(int, b, 99);
+    a = b + (c++);
 
-    func(d - 1);
+    // if (!d) return;
 
-    b = a = caca;
+    // OBSERVED(int, a, 1);
+    // OBSERVED(int, b, 99);
+    // OBSERVED(int, name, 3);
+    // a = b + name;
+    // a = a + name;
+
+    // func(d - 1);
+
+    // b = a = name;
 }
 
 
@@ -49,18 +55,24 @@ int main() {
     html_logger->set_html_mode(true);
 
     MicroLogger<int> microlog(*html_logger, {true, false, true});
+    MicroLoggerGraph<int> micrograph;
 
-    Observed<int>::get_default_pool().push_observer([&microlog](const OperatorSignal<int> &signal) {
+    Observed<int>::get_default_pool().push_observer([&microlog, &micrograph](const OperatorSignal<int> &signal) {
         microlog.log_operator(signal);
+        micrograph.log_operator(signal);
     });
     
-    FuncLogger::get_signal_dispatcher().push_observer([&microlog](const FuncCallSignal &signal) {
+    FuncLogger::get_signal_dispatcher().push_observer([&microlog, &micrograph](const FuncCallSignal &signal) {
         microlog.log_func(signal);
+        micrograph.log_func(signal);
     });
 
     func();
 
+    microlog.end_log();
     delete html_logger;
+
+    micrograph.graph();
 
     return 0;
 }

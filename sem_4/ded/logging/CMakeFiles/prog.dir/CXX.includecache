@@ -11,18 +11,20 @@ cstdlib
 -
 cstdio
 -
-observer/observed.h
-/home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/observed.h
 micro_logger/MicroLogger.h
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/MicroLogger.h
 
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/MicroLogger.h
+observer/observed.h
+/home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/observer/observed.h
 logged.h
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/logged.h
 micro_logger.h
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/micro_logger.h
 func_logger.h
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.h
+graph_logger.h
+/home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/graph_logger.h
 
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.h
 string
@@ -32,6 +34,24 @@ map
 event_system/signal.h
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/event_system/signal.h
 
+/home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/graph_logger.h
+observer/observed.h
+/home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/observer/observed.h
+micro_logger/func_logger.h
+/home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/micro_logger/func_logger.h
+utils/logger.h
+/home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/utils/logger.h
+vector
+-
+string
+-
+sstream
+-
+map
+-
+fstream
+-
+
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/logged.h
 
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/micro_logger.h
@@ -39,20 +59,6 @@ observer/observed.h
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/observer/observed.h
 micro_logger/func_logger.h
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/micro_logger/func_logger.h
-
-/home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/observed.h
-operators.h
-/home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/operators.h
-event_system/signal.h
-/home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/event_system/signal.h
-utils/logger.h
-/home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/utils/logger.h
-operators.dsl
-/home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/operators.dsl
-
-/home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/operators.dsl
-
-/home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/operators.h
 
 src/event_system/signal.h
 vector
@@ -77,6 +83,22 @@ map
 -
 event_system/signal.h
 src/micro_logger/event_system/signal.h
+
+src/observer/observed.h
+operators.h
+src/observer/operators.h
+event_system/signal.h
+src/observer/event_system/signal.h
+utils/logger.h
+src/observer/utils/logger.h
+map
+-
+operators.dsl
+src/observer/operators.dsl
+
+src/observer/operators.dsl
+
+src/observer/operators.h
 
 src/utils/logger.h
 string.h

@@ -212,7 +212,6 @@ void Logger::_log(bool to_ignore_log_level, const char* code, const char* announ
     }
 
     print_log_prefix(code, announcer);
-
     vfprintf(fileptr, message, arglist);
 
     n();

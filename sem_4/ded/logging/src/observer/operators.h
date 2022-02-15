@@ -59,6 +59,7 @@ enum Operator {
     a_del,
     a_del_arr,
 
+    dtor,
     ctor,
     asgn_copy,
     ctor_copy,
@@ -174,6 +175,8 @@ const char *to_str(Operator op) {
         case a_del_arr:
             return "delete[]";
         
+        case dtor:
+            return "dtor";
         case ctor:
             return "ctor";
         case ctor_copy:

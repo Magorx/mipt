@@ -4,14 +4,15 @@
 CMakeFiles/prog.dir/src/main.cpp.o: src/main.cpp
 CMakeFiles/prog.dir/src/main.cpp.o: src/micro_logger/MicroLogger.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/micro_logger/func_logger.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/micro_logger/graph_logger.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/micro_logger/logged.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/micro_logger/micro_logger.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/observer/observed.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/observer/operators.dsl
-CMakeFiles/prog.dir/src/main.cpp.o: src/observer/operators.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/event_system/signal.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/event_system/signal_reaction.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/micro_logger/func_logger.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/observer/observed.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/observer/operators.dsl
+CMakeFiles/prog.dir/src/main.cpp.o: src/observer/operators.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/utils/logger.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/utils/tag.h
 

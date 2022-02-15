@@ -5,14 +5,15 @@ CMakeFiles/prog.dir/src/main.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/main.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/MicroLogger.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.h
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/graph_logger.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/logged.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/micro_logger.h
- /home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/observed.h
- /home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/operators.dsl
- /home/kctf/Repositories/mipt/sem_4/ded/logging/src/observer/operators.h
  src/event_system/signal.h
  src/event_system/signal_reaction.h
  src/micro_logger/func_logger.h
+ src/observer/observed.h
+ src/observer/operators.dsl
+ src/observer/operators.h
  src/utils/logger.h
  src/utils/tag.h
 CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o

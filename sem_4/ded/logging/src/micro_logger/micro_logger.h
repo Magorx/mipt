@@ -33,7 +33,7 @@ class MicroLogger {
 
         if (settings.html_mode()) {
             logger.tag("b");
-            logger.tag("font")("color", "FF2222");
+            logger.tag("font")("color", "DD1111");
         }
 
         logger.print_log_prefix("mclg", "op");
@@ -51,14 +51,40 @@ class MicroLogger {
     }
 
     void log_normal_operator(const OperatorSignal<T> &signal) {
-        logger.print("op [%s] {", to_str(signal.op));
+        if (settings.html_mode()) {
+            logger.print("op [");
+
+            logger.tag("b");
+            logger.tag("font")("color", "cc22cc");
+            logger.print("%s", to_str(signal.op));
+            logger.tag_close(2);
+
+            logger.print("] {");
+        } else {
+            logger.print("op [%s] {", to_str(signal.op));
+        }
     }
 
 public:
     MicroLogger(Logger &logger=kctf::logger, MicroLoggerSettings settings={}) :
     logger(logger),
     settings(settings)
-    {}
+    {
+        logger.set_verb_level(Logger::Level::info);
+        print_welcome_message();
+    }
+
+    void end_log() {
+        if (settings.html_mode()) {
+            logger.tag("pre");
+        }
+
+        logger.page_cut("log end");
+
+        if (settings.html_mode()) {
+            logger.tag_close();
+        }
+    }
 
     bool is_importand_operator(Operator op) {
         return op == Operator::asgn_copy || op == Operator::ctor_copy;
@@ -156,5 +182,39 @@ public:
 
     Logger &get_logger() {
         return logger;
+    }
+
+    void print_welcome_message() {
+        if (settings.html_mode()) {
+            logger.tag("pre");
+        }
+        
+        logger.print_log_prefix("mclg", "observer");
+
+        if (settings.html_mode()) {
+            logger.print("MicroLogger by ");
+
+            logger.tag("b");
+            logger.tag("font")("color", "33CC33");
+
+            logger.print("KCTF");
+            logger.tag_close(2);
+
+            logger.print(" welcomes you!\n");
+        } else {
+            logger.print("MicroLogger by KCTF welcomes you!\n");
+        }
+
+        logger.n();
+
+        logger.info("observer", "The format of \"Observed\" values is:");
+        logger.info("observer", "name < id >[ addr ][ addr_id ] | value | history");
+
+        logger.n();
+        logger.page_cut("log start");
+
+        if (settings.html_mode()) {
+            logger.tag_close();
+        }
     }
 };

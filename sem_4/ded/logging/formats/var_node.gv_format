@@ -1,0 +1,11 @@
+node_%d[label=<<font face="Times">
+<table cellspacing="0" border="0">
+	<tr color="red">
+		<td border="1" colspan="1" color="black" bgcolor="gray92" port="name"><font color="firebrick">%s</font></td>
+		<td border="1" colspan="1" color="black" bgcolor="gray92" port="name"><font color="dodgerblue4">%d</font></td>
+		<td border="1" colspan="1" color="black" bgcolor="gray92" port="addr" cellpadding="5">%p</td>
+	</tr>
+	<tr color="red">
+		<td border="1" colspan="3" color="black" port="value">VALUE</td>
+	</tr>
+</table></font>>, shape=none]

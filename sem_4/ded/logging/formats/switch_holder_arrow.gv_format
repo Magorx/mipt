@@ -1,0 +1,1 @@
+node%d:prev->node%d:index [constraint=true, color=crimson];

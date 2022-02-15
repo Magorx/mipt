@@ -6,6 +6,8 @@
 
 #include "utils/logger.h"
 
+#include <map>
+
 
 template<typename T>
 class Observed;
@@ -27,6 +29,9 @@ class ObservedPool : public SignalDispatcher<OperatorSignal<T>> {
     static int max_id;
     static int max_tmp_id;
 
+    static int max_addr_id;
+    static std::map<const Observed<T>*, int> addr_map;
+
 public:
     ObservedPool() {}
 
@@ -42,19 +47,32 @@ public:
     }
 
     int get_unique_id() {
-        int ret = max_id;
-        ++max_id;
+        int ret = ++max_id;
         return ret;
     }
 
     int get_tmp_id() {
-        int ret = max_tmp_id;
-        ++max_tmp_id;
+        int ret = ++max_tmp_id;
         return ret;
     }
 
-    std::string get_tmp_name() {
-        return "tmp" + std::to_string(get_tmp_id());
+    std::string get_tmp_name() const {
+        return "~";
+    }
+
+    int register_addr(const Observed<T>* addr) {
+        if (!addr_map.contains(addr)) {
+            addr_map[addr] = ++max_addr_id;
+        }
+        return addr_map[addr];
+    }
+
+    int get_addr_id(const Observed<T>* addr) const {
+        if (!addr_map.contains(addr)) {
+            return -1;
+        } else {
+            return addr_map[addr];
+        }
     }
 };
 
@@ -71,11 +89,12 @@ Observed<T> operator op_sgn() const {                 \
     pool.on_operator(op_code, this, nullptr);         \
     auto ret = Observed<T>(op_sgn get_data(), pool.get_tmp_name());            \
     ret.set_history(#op_sgn + history);\
+    pool.register_addr(&ret);\
     return ret;\
 }
 
 #define OPERATOR_DEF_UNARY_PREF_SAME_REF(op_sgn, op_code)   \
-Observed<T> &operator op_sgn() const {                      \
+Observed<T> &operator op_sgn() {                      \
     pool.on_operator(op_code, this, nullptr);               \
     data = op_sgn get_data();                               \
     history = #op_sgn + std::string("(") + history + ")";                              \
@@ -83,10 +102,12 @@ Observed<T> &operator op_sgn() const {                      \
 }
 
 #define OPERATOR_DEF_UNARY_POST_SAME(op_sgn, op_code) \
-Observed<T> operator op_sgn(int) const {              \
+Observed<T> operator op_sgn(int) {              \
     pool.on_operator(op_code, this, nullptr);         \
-    auto ret= Observed<T>(get_data() op_sgn, pool.get_tmp_name());            \
+    auto ret= Observed<T>(*this, pool.get_tmp_name());            \
+    get_data() = get_data() op_sgn; \
     ret.set_history("(" + get_history() + ")" + #op_sgn); \
+    pool.register_addr(&ret);\
     return ret; \
 }
 
@@ -99,12 +120,22 @@ Observed<T> &operator op_sgn(const Observed<T> &other) { \
     return *this; \
 }
 
+/*
 #define OPERATOR_DEF_BINARY_SAME(op_sgn, op_code)                                   \
 friend Observed<T> operator op_sgn(Observed<T> first, const Observed<T> &second) {  \
     first.pool.on_operator(Operator::op_code, &first, &second);                     \
     first.get_data() op_sgn##= second.get_data();                                   \
     first.set_history(first.get_history() + " " + #op_sgn + " " + second.get_history()); \
     return first;                                                                   \
+}
+*/
+
+#define OPERATOR_DEF_BINARY_SAME(op_sgn, op_code)                                   \
+friend Observed<T> operator op_sgn(const Observed<T> &first, const Observed<T> &second) {  \
+    first.pool.on_operator(Operator::op_code, &first, &second);                     \
+    Observed<T> ret(first.get_data() op_sgn second.get_data(), first.pool.get_tmp_name()); \
+    ret.set_history(first.get_history() + " " + #op_sgn + " " + second.get_history()); \
+    return ret;                                                                   \
 }
 
 #define OPERATOR_DEF_BINARY_TYPE(ret_type, op_sgn, op_code)                             \
@@ -135,6 +166,7 @@ class Observed {
     static int max_value_len;
     static int max_id_len;
     static int max_addr_len;
+    static int max_addr_id_len;
 
     void set_default_ctor_history() {
         history = "$" + std::to_string(id);
@@ -145,7 +177,9 @@ public:
     data(), pool(default_pool),
     id(pool.get_unique_id())
     {
+        pool.register_addr(this);
         set_default_ctor_history();
+
         pool.on_operator(Operator::ctor, this, nullptr);
     }
 
@@ -155,7 +189,9 @@ public:
     name(name),
     history("")
     {
+        pool.register_addr(this);
         set_default_ctor_history();
+
         pool.on_operator(Operator::ctor, this, nullptr);
     }
 
@@ -165,21 +201,26 @@ public:
     name(name),
     history("")
     {
+        pool.register_addr(this);
         set_default_ctor_history();
+
         pool.on_operator(Operator::ctor, this, nullptr);
     }
 
-    Observed(const Observed<T> &other) :
+    Observed(const Observed<T> &other, const std::string &name="noname") :
     data(other.get_data()), pool(other.get_pool()),
     id(pool.get_unique_id()),
-    name(pool.get_tmp_name()),
+    name(name),
     history("{" + other.get_history() + "}")
     {
+        pool.register_addr(this);
         pool.on_operator(Operator::ctor_copy, this, &other);
     }
 
     Observed<T> &operator=(const Observed<T> &other) {
+        pool.register_addr(this);
         history = "=(" + other.get_history() + ")";
+
         pool.on_operator(Operator::asgn_copy, this, &other);
         get_data() = other.get_data();
         return *this;
@@ -191,15 +232,21 @@ public:
     name(pool.get_tmp_name()),
     history("&&(" + other.get_history() + ")")
     {
+        pool.register_addr(this);
         pool.on_operator(Operator::ctor_move, this, &other);
     }
 
     Observed<T> &operator=(Observed<T> &&other) {
+        pool.register_addr(this);
         history = "=&&(" + other.get_history() + ")";
 
         pool.on_operator(Operator::asgn_move, this, &other);
         get_data() = std::move(other.get_data());
         return *this;
+    }
+
+    ~Observed() {
+        pool.on_operator(Operator::dtor, this, nullptr);
     }
 
     #include "operators.dsl"
@@ -259,6 +306,7 @@ public:
         _UPD_MAX_VALUE_LEN(id, "%d", id);
         _UPD_MAX_VALUE_LEN(name, "%s", name.c_str());
         _UPD_MAX_VALUE_LEN(addr, "%p", this);
+        _UPD_MAX_VALUE_LEN(addr_id, "%d", pool.get_addr_id(this));
 
         if (value_length) {
             max_value_len = std::max(max_value_len, value_length(*this));
@@ -290,8 +338,9 @@ public:
         logger.print_aligned(Logger::Align::middle, max_id_len, "%d", id);
         logger.print(">[");
         logger.print_aligned(Logger::Align::middle, max_addr_len, "%p", this);
+        logger.print("][");
+        logger.print_aligned(Logger::Align::middle, max_addr_id_len, "%d", pool.get_addr_id(this));
         logger.print("] | ");
-        //%d>[%p] | ", name.c_str(), id, this);
         log(logger);
 
         if (to_show_history) {
@@ -322,10 +371,10 @@ template<typename T>
 ObservedPool<T> Observed<T>::default_pool = {};
 
 template<typename T>
-Observed<T>::one_line_log_type Observed<T>::one_line_log = nullptr;
+typename Observed<T>::one_line_log_type Observed<T>::one_line_log = nullptr;
 
 template<typename T>
-Observed<T>::value_length_type Observed<T>::value_length = nullptr;
+typename Observed<T>::value_length_type Observed<T>::value_length = nullptr;
 
 template<typename T>
 int Observed<T>::max_name_len = 0;
@@ -335,6 +384,14 @@ template<typename T>
 int Observed<T>::max_id_len = 0;
 template<typename T>
 int Observed<T>::max_addr_len = 0;
+template<typename T>
+int Observed<T>::max_addr_id_len = 0;
+
+template<typename T>
+int ObservedPool<T>::max_addr_id = 0;
+
+template<typename T>
+std::map<const Observed<T>*, int> ObservedPool<T>::addr_map;
 
 #undef OPERATOR_DEF_UNARY_PREF_SAME
 #undef OPERATOR_DEF_UNARY_PREF_SAME_REF
