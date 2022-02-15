@@ -5,8 +5,8 @@
 #include "micro_logger/MicroLogger.h"
 
 
-void observed_int_log(const Observed<int> &obj, Logger &logger=kctf::logger) {
-    logger.print_aligned(Logger::Align::middle, obj.get_max_value_len(), "%d", obj.get_data());
+std::string observed_int_log(const Observed<int> &obj) {
+    return std::to_string(obj.get_data());
 }
 
 int observed_int_length(const Observed<int> &obj) {

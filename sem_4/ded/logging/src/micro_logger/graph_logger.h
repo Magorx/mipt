@@ -166,7 +166,8 @@ public:
             snprintf(buf.data(), buf.size(), var_node_format.c_str(),
                     node_cnt,
                     first->get_name().c_str(), first->get_id(),
-                    first);
+                    first,
+                    first->to_str().c_str());
             
 
             log_file << buf.c_str();
@@ -206,14 +207,16 @@ public:
             snprintf(buf.data(), buf.size(), var_node_format.c_str(),
                     ++node_cnt,
                     first->get_name().c_str(), first->get_id(),
-                    first);
+                    first,
+                    first->to_str().c_str());
             log_file << buf.c_str();
 
             clear_buf();
             snprintf(buf.data(), buf.size(), var_node_format.c_str(),
                     ++node_cnt,
                     second->get_name().c_str(), second->get_id(),
-                    second);
+                    second,
+                    second->to_str().c_str());
             log_file << buf.c_str();
 
             clear_buf();

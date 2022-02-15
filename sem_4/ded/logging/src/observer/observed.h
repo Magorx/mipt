@@ -7,6 +7,7 @@
 #include "utils/logger.h"
 
 #include <map>
+#include <string>
 
 
 template<typename T>
@@ -155,7 +156,7 @@ class Observed {
     std::string name;
     std::string history;
 
-    using one_line_log_type = std::function<void (const Observed<T>&,Logger&)>;
+    using one_line_log_type = std::function<std::string (const Observed<T>&)>;
     using value_length_type = std::function<int (const Observed<T>&)>;
     static one_line_log_type one_line_log;
     static value_length_type value_length;
@@ -323,10 +324,19 @@ public:
     _GET_MAX_VALUE_LEN(addr)
     _GET_MAX_VALUE_LEN(value)
 
-    void log(Logger &logger=kctf::logger) const {
-        if (one_line_log) {
-            one_line_log(*this, logger);
+    std::string to_str() const {
+        if (!one_line_log) {
+            return "{no one_line_log set up}";
         }
+        return one_line_log(*this);
+    }
+
+    void log(Logger &logger=kctf::logger) const {
+        if (!one_line_log) {
+            return;
+        }
+        auto str = one_line_log(*this);
+        logger.print_aligned(Logger::Align::middle, get_max_value_len(), "%s", str.c_str());
     }
 
     void logger_log(Logger &logger=kctf::logger, bool to_show_history=false) const {
