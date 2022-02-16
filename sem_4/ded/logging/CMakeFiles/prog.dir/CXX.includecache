@@ -59,6 +59,12 @@ observer/observed.h
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/observer/observed.h
 micro_logger/func_logger.h
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/micro_logger/func_logger.h
+settings.h
+/home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/settings.h
+
+/home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/settings.h
+utils/rgba/rgba.h
+/home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/utils/rgba/rgba.h
 
 src/event_system/signal.h
 vector
@@ -117,6 +123,12 @@ vector
 -
 tag.h
 src/utils/tag.h
+
+src/utils/rgba/rgba.h
+cstdint
+-
+string
+-
 
 src/utils/tag.h
 string

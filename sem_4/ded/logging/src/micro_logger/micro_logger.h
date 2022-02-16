@@ -5,6 +5,9 @@
 #include "micro_logger/func_logger.h"
 
 
+#include "settings.h"
+
+
 struct MicroLoggerSettings {
     bool to_show_history = false;
 
@@ -28,12 +31,39 @@ class MicroLogger {
 
     MicroLoggerSettings settings;
 
+    bool is_important(Operator op) {
+        return op == Operator::asgn_copy
+            || op == Operator::ctor_copy;
+    }
+
+    bool is_ctor(Operator op) {
+        return op == Operator::ctor
+            || op == Operator::ctor_copy
+            || op == Operator::ctor_move;
+    }
+
+    bool is_dtor(Operator op) {
+        return op == Operator::dtor;
+    }
+
+    const char *get_op_color(Operator op) {
+        if (is_important(op)) {
+            return get_color(CLR_IMPORTANT).c_str();
+        } else if (is_ctor(op)) {
+            return get_color(CLR_CTOR).c_str();
+        } else if (is_dtor(op)) {
+            return get_color(CLR_DTOR).c_str();
+        } else {
+            return get_color(CLR_OP).c_str();
+        }
+    }
+
     void log_important_operator(const OperatorSignal<T> &signal) {
         logger.print("op [\n");
 
         if (settings.html_mode()) {
             logger.tag("b");
-            logger.tag("font")("color", "DD1111");
+            logger.tag("font")("color", get_op_color(signal.op));
         }
 
         logger.print_log_prefix("mclg", "op");
@@ -55,7 +85,7 @@ class MicroLogger {
             logger.print("op [");
 
             logger.tag("b");
-            logger.tag("font")("color", "cc22cc");
+            logger.tag("font")("color", get_op_color(signal.op));
             logger.print("%s", to_str(signal.op));
             logger.tag_close(2);
 
@@ -71,6 +101,9 @@ public:
     settings(settings)
     {
         logger.set_verb_level(Logger::Level::info);
+
+        logger.print("<style> body, html { background: #%s; color: #%s } </style>", get_color(CLR_BACKGROUND).c_str(), get_color(CLR_FONT).c_str());
+
         print_welcome_message();
     }
 
@@ -86,14 +119,10 @@ public:
         }
     }
 
-    bool is_importand_operator(Operator op) {
-        return op == Operator::asgn_copy || op == Operator::ctor_copy;
-    }
-
     void log_opeartor_console(const OperatorSignal<T> &signal) {
         logger.print_log_prefix("mclg", "observed");
         
-        if (is_importand_operator(signal.op)) {
+        if (is_important(signal.op)) {
             log_important_operator(signal);
         } else {
             log_normal_operator(signal);
@@ -155,10 +184,14 @@ public:
         }
     }
 
+    std::string get_color(const RGBA &color) {
+        return to_string(!color);
+    }
+
     void log_func_console(const FuncCallSignal &signal) {
         if (settings.html_mode()) {
             logger.tag("b");
-            logger.tag("font")("color", "3333CC");
+            logger.tag("font")("color", get_color(CLR_FUNC).c_str());
         }
 
         if (signal.is_called) {
@@ -195,7 +228,7 @@ public:
             logger.print("MicroLogger by ");
 
             logger.tag("b");
-            logger.tag("font")("color", "33CC33");
+            logger.tag("font")("color", get_color(CLR_KCTF).c_str());
 
             logger.print("KCTF");
             logger.tag_close(2);

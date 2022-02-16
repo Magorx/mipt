@@ -1,7 +1,6 @@
 #include <cstdlib>
 #include <cstdio>
 
-
 #include "micro_logger/MicroLogger.h"
 
 
@@ -25,23 +24,12 @@ int observed_int_length(const Observed<int> &obj) {
 void func(int = 3) {
     FuncLogger flg("func");
 
-    OBSERVED(int, a, 5);
-    OBSERVED(int, b, 99);
+    OBSERVED(int, a, 3);
+    OBSERVED(int, b, 5);
     OBSERVED(int, c, 99);
-    // OBSERVED(int, b, 99);
-    a = b + (c++);
+    OBSERVED(int, res, 0);
 
-    // if (!d) return;
-
-    // OBSERVED(int, a, 1);
-    // OBSERVED(int, b, 99);
-    // OBSERVED(int, name, 3);
-    // a = b + name;
-    // a = a + name;
-
-    // func(d - 1);
-
-    // b = a = name;
+    res = a + b * (c++);
 }
 
 
@@ -73,6 +61,9 @@ int main() {
     delete html_logger;
 
     micrograph.graph();
+
+    RGBA a("ff33c9");
+    LOOG("%s\n", to_string(a).c_str());
 
     return 0;
 }

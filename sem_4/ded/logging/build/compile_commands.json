@@ -16,6 +16,11 @@
 },
 {
   "directory": "/home/kctf/Repositories/mipt/sem_4/ded/logging/build",
+  "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/logging/src  -O0 -Wall -Wextra -Wno-multichar -Wno-unused-result -fno-elide-constructors -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/rgba/rgba.cpp",
+  "file": "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/rgba/rgba.cpp"
+},
+{
+  "directory": "/home/kctf/Repositories/mipt/sem_4/ded/logging/build",
   "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/logging/src  -O0 -Wall -Wextra -Wno-multichar -Wno-unused-result -fno-elide-constructors -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/line.cpp",
   "file": "/home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/line.cpp"
 },

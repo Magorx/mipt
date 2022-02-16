@@ -33,6 +33,8 @@ class MicroLoggerGraph {
 
     int node_cnt = 0;
 
+    bool graphed = false;
+
 public:
     MicroLoggerGraph(const std::string log_file_name="lograph.tmp") :
     log_file(log_file_name),
@@ -134,6 +136,60 @@ public:
         log_file << buf.c_str();
     }
 
+    void log_var_node(const Observed<T> *obj) {
+        clear_buf();
+
+        snprintf(buf.data(), buf.size(), var_node_format.c_str(),
+                 ++node_cnt,
+                 obj->get_name().c_str(), obj->get_id(),
+                 obj,
+                 obj->to_str().c_str());
+
+        log_file << buf.c_str();
+    }
+    
+    void log_binary_op(const Observed<T> *first, const Observed<T> *second, Operator op) {
+        clear_buf();
+
+        snprintf(buf.data(), buf.size(), binary_op_node_format.c_str(),
+                 ++node_cnt,
+                 first->get_name().c_str(),
+                 first->get_id(),
+                 second->get_name().c_str(),
+                 second->get_id(),
+                 to_str(op));
+        
+        log_file << buf.c_str();
+    }
+
+    void log_unary_op(const Observed<T> *obj, Operator op) {
+        clear_buf();
+
+        snprintf(buf.data(), buf.size(), unary_op_node_format.c_str(),
+                 ++node_cnt,
+                 obj->get_name().c_str(),
+                 obj->get_id(),
+                 to_str(op));
+
+        log_file << buf.c_str();
+    }
+
+    void bind_node_ranks(const std::vector<int> &nodes, const std::vector<bool> &is_var_node) {
+        std::string bind_command = "{rank = same";
+
+        for (size_t i = 0; i < nodes.size(); ++i) {
+            if (i < is_var_node.size() && is_var_node[i]) {
+                bind_command += ";node_" + std::to_string(nodes[i]);
+            } else {
+                bind_command += ";node" + std::to_string(nodes[i]);
+            }
+        }
+
+        bind_command += "}\n";
+
+        log_file << bind_command;
+    }
+
     void log_operator(const OperatorSignal<T> &signal) {
         const Observed<T> *first = signal.first;
         const Observed<T> *second = signal.second;
@@ -147,52 +203,25 @@ public:
         }
 
         if (!second) {
-            clear_buf();
-
-            snprintf(buf.data(), buf.size(), unary_op_node_format.c_str(),
-                     ++node_cnt,
-                     first->get_name().c_str(),
-                     first->get_id(),
-                     to_str(signal.op));
-
-            log_file << buf.c_str();
+            log_unary_op(first, signal.op);
+            int node_cur = node_cnt;
             
             if (!is_creating_op(signal.op)) {
-                draw_arrow_move(node_one, node_cnt);
+                draw_arrow_move(node_one, node_cur);
             }
 
-            clear_buf();
+            log_var_node(first);
 
-            snprintf(buf.data(), buf.size(), var_node_format.c_str(),
-                    node_cnt,
-                    first->get_name().c_str(), first->get_id(),
-                    first,
-                    first->to_str().c_str());
-            
-
-            log_file << buf.c_str();
-
-            clear_buf();
-            snprintf(buf.data(), buf.size(), "{rank = same; node%d; node_%d;}", node_cnt, node_cnt);
-            log_file << buf.c_str();
+            bind_node_ranks({node_cur, node_cnt}, {0, 1});
 
             if (is_creating_op(signal.op) || is_node_replacing_op(signal.op)) {
-                obs_to_node[first] = node_cnt;
+                obs_to_node[first] = node_cur;
             }
             
-            draw_arrow_flow(node_cnt, node_cnt + 1);
+            draw_arrow_flow(node_cur, node_cnt + 1);
         } else {
-            clear_buf();
-
-            snprintf(buf.data(), buf.size(), binary_op_node_format.c_str(),
-                     ++node_cnt,
-                     first->get_name().c_str(),
-                     first->get_id(),
-                     second->get_name().c_str(),
-                     second->get_id(),
-                     to_str(signal.op));
-            
-            log_file << buf.c_str();
+            log_binary_op(first, second, signal.op);
+            int node_cur = node_cnt;
 
             if (!is_creating_op(signal.op)) {
                 draw_arrow_move(node_one, node_cnt);
@@ -203,27 +232,12 @@ public:
                 node_one = obs_to_node[first] = node_cnt;
             }
 
-            clear_buf();
-            snprintf(buf.data(), buf.size(), var_node_format.c_str(),
-                    ++node_cnt,
-                    first->get_name().c_str(), first->get_id(),
-                    first,
-                    first->to_str().c_str());
-            log_file << buf.c_str();
+            log_var_node(first);
+            log_var_node(second);
 
-            clear_buf();
-            snprintf(buf.data(), buf.size(), var_node_format.c_str(),
-                    ++node_cnt,
-                    second->get_name().c_str(), second->get_id(),
-                    second,
-                    second->to_str().c_str());
-            log_file << buf.c_str();
+            bind_node_ranks({node_cur, node_cur + 1, node_cur + 2}, {0, 1, 1});
 
-            clear_buf();
-            snprintf(buf.data(), buf.size(), "{rank = same; node%d; node_%d; node_%d}", node_cnt - 2, node_cnt - 1, node_cnt);
-            log_file << buf.c_str();
-
-            draw_arrow_flow(node_cnt - 2, node_cnt + 1);
+            draw_arrow_flow(node_cur, node_cnt + 1);
         }
     }
 
@@ -246,6 +260,20 @@ public:
     }
 
     void graph() {
+        if (graphed) {
+            logger.error("MicroLoggerGraph", "sorry, can't graph() more then once per logger");
+            logger.error("MicroLoggerGraph", "operations are saved in the file, you have to fix it to meet dot format");
+            logger.error("MicroLoggerGraph", "(only places between graphs() have to be fixed)");
+
+            log_tail();
+            log_file.close();
+            log_head();
+
+            return;
+        } else {
+            graphed = true;
+        }
+
         log_tail();
         log_file.close();
 
@@ -257,7 +285,7 @@ public:
 
         command_buffer.assign(100, 0);
         snprintf(command_buffer.data(), command_buffer.size(), "eog %s", output_name.c_str());
-        system(command_buffer.data());
+        // system(command_buffer.data());
 
         log_file.open(file_name, std::ios_base::app);
     }

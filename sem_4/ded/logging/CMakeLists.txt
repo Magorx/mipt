@@ -25,6 +25,8 @@ add_executable(prog
         src/utils/logger.cpp
         src/utils/tag.cpp
 
+        src/utils/rgba/rgba.cpp
+
         src/utils/text_line/line.cpp
         src/utils/text_line/line_pos.cpp
         src/utils/text_line/cursor.cpp

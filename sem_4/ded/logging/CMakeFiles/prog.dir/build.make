@@ -96,9 +96,22 @@ CMakeFiles/prog.dir/src/utils/tag.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/tag.cpp.s"
 	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/tag.cpp -o CMakeFiles/prog.dir/src/utils/tag.cpp.s
 
+CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o: CMakeFiles/prog.dir/flags.make
+CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o: src/utils/rgba/rgba.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/rgba/rgba.cpp
+
+CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.i"
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/rgba/rgba.cpp > CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.i
+
+CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.s"
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/rgba/rgba.cpp -o CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.s
+
 CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o: src/utils/text_line/line.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o"
 	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/line.cpp
 
 CMakeFiles/prog.dir/src/utils/text_line/line.cpp.i: cmake_force
@@ -111,7 +124,7 @@ CMakeFiles/prog.dir/src/utils/text_line/line.cpp.s: cmake_force
 
 CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o: src/utils/text_line/line_pos.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o"
 	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/line_pos.cpp
 
 CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.i: cmake_force
@@ -124,7 +137,7 @@ CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.s: cmake_force
 
 CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o: src/utils/text_line/cursor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o"
 	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/cursor.cpp
 
 CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.i: cmake_force
@@ -137,7 +150,7 @@ CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.s: cmake_force
 
 CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o: src/utils/text_line/line_history.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o"
 	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/text_line/line_history.cpp
 
 CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.i: cmake_force
@@ -150,7 +163,7 @@ CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.s: cmake_force
 
 CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o: src/utils/state_history/history.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o"
 	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/state_history/history.cpp
 
 CMakeFiles/prog.dir/src/utils/state_history/history.cpp.i: cmake_force
@@ -163,7 +176,7 @@ CMakeFiles/prog.dir/src/utils/state_history/history.cpp.s: cmake_force
 
 CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o: src/micro_logger/func_logger.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o"
 	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.cpp
 
 CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.i: cmake_force
@@ -176,7 +189,7 @@ CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.s: cmake_force
 
 CMakeFiles/prog.dir/src/main.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/main.cpp.o: src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/prog.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/prog.dir/src/main.cpp.o"
 	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/main.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/logging/src/main.cpp
 
 CMakeFiles/prog.dir/src/main.cpp.i: cmake_force
@@ -192,6 +205,7 @@ prog_OBJECTS = \
 "CMakeFiles/prog.dir/src/utils/timer.cpp.o" \
 "CMakeFiles/prog.dir/src/utils/logger.cpp.o" \
 "CMakeFiles/prog.dir/src/utils/tag.cpp.o" \
+"CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o" \
 "CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o" \
 "CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o" \
 "CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o" \
@@ -206,6 +220,7 @@ prog_EXTERNAL_OBJECTS =
 prog: CMakeFiles/prog.dir/src/utils/timer.cpp.o
 prog: CMakeFiles/prog.dir/src/utils/logger.cpp.o
 prog: CMakeFiles/prog.dir/src/utils/tag.cpp.o
+prog: CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o
 prog: CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o
 prog: CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o
 prog: CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o
@@ -215,7 +230,7 @@ prog: CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o
 prog: CMakeFiles/prog.dir/src/main.cpp.o
 prog: CMakeFiles/prog.dir/build.make
 prog: CMakeFiles/prog.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable prog"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/logging/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable prog"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/prog.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -57,8 +57,8 @@ public:
         return ret;
     }
 
-    std::string get_tmp_name() const {
-        return "~";
+    std::string get_tmp_name() {
+        return "TMP" + std::to_string(get_tmp_id());
     }
 
     int register_addr(const Observed<T>* addr) {
@@ -170,7 +170,7 @@ class Observed {
     static int max_addr_id_len;
 
     void set_default_ctor_history() {
-        history = "$" + std::to_string(id);
+        history = name + std::to_string(id);
     }
 
 public:
@@ -344,13 +344,13 @@ public:
 
         logger.print_aligned(Logger::Align::left, max_name_len, "%s", name.c_str());
 
-        logger.print(" | <");
-        logger.print_aligned(Logger::Align::middle, max_id_len, "%d", id);
-        logger.print(">[");
+        logger.print(" | [");
+        logger.print_aligned(Logger::Align::middle, max_id_len, "var%d", id);
+        logger.print("][");
         logger.print_aligned(Logger::Align::middle, max_addr_len, "%p", this);
         logger.print("][");
-        logger.print_aligned(Logger::Align::middle, max_addr_id_len, "%d", pool.get_addr_id(this));
-        logger.print("] | ");
+        logger.print_aligned(Logger::Align::middle, max_addr_id_len, "loc%d", pool.get_addr_id(this));
+        logger.print("] | val = ");
         log(logger);
 
         if (to_show_history) {

@@ -217,6 +217,33 @@ src/utils/logger.cpp.s:
 	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/utils/logger.cpp.s
 .PHONY : src/utils/logger.cpp.s
 
+src/utils/rgba/rgba.o: src/utils/rgba/rgba.cpp.o
+
+.PHONY : src/utils/rgba/rgba.o
+
+# target to build an object file
+src/utils/rgba/rgba.cpp.o:
+	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o
+.PHONY : src/utils/rgba/rgba.cpp.o
+
+src/utils/rgba/rgba.i: src/utils/rgba/rgba.cpp.i
+
+.PHONY : src/utils/rgba/rgba.i
+
+# target to preprocess a source file
+src/utils/rgba/rgba.cpp.i:
+	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.i
+.PHONY : src/utils/rgba/rgba.cpp.i
+
+src/utils/rgba/rgba.s: src/utils/rgba/rgba.cpp.s
+
+.PHONY : src/utils/rgba/rgba.s
+
+# target to generate assembly for a file
+src/utils/rgba/rgba.cpp.s:
+	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.s
+.PHONY : src/utils/rgba/rgba.cpp.s
+
 src/utils/state_history/history.o: src/utils/state_history/history.cpp.o
 
 .PHONY : src/utils/state_history/history.o
@@ -425,6 +452,9 @@ help:
 	@echo "... src/utils/logger.o"
 	@echo "... src/utils/logger.i"
 	@echo "... src/utils/logger.s"
+	@echo "... src/utils/rgba/rgba.o"
+	@echo "... src/utils/rgba/rgba.i"
+	@echo "... src/utils/rgba/rgba.s"
 	@echo "... src/utils/state_history/history.o"
 	@echo "... src/utils/state_history/history.i"
 	@echo "... src/utils/state_history/history.s"

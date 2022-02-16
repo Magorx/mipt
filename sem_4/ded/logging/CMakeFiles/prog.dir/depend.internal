@@ -8,6 +8,7 @@ CMakeFiles/prog.dir/src/main.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/graph_logger.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/logged.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/micro_logger.h
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/settings.h
  src/event_system/signal.h
  src/event_system/signal_reaction.h
  src/micro_logger/func_logger.h
@@ -15,6 +16,7 @@ CMakeFiles/prog.dir/src/main.cpp.o
  src/observer/operators.dsl
  src/observer/operators.h
  src/utils/logger.h
+ src/utils/rgba/rgba.h
  src/utils/tag.h
 CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/func_logger.cpp
@@ -27,6 +29,9 @@ CMakeFiles/prog.dir/src/utils/logger.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/logger.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/logger.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/tag.h
+CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/rgba/rgba.cpp
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/rgba/rgba.h
 CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/state_history/history.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/state_history/history.h

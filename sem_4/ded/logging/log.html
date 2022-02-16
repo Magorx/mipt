@@ -1,86 +1,116 @@
-<pre>[mclg]&lt;observer&gt; : MicroLogger by <b><font color=33CC33>KCTF</font></b> welcomes you!
+<style> body, html { background: #000000; color: #ffffff } </style><pre>[mclg]&lt;observer&gt; : MicroLogger by <b><font color=d63cd6>KCTF</font></b> welcomes you!
 
 [info]<        > : The format of "Observed" values is:
                  : name < id >[ addr ][ addr_id ] | value | history
 
 ================================================================================ [0] log start
-</pre><pre><b><font color=3333CC>[mclg]&lt;func&gt; : [1] func() <{
+</pre><pre><b><font color=bdbd3c>[mclg]&lt;func&gt; : [1] func() <{
 
-</font></b></pre><pre>[    ]&lt;observed&gt; :     op [<b><font color=cc22cc>ctor</font></b>] {
-                 :         a | <1>[0x7ffc1322c4a0][1] | 5 | $1
+</font></b></pre><pre>[    ]&lt;observed&gt; :     op [<b><font color=8c6eb0>ctor</font></b>] {
+                 :         a | [var1][0x7ffd4a392660][loc1] | val = 3 | a1
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>ctor</font></b>] {
-                 :         b | <2>[0x7ffc1322c500][2] | 99 | $2
+</pre><pre>                 :     op [<b><font color=8c6eb0>ctor</font></b>] {
+                 :         b | [var2][0x7ffd4a3926c0][loc2] | val = 5 | b2
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>ctor</font></b>] {
-                 :         c | <3>[0x7ffc1322c560][3] | 99 | $3
+</pre><pre>                 :     op [<b><font color=8c6eb0>ctor</font></b>] {
+                 :         c | [var3][0x7ffd4a392720][loc3] | val = 99 | c3
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>.++</font></b>] {
-                 :         c | <3>[0x7ffc1322c560][3] | 99 | $3
+</pre><pre>                 :     op [<b><font color=8c6eb0>ctor</font></b>] {
+                 :         res | [var4][0x7ffd4a392780][loc4] | val = 0  | res4
+                 :     }
+
+</pre><pre>                 :     op [<b><font color=2cdb2c>.++</font></b>] {
+                 :         c   | [var3][0x7ffd4a392720][loc3] | val = 99 | c3
                  :     }
 
 </pre><pre>                 :     op [
-<b><font color=DD1111>[    ]&lt;   op   &gt; :         ctor_copy
+<b><font color=26e3e3>[    ]&lt;   op   &gt; :         ctor_copy
 </font></b>                 :                  ] {
-[    ]&lt;observed&gt; :         ~ | <4>[0x7ffc1322c3e0][4] | 99 | {$3}
-                 :         c | <3>[0x7ffc1322c560][3] | 99 | $3
+[    ]&lt;observed&gt; :         TMP1 | [var5][0x7ffd4a3925a0][loc5] | val = 99 | {c3}
+                 :         c    | [var3][0x7ffd4a392720][loc3] | val = 99 | c3
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>ctor_move</font></b>] {
-                 :         ~ | <5>[0x7ffc1322c5c0][5] | 99 | &&(($3)++)
-                 :         ~ | <4>[0x7ffc1322c3e0][4] | 99 | ($3)++
+</pre><pre>                 :     op [<b><font color=8c6eb0>ctor_move</font></b>] {
+                 :         TMP2 | [var6][0x7ffd4a3927e0][loc6] | val = 99 | &&((c3)++)
+                 :         TMP1 | [var5][0x7ffd4a3925a0][loc5] | val = 99 | (c3)++
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>dtor</font></b>] {
-                 :         ~ | <4>[0x7ffc1322c3e0][4] | 99 | ($3)++
+</pre><pre>                 :     op [<b><font color=4179f8>dtor</font></b>] {
+                 :         TMP1 | [var5][0x7ffd4a3925a0][loc5] | val = 99 | (c3)++
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>+</font></b>] {
-                 :         b | <2>[0x7ffc1322c500][2] | 99 | $2
-                 :         ~ | <5>[0x7ffc1322c5c0][5] | 99 | &&(($3)++)
+</pre><pre>                 :     op [<b><font color=2cdb2c>*</font></b>] {
+                 :         b    | [var2][0x7ffd4a3926c0][loc2] | val = 5  | b2
+                 :         TMP2 | [var6][0x7ffd4a3927e0][loc6] | val = 99 | &&((c3)++)
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>ctor</font></b>] {
-                 :         ~ | <6>[0x7ffc1322c3e0][4] | 198 | $6
+</pre><pre>                 :     op [<b><font color=8c6eb0>ctor</font></b>] {
+                 :         TMP3 | [var7][0x7ffd4a3925a0][loc5] | val = 495 | TMP37
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>ctor_move</font></b>] {
-                 :         ~ | <7>[0x7ffc1322c620][6] | 198 | &&($2 + &&(($3)++))
-                 :         ~ | <6>[0x7ffc1322c3e0][4] | 198 | $2 + &&(($3)++)
+</pre><pre>                 :     op [<b><font color=8c6eb0>ctor_move</font></b>] {
+                 :         TMP4 | [var8][0x7ffd4a392840][loc7] | val = 495 | &&(b2 * &&((c3)++))
+                 :         TMP3 | [var7][0x7ffd4a3925a0][loc5] | val = 495 | b2 * &&((c3)++)
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>dtor</font></b>] {
-                 :         ~ | <6>[0x7ffc1322c3e0][4] | 198 | $2 + &&(($3)++)
+</pre><pre>                 :     op [<b><font color=4179f8>dtor</font></b>] {
+                 :         TMP3 | [var7][0x7ffd4a3925a0][loc5] | val = 495 | b2 * &&((c3)++)
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>asgn_move</font></b>] {
-                 :         a | <1>[0x7ffc1322c4a0][1] |  5  | =&&(&&($2 + &&(($3)++)))
-                 :         ~ | <7>[0x7ffc1322c620][6] | 198 | &&($2 + &&(($3)++))
+</pre><pre>                 :     op [<b><font color=2cdb2c>+</font></b>] {
+                 :         a    | [var1][0x7ffd4a392660][loc1] | val =  3  | a1
+                 :         TMP4 | [var8][0x7ffd4a392840][loc7] | val = 495 | &&(b2 * &&((c3)++))
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>dtor</font></b>] {
-                 :         ~ | <7>[0x7ffc1322c620][6] | 198 | &&($2 + &&(($3)++))
-                 :     }
-
-</pre><pre>                 :     op [<b><font color=cc22cc>dtor</font></b>] {
-                 :         ~ | <5>[0x7ffc1322c5c0][5] | 99  | &&(($3)++)
+</pre><pre>                 :     op [<b><font color=8c6eb0>ctor</font></b>] {
+                 :         TMP5 | [var9][0x7ffd4a3925a0][loc5] | val = 498 | TMP59
 [mclg]&lt;observed&gt; :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>dtor</font></b>] {
-                 :         c | <3>[0x7ffc1322c560][3] | 99  | $3
+</pre><pre>                 :     op [<b><font color=8c6eb0>ctor_move</font></b>] {
+                 :         TMP6 | [var10][0x7ffd4a3928a0][loc8] | val = 498 | &&(a1 + &&(b2 * &&((c3)++)))
+                 :         TMP5 | [var9][0x7ffd4a3925a0][loc5] | val = 498 | a1 + &&(b2 * &&((c3)++))
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>dtor</font></b>] {
-                 :         b | <2>[0x7ffc1322c500][2] | 99  | $2
+</pre><pre>                 :     op [<b><font color=4179f8>dtor</font></b>] {
+                 :         TMP5 | [var9][0x7ffd4a3925a0][loc5] | val = 498 | a1 + &&(b2 * &&((c3)++))
                  :     }
 
-</pre><pre>                 :     op [<b><font color=cc22cc>dtor</font></b>] {
-                 :         a | <1>[0x7ffc1322c4a0][1] | 198 | =&&(&&($2 + &&(($3)++)))
+</pre><pre>                 :     op [<b><font color=2cdb2c>asgn_move</font></b>] {
+                 :         res  | [var4][0x7ffd4a392780][loc4] | val =  0  | =&&(&&(a1 + &&(b2 * &&((c3)++))))
+                 :         TMP6 | [var10][0x7ffd4a3928a0][loc8] | val = 498 | &&(a1 + &&(b2 * &&((c3)++)))
                  :     }
 
-</pre><pre><b><font color=3333CC>[    ]&lt;  func  &gt; : }> [1] func()
+</pre><pre>                 :     op [<b><font color=4179f8>dtor</font></b>] {
+                 :         TMP6 | [var10][0x7ffd4a3928a0][loc8] | val = 498 | &&(a1 + &&(b2 * &&((c3)++)))
+                 :     }
+
+</pre><pre>                 :     op [<b><font color=4179f8>dtor</font></b>] {
+                 :         TMP4 | [var8][0x7ffd4a392840][loc7] | val = 495 | &&(b2 * &&((c3)++))
+                 :     }
+
+</pre><pre>                 :     op [<b><font color=4179f8>dtor</font></b>] {
+                 :         TMP2 | [var6][0x7ffd4a3927e0][loc6] | val = 99  | &&((c3)++)
+                 :     }
+
+</pre><pre>                 :     op [<b><font color=4179f8>dtor</font></b>] {
+                 :         res  | [var4][0x7ffd4a392780][loc4] | val = 498 | =&&(&&(a1 + &&(b2 * &&((c3)++))))
+                 :     }
+
+</pre><pre>                 :     op [<b><font color=4179f8>dtor</font></b>] {
+                 :         c    | [var3][0x7ffd4a392720][loc3] | val = 99  | c3
+                 :     }
+
+</pre><pre>                 :     op [<b><font color=4179f8>dtor</font></b>] {
+                 :         b    | [var2][0x7ffd4a3926c0][loc2] | val =  5  | b2
+                 :     }
+
+</pre><pre>                 :     op [<b><font color=4179f8>dtor</font></b>] {
+                 :         a    | [var1][0x7ffd4a392660][loc1] | val =  3  | a1
+                 :     }
+
+</pre><pre><b><font color=bdbd3c>[    ]&lt;  func  &gt; : }> [1] func()
 </font></b></pre><pre>================================================================================ [1] log end
 </pre>
