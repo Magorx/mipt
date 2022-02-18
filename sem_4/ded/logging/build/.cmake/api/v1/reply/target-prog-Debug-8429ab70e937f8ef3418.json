@@ -25,13 +25,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 21,
+				"line" : 22,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 13,
+				"line" : 14,
 				"parent" : 0
 			}
 		]
@@ -42,7 +42,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-O0 -Wall -Wextra -Wno-multichar -Wno-unused-result -fno-elide-constructors -g  "
+					"fragment" : "-O2 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g  "
 				},
 				{
 					"fragment" : "-std=gnu++2a"
@@ -78,7 +78,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-O0 -Wall -Wextra -Wno-multichar -Wno-unused-result -fno-elide-constructors -g",
+				"fragment" : "-O2 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g",
 				"role" : "flags"
 			},
 			{

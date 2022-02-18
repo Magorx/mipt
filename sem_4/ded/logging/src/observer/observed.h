@@ -88,7 +88,7 @@ int ObservedPool<T>::max_tmp_id = 0;
 #define OPERATOR_DEF_UNARY_PREF_SAME(op_sgn, op_code) \
 Observed<T> operator op_sgn() const {                 \
     pool.on_operator(op_code, this, nullptr);         \
-    auto ret = Observed<T>(op_sgn get_data(), pool.get_tmp_name());            \
+    auto ret = Observed<T>(op_sgn get_data(), pool.get_tmp_name(), true);            \
     ret.set_history(#op_sgn + history);\
     pool.register_addr(&ret);\
     return ret;\
@@ -105,10 +105,10 @@ Observed<T> &operator op_sgn() {                      \
 #define OPERATOR_DEF_UNARY_POST_SAME(op_sgn, op_code) \
 Observed<T> operator op_sgn(int) {              \
     pool.on_operator(op_code, this, nullptr);         \
-    auto ret= Observed<T>(*this, pool.get_tmp_name());            \
-    get_data() = get_data() op_sgn; \
-    ret.set_history("(" + get_history() + ")" + #op_sgn); \
+    auto ret= Observed<T>(*this, pool.get_tmp_name(), true);            \
+    get_data() op_sgn; \
     pool.register_addr(&ret);\
+    set_history("(" + get_history() + ")" + #op_sgn);\
     return ret; \
 }
 
@@ -134,7 +134,7 @@ friend Observed<T> operator op_sgn(Observed<T> first, const Observed<T> &second)
 #define OPERATOR_DEF_BINARY_SAME(op_sgn, op_code)                                   \
 friend Observed<T> operator op_sgn(const Observed<T> &first, const Observed<T> &second) {  \
     first.pool.on_operator(Operator::op_code, &first, &second);                     \
-    Observed<T> ret(first.get_data() op_sgn second.get_data(), first.pool.get_tmp_name()); \
+    Observed<T> ret(first.get_data() op_sgn second.get_data(), first.pool.get_tmp_name(), true); \
     ret.set_history(first.get_history() + " " + #op_sgn + " " + second.get_history()); \
     return ret;                                                                   \
 }
@@ -156,6 +156,8 @@ class Observed {
     std::string name;
     std::string history;
 
+    bool is_temp = false;
+
     using one_line_log_type = std::function<std::string (const Observed<T>&)>;
     using value_length_type = std::function<int (const Observed<T>&)>;
     static one_line_log_type one_line_log;
@@ -168,6 +170,7 @@ class Observed {
     static int max_id_len;
     static int max_addr_len;
     static int max_addr_id_len;
+
 
     void set_default_ctor_history() {
         history = name + std::to_string(id);
@@ -184,11 +187,12 @@ public:
         pool.on_operator(Operator::ctor, this, nullptr);
     }
 
-    Observed(const T &data, const std::string &name="noname") :
+    Observed(const T &data, const std::string &name="@noname", bool is_temp=false) :
     data(data), pool(default_pool),
     id(pool.get_unique_id()),
     name(name),
-    history("")
+    history(""),
+    is_temp(is_temp)
     {
         pool.register_addr(this);
         set_default_ctor_history();
@@ -196,11 +200,12 @@ public:
         pool.on_operator(Operator::ctor, this, nullptr);
     }
 
-    Observed(const T &data, ObservedPool<T> &pool, const std::string &name="noname") :
+    Observed(const T &data, ObservedPool<T> &pool, const std::string &name="@noname", bool is_temp=false) :
     data(data), pool(pool),
     id(pool.get_unique_id()),
     name(name),
-    history("")
+    history(""),
+    is_temp(is_temp)
     {
         pool.register_addr(this);
         set_default_ctor_history();
@@ -208,11 +213,12 @@ public:
         pool.on_operator(Operator::ctor, this, nullptr);
     }
 
-    Observed(const Observed<T> &other, const std::string &name="noname") :
+    Observed(const Observed<T> &other, const std::string &name="@noname", bool is_temp=false) :
     data(other.get_data()), pool(other.get_pool()),
     id(pool.get_unique_id()),
     name(name),
-    history("{" + other.get_history() + "}")
+    history("COPY{" + other.get_history() + "}"),
+    is_temp(is_temp)
     {
         pool.register_addr(this);
         pool.on_operator(Operator::ctor_copy, this, &other);
@@ -220,7 +226,7 @@ public:
 
     Observed<T> &operator=(const Observed<T> &other) {
         pool.register_addr(this);
-        history = "=(" + other.get_history() + ")";
+        history = "COPY={" + other.get_history() + "}";
 
         pool.on_operator(Operator::asgn_copy, this, &other);
         get_data() = other.get_data();
@@ -231,7 +237,8 @@ public:
     data(std::move(other.get_data())), pool(other.get_pool()),
     id(pool.get_unique_id()),
     name(pool.get_tmp_name()),
-    history("&&(" + other.get_history() + ")")
+    history("move(" + other.get_history() + ")"),
+    is_temp(true)
     {
         pool.register_addr(this);
         pool.on_operator(Operator::ctor_move, this, &other);
@@ -239,7 +246,7 @@ public:
 
     Observed<T> &operator=(Observed<T> &&other) {
         pool.register_addr(this);
-        history = "=&&(" + other.get_history() + ")";
+        history = "move=(" + other.get_history() + ")";
 
         pool.on_operator(Operator::asgn_move, this, &other);
         get_data() = std::move(other.get_data());
@@ -374,6 +381,10 @@ public:
 
     const std::string &get_history() const {
         return history;
+    }
+
+    inline bool is_tmp() const {
+        return is_temp;
     }
 };
 

@@ -1,6 +1,9 @@
 #pragma once
 
 
+#include "settings.h"
+
+
 #include "observer/observed.h"
 #include "micro_logger/func_logger.h"
 
@@ -21,6 +24,7 @@ struct MicroLoggerGraphSettings {
 template <typename T>
 class MicroLoggerGraph {
     std::map<const Observed<T>*, int> obs_to_node;
+    std::map<const Observed<T>*, int> init_obs_to_node;
 
     std::ofstream log_file;
     std::string file_name;
@@ -28,10 +32,11 @@ class MicroLoggerGraph {
     std::string var_node_format;
     std::string unary_op_node_format;
     std::string binary_op_node_format;
+    std::string func_node_format;
 
     std::string buf;
 
-    int node_cnt = 0;
+    int node_cnt = 1;
 
     bool graphed = false;
 
@@ -63,9 +68,15 @@ public:
         tmp_file.close();
         buffer.str(std::string());
 
-        log_head();
+        tmp_file.open("formats/func.gv_format");
+        buffer << tmp_file.rdbuf();
+        func_node_format = buffer.str();
+        tmp_file.close();
+        buffer.str(std::string());
 
         buf.resize(1024);
+
+        log_head();
     }
 
     ~MicroLoggerGraph() {
@@ -122,7 +133,7 @@ public:
 
     void draw_arrow_move(int node_from, int node_to) {
         clear_buf();
-        snprintf(buf.data(), buf.size(), "node%d->node%d [style=dashed, constraint=true, color=darkmagenta];\n",
+        snprintf(buf.data(), buf.size(), "node%d->node%d [style=dashed, constraint=true];\n",
                  node_from,
                  node_to);
         log_file << buf.c_str();
@@ -130,18 +141,51 @@ public:
 
     void draw_arrow_flow(int node_from, int node_to) {
         clear_buf();
-        snprintf(buf.data(), buf.size(), "node%d->node%d [constraint=true, color=crimson];\n",
+        snprintf(buf.data(), buf.size(), "node%d->node%d [constraint=true, color=\"#%s\"];\n",
                  node_from,
-                 node_to);
+                 node_to,
+                 to_string(CLR_FLOW).c_str());
+        log_file << buf.c_str();
+    }
+    
+    void draw_arrow_actor(int node_from, int node_to, Operator op, std::string label="", bool kostil=true) {
+        clear_buf();
+
+        if (is_important_bad(op)) {
+            label = "<b><font color=\"#" + to_string(CLR_IMPORTANT_BAD) + "\">COPY</font></b>";
+        } else if (is_important_good(op)) {
+            if (kostil) {
+                label = "<font color=\"#" + to_string(CLR_IMPORTANT_GOOD) + "\">MOVE</font>";
+            } else {
+                label = "<font color=\"#" + to_string(CLR_IMPORTANT_GOOD) + "\">TO</font>";
+            }
+        }
+
+        snprintf(buf.data(), buf.size(), "node%d->node%d [constraint=true, label=<%s> color=\"#%s\"];\n",
+                 node_from,
+                 node_to,
+                 label.c_str(),
+                 get_op_color(op).c_str());
         log_file << buf.c_str();
     }
 
     void log_var_node(const Observed<T> *obj) {
         clear_buf();
 
+        std::string color;
+        if (obj->is_tmp()) {
+            color = '#' + to_string(CLR_VAR_BAD);
+        } else {
+            color = '#' + to_string(CLR_VAR_NORMAL);
+        }
+
         snprintf(buf.data(), buf.size(), var_node_format.c_str(),
                  ++node_cnt,
-                 obj->get_name().c_str(), obj->get_id(),
+                 color.c_str(),
+                 obj->get_name().c_str(),
+                 color.c_str(),
+                 obj->get_id(),
+                 color.c_str(),
                  obj,
                  obj->to_str().c_str());
 
@@ -151,12 +195,26 @@ public:
     void log_binary_op(const Observed<T> *first, const Observed<T> *second, Operator op) {
         clear_buf();
 
+        std::string color_first;
+        if (first->is_tmp()) {
+            color_first = '#' + to_string(CLR_VAR_BAD);
+        } else {
+            color_first = '#' + to_string(CLR_VAR_NORMAL);
+        }
+
+        std::string color_second;
+        if (second->is_tmp()) {
+            color_second = '#' + to_string(CLR_VAR_BAD);
+        } else {
+            color_second = '#' + to_string(CLR_VAR_NORMAL);
+        }
+
         snprintf(buf.data(), buf.size(), binary_op_node_format.c_str(),
                  ++node_cnt,
+                 color_first.c_str(),
                  first->get_name().c_str(),
-                 first->get_id(),
+                 color_second.c_str(),
                  second->get_name().c_str(),
-                 second->get_id(),
                  to_str(op));
         
         log_file << buf.c_str();
@@ -165,10 +223,17 @@ public:
     void log_unary_op(const Observed<T> *obj, Operator op) {
         clear_buf();
 
+        std::string color;
+        if (obj->is_tmp()) {
+            color = '#' + to_string(CLR_VAR_BAD);
+        } else {
+            color = '#' + to_string(CLR_VAR_NORMAL);
+        }
+
         snprintf(buf.data(), buf.size(), unary_op_node_format.c_str(),
                  ++node_cnt,
+                 color.c_str(),
                  obj->get_name().c_str(),
-                 obj->get_id(),
                  to_str(op));
 
         log_file << buf.c_str();
@@ -197,52 +262,101 @@ public:
         int node_one = first ? get_node(first) : -1;
         int node_two = second ? get_node(second) : -1;
 
-        if (!node_one && !node_two) {
-            logger.warning("MicroLoggerGraph", "operator with no operands occured!");
-            return;
-        }
+        // if (!node_one && !node_two) {
+        //     logger.warning("MicroLoggerGraph", "operator with no operands occured!");
+        //     return;
+        // }
 
         if (!second) {
             log_unary_op(first, signal.op);
             int node_cur = node_cnt;
-            
-            if (!is_creating_op(signal.op)) {
-                draw_arrow_move(node_one, node_cur);
+
+            if (is_creating_op(signal.op)) {
+                log_var_node(first);
+                draw_arrow_move(node_cur, node_cnt);
+                obs_to_node[first] = node_cnt;
+            } else if (is_node_replacing_op(signal.op)) {
+                if (signal.op != Operator::dtor) {
+                    draw_arrow_actor(node_one, node_cur, signal.op);
+                    log_var_node(first);
+                    draw_arrow_actor(node_cur, node_cnt, signal.op);
+                    draw_arrow_move(node_one, node_cnt);
+                    obs_to_node[first] = node_cnt;
+                } else {
+                    draw_arrow_move(node_one, node_cur);
+                }
+            } else {
+                draw_arrow_actor(node_one, node_cur, signal.op);
             }
 
-            log_var_node(first);
+            // if (is_creating_op(signal.op) || is_node_replacing_op(signal.op)) {
+            //     log_var_node(first);
+                
+            //     if (is_creating_op(signal.op)) {
+            //         draw_arrow_move(node_cur, node_cnt);
+            //     } else {
+            //         draw_arrow_move(obs_to_node[first], node_cur);
+            //     }
 
-            bind_node_ranks({node_cur, node_cnt}, {0, 1});
-
-            if (is_creating_op(signal.op) || is_node_replacing_op(signal.op)) {
-                obs_to_node[first] = node_cur;
-            }
+            //     obs_to_node[first] = node_cnt;
+            // }
             
             draw_arrow_flow(node_cur, node_cnt + 1);
         } else {
             log_binary_op(first, second, signal.op);
             int node_cur = node_cnt;
 
-            if (!is_creating_op(signal.op)) {
-                draw_arrow_move(node_one, node_cnt);
-                draw_arrow_move(node_two, node_cnt);
+            if (is_creating_op(signal.op)) {
+                draw_arrow_actor(node_two, node_cnt, signal.op);
+                log_var_node(first);
+                obs_to_node[first] = node_cnt;
+                node_one = obs_to_node[first];
+                draw_arrow_move(node_cur, node_one);
+            } else if (is_node_replacing_op(signal.op)) {
+                draw_arrow_actor(node_cnt, node_one, signal.op, "", false);
+                draw_arrow_actor(node_two, node_cnt, signal.op);
+            } else {
+                draw_arrow_actor(node_one, node_cnt, signal.op);
+                draw_arrow_actor(node_two, node_cnt, signal.op);
             }
 
-            if (is_creating_op(signal.op) || is_node_replacing_op(signal.op)) {
-                node_one = obs_to_node[first] = node_cnt;
-            }
+            // if (is_creating_op(signal.op) || is_node_replacing_op(signal.op)) {
+            //     node_one = obs_to_node[first] = node_cnt;
+            // }
 
-            log_var_node(first);
-            log_var_node(second);
+            // log_var_node(first);
+            // log_var_node(second);
 
-            bind_node_ranks({node_cur, node_cur + 1, node_cur + 2}, {0, 1, 1});
+            // bind_node_ranks({node_cur, node_cur + 1, node_cur + 2}, {0, 1, 1});
 
             draw_arrow_flow(node_cur, node_cnt + 1);
         }
     }
+    
 
-    void log_func(const FuncCallSignal &) {
-        
+    void log_func(const FuncCallSignal &signal, const std::string &color) {
+        clear_buf();
+
+        snprintf(buf.data(), buf.size(), func_node_format.c_str(),
+                 ++node_cnt,
+                 signal.name.c_str(),
+                 color.c_str());
+
+        log_file << buf.c_str();
+    }
+
+    void log_func(const FuncCallSignal &signal) {
+        if (signal.is_called) {
+            log_func(signal, "44CC44");
+        } else {
+            log_func(signal, "4444EE");
+        }
+        int node_cur = node_cnt;
+        draw_arrow_flow(node_cur, node_cnt + 1);
+    }
+
+    void info_node(const std::string &label, int node_idx, const std::string &shape="diamond") {
+        log_file << "node" << node_idx << "[label=<" + label + "> shape=" + shape + "]\n";
     }
 
     void log_head() {
@@ -253,10 +367,14 @@ public:
         buffer << tmp_file.rdbuf();
         log_file << buffer.str();
         tmp_file.close();
+
+        info_node("Start of log", node_cnt, "trapezium");
+        draw_arrow_flow(node_cnt, node_cnt + 1);
     }
 
     void log_tail() {
-        log_file << "}}";
+        info_node("End of log", ++node_cnt, "invtrapezium");
+        log_file << "}}"; 
     }
 
     void graph() {

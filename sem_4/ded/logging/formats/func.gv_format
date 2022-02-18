@@ -1,0 +1,3 @@
+node%d[label=<<font face="Times">
+%s
+</font>>, color="#%s", shape=diamond]

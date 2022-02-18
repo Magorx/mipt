@@ -35,6 +35,8 @@ event_system/signal.h
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/event_system/signal.h
 
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/graph_logger.h
+settings.h
+/home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/settings.h
 observer/observed.h
 /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/observer/observed.h
 micro_logger/func_logger.h

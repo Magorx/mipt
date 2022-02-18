@@ -21,15 +21,24 @@ int observed_int_length(const Observed<int> &obj) {
 }
 
 
-void func(int = 3) {
+void func(int d = 2) {
     FuncLogger flg("func");
+    if (!d) return;
+
+    // OBSERVED(int, a, 3);
+    // OBSERVED(int, b, 3);
+    // OBSERVED(int, c, 3);
+    // OBSERVED(int, d, 3);
+
+    // c = (a + b) * d;
 
     OBSERVED(int, a, 3);
-    OBSERVED(int, b, 5);
-    OBSERVED(int, c, 99);
-    OBSERVED(int, res, 0);
+    OBSERVED(int, b, 3);
+    OBSERVED(int, c, 3);
 
-    res = a + b * (c++);
+    // func(d - 1);
+
+    b = c * ((a++) + a);
 }
 
 

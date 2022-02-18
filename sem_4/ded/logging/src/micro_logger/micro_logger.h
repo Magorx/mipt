@@ -31,31 +31,8 @@ class MicroLogger {
 
     MicroLoggerSettings settings;
 
-    bool is_important(Operator op) {
-        return op == Operator::asgn_copy
-            || op == Operator::ctor_copy;
-    }
-
-    bool is_ctor(Operator op) {
-        return op == Operator::ctor
-            || op == Operator::ctor_copy
-            || op == Operator::ctor_move;
-    }
-
-    bool is_dtor(Operator op) {
-        return op == Operator::dtor;
-    }
-
-    const char *get_op_color(Operator op) {
-        if (is_important(op)) {
-            return get_color(CLR_IMPORTANT).c_str();
-        } else if (is_ctor(op)) {
-            return get_color(CLR_CTOR).c_str();
-        } else if (is_dtor(op)) {
-            return get_color(CLR_DTOR).c_str();
-        } else {
-            return get_color(CLR_OP).c_str();
-        }
+    std::string get_color(const RGBA &color) {
+        return to_string(color);
     }
 
     void log_important_operator(const OperatorSignal<T> &signal) {
@@ -63,7 +40,7 @@ class MicroLogger {
 
         if (settings.html_mode()) {
             logger.tag("b");
-            logger.tag("font")("color", get_op_color(signal.op));
+            logger.tag("font")("color", get_op_color(signal.op).c_str());
         }
 
         logger.print_log_prefix("mclg", "op");
@@ -85,7 +62,7 @@ class MicroLogger {
             logger.print("op [");
 
             logger.tag("b");
-            logger.tag("font")("color", get_op_color(signal.op));
+            logger.tag("font")("color", get_op_color(signal.op).c_str());
             logger.print("%s", to_str(signal.op));
             logger.tag_close(2);
 
@@ -122,7 +99,7 @@ public:
     void log_opeartor_console(const OperatorSignal<T> &signal) {
         logger.print_log_prefix("mclg", "observed");
         
-        if (is_important(signal.op)) {
+        if (is_important_bad(signal.op)) {
             log_important_operator(signal);
         } else {
             log_normal_operator(signal);
@@ -182,10 +159,6 @@ public:
 
             logger.tag_close();
         }
-    }
-
-    std::string get_color(const RGBA &color) {
-        return to_string(!color);
     }
 
     void log_func_console(const FuncCallSignal &signal) {
