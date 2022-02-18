@@ -38,7 +38,7 @@ void func(int d = 2) {
 
     // func(d - 1);
 
-    b = c * ((a++) + a);
+    b = c * ((++a) + a);
 }
 
 

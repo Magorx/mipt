@@ -116,7 +116,7 @@ Observed<T> operator op_sgn(int) {              \
 #define OPERATOR_DEF_INPLACE(op_sgn, op_code)            \
 Observed<T> &operator op_sgn(const Observed<T> &other) { \
     pool.on_operator(Operator::op_code, this, &other);   \
-    data = get_data() op_sgn other.get_data(); \
+    data op_sgn other.get_data(); \
     set_history(get_history() + " " +  #op_sgn + " " + other.get_history()); \
     return *this; \
 }

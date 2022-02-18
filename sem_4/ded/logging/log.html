@@ -7,73 +7,62 @@
 </pre><pre><b><font color=4242c3>[mclg]&lt;func&gt; : [1] func() <{
 
 </font></b></pre><pre>[    ]&lt;observed&gt; :     op [<b><font color=73914f>ctor</font></b>] {
-                 :         a | [var1][0x7ffc13fd8030][loc1] | val = 3 | a1
+                 :         a | [var1][0x7ffe1fb25700][loc1] | val = 3 | a1
                  :     }
 
 </pre><pre>                 :     op [<b><font color=73914f>ctor</font></b>] {
-                 :         b | [var2][0x7ffc13fd8090][loc2] | val = 3 | b2
+                 :         b | [var2][0x7ffe1fb25760][loc2] | val = 3 | b2
                  :     }
 
 </pre><pre>                 :     op [<b><font color=73914f>ctor</font></b>] {
-                 :         c | [var3][0x7ffc13fd80f0][loc3] | val = 3 | c3
+                 :         c | [var3][0x7ffe1fb257c0][loc3] | val = 3 | c3
                  :     }
 
-</pre><pre>                 :     op [<b><font color=691269>.++</font></b>] {
-                 :         a | [var1][0x7ffc13fd8030][loc1] | val = 3 | a1
-                 :     }
-
-</pre><pre>                 :     op [
-<b><font color=ee1c1c>[    ]&lt;   op   &gt; :         ctor_copy
-</font></b>                 :                  ] {
-[    ]&lt;observed&gt; :         TMP1 | [var4][0x7ffc13fd8150][loc4] | val = 3 | COPY{a1}
-                 :         a    | [var1][0x7ffc13fd8030][loc1] | val = 3 | a1
+</pre><pre>                 :     op [<b><font color=691269>++.</font></b>] {
+                 :         a | [var1][0x7ffe1fb25700][loc1] | val = 3 | a1
                  :     }
 
 </pre><pre>                 :     op [<b><font color=691269>+</font></b>] {
-                 :         TMP1 | [var4][0x7ffc13fd8150][loc4] | val = 3 | COPY{a1}
-                 :         a    | [var1][0x7ffc13fd8030][loc1] | val = 4 | (a1)++
+                 :         a | [var1][0x7ffe1fb25700][loc1] | val = 4 | ++(a1)
+                 :         a | [var1][0x7ffe1fb25700][loc1] | val = 4 | ++(a1)
                  :     }
 
 </pre><pre>                 :     op [<b><font color=73914f>ctor</font></b>] {
-                 :         TMP2 | [var5][0x7ffc13fd81b0][loc5] | val = 7 | TMP25
+                 :         TMP1 | [var4][0x7ffe1fb25820][loc4] | val = 8 | TMP14
                  :     }
 
 </pre><pre>                 :     op [<b><font color=691269>*</font></b>] {
-                 :         c    | [var3][0x7ffc13fd80f0][loc3] | val = 3 | c3
-                 :         TMP2 | [var5][0x7ffc13fd81b0][loc5] | val = 7 | COPY{a1} + (a1)++
+                 :         c    | [var3][0x7ffe1fb257c0][loc3] | val = 3 | c3
+                 :         TMP1 | [var4][0x7ffe1fb25820][loc4] | val = 8 | ++(a1) + ++(a1)
                  :     }
 
 </pre><pre>                 :     op [<b><font color=73914f>ctor</font></b>] {
-                 :         TMP3 | [var6][0x7ffc13fd8210][loc6] | val = 21 | TMP36
+                 :         TMP2 | [var5][0x7ffe1fb25880][loc5] | val = 24 | TMP25
                  :     }
 
 </pre><pre>                 :     op [<b><font color=108910>asgn_move</font></b>] {
-                 :         b    | [var2][0x7ffc13fd8090][loc2] | val = 3  | move=(c3 * COPY{a1} + (a1)++)
-                 :         TMP3 | [var6][0x7ffc13fd8210][loc6] | val = 21 | c3 * COPY{a1} + (a1)++
+                 :         b    | [var2][0x7ffe1fb25760][loc2] | val = 3  | move=(c3 * ++(a1) + ++(a1))
+                 :         TMP2 | [var5][0x7ffe1fb25880][loc5] | val = 24 | c3 * ++(a1) + ++(a1)
                  :     }
 
 </pre><pre>                 :     op [<b><font color=be8607>dtor</font></b>] {
-                 :         TMP3 | [var6][0x7ffc13fd8210][loc6] | val = 21 | c3 * COPY{a1} + (a1)++
+                 :         TMP2 | [var5][0x7ffe1fb25880][loc5] | val = 24 | c3 * ++(a1) + ++(a1)
                  :     }
 
 </pre><pre>                 :     op [<b><font color=be8607>dtor</font></b>] {
-                 :         TMP2 | [var5][0x7ffc13fd81b0][loc5] | val = 7  | COPY{a1} + (a1)++
+                 :         TMP1 | [var4][0x7ffe1fb25820][loc4] | val = 8  | ++(a1) + ++(a1)
                  :     }
 
 </pre><pre>                 :     op [<b><font color=be8607>dtor</font></b>] {
-                 :         TMP1 | [var4][0x7ffc13fd8150][loc4] | val = 3  | COPY{a1}
+                 :         c    | [var3][0x7ffe1fb257c0][loc3] | val = 3  | c3
                  :     }
 
 </pre><pre>                 :     op [<b><font color=be8607>dtor</font></b>] {
-                 :         c    | [var3][0x7ffc13fd80f0][loc3] | val = 3  | c3
-                 :     }
-
-</pre><pre>[mclg]&lt;observed&gt; :     op [<b><font color=be8607>dtor</font></b>] {
-                 :         b    | [var2][0x7ffc13fd8090][loc2] | val = 21 | move=(c3 * COPY{a1} + (a1)++)
+                 :         b    | [var2][0x7ffe1fb25760][loc2] | val = 24 | move=(c3 * ++(a1) + ++(a1))
                  :     }
 
 </pre><pre>                 :     op [<b><font color=be8607>dtor</font></b>] {
-                 :         a    | [var1][0x7ffc13fd8030][loc1] | val = 4  | (a1)++
+                 :         a    | [var1][0x7ffe1fb25700][loc1] | val = 4  | ++(a1)
                  :     }
 
 </pre><pre><b><font color=4242c3>[    ]&lt;  func  &gt; : }> [1] func()
