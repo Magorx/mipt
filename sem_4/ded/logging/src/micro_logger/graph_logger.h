@@ -349,14 +349,14 @@ public:
         if (signal.is_called) {
             log_func(signal, "44CC44");
         } else {
-            log_func(signal, "4444EE");
+            log_func(signal, "3333EE");
         }
         int node_cur = node_cnt;
         draw_arrow_flow(node_cur, node_cnt + 1);
     }
 
     void info_node(const std::string &label, int node_idx, const std::string &shape="diamond") {
-        log_file << "node" << node_idx << "[label=<" + label + "> shape=" + shape + "]\n";
+        log_file << "node" << node_idx << "[color=\"#" + to_string(CLR_FLOW) + "\" label=<" + label + "> shape=" + shape + "]\n";
     }
 
     void log_head() {

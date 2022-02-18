@@ -26,7 +26,7 @@ digraph list {
   }
     }
 
-    rankdir="TB"; subgraph {node1[label=<Start of log> shape=trapezium]
+    rankdir="TB"; subgraph {node1[color="#278ec6" label=<Start of log> shape=trapezium]
 node1->node2 [constraint=true, color="#278ec6"];
 node2[label=<<font face="Times">
 func
@@ -49,7 +49,7 @@ node4[label=<<font face="Times">
 	<tr color="red">
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">a</td>
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">1</td>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7ffe1fb25700</td>
+		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7ffe902275d0</td>
 	</tr>
 	<tr color="red">
 		<td border="1" colspan="3" color="black" port="value">3</td>
@@ -74,7 +74,7 @@ node6[label=<<font face="Times">
 	<tr color="red">
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">b</td>
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">2</td>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7ffe1fb25760</td>
+		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7ffe90227630</td>
 	</tr>
 	<tr color="red">
 		<td border="1" colspan="3" color="black" port="value">3</td>
@@ -99,7 +99,7 @@ node8[label=<<font face="Times">
 	<tr color="red">
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">c</td>
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">3</td>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7ffe1fb257c0</td>
+		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7ffe90227690</td>
 	</tr>
 	<tr color="red">
 		<td border="1" colspan="3" color="black" port="value">3</td>
@@ -125,7 +125,7 @@ node10[label=<<font face="Times">
 	<tr color="red">
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">a</td>
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">1</td>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7ffe1fb25700</td>
+		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7ffe902275d0</td>
 	</tr>
 	<tr color="red">
 		<td border="1" colspan="3" color="black" port="value">3</td>
@@ -167,7 +167,7 @@ node13[label=<<font face="Times">
 	<tr color="red">
 		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="name">TMP1</td>
 		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="name">4</td>
-		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="addr" cellpadding="5">0x7ffe1fb25820</td>
+		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="addr" cellpadding="5">0x7ffe902276f0</td>
 	</tr>
 	<tr color="red">
 		<td border="1" colspan="3" color="black" port="value">8</td>
@@ -208,7 +208,7 @@ node16[label=<<font face="Times">
 	<tr color="red">
 		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="name">TMP2</td>
 		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="name">5</td>
-		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="addr" cellpadding="5">0x7ffe1fb25880</td>
+		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="addr" cellpadding="5">0x7ffe90227750</td>
 	</tr>
 	<tr color="red">
 		<td border="1" colspan="3" color="black" port="value">24</td>
@@ -304,7 +304,7 @@ node10->node22 [style=dashed, constraint=true];
 node22->node23 [constraint=true, color="#278ec6"];
 node23[label=<<font face="Times">
 func
-</font>>, color="#4444EE", shape=diamond]
+</font>>, color="#3333EE", shape=diamond]
 node23->node24 [constraint=true, color="#278ec6"];
-node24[label=<End of log> shape=invtrapezium]
+node24[color="#278ec6" label=<End of log> shape=invtrapezium]
 }}
