@@ -21,24 +21,26 @@ int observed_int_length(const Observed<int> &obj) {
 }
 
 
-void func(int d = 2) {
+void recieve_tmp(Observed<int> a) {
+    FuncLogger flg("recieve_tmp");
+    printf("lol %d\n", a.get_data());
+}
+
+Observed<int> return_tmp() {
+    FuncLogger flg("return_tmp");
+
+    OBSERVED(int, a, 1);
+    return a + a;
+}
+
+
+void func(int = 2) {
     FuncLogger flg("func");
-    if (!d) return;
 
-    // OBSERVED(int, a, 3);
-    // OBSERVED(int, b, 3);
-    // OBSERVED(int, c, 3);
-    // OBSERVED(int, d, 3);
+    OBSERVED(int, a, 1);
+    OBSERVED(int, b, 99);
 
-    // c = (a + b) * d;
-
-    OBSERVED(int, a, 3);
-    OBSERVED(int, b, 3);
-    OBSERVED(int, c, 3);
-
-    // func(d - 1);
-
-    b = c * ((++a) + a);
+    a = return_tmp();
 }
 
 

@@ -216,9 +216,9 @@ public:
     Observed(const Observed<T> &other, const std::string &name="@noname", bool is_temp=false) :
     data(other.get_data()), pool(other.get_pool()),
     id(pool.get_unique_id()),
-    name(name),
+    name(name[0] == '@' ? pool.get_tmp_name() : name),
     history("COPY{" + other.get_history() + "}"),
-    is_temp(is_temp)
+    is_temp(name[0] == '@' ?  true : is_temp)
     {
         pool.register_addr(this);
         pool.on_operator(Operator::ctor_copy, this, &other);
@@ -233,6 +233,7 @@ public:
         return *this;
     }
 
+#ifndef NO_MOVE
     Observed(Observed<T> &&other) :
     data(std::move(other.get_data())), pool(other.get_pool()),
     id(pool.get_unique_id()),
@@ -252,6 +253,7 @@ public:
         get_data() = std::move(other.get_data());
         return *this;
     }
+#endif
 
     ~Observed() {
         pool.on_operator(Operator::dtor, this, nullptr);

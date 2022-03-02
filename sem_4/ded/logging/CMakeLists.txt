@@ -7,9 +7,14 @@ set(CMAKE_CXX_STANDARD 20)
 set(SFML_BUILD_GRAPHICS true)
 
 set(WARNING_FLAGS "-Wall -Wextra -Wno-multichar -Wno-unused-result")
+#====================================================================
 # set(OPTIMIZATION_FLAGS "-fno-elide-constructors")
-set(OPTIMIZATION_FLAGS "")
-set(O_LEVEL "-O2")
+# set(OPTIMIZATION_FLAGS "-fno-elide-constructors -DNO_MOVE")
+
+# set(OPTIMIZATION_FLAGS "")
+set(OPTIMIZATION_FLAGS "-DNO_MOVE")
+#====================================================================
+set(O_LEVEL "-O1")
 
 include_directories(src)
 

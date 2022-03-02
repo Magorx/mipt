@@ -49,10 +49,10 @@ node4[label=<<font face="Times">
 	<tr color="red">
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">a</td>
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">1</td>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7ffe902275d0</td>
+		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7fff75db02d0</td>
 	</tr>
 	<tr color="red">
-		<td border="1" colspan="3" color="black" port="value">3</td>
+		<td border="1" colspan="3" color="black" port="value">1</td>
 	</tr>
 </table></font>>, shape=none]
 node3->node4 [style=dashed, constraint=true];
@@ -74,18 +74,22 @@ node6[label=<<font face="Times">
 	<tr color="red">
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">b</td>
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">2</td>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7ffe90227630</td>
+		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7fff75db0330</td>
 	</tr>
 	<tr color="red">
-		<td border="1" colspan="3" color="black" port="value">3</td>
+		<td border="1" colspan="3" color="black" port="value">99</td>
 	</tr>
 </table></font>>, shape=none]
 node5->node6 [style=dashed, constraint=true];
 node5->node7 [constraint=true, color="#278ec6"];
 node7[label=<<font face="Times">
+return_tmp
+</font>>, color="#44CC44", shape=diamond]
+node7->node8 [constraint=true, color="#278ec6"];
+node8[label=<<font face="Times">
 <table cellspacing="0" border="0">
 	<tr>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="first">c</td>
+		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="first">a</td>
 	</tr>
 	<tr>
 		<td border="1" colspan="1" color="black" port="operator">ctor</td>
@@ -94,47 +98,20 @@ node7[label=<<font face="Times">
 </table>
 </font>
 >, shape=none]
-node8[label=<<font face="Times">
-<table cellspacing="0" border="0">
-	<tr color="red">
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">c</td>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">3</td>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7ffe90227690</td>
-	</tr>
-	<tr color="red">
-		<td border="1" colspan="3" color="black" port="value">3</td>
-	</tr>
-</table></font>>, shape=none]
-node7->node8 [style=dashed, constraint=true];
-node7->node9 [constraint=true, color="#278ec6"];
 node9[label=<<font face="Times">
-<table cellspacing="0" border="0">
-	<tr>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="first">a</td>
-	</tr>
-	<tr>
-		<td border="1" colspan="1" color="black" port="operator">++.</td>
-	</tr>
-	
-</table>
-</font>
->, shape=none]
-node4->node9 [constraint=true, label=<> color="#691269"];
-node10[label=<<font face="Times">
 <table cellspacing="0" border="0">
 	<tr color="red">
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">a</td>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">1</td>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7ffe902275d0</td>
+		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="name">3</td>
+		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="addr" cellpadding="5">0x7fff75db0170</td>
 	</tr>
 	<tr color="red">
-		<td border="1" colspan="3" color="black" port="value">3</td>
+		<td border="1" colspan="3" color="black" port="value">1</td>
 	</tr>
 </table></font>>, shape=none]
-node9->node10 [constraint=true, label=<> color="#691269"];
-node4->node10 [style=dashed, constraint=true];
-node9->node11 [constraint=true, color="#278ec6"];
-node11[label=<<font face="Times">
+node8->node9 [style=dashed, constraint=true];
+node8->node10 [constraint=true, color="#278ec6"];
+node10[label=<<font face="Times">
 <table cellspacing="0" border="0">
 	<tr>
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="first">a</td>
@@ -147,10 +124,10 @@ node11[label=<<font face="Times">
 </table>
 </font>
 >, shape=none]
-node10->node11 [constraint=true, label=<> color="#691269"];
-node10->node11 [constraint=true, label=<> color="#691269"];
-node11->node12 [constraint=true, color="#278ec6"];
-node12[label=<<font face="Times">
+node9->node10 [constraint=true, label=<> color="#691269"];
+node9->node10 [constraint=true, label=<> color="#691269"];
+node10->node11 [constraint=true, color="#278ec6"];
+node11[label=<<font face="Times">
 <table cellspacing="0" border="0">
 	<tr>
 		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="first">TMP1</td>
@@ -162,133 +139,20 @@ node12[label=<<font face="Times">
 </table>
 </font>
 >, shape=none]
-node13[label=<<font face="Times">
+node12[label=<<font face="Times">
 <table cellspacing="0" border="0">
 	<tr color="red">
 		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="name">TMP1</td>
 		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="name">4</td>
-		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="addr" cellpadding="5">0x7ffe902276f0</td>
+		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="addr" cellpadding="5">0x7fff75db0390</td>
 	</tr>
 	<tr color="red">
-		<td border="1" colspan="3" color="black" port="value">8</td>
+		<td border="1" colspan="3" color="black" port="value">2</td>
 	</tr>
 </table></font>>, shape=none]
-node12->node13 [style=dashed, constraint=true];
-node12->node14 [constraint=true, color="#278ec6"];
-node14[label=<<font face="Times">
-<table cellspacing="0" border="0">
-	<tr>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="first">c</td>
-		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="second">TMP1</td>
-	</tr>
-	<tr>
-		<td border="1" colspan="2" color="black" port="operator">*</td>
-	</tr>
-	
-</table>
-</font>
->, shape=none]
-node8->node14 [constraint=true, label=<> color="#691269"];
-node13->node14 [constraint=true, label=<> color="#691269"];
-node14->node15 [constraint=true, color="#278ec6"];
-node15[label=<<font face="Times">
-<table cellspacing="0" border="0">
-	<tr>
-		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="first">TMP2</td>
-	</tr>
-	<tr>
-		<td border="1" colspan="1" color="black" port="operator">ctor</td>
-	</tr>
-	
-</table>
-</font>
->, shape=none]
-node16[label=<<font face="Times">
-<table cellspacing="0" border="0">
-	<tr color="red">
-		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="name">TMP2</td>
-		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="name">5</td>
-		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="addr" cellpadding="5">0x7ffe90227750</td>
-	</tr>
-	<tr color="red">
-		<td border="1" colspan="3" color="black" port="value">24</td>
-	</tr>
-</table></font>>, shape=none]
-node15->node16 [style=dashed, constraint=true];
-node15->node17 [constraint=true, color="#278ec6"];
-node17[label=<<font face="Times">
-<table cellspacing="0" border="0">
-	<tr>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="first">b</td>
-		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="second">TMP2</td>
-	</tr>
-	<tr>
-		<td border="1" colspan="2" color="black" port="operator">asgn_move</td>
-	</tr>
-	
-</table>
-</font>
->, shape=none]
-node17->node6 [constraint=true, label=<<font color="#108910">TO</font>> color="#108910"];
-node16->node17 [constraint=true, label=<<font color="#108910">MOVE</font>> color="#108910"];
-node17->node18 [constraint=true, color="#278ec6"];
-node18[label=<<font face="Times">
-<table cellspacing="0" border="0">
-	<tr>
-		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="first">TMP2</td>
-	</tr>
-	<tr>
-		<td border="1" colspan="1" color="black" port="operator">dtor</td>
-	</tr>
-	
-</table>
-</font>
->, shape=none]
-node16->node18 [style=dashed, constraint=true];
-node18->node19 [constraint=true, color="#278ec6"];
-node19[label=<<font face="Times">
-<table cellspacing="0" border="0">
-	<tr>
-		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="first">TMP1</td>
-	</tr>
-	<tr>
-		<td border="1" colspan="1" color="black" port="operator">dtor</td>
-	</tr>
-	
-</table>
-</font>
->, shape=none]
-node13->node19 [style=dashed, constraint=true];
-node19->node20 [constraint=true, color="#278ec6"];
-node20[label=<<font face="Times">
-<table cellspacing="0" border="0">
-	<tr>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="first">c</td>
-	</tr>
-	<tr>
-		<td border="1" colspan="1" color="black" port="operator">dtor</td>
-	</tr>
-	
-</table>
-</font>
->, shape=none]
-node8->node20 [style=dashed, constraint=true];
-node20->node21 [constraint=true, color="#278ec6"];
-node21[label=<<font face="Times">
-<table cellspacing="0" border="0">
-	<tr>
-		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="first">b</td>
-	</tr>
-	<tr>
-		<td border="1" colspan="1" color="black" port="operator">dtor</td>
-	</tr>
-	
-</table>
-</font>
->, shape=none]
-node6->node21 [style=dashed, constraint=true];
-node21->node22 [constraint=true, color="#278ec6"];
-node22[label=<<font face="Times">
+node11->node12 [style=dashed, constraint=true];
+node11->node13 [constraint=true, color="#278ec6"];
+node13[label=<<font face="Times">
 <table cellspacing="0" border="0">
 	<tr>
 		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="first">a</td>
@@ -300,11 +164,73 @@ node22[label=<<font face="Times">
 </table>
 </font>
 >, shape=none]
-node10->node22 [style=dashed, constraint=true];
-node22->node23 [constraint=true, color="#278ec6"];
-node23[label=<<font face="Times">
+node9->node13 [style=dashed, constraint=true];
+node13->node14 [constraint=true, color="#278ec6"];
+node14[label=<<font face="Times">
+return_tmp
+</font>>, color="#3333EE", shape=diamond]
+node14->node15 [constraint=true, color="#278ec6"];
+node15[label=<<font face="Times">
+<table cellspacing="0" border="0">
+	<tr>
+		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="first">a</td>
+		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="second">TMP1</td>
+	</tr>
+	<tr>
+		<td border="1" colspan="2" color="black" port="operator">asgn_copy</td>
+	</tr>
+	
+</table>
+</font>
+>, shape=none]
+node15->node4 [constraint=true, label=<<b><font color="#ee1c1c">COPY</font></b>> color="#ee1c1c"];
+node12->node15 [constraint=true, label=<<b><font color="#ee1c1c">COPY</font></b>> color="#ee1c1c"];
+node15->node16 [constraint=true, color="#278ec6"];
+node16[label=<<font face="Times">
+<table cellspacing="0" border="0">
+	<tr>
+		<td border="1" colspan="1" color="black" bgcolor="#eacfcf" port="first">TMP1</td>
+	</tr>
+	<tr>
+		<td border="1" colspan="1" color="black" port="operator">dtor</td>
+	</tr>
+	
+</table>
+</font>
+>, shape=none]
+node12->node16 [style=dashed, constraint=true];
+node16->node17 [constraint=true, color="#278ec6"];
+node17[label=<<font face="Times">
+<table cellspacing="0" border="0">
+	<tr>
+		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="first">b</td>
+	</tr>
+	<tr>
+		<td border="1" colspan="1" color="black" port="operator">dtor</td>
+	</tr>
+	
+</table>
+</font>
+>, shape=none]
+node6->node17 [style=dashed, constraint=true];
+node17->node18 [constraint=true, color="#278ec6"];
+node18[label=<<font face="Times">
+<table cellspacing="0" border="0">
+	<tr>
+		<td border="1" colspan="1" color="black" bgcolor="#d4eacf" port="first">a</td>
+	</tr>
+	<tr>
+		<td border="1" colspan="1" color="black" port="operator">dtor</td>
+	</tr>
+	
+</table>
+</font>
+>, shape=none]
+node4->node18 [style=dashed, constraint=true];
+node18->node19 [constraint=true, color="#278ec6"];
+node19[label=<<font face="Times">
 func
 </font>>, color="#3333EE", shape=diamond]
-node23->node24 [constraint=true, color="#278ec6"];
-node24[color="#278ec6" label=<End of log> shape=invtrapezium]
+node19->node20 [constraint=true, color="#278ec6"];
+node20[color="#278ec6" label=<End of log> shape=invtrapezium]
 }}
