@@ -249,8 +249,8 @@ public:
         pool.register_addr(this);
         history = "move=(" + other.get_history() + ")";
 
-        pool.on_operator(Operator::asgn_move, this, &other);
         get_data() = std::move(other.get_data());
+        pool.on_operator(Operator::asgn_move, this, &other);
         return *this;
     }
 #endif

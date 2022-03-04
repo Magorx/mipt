@@ -17,29 +17,53 @@ int observed_string_length(const Observed<std::string> &obj) {
 using Type = Observed<std::string>;
 
 
-void recieve_and_copy(Type &&obj) {
-    OBSERVED(std::string, other, "");
+template<typename T>
+void to_uppercase(T &&obj) {
+    FuncLogger flg("TO_UPERCASE");
 
-    other = obj;
+    my_remove_reference_t<T> tmp = my_forward<T>(obj);
+
+    for (size_t i = 0; i  < tmp.get_data().length(); ++i) {
+        char c = tmp.get_data()[i];
+        if (c >= 'a' && c <= 'z') {
+            c += 'A' - 'a';
+        }
+
+        tmp.get_data()[i] = c;
+    }
 }
 
-void recieve_and_move(Type &&obj) {
-    OBSERVED(std::string, other, "");
 
-    other = my_move(obj);
+template<typename T>
+void recieve_and_pass(T &&obj) {
+    FuncLogger flg("Gona pass");
+
+    to_uppercase(obj);
 }
 
-void recieve_and_forward(Type &&obj) {
-    OBSERVED(std::string, other, "");
+template<typename T>
+void recieve_and_move(T &&obj) {
+    FuncLogger flg("Gona move");
 
-    other = my_forward(obj);
+    to_uppercase(my_move(obj));
+}
+
+template<typename T>
+void recieve_and_forward(T &&obj) {
+    FuncLogger flg("Gona forward");
+
+    to_uppercase(my_forward<T>(obj));
 }
 
 void func() {
     FuncLogger flg("func");
 
-    OBSERVED(std::string, obj, "a string");
-    recieve_and_copy(my_move(obj));
+    OBSERVED(std::string, initial, "Feature Film");
+    recieve_and_forward(initial);
+
+    if (initial.get_data().length() == 0) {
+        initial.get_data() = "~~~Snatch~~~";
+    }
 }
 
 

@@ -11,8 +11,8 @@ set(WARNING_FLAGS "-Wall -Wextra -Wno-multichar -Wno-unused-result")
 # set(OPTIMIZATION_FLAGS "-fno-elide-constructors")
 # set(OPTIMIZATION_FLAGS "-fno-elide-constructors -DNO_MOVE")
 
-# set(OPTIMIZATION_FLAGS "")
-set(OPTIMIZATION_FLAGS "-DNO_MOVE")
+set(OPTIMIZATION_FLAGS "")
+# set(OPTIMIZATION_FLAGS "-DNO_MOVE")
 #====================================================================
 set(O_LEVEL "-O1")
 

@@ -276,15 +276,15 @@ public:
                 draw_arrow_move(node_cur, node_cnt);
                 obs_to_node[first] = node_cnt;
             } else if (is_node_replacing_op(signal.op)) {
-                if (signal.op != Operator::dtor) {
+                // if (signal.op != Operator::dtor) {
                     draw_arrow_actor(node_one, node_cur, signal.op);
                     log_var_node(first);
                     draw_arrow_actor(node_cur, node_cnt, signal.op);
                     draw_arrow_move(node_one, node_cnt);
                     obs_to_node[first] = node_cnt;
-                } else {
-                    draw_arrow_move(node_one, node_cur);
-                }
+                // } else {
+                //     draw_arrow_move(node_one, node_cur);
+                // }
             } else {
                 draw_arrow_actor(node_one, node_cur, signal.op);
             }

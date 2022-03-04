@@ -7,26 +7,28 @@
 </pre><pre><b><font color=4242c3>[mclg]&lt;func&gt; : [1] func() <{
 
 </font></b></pre><pre>[    ]&lt;observed&gt; :     op [<b><font color=73914f>ctor</font></b>] {
-                 :         obj | [var1][0x7ffc0521fd50][loc1] | val = a string | obj1
+                 :         initial | [var1][0x7fff2c6b5040][loc1] | val = Feature Film | initial1
                  :     }
 
-</pre><pre>                 :     op [<b><font color=73914f>ctor</font></b>] {
-                 :         other | [var2][0x7ffc0521fc10][loc2] | val =          | other2
-                 :     }
+</pre><pre><b><font color=4242c3>[    ]&lt;  func  &gt; :     [1] Gona forward() <{
 
-</pre><pre>                 :     op [
-<b><font color=ee1c1c>[    ]&lt;   op   &gt; :         asgn_copy
-</font></b>                 :                  ] {
-[    ]&lt;observed&gt; :         other | [var2][0x7ffc0521fc10][loc2] | val = a string | COPY={obj1}
-                 :         obj   | [var1][0x7ffc0521fd50][loc1] | val = a string | obj1
-                 :     }
+</font></b></pre><pre><b><font color=4242c3>                 :         [1] TO_UPERCASE() <{
 
-</pre><pre>                 :     op [<b><font color=be8607>dtor</font></b>] {
-                 :         other | [var2][0x7ffc0521fc10][loc2] | val = a string | COPY={obj1}
-                 :     }
+</font></b></pre><pre>[    ]&lt;observed&gt; :             op [
+<b><font color=ee1c1c>[    ]&lt;   op   &gt; :                 ctor_copy
+</font></b>                 :                          ] {
+[    ]&lt;observed&gt; :                 TMP1    | [var2][0x7fff2c6b4e40][loc2] | val = Feature Film | COPY{initial1}
+                 :                 initial | [var1][0x7fff2c6b5040][loc1] | val = Feature Film | initial1
+                 :             }
 
-</pre><pre>                 :     op [<b><font color=be8607>dtor</font></b>] {
-                 :         obj   | [var1][0x7ffc0521fd50][loc1] | val = a string | obj1
+</pre><pre>                 :             op [<b><font color=be8607>dtor</font></b>] {
+                 :                 TMP1    | [var2][0x7fff2c6b4e40][loc2] | val = FEATURE FILM | COPY{initial1}
+                 :             }
+
+</pre><pre><b><font color=4242c3>[    ]&lt;  func  &gt; :         }> [1] TO_UPERCASE()
+</font></b></pre><pre><b><font color=4242c3>                 :     }> [1] Gona forward()
+</font></b></pre><pre>[    ]&lt;observed&gt; :     op [<b><font color=be8607>dtor</font></b>] {
+                 :         initial | [var1][0x7fff2c6b5040][loc1] | val = Feature Film | initial1
                  :     }
 
 </pre><pre><b><font color=4242c3>[    ]&lt;  func  &gt; : }> [1] func()

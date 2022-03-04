@@ -26,6 +26,11 @@ my_remove_reference_t<T>&& my_move(T &&obj) {
 
 
 template<typename T>
-T&& my_forward(T &&obj) {
+T&& my_forward(my_remove_reference_t<T> &obj) {
+    return static_cast<T&&>(obj);
+}
+
+template<typename T>
+T&& my_forward(my_remove_reference_t<T> &&obj) {
     return static_cast<T&&>(obj);
 }
