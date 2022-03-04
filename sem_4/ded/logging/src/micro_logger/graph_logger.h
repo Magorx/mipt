@@ -313,8 +313,12 @@ public:
                 node_one = obs_to_node[first];
                 draw_arrow_move(node_cur, node_one);
             } else if (is_node_replacing_op(signal.op)) {
-                draw_arrow_actor(node_cnt, node_one, signal.op, "", false);
-                draw_arrow_actor(node_two, node_cnt, signal.op);
+                log_var_node(first);
+                obs_to_node[first] = node_cnt;
+                draw_arrow_move(node_one, node_cnt);
+
+                draw_arrow_actor(node_cur, node_cnt, signal.op, "", false);
+                draw_arrow_actor(node_two, node_cur, signal.op);
             } else {
                 draw_arrow_actor(node_one, node_cnt, signal.op);
                 draw_arrow_actor(node_two, node_cnt, signal.op);

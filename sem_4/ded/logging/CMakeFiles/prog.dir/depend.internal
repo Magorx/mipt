@@ -9,6 +9,7 @@ CMakeFiles/prog.dir/src/main.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/logged.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/micro_logger.h
  /home/kctf/Repositories/mipt/sem_4/ded/logging/src/micro_logger/settings.h
+ /home/kctf/Repositories/mipt/sem_4/ded/logging/src/utils/move_forward.h
  src/event_system/signal.h
  src/event_system/signal_reaction.h
  src/micro_logger/func_logger.h

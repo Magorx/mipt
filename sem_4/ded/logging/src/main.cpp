@@ -2,61 +2,61 @@
 #include <cstdio>
 
 #include "micro_logger/MicroLogger.h"
+#include "utils/move_forward.h"
 
 
-std::string observed_int_log(const Observed<int> &obj) {
-    return std::to_string(obj.get_data());
+std::string observed_string_log(const Observed<std::string> &obj) {
+    return obj.get_data();
 }
 
-int observed_int_length(const Observed<int> &obj) {
-    int val = obj.get_data();
-    if (!val) return 1;
-    
-    int cnt = 0;
-    while (val && ++cnt) {
-        val /= 10;
-    }
-
-    return cnt;
+int observed_string_length(const Observed<std::string> &obj) {
+    return (int) obj.get_data().length();
 }
 
 
-void recieve_tmp(Observed<int> a) {
-    FuncLogger flg("recieve_tmp");
-    printf("lol %d\n", a.get_data());
+using Type = Observed<std::string>;
+
+
+void recieve_and_copy(Type &&obj) {
+    OBSERVED(std::string, other, "");
+
+    other = obj;
+    printf("data: |%s|\n", other.get_data().c_str());
 }
 
-Observed<int> return_tmp() {
-    FuncLogger flg("return_tmp");
+void recieve_and_move(Type &&obj) {
+    OBSERVED(std::string, other, "");
 
-    OBSERVED(int, a, 1);
-    return a + a;
+    other = my_move(obj);
 }
 
+void recieve_and_forward(Type &&obj) {
+    OBSERVED(std::string, other, "");
 
-void func(int = 2) {
+    other = my_forward(obj);
+}
+
+void func() {
     FuncLogger flg("func");
 
-    OBSERVED(int, a, 1);
-    OBSERVED(int, b, 99);
-
-    a = return_tmp();
+    OBSERVED(std::string, obj, "a string");
+    recieve_and_copy(my_move(obj));
 }
 
 
 int main() {
     logger.set_verb_level(Logger::Level::info);
 
-    Observed<int>::set_one_line_log(observed_int_log);
-    Observed<int>::set_value_length(observed_int_length);
+    Observed<std::string>::set_one_line_log(observed_string_log);
+    Observed<std::string>::set_value_length(observed_string_length);
 
     Logger *html_logger = new Logger("log.html");
     html_logger->set_html_mode(true);
 
-    MicroLogger<int> microlog(*html_logger, {true, false, true});
-    MicroLoggerGraph<int> micrograph;
+    MicroLogger<std::string> microlog(*html_logger, {true, false, true});
+    MicroLoggerGraph<std::string> micrograph;
 
-    Observed<int>::get_default_pool().push_observer([&microlog, &micrograph](const OperatorSignal<int> &signal) {
+    Observed<std::string>::get_default_pool().push_observer([&microlog, &micrograph](const OperatorSignal<std::string> &signal) {
         microlog.log_operator(signal);
         micrograph.log_operator(signal);
     });

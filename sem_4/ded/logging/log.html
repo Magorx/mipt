@@ -7,50 +7,26 @@
 </pre><pre><b><font color=4242c3>[mclg]&lt;func&gt; : [1] func() <{
 
 </font></b></pre><pre>[    ]&lt;observed&gt; :     op [<b><font color=73914f>ctor</font></b>] {
-                 :         a | [var1][0x7fff75db02d0][loc1] | val = 1 | a1
+                 :         obj | [var1][0x7ffc0521fd50][loc1] | val = a string | obj1
                  :     }
 
 </pre><pre>                 :     op [<b><font color=73914f>ctor</font></b>] {
-                 :         b | [var2][0x7fff75db0330][loc2] | val = 99 | b2
+                 :         other | [var2][0x7ffc0521fc10][loc2] | val =          | other2
                  :     }
 
-</pre><pre><b><font color=4242c3>[    ]&lt;  func  &gt; :     [1] return_tmp() <{
-
-</font></b></pre><pre>[    ]&lt;observed&gt; :         op [<b><font color=73914f>ctor</font></b>] {
-                 :             a | [var3][0x7fff75db0170][loc3] | val = 1  | a3
-                 :         }
-
-</pre><pre>                 :         op [<b><font color=691269>+</font></b>] {
-                 :             a | [var3][0x7fff75db0170][loc3] | val = 1  | a3
-                 :             a | [var3][0x7fff75db0170][loc3] | val = 1  | a3
-                 :         }
-
-</pre><pre>                 :         op [<b><font color=73914f>ctor</font></b>] {
-                 :             TMP1 | [var4][0x7fff75db0390][loc4] | val = 2  | TMP14
-                 :         }
-
-</pre><pre>                 :         op [<b><font color=be8607>dtor</font></b>] {
-                 :             a    | [var3][0x7fff75db0170][loc3] | val = 1  | a3
-                 :         }
-
-</pre><pre><b><font color=4242c3>[    ]&lt;  func  &gt; :     }> [1] return_tmp()
-</font></b></pre><pre>[    ]&lt;observed&gt; :     op [
+</pre><pre>                 :     op [
 <b><font color=ee1c1c>[    ]&lt;   op   &gt; :         asgn_copy
 </font></b>                 :                  ] {
-[    ]&lt;observed&gt; :         a    | [var1][0x7fff75db02d0][loc1] | val = 1  | COPY={a3 + a3}
-                 :         TMP1 | [var4][0x7fff75db0390][loc4] | val = 2  | a3 + a3
+[    ]&lt;observed&gt; :         other | [var2][0x7ffc0521fc10][loc2] | val = a string | COPY={obj1}
+                 :         obj   | [var1][0x7ffc0521fd50][loc1] | val = a string | obj1
                  :     }
 
 </pre><pre>                 :     op [<b><font color=be8607>dtor</font></b>] {
-                 :         TMP1 | [var4][0x7fff75db0390][loc4] | val = 2  | a3 + a3
+                 :         other | [var2][0x7ffc0521fc10][loc2] | val = a string | COPY={obj1}
                  :     }
 
 </pre><pre>                 :     op [<b><font color=be8607>dtor</font></b>] {
-                 :         b    | [var2][0x7fff75db0330][loc2] | val = 99 | b2
-                 :     }
-
-</pre><pre>                 :     op [<b><font color=be8607>dtor</font></b>] {
-                 :         a    | [var1][0x7fff75db02d0][loc1] | val = 2  | COPY={a3 + a3}
+                 :         obj   | [var1][0x7ffc0521fd50][loc1] | val = a string | obj1
                  :     }
 
 </pre><pre><b><font color=4242c3>[    ]&lt;  func  &gt; : }> [1] func()

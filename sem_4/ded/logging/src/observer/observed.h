@@ -228,8 +228,8 @@ public:
         pool.register_addr(this);
         history = "COPY={" + other.get_history() + "}";
 
-        pool.on_operator(Operator::asgn_copy, this, &other);
         get_data() = other.get_data();
+        pool.on_operator(Operator::asgn_copy, this, &other);
         return *this;
     }
 
