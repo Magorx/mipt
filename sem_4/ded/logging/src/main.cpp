@@ -21,7 +21,6 @@ void recieve_and_copy(Type &&obj) {
     OBSERVED(std::string, other, "");
 
     other = obj;
-    printf("data: |%s|\n", other.get_data().c_str());
 }
 
 void recieve_and_move(Type &&obj) {
