@@ -1,0 +1,2 @@
+node1[color="#278ec6" label=<Start of log> shape=trapezium]
+node1->node2 [constraint=true, color="#278ec6"];
