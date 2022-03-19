@@ -40,6 +40,8 @@ public:
     inline size_t capacity() const {
         return Size;
     }
+
+    inline void shrink_to_fit() const {}
 };
 
 template<int Size>
