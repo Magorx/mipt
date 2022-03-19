@@ -11,7 +11,7 @@ template <
           typename T,
           template <typename U> typename IndexedStorageT
          >
-class Array {
+class ArrayT {
 protected:
     IndexedStorageT<T> storage_;
 
@@ -21,10 +21,10 @@ protected:
     // }
     
 public:
-    Array() : storage_() {
+    ArrayT() : storage_() {
     }
 
-    Array(size_t length, const T &elem={}) : storage_(length, elem) {
+    ArrayT(size_t length, const T &elem={}) : storage_(length, elem) {
     }
 
     T &operator[](size_t i) {
@@ -41,6 +41,10 @@ public:
     void emplace_back(Ts ... vs) {
         T *placement = storage_.expand_one();
         new(placement) T(std::forward<Ts>(vs)...);
+    }
+
+    void pop_back() {
+        storage_.extract_one();
     }
 
     constexpr inline size_t size() const {
@@ -87,22 +91,22 @@ struct BoolProxy {
 template <
           template <typename U> typename IndexedStorageT
          >
-class Array<bool, IndexedStorageT> : private Array<uint8_t, IndexedStorageT> {
+class ArrayT<bool, IndexedStorageT> : private ArrayT<uint8_t, IndexedStorageT> {
     size_t bools_cnt; 
 
-    using BaseArray = Array<uint8_t, IndexedStorageT>;
+    using BaseArray = ArrayT<uint8_t, IndexedStorageT>;
 public:
     BoolProxy operator[](size_t i) {
         return BoolProxy(BaseArray::storage_.data(i / 8), i % 8);
     }
 
-    Array() :
-        Array<uint8_t, IndexedStorageT>(),
+    ArrayT() :
+        ArrayT<uint8_t, IndexedStorageT>(),
         bools_cnt(IndexedStorageT<uint8_t>::is_dynamic ? 0 : BaseArray::storage_.size())
     {}
 
-    Array(size_t length, const bool elem={}) :
-        Array<uint8_t, IndexedStorageT>(length / 8 + 1 * (!!(length % 8 != 0)), elem),
+    ArrayT(size_t length, const bool elem={}) :
+        ArrayT<uint8_t, IndexedStorageT>(length / 8 + 1 * (!!(length % 8 != 0)), elem),
         bools_cnt(length)
     {}
 
@@ -121,6 +125,13 @@ public:
         push_back(elem);
     }
 
+    void pop_back() {
+        --bools_cnt;
+        if (bools_cnt % 8 == 0) {
+            BaseArray::storage_.extract_one();
+        }
+    }
+
     constexpr inline size_t size() const {
         return bools_cnt;
     }
@@ -136,5 +147,15 @@ public:
         }
     }
 };
+
+
+template <typename T>
+using Vector = ArrayT<T, storage::IndexedDynamic>;
+
+template <typename T, int Size>
+using Array = ArrayT<T, storage::IndexedStatic<Size>::template type>;
+
+template <typename T>
+using ChunkVector = ArrayT<T, storage::IndexedChunk>;
 
 } // namespace kctf

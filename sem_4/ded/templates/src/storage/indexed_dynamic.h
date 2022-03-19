@@ -95,7 +95,7 @@ public:
     }
 
     void extract_one() {
-        data(size()).~T();
+        data(size() - 1).~T();
         decrement_size();
     }
 

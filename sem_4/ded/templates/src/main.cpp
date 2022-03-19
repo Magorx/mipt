@@ -12,30 +12,31 @@
 
 template <typename T>
 struct Box {
-    T a;
-    T b;
+    T value_;
 
-    Box(const T &a, const T &b) :
-    a(a),
-    b(b)
-    {}
+    Box(const T &value) : value_(value) {}
 
     ~Box() {
-        printf("box[%d, %d] destroyed\n", a, b);
+        print((*this), "destroyed");
+    }
+
+    operator T() {
+        return value_;
+    }
+
+    friend std::ostream& operator<< (std::ostream& stream, const Box &box) {
+        stream << "Box[" << box.value_ << ']';
+        return stream;
     }
 };
-
-
-std::string observed_int_log(const Observed<Box<int>> &obj) {
-    return "[" + std::to_string(obj.get_data().a) + ", " + std::to_string(obj.get_data().b) + "]";
-}
 
 int main() {
     logger.set_verb_level(Logger::Level::info);
 
-    Observed<Box<int>>::set_one_line_log(observed_int_log);
-
-    MicroLogger<Box<int>> microlog;
+    // Observed<Box<int>>::set_one_line_log([](const Observed<Box<int>> &obj) {
+    //     return "[" + std::to_string(obj.get_data().a) + ", " + std::to_string(obj.get_data().b) + "]";
+    // });
+    // MicroLogger<Box<int>> microlog;
 
 // ============================================================================ Array Dynamic
 
@@ -63,19 +64,22 @@ int main() {
 
 // ============================================================================ Array Chunk
 
-    kctf::Array<Observed<Box<int>>, kctf::storage::IndexedChunk> arr(0, Observed<Box<int>>{Box{-1, -1}});
-
-    // for (size_t i = 6; i < arr.size(); ++i) {
-    //     arr[i] = Box{(int) i, (int) i % 3 + 1};
-    // }
-
-    for (size_t i = 0; i < 5; ++i) {
-        arr.push_back(Observed<Box<int>>{Box{(int) i, (int) i % 3 + 1}});
-    }
-    printf("stop\n");
+    kctf::Vector<bool> arr(10);
 
     for (size_t i = 0; i < arr.size(); ++i) {
-        // print<' ', ' '>((int) arr[i].a);
+        arr[i] = -((int)i % 3);
+    }
+
+    // for (size_t i = 0; i < 160; ++i) {
+    //     arr.push_back(i % 3);
+    // }
+    // for (size_t i = 0; i < 7; ++i) {
+    //     arr.pop_back();
+    // }
+
+    print("arr size:", arr.size());
+    for (size_t i = 0; i < arr.size(); ++i) {
+        print<' ', ' '>(arr[i]);
     }
     print();
 

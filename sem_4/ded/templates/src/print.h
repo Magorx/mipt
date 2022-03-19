@@ -15,8 +15,8 @@ template <
           typename T,
           typename ... Ts
          >
-void print(T a, Ts ... vs) {
-    std::cout << a;
+void print(T&& a, Ts&& ... vs) {
+    std::cout << std::forward<T>(a);
     if constexpr (sizeof...(Ts) != 0) { std::cout << S; }
-    print<S, E>(vs...);
+    print<S, E>(std::forward<Ts>(vs)...);
 }

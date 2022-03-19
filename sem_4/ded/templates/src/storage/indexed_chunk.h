@@ -14,7 +14,7 @@ namespace kctf::storage
 template <typename T>
 class IndexedChunk {
     constexpr static size_t MIN_CAPACITY = 4;
-    constexpr static size_t CHUNK_SIZE = 4; // exp2(log2(4096 / sizeof(T)) + 1);
+    constexpr static size_t CHUNK_SIZE = 2; // exp2(log2(4096 / sizeof(T)) + 1);
 
     IndexedDynamic<T*> data_;
 
@@ -103,7 +103,6 @@ public:
                 size_t i = chunk_i * CHUNK_SIZE + idx;
                 if (i >= size_) break;
 
-                printf("kill\n");
                 data_.data(chunk_i)[idx].~T();
             }
         }
@@ -126,8 +125,7 @@ public:
     }
 
     void extract_one() {
-        data(size()).~T();
-        
+        data(size() - 1).~T();
         decrement_size();
     }
 
