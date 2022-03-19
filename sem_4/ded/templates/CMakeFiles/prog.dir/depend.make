@@ -3,39 +3,38 @@
 
 CMakeFiles/prog.dir/src/main.cpp.o: src/array/array.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/main.cpp
-CMakeFiles/prog.dir/src/main.cpp.o: src/micro_logger/graph_logger.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/micro_logger/micro_logger.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/micro_logger/settings.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/observer/observed.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/observer/operators.dsl
-CMakeFiles/prog.dir/src/main.cpp.o: src/observer/operators.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/print.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/storage/Indexed.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/storage/indexed_chunk.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/storage/indexed_dynamic.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/storage/indexed_static.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/utils/Utils.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/utils/logger.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/utils/micro_logger/func_logger.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/utils/micro_logger/micro_logger.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/utils/micro_logger/observer/observed.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/utils/micro_logger/observer/operators.dsl
+CMakeFiles/prog.dir/src/main.cpp.o: src/utils/micro_logger/observer/operators.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/utils/micro_logger/settings.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/utils/progress_bar.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/utils/tag.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/utils/timer.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/vec/vec.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/event_system/signal.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/event_system/signal_reaction.h
-CMakeFiles/prog.dir/src/main.cpp.o: src/micro_logger/func_logger.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/storage/Indexed.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/storage/indexed_chunk.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/storage/indexed_dynamic.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/storage/indexed_static.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/utils/event_system/signal.h
+CMakeFiles/prog.dir/src/main.cpp.o: src/utils/event_system/signal_reaction.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/utils/logger.h
 CMakeFiles/prog.dir/src/main.cpp.o: src/utils/rgba/rgba.h
-
-CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o: src/micro_logger/func_logger.cpp
-CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o: src/micro_logger/func_logger.h
-CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o: src/event_system/signal.h
-CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o: src/event_system/signal_reaction.h
-CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o: src/utils/logger.h
-CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o: src/utils/tag.h
 
 CMakeFiles/prog.dir/src/utils/logger.cpp.o: src/utils/logger.cpp
 CMakeFiles/prog.dir/src/utils/logger.cpp.o: src/utils/logger.h
 CMakeFiles/prog.dir/src/utils/logger.cpp.o: src/utils/tag.h
+
+CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o: src/utils/micro_logger/func_logger.cpp
+CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o: src/utils/micro_logger/func_logger.h
+CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o: src/utils/event_system/signal.h
+CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o: src/utils/event_system/signal_reaction.h
+CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o: src/utils/logger.h
+CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o: src/utils/tag.h
 
 CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o: src/utils/rgba/rgba.cpp
 CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o: src/utils/rgba/rgba.h

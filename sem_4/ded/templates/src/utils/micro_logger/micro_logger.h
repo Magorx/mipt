@@ -2,7 +2,7 @@
 
 
 #include "observer/observed.h"
-#include "micro_logger/func_logger.h"
+#include "func_logger.h"
 
 
 #include "settings.h"
@@ -32,6 +32,7 @@ class MicroLogger {
     MicroLoggerSettings settings;
 
     bool is_logging = true;
+    bool autohoooked = false;
 
     std::string get_color(const RGBA &color) {
         return to_string(color);
@@ -75,15 +76,31 @@ class MicroLogger {
     }
 
 public:
-    MicroLogger(Logger &logger=kctf::logger, MicroLoggerSettings settings={}) :
+    MicroLogger(Logger &logger=kctf::logger, MicroLoggerSettings settings={}, bool autostart=true) :
     logger(logger),
     settings(settings)
     {
         logger.set_verb_level(Logger::Level::info);
 
-        logger.print("<style> body, html { background: #%s; color: #%s } </style>", get_color(CLR_BACKGROUND).c_str(), get_color(CLR_FONT).c_str());
+        if (settings.html_mode()) {
+            logger.print("<style> body, html { background: #%s; color: #%s } </style>", get_color(CLR_BACKGROUND).c_str(), get_color(CLR_FONT).c_str());
+        }
 
         print_welcome_message();
+
+        if (autostart) {
+            start();
+        }
+    }
+
+    MicroLogger(bool autostart) :
+    MicroLogger(kctf::logger, {}, autostart)
+    {}
+
+    ~MicroLogger() {
+        if (is_logging) {
+            end_log();
+        }
     }
 
     void end_log() {
@@ -230,7 +247,7 @@ public:
         logger.n();
 
         logger.info("observer", "The format of \"Observed\" values is:");
-        logger.info("observer", "name < id >[ addr ][ addr_id ] | value | history");
+        logger.info("observer", "name | [ var_id ][ addr ][ addr_id ] | value | history");
 
         logger.n();
         logger.page_cut("log start");
@@ -240,9 +257,14 @@ public:
         }
     }
 
-    void autohook() {
-        Observed<T>::get_default_pool().push_observer([&](const OperatorSignal<T> &signal) {
-            this->log_operator(signal);
-        });
+    void start(bool to_autohook=true) {
+        if (to_autohook && !autohoooked) {
+            Observed<T>::get_default_pool().push_observer([&](const OperatorSignal<T> &signal) {
+                this->log_operator(signal);
+            });
+            autohoooked = true;
+        }
+
+        is_logging = true;
     }
 };

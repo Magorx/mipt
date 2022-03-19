@@ -4,39 +4,38 @@
 CMakeFiles/prog.dir/src/main.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/array/array.h
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/main.cpp
- /home/kctf/Repositories/mipt/sem_4/ded/templates/src/micro_logger/graph_logger.h
- /home/kctf/Repositories/mipt/sem_4/ded/templates/src/micro_logger/micro_logger.h
- /home/kctf/Repositories/mipt/sem_4/ded/templates/src/micro_logger/settings.h
- /home/kctf/Repositories/mipt/sem_4/ded/templates/src/observer/observed.h
- /home/kctf/Repositories/mipt/sem_4/ded/templates/src/observer/operators.dsl
- /home/kctf/Repositories/mipt/sem_4/ded/templates/src/observer/operators.h
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/print.h
- /home/kctf/Repositories/mipt/sem_4/ded/templates/src/storage/Indexed.h
- /home/kctf/Repositories/mipt/sem_4/ded/templates/src/storage/indexed_chunk.h
- /home/kctf/Repositories/mipt/sem_4/ded/templates/src/storage/indexed_dynamic.h
- /home/kctf/Repositories/mipt/sem_4/ded/templates/src/storage/indexed_static.h
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/Utils.h
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/logger.h
+ /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.h
+ /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/micro_logger.h
+ /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/observer/observed.h
+ /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/observer/operators.dsl
+ /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/observer/operators.h
+ /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/settings.h
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/progress_bar.h
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/tag.h
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/timer.h
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/vec/vec.h
- src/event_system/signal.h
- src/event_system/signal_reaction.h
- src/micro_logger/func_logger.h
+ src/storage/Indexed.h
+ src/storage/indexed_chunk.h
+ src/storage/indexed_dynamic.h
+ src/storage/indexed_static.h
+ src/utils/event_system/signal.h
+ src/utils/event_system/signal_reaction.h
  src/utils/logger.h
  src/utils/rgba/rgba.h
-CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o
- /home/kctf/Repositories/mipt/sem_4/ded/templates/src/micro_logger/func_logger.cpp
- /home/kctf/Repositories/mipt/sem_4/ded/templates/src/micro_logger/func_logger.h
- src/event_system/signal.h
- src/event_system/signal_reaction.h
- src/utils/logger.h
- src/utils/tag.h
 CMakeFiles/prog.dir/src/utils/logger.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/logger.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/logger.h
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/tag.h
+CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o
+ /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp
+ /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.h
+ src/utils/event_system/signal.h
+ src/utils/event_system/signal_reaction.h
+ src/utils/logger.h
+ src/utils/tag.h
 CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/rgba/rgba.cpp
  /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/rgba/rgba.h

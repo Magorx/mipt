@@ -5,15 +5,7 @@
 
 #include "utils/Utils.h"
 #include "array/array.h"
-#include "storage/Indexed.h"
 #include "vec/vec.h"
-
-#include <array>
-
-#include "observer/observed.h"
-#include "micro_logger/micro_logger.h"
-#include "micro_logger/graph_logger.h"
-
 
 #include "print.h"
 
@@ -44,7 +36,6 @@ int main() {
     Observed<Box<int>>::set_one_line_log(observed_int_log);
 
     MicroLogger<Box<int>> microlog;
-    microlog.autohook();
 
 // ============================================================================ Array Dynamic
 
@@ -95,6 +86,5 @@ int main() {
 
     // print(a.dot(b));
 
-    microlog.end_log();
     return 0;
 }

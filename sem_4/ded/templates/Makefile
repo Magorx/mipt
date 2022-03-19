@@ -163,33 +163,6 @@ src/main.cpp.s:
 	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
-src/micro_logger/func_logger.o: src/micro_logger/func_logger.cpp.o
-
-.PHONY : src/micro_logger/func_logger.o
-
-# target to build an object file
-src/micro_logger/func_logger.cpp.o:
-	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o
-.PHONY : src/micro_logger/func_logger.cpp.o
-
-src/micro_logger/func_logger.i: src/micro_logger/func_logger.cpp.i
-
-.PHONY : src/micro_logger/func_logger.i
-
-# target to preprocess a source file
-src/micro_logger/func_logger.cpp.i:
-	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.i
-.PHONY : src/micro_logger/func_logger.cpp.i
-
-src/micro_logger/func_logger.s: src/micro_logger/func_logger.cpp.s
-
-.PHONY : src/micro_logger/func_logger.s
-
-# target to generate assembly for a file
-src/micro_logger/func_logger.cpp.s:
-	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.s
-.PHONY : src/micro_logger/func_logger.cpp.s
-
 src/utils/logger.o: src/utils/logger.cpp.o
 
 .PHONY : src/utils/logger.o
@@ -216,6 +189,33 @@ src/utils/logger.s: src/utils/logger.cpp.s
 src/utils/logger.cpp.s:
 	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/utils/logger.cpp.s
 .PHONY : src/utils/logger.cpp.s
+
+src/utils/micro_logger/func_logger.o: src/utils/micro_logger/func_logger.cpp.o
+
+.PHONY : src/utils/micro_logger/func_logger.o
+
+# target to build an object file
+src/utils/micro_logger/func_logger.cpp.o:
+	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o
+.PHONY : src/utils/micro_logger/func_logger.cpp.o
+
+src/utils/micro_logger/func_logger.i: src/utils/micro_logger/func_logger.cpp.i
+
+.PHONY : src/utils/micro_logger/func_logger.i
+
+# target to preprocess a source file
+src/utils/micro_logger/func_logger.cpp.i:
+	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.i
+.PHONY : src/utils/micro_logger/func_logger.cpp.i
+
+src/utils/micro_logger/func_logger.s: src/utils/micro_logger/func_logger.cpp.s
+
+.PHONY : src/utils/micro_logger/func_logger.s
+
+# target to generate assembly for a file
+src/utils/micro_logger/func_logger.cpp.s:
+	$(MAKE) -f CMakeFiles/prog.dir/build.make CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.s
+.PHONY : src/utils/micro_logger/func_logger.cpp.s
 
 src/utils/rgba/rgba.o: src/utils/rgba/rgba.cpp.o
 
@@ -446,12 +446,12 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... src/micro_logger/func_logger.o"
-	@echo "... src/micro_logger/func_logger.i"
-	@echo "... src/micro_logger/func_logger.s"
 	@echo "... src/utils/logger.o"
 	@echo "... src/utils/logger.i"
 	@echo "... src/utils/logger.s"
+	@echo "... src/utils/micro_logger/func_logger.o"
+	@echo "... src/utils/micro_logger/func_logger.i"
+	@echo "... src/utils/micro_logger/func_logger.s"
 	@echo "... src/utils/rgba/rgba.o"
 	@echo "... src/utils/rgba/rgba.i"
 	@echo "... src/utils/rgba/rgba.s"

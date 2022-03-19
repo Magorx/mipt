@@ -174,18 +174,18 @@ CMakeFiles/prog.dir/src/utils/state_history/history.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/state_history/history.cpp.s"
 	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/state_history/history.cpp -o CMakeFiles/prog.dir/src/utils/state_history/history.cpp.s
 
-CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o: CMakeFiles/prog.dir/flags.make
-CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o: ../src/micro_logger/func_logger.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/micro_logger/func_logger.cpp
+CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o: CMakeFiles/prog.dir/flags.make
+CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o: ../src/utils/micro_logger/func_logger.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp
 
-CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/micro_logger/func_logger.cpp > CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.i
+CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.i"
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp > CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.i
 
-CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/micro_logger/func_logger.cpp -o CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.s
+CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.s"
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp -o CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.s
 
 CMakeFiles/prog.dir/src/main.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/main.cpp.o: ../src/main.cpp
@@ -211,7 +211,7 @@ prog_OBJECTS = \
 "CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o" \
 "CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o" \
 "CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o" \
-"CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o" \
+"CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o" \
 "CMakeFiles/prog.dir/src/main.cpp.o"
 
 # External object files for target prog
@@ -226,7 +226,7 @@ prog: CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o
 prog: CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o
 prog: CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o
 prog: CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o
-prog: CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o
+prog: CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o
 prog: CMakeFiles/prog.dir/src/main.cpp.o
 prog: CMakeFiles/prog.dir/build.make
 prog: CMakeFiles/prog.dir/link.txt

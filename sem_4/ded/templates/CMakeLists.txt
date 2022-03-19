@@ -40,8 +40,9 @@ add_executable(prog
 
         src/utils/state_history/history.cpp
 
+        src/utils/micro_logger/func_logger.cpp
+
         # task
-        src/micro_logger/func_logger.cpp
 
         src/main.cpp
 )

@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/prog.dir/src/main.cpp.o"
-  "CMakeFiles/prog.dir/src/micro_logger/func_logger.cpp.o"
   "CMakeFiles/prog.dir/src/utils/logger.cpp.o"
+  "CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o"
   "CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o"
   "CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o"
   "CMakeFiles/prog.dir/src/utils/tag.cpp.o"
