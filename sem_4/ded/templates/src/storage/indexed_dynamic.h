@@ -14,12 +14,7 @@ class IndexedDynamic {
     size_t capacity_;
     size_t size_;
 
-    void grow_capacity(float coef=2) {
-        if (!capacity_) {
-            capacity_ = MIN_CAPACITY;
-        }
-
-        size_t new_capacity = capacity_ * coef;
+    void set_capacity(size_t new_capacity) {
         T *new_data = (T*) calloc(new_capacity, sizeof(T));
 
         if (!new_data) {
@@ -36,6 +31,15 @@ class IndexedDynamic {
 
         data_ = new_data;
         capacity_ = new_capacity;
+    }
+
+    void grow_capacity(float coef=2) {
+        if (!capacity_) {
+            capacity_ = MIN_CAPACITY;
+        }
+
+        size_t new_capacity = capacity_ * coef;
+        set_capacity(new_capacity);
     }
 
     int increment_size() {
@@ -83,7 +87,7 @@ public:
 
     T &data(size_t i) {
         if (size_ <= i) {
-            throw std::range_error("Bad index passed to data() of IndexedDynamic storage");
+            throw std::range_error("Bad index " + std::to_string(i) + " passed to data() of IndexedDynamic storage");
         }
 
         return data_[i];
@@ -102,9 +106,22 @@ public:
     inline size_t size() const {
         return size_;
     }
+    
+    inline size_t capacity() const {
+        return capacity_;
+    }
 
     inline bool full() const {
         return size_ == capacity_;
+    }
+
+    void reserve(size_t capacity) {
+        if (capacity_ >= capacity) return;
+        set_capacity(capacity);
+    }
+
+    void shrink_to_fit() {
+        set_capacity(size());
     }
 };
 

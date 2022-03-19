@@ -54,6 +54,18 @@ public:
     constexpr inline bool empty() const {
         return !!storage_.size();
     }
+
+    void reserve(size_t capacity) {
+        storage_.reserve(capacity);
+    }
+
+    size_t capacity() const {
+        return storage_.capacity();
+    }
+
+    void shrink_to_fit() {
+        storage_.shrink_to_fit();
+    }
 };
 
 

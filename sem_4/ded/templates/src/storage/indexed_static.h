@@ -36,6 +36,10 @@ public:
     constexpr inline size_t size() const {
         return Size;
     }
+
+    inline size_t capacity() const {
+        return Size;
+    }
 };
 
 template<int Size>

@@ -38,6 +38,23 @@ class IndexedChunk {
         return chunk;
     }
 
+    void free_chunk(size_t chunk_i) {
+        if (!data_.data(chunk_i)) return;
+
+        for (size_t idx = 0; idx < CHUNK_SIZE; ++idx) {
+            size_t i = chunk_i * CHUNK_SIZE + idx;
+            if (i >= size_) break;
+
+            data_.data(chunk_i)[idx].~T();
+        }
+    }
+
+    void grow_capacity(size_t capacity) {
+        while (capacity_ < capacity) {
+            grow_capacity();
+        }
+    }
+
     void grow_capacity() {
         size_t new_capacity = capacity_ + CHUNK_SIZE;
         T *new_chunk = allocate_chunk(capacity_, new_capacity);
@@ -97,14 +114,7 @@ public:
 
     ~IndexedChunk() {
         for (size_t chunk_i = 0; chunk_i * CHUNK_SIZE < capacity_; ++chunk_i) {
-            if (!data_.data(chunk_i)) continue;
-
-            for (size_t idx = 0; idx < CHUNK_SIZE; ++idx) {
-                size_t i = chunk_i * CHUNK_SIZE + idx;
-                if (i >= size_) break;
-
-                data_.data(chunk_i)[idx].~T();
-            }
+            free_chunk(chunk_i);
         }
 
         capacity_ = 0;
@@ -133,8 +143,24 @@ public:
         return size_;
     }
 
+    inline size_t capacity() const {
+        return capacity_;
+    }
+
     inline bool full() const {
         return size_ == capacity_;
+    }
+
+    void reserve(size_t capacity) {
+        grow_capacity(capacity);
+    }
+
+    void shrink_to_fit() {
+        while (data_.size() && (data_.size() - 1) * CHUNK_SIZE >= size()) {
+            free_chunk(data_.size() - 1);
+            capacity_ -= CHUNK_SIZE;
+            data_.extract_one();
+        }
     }
 };
 

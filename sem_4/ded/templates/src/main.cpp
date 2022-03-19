@@ -64,11 +64,18 @@ int main() {
 
 // ============================================================================ Array Chunk
 
-    kctf::Vector<bool> arr(10);
+    kctf::Vector<int> a(3);
+    a.reserve(100);
+    print("size is", a.size(), " capacity is", a.capacity());
 
-    for (size_t i = 0; i < arr.size(); ++i) {
-        arr[i] = -((int)i % 3);
-    }
+    kctf::ChunkVector<int> b(0);
+    b.reserve(101);
+    b.shrink_to_fit();
+    print("size is", b.size(), " capacity is", b.capacity());
+
+    // for (size_t i = 0; i < arr.size(); ++i) {
+    //     arr[i] = -((int)i % 3);
+    // }
 
     // for (size_t i = 0; i < 160; ++i) {
     //     arr.push_back(i % 3);
@@ -77,11 +84,11 @@ int main() {
     //     arr.pop_back();
     // }
 
-    print("arr size:", arr.size());
-    for (size_t i = 0; i < arr.size(); ++i) {
-        print<' ', ' '>(arr[i]);
-    }
-    print();
+    // print("arr size:", arr.size());
+    // for (size_t i = 0; i < arr.size(); ++i) {
+    //     print<' ', ' '>(arr[i]);
+    // }
+    // print();
 
 // ============================================================================ Vector
 
