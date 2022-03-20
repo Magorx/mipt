@@ -56,6 +56,7 @@ class IndexedDynamic {
 
 public:
     constexpr static bool is_dynamic = true;
+    constexpr static bool can_give_data_ptr = true;
 
     IndexedDynamic() :
         data_(nullptr),
@@ -68,7 +69,7 @@ public:
         capacity_(length),
         size_(length)
     {
-        if (!data_) throw std::overflow_error("Can't allocate buffer for IndexedDynamic storage");
+        if (!data_) throw std::bad_alloc();
 
         for (size_t i = 0; i < size_; ++i) {
             new(&data_[i]) T(elem);
@@ -78,14 +79,61 @@ public:
     IndexedDynamic(const IndexedDynamic &other) :
         data_((T*) calloc(other.capacity_, sizeof(T))),
         capacity_(other.capacity_),
-        size_(other.size_) {
+        size_(other.size_)
+    {
         for (size_t i = 0; i < size_; ++i) {
             new(data_ + i) T(other.data(i));
         }
     }
 
+    IndexedDynamic &operator=(const IndexedDynamic &other) {
+        clear();
+
+        data_ = (T*) calloc(other.capacity_, sizeof(T));
+        if (!data_) throw std::bad_alloc();
+
+        capacity_ = other.capacity_;
+        size_ = other.size_;
+
+        for (size_t i = 0; i < size_; ++i) {
+            new(data_ + i) T(other.data(i));
+        }
+
+        return *this;
+    }
+
+    IndexedDynamic(IndexedDynamic &&other) :
+        data_(std::move(other.data_)),
+        capacity_(std::move(other.capacity_)),
+        size_(std::move(other.size_))
+    {
+        other.clear();
+    }
+
+    IndexedDynamic &operator=(IndexedDynamic &&other) {
+        clear();
+
+        data_     = std::move(other.data_);
+        capacity_ = std::move(other.capacity_);
+        size_     = std::move(other.size_);
+
+        other.data_ = nullptr;
+        other.capacity_ = 0;
+        other.size_ = 0;
+
+        return *this;
+    }
+
     ~IndexedDynamic() {
         clear();
+    }
+
+    T *data_ptr() {
+        return data_;
+    }
+
+    const T *data_ptr() const {
+        return data_;
     }
 
     T &data(size_t i) {

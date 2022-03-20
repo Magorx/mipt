@@ -11,10 +11,10 @@ namespace kctf::storage
 {
 
 
-template <typename T>
-class IndexedChunk {
+template <typename T, int ChunkSize>
+class IndexedChunkedT {
     constexpr static size_t MIN_CAPACITY = 4;
-    constexpr static size_t CHUNK_SIZE = 2; // exp2(log2(4096 / sizeof(T)) + 1);
+    // constexpr static size_t ChunkSize = 2; // exp2(log2(4096 / sizeof(T)) + 1);
 
     IndexedDynamic<T*> data_;
 
@@ -25,7 +25,7 @@ class IndexedChunk {
     std::optional<T> fill_elem_;
 
     T *allocate_chunk(size_t from, size_t to) {
-        T *chunk = (T*) calloc(CHUNK_SIZE, sizeof(T));
+        T *chunk = (T*) calloc(ChunkSize, sizeof(T));
         
         if (!fill_elem_.has_value()) {
             return chunk;
@@ -39,7 +39,9 @@ class IndexedChunk {
     }
 
     T *copy_chunk(T *chunk, size_t to_copy) {
-        T *new_chunk = (T*) calloc(CHUNK_SIZE, sizeof(T));
+        if (!chunk) return nullptr;
+
+        T *new_chunk = (T*) calloc(ChunkSize, sizeof(T));
 
         for (size_t i = 0; i < to_copy; ++i) {
             new(new_chunk + i) T(chunk[i]);
@@ -51,12 +53,14 @@ class IndexedChunk {
     void free_chunk(size_t chunk_i) {
         if (!data_.data(chunk_i)) return;
 
-        for (size_t idx = 0; idx < CHUNK_SIZE; ++idx) {
-            size_t i = chunk_i * CHUNK_SIZE + idx;
+        for (size_t idx = 0; idx < ChunkSize; ++idx) {
+            size_t i = chunk_i * ChunkSize + idx;
             if (i >= size_) break;
 
             data_.data(chunk_i)[idx].~T();
         }
+
+        free(data_.data(chunk_i));
     }
 
     void grow_capacity(size_t capacity) {
@@ -66,7 +70,7 @@ class IndexedChunk {
     }
 
     void grow_capacity() {
-        size_t new_capacity = capacity_ + CHUNK_SIZE;
+        size_t new_capacity = capacity_ + ChunkSize;
         T *new_chunk = allocate_chunk(capacity_, new_capacity);
 
         if (!new_chunk) {
@@ -98,7 +102,7 @@ class IndexedChunk {
         if (data_.data(i)) {
             return data_.data(i);
         } else {
-            return data_.data(i) = allocate_chunk(CHUNK_SIZE * i, CHUNK_SIZE * (i + 1));
+            return data_.data(i) = allocate_chunk(ChunkSize * i, ChunkSize * (i + 1));
         }
     }
 
@@ -116,8 +120,9 @@ class IndexedChunk {
 
 public:
     constexpr static bool is_dynamic = true;
+    constexpr static bool can_give_data_ptr = false;
 
-    IndexedChunk() :
+    IndexedChunkedT() :
         data_(),
         capacity_(0),
         size_(0),
@@ -125,15 +130,15 @@ public:
         fill_elem_()
     {}
 
-    IndexedChunk(size_t length, const T &elem={}) :
-        data_(length / CHUNK_SIZE + 1 * (!!((length % CHUNK_SIZE) != 0)), nullptr),
-        capacity_(data_.size() * CHUNK_SIZE),
+    IndexedChunkedT(size_t length, const T &elem={}) :
+        data_(length / ChunkSize + 1 * (!!((length % ChunkSize) != 0)), nullptr),
+        capacity_(data_.size() * ChunkSize),
         size_(length),
         prefill_size_(length),
         fill_elem_(elem)
     {}
 
-    IndexedChunk(const IndexedChunk &other) :
+    IndexedChunkedT(const IndexedChunkedT &other) :
         data_(other.data_),
         capacity_(other.capacity_),
         size_(other.size_),
@@ -142,19 +147,57 @@ public:
     {
         for (size_t chunk_i = 0; chunk_i < data_.size(); ++chunk_i) {
             if (data_.data(chunk_i)) {
-                size_t to_copy = std::min(std::max((size_t) 0, CHUNK_SIZE * chunk_i - size_), CHUNK_SIZE);
+                size_t to_copy = std::min(std::max((size_t) 0, ChunkSize * chunk_i - size_), (size_t) ChunkSize);
                 data_.data(chunk_i) = copy_chunk(data_.data(chunk_i), to_copy);
             }
         }
     }
 
-    ~IndexedChunk() {
-        for (size_t chunk_i = 0; chunk_i * CHUNK_SIZE < capacity_; ++chunk_i) {
-            free_chunk(chunk_i);
+    IndexedChunkedT &operator=(const IndexedChunkedT &other) {
+        clear();
+
+        data_ = other.data_;
+        capacity_ = other.capacity_;
+        size_ = other.size_;
+        prefill_size_ = other.prefill_size_;
+        fill_elem_ = other.fill_elem_;
+
+        for (size_t chunk_i = 0; chunk_i < data_.size(); ++chunk_i) {
+            if (data_.data(chunk_i)) {
+                size_t to_copy = std::min(std::max((size_t) 0, ChunkSize * chunk_i - size_), (size_t) ChunkSize);
+                data_.data(chunk_i) = copy_chunk(data_.data(chunk_i), to_copy);
+            }
         }
 
-        capacity_ = 0;
-        size_ = 0;
+        return *this;
+    }
+
+    IndexedChunkedT(IndexedChunkedT &&other) :
+        data_(std::move(other.data_)),
+        capacity_(std::move(other.capacity_)),
+        size_(std::move(other.size_)),
+        prefill_size_(std::move(other.prefill_size_)),
+        fill_elem_(std::move(other.fill_elem_))
+    {
+        other.clear();
+    }
+
+    IndexedChunkedT &operator=(IndexedChunkedT &&other) {
+        clear();
+
+        data_ = std::move(other.data_);
+        capacity_ = std::move(other.capacity_);
+        size_ = std::move(other.size_);
+        prefill_size_ = std::move(other.prefill_size_);
+        fill_elem_ = std::move(other.fill_elem_);
+
+        other.clear();
+
+        return *this;
+    }
+
+    ~IndexedChunkedT() {
+        clear();
     }
 
     T &data(size_t i) {
@@ -162,7 +205,7 @@ public:
             throw std::range_error("Bad index passed to data() of IndexedChunk storage");
         }
 
-        return get_chunk(i / CHUNK_SIZE)[i % CHUNK_SIZE];
+        return get_chunk(i / ChunkSize)[i % ChunkSize];
     }
 
     const T &data(size_t i) const {
@@ -170,7 +213,7 @@ public:
             throw std::range_error("Bad index passed to data() of IndexedChunk storage");
         }
 
-        return get_chunk(i / CHUNK_SIZE)[i % CHUNK_SIZE];
+        return get_chunk(i / ChunkSize)[i % ChunkSize];
     }
 
     T *expand_one() {
@@ -202,9 +245,9 @@ public:
     }
 
     void shrink_to_fit() {
-        while (data_.size() && (data_.size() - 1) * CHUNK_SIZE >= size()) {
+        while (data_.size() && (data_.size() - 1) * ChunkSize >= size()) {
             free_chunk(data_.size() - 1);
-            capacity_ -= CHUNK_SIZE;
+            capacity_ -= ChunkSize;
             data_.extract_one();
         }
     }
@@ -234,6 +277,13 @@ public:
         }
     }
 
+};
+
+
+template <int ChunkSize>
+struct IndexedChunked {
+    template <typename T>
+    using type = IndexedChunkedT<T, ChunkSize>;
 };
 
 

@@ -28,7 +28,22 @@ public:
     }
 
     ArrayT(const ArrayT &other) :
-    storage_(other.storage_) {}
+    storage_(other.storage_) {
+    }
+
+    ArrayT &operator=(const ArrayT &other) {
+        storage_ = other.storage_;
+        return *this;
+    }
+
+    ArrayT(ArrayT &&other) :
+    storage_(std::move(other.storage_)) {
+    }
+
+    ArrayT &operator=(ArrayT &&other) {
+        storage_ = std::move(other.storage_);
+        return *this;
+    }
 
     T &operator[](size_t i) {
         return storage_.data(i);
@@ -52,6 +67,32 @@ public:
 
     void pop_back() {
         storage_.extract_one();
+    }
+
+    T &front() {
+        return (*this)[0];
+    }
+
+    const T &front() const {
+        return (*this)[0];
+    }
+
+    T &back() {
+        return (*this)[size() - 1];
+    }
+
+    T *data() {
+        static_assert(IndexedStorageT<T>::can_give_data_ptr);
+        return storage_.data_ptr();
+    }
+
+    const T *data() const {
+        static_assert(IndexedStorageT<T>::can_give_data_ptr);
+        return storage_.data_ptr();
+    }
+
+    const T &back() const {
+        return (*this)[size() - 1];
     }
 
     constexpr inline size_t size() const {
@@ -80,6 +121,12 @@ public:
 
     void resize(size_t new_size, const T &fill_elem={}) {
         storage_.resize(new_size, fill_elem);
+    }
+
+    void fill(const T &elem) {
+        for (size_t i = 0; i < size(); ++i) {
+            storage_.data(i) = elem;
+        }
     }
 };
 
@@ -182,7 +229,7 @@ using Vector = ArrayT<T, storage::IndexedDynamic>;
 template <typename T, int Size>
 using Array = ArrayT<T, storage::IndexedStatic<Size>::template type>;
 
-template <typename T>
-using ChunkVector = ArrayT<T, storage::IndexedChunk>;
+template <typename T, int ChunkSize>
+using ChunkVector = ArrayT<T, storage::IndexedChunked<ChunkSize>::template type>;
 
 } // namespace kctf

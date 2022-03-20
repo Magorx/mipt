@@ -64,39 +64,37 @@ int main() {
 
 // ============================================================================ Array Chunk
 
-    kctf::Vector<int> a;
-    a.resize(7, 5);
-    print("a | size is", a.size(), " capacity is", a.capacity());
+    kctf::Vector<int> arr_vec;
+    arr_vec.resize(3, 1);
+    arr_vec.push_back(11);
+    print("arr_vec | size is", arr_vec.size(), " capacity is", arr_vec.capacity());
 
-    kctf::ChunkVector<int> b;
-    b.reserve(101);
-    b.resize(7, 9);
-    print("b | size is", b.size(), " capacity is", b.capacity());
+    kctf::ChunkVector<int, 2> arr_chunk(2, -2);
+    arr_chunk.push_back(2);
+    arr_chunk.reserve(10);
+    arr_chunk.resize(7, 2);
+    // print("arr_chunk | size is", arr_chunk.size(), " capacity is", arr_chunk.capacity());
 
-    // for (size_t i = 0; i < arr.size(); ++i) {
-    //     arr[i] = -((int)i % 3);
-    // }
+    kctf::Array<int, 10> arr_stat;
+    arr_stat.fill(3);
 
-    // for (size_t i = 0; i < 160; ++i) {
-    //     arr.push_back(i % 3);
-    // }
-    // for (size_t i = 0; i < 7; ++i) {
-    //     arr.pop_back();
-    // }
-
-    print("arr size:", a.size());
-    for (size_t i = 0; i < a.size(); ++i) {
-        print<' ', ' '>(a[i]);
+    print("arr_vec size:", arr_vec.size());
+    for (size_t i = 0; i < arr_vec.size(); ++i) {
+        print<' ', ' '>(arr_vec[i]);
     }
     print();
 
-    auto c(b);
+    kctf::Vector<int> arr_cpy;
+    print(arr_cpy.data(), "!!!!!!!!!");
+    std::swap(arr_cpy, arr_vec);
 
-    print("arr size:", c.size());
-    for (size_t i = 0; i < c.size(); ++i) {
-        print<' ', ' '>(c[i]);
+    print("arr_cpy size:", arr_cpy.size());
+    for (size_t i = 0; i < arr_cpy.size(); ++i) {
+        print<' ', ' '>(arr_cpy[i]);
     }
     print();
+
+    print(arr_cpy.data());
 
 // ============================================================================ Vector
 
