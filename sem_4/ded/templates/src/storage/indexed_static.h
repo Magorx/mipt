@@ -33,6 +33,8 @@ public:
         return data_[i];
     }
 
+// ============================================================================ capacity
+
     constexpr inline size_t size() const {
         return Size;
     }
@@ -40,8 +42,6 @@ public:
     inline size_t capacity() const {
         return Size;
     }
-
-    inline void shrink_to_fit() const {}
 };
 
 template<int Size>

@@ -75,17 +75,28 @@ public:
         }
     }
 
-    ~IndexedDynamic() {
+    IndexedDynamic(const IndexedDynamic &other) :
+        data_((T*) calloc(other.capacity_, sizeof(T))),
+        capacity_(other.capacity_),
+        size_(other.size_) {
         for (size_t i = 0; i < size_; ++i) {
-            data_[i].~T();
+            new(data_ + i) T(other.data(i));
         }
+    }
 
-        free(data_);
-        capacity_ = 0;
-        size_ = 0;
+    ~IndexedDynamic() {
+        clear();
     }
 
     T &data(size_t i) {
+        if (size_ <= i) {
+            throw std::range_error("Bad index " + std::to_string(i) + " passed to data() of IndexedDynamic storage");
+        }
+
+        return data_[i];
+    }
+
+    const T &data(size_t i) const {
         if (size_ <= i) {
             throw std::range_error("Bad index " + std::to_string(i) + " passed to data() of IndexedDynamic storage");
         }
@@ -102,6 +113,8 @@ public:
         data(size() - 1).~T();
         decrement_size();
     }
+
+// ============================================================================ capacity
 
     inline size_t size() const {
         return size_;
@@ -122,6 +135,29 @@ public:
 
     void shrink_to_fit() {
         set_capacity(size());
+    }
+// ============================================================================ modifirers
+
+    void clear() {
+        for (size_t i = 0; i < size(); ++i) {
+            data_[i].~T();
+        }
+
+        free(data_);
+        data_ = nullptr;
+
+        capacity_ = 0;
+        size_ = 0;
+    }
+
+    void resize(size_t new_size, const T &fill_elem={}) {
+        while (size() > new_size) {
+            extract_one();
+        }
+
+        while (size() < new_size) {
+            *expand_one() = fill_elem;
+        }
     }
 };
 

@@ -27,7 +27,14 @@ public:
     ArrayT(size_t length, const T &elem={}) : storage_(length, elem) {
     }
 
+    ArrayT(const ArrayT &other) :
+    storage_(other.storage_) {}
+
     T &operator[](size_t i) {
+        return storage_.data(i);
+    }
+
+    const T &operator[](size_t i) const {
         return storage_.data(i);
     }
 
@@ -65,6 +72,14 @@ public:
 
     void shrink_to_fit() {
         storage_.shrink_to_fit();
+    }
+
+    void clear() {
+        storage_.clear();
+    }
+
+    void resize(size_t new_size, const T &fill_elem={}) {
+        storage_.resize(new_size, fill_elem);
     }
 };
 

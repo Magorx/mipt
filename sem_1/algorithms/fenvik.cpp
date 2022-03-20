@@ -2,16 +2,6 @@
 #include <cstdio>
 #include <climits>
 
-template <typename T>
-const T &min(const T &first, const T &second) {
-	return first < second ? first : second;
-}
-
-template <typename T>
-const T &max(const T &first, const T &second) {
-	return second < first ? first : second;
-}
-
 template <typename T, typename T_OP, typename T_REV>
 class FenvikTree {
 private:
