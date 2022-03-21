@@ -45,6 +45,8 @@ public:
         return *this;
     }
 
+// ============================================================================ element access
+
     T &operator[](size_t i) {
         return storage_.data(i);
     }
@@ -53,20 +55,20 @@ public:
         return storage_.data(i);
     }
 
-    template <typename Q>
-    void push_back(Q &&elem) {
-        T *placement = storage_.expand_one();
-        new(placement) T(std::forward<Q>(elem));
+    T &at(size_t i) {
+        if (i >= size()) {
+            throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of ArrayT (size = " + std::to_string(size()) + ")");
+        }
+
+        return storage_.data(i);
     }
 
-    template <typename ... Ts>
-    void emplace_back(Ts ... vs) {
-        T *placement = storage_.expand_one();
-        new(placement) T(std::forward<Ts>(vs)...);
-    }
+    const T &at(size_t i) const {
+        if (i >= size()) {
+            throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of ArrayT (size = " + std::to_string(size()) + ")");
+        }
 
-    void pop_back() {
-        storage_.extract_one();
+        return storage_.data(i);
     }
 
     T &front() {
@@ -81,6 +83,34 @@ public:
         return (*this)[size() - 1];
     }
 
+    const T &back() const {
+        return (*this)[size() - 1];
+    }
+
+    T &at_front() {
+        if (empty()) throw std::range_error("can't take front() from ArrayT of size 0");
+
+        return (*this)[0];
+    }
+
+    const T &at_front() const {
+        if (empty()) throw std::range_error("can't take front() from ArrayT of size 0");
+
+        return (*this)[0];
+    }
+
+    T &at_back() {
+        if (empty()) throw std::range_error("can't take back() from ArrayT of size 0");
+
+        return (*this)[size() - 1];
+    }
+
+    const T &at_back() const {
+        if (empty()) throw std::range_error("can't take back() from ArrayT of size 0");
+
+        return (*this)[size() - 1];
+    }
+
     T *data() {
         static_assert(IndexedStorageT<T>::can_give_data_ptr);
         return storage_.data_ptr();
@@ -91,9 +121,7 @@ public:
         return storage_.data_ptr();
     }
 
-    const T &back() const {
-        return (*this)[size() - 1];
-    }
+// ============================================================================ capacity
 
     constexpr inline size_t size() const {
         return storage_.size();
@@ -115,11 +143,39 @@ public:
         storage_.shrink_to_fit();
     }
 
+// ============================================================================ modifiers
+
+    template <typename Q>
+    void push_back(Q &&elem) {
+        static_assert(IndexedStorageT<T>::can_modify_size);
+
+        T *placement = storage_.expand_one();
+        new(placement) T(std::forward<Q>(elem));
+    }
+
+    template <typename ... Ts>
+    void emplace_back(Ts ... vs) {
+        static_assert(IndexedStorageT<T>::can_modify_size);
+
+        T *placement = storage_.expand_one();
+        new(placement) T(std::forward<Ts>(vs)...);
+    }
+
+    void pop_back() {
+        static_assert(IndexedStorageT<T>::can_modify_size);
+
+        storage_.extract_one();
+    }
+
     void clear() {
+        static_assert(IndexedStorageT<T>::can_modify_size);
+
         storage_.clear();
     }
 
     void resize(size_t new_size, const T &fill_elem={}) {
+        static_assert(IndexedStorageT<T>::can_modify_size);
+
         storage_.resize(new_size, fill_elem);
     }
 

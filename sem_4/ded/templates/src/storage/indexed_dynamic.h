@@ -57,6 +57,7 @@ class IndexedDynamic {
 public:
     constexpr static bool is_dynamic = true;
     constexpr static bool can_give_data_ptr = true;
+    constexpr static bool can_modify_size = true;
 
     IndexedDynamic() :
         data_(nullptr),
@@ -137,29 +138,11 @@ public:
     }
 
     T &data(size_t i) {
-        if (size_ <= i) {
-            throw std::range_error("Bad index " + std::to_string(i) + " passed to data() of IndexedDynamic storage");
-        }
-
         return data_[i];
     }
 
     const T &data(size_t i) const {
-        if (size_ <= i) {
-            throw std::range_error("Bad index " + std::to_string(i) + " passed to data() of IndexedDynamic storage");
-        }
-
         return data_[i];
-    }
-
-    T *expand_one() {
-        int placement_i = increment_size() - 1;
-        return &data(placement_i);
-    }
-
-    void extract_one() {
-        data(size() - 1).~T();
-        decrement_size();
     }
 
 // ============================================================================ capacity
@@ -185,6 +168,16 @@ public:
         set_capacity(size());
     }
 // ============================================================================ modifirers
+
+    T *expand_one() {
+        int placement_i = increment_size() - 1;
+        return &data(placement_i);
+    }
+
+    void extract_one() {
+        data(size() - 1).~T();
+        decrement_size();
+    }
 
     void clear() {
         for (size_t i = 0; i < size(); ++i) {

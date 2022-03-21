@@ -121,6 +121,7 @@ class IndexedChunkedT {
 public:
     constexpr static bool is_dynamic = true;
     constexpr static bool can_give_data_ptr = false;
+    constexpr static bool can_modify_size = true;
 
     IndexedChunkedT() :
         data_(),
@@ -201,29 +202,11 @@ public:
     }
 
     T &data(size_t i) {
-        if (size_ <= i) {
-            throw std::range_error("Bad index passed to data() of IndexedChunk storage");
-        }
-
         return get_chunk(i / ChunkSize)[i % ChunkSize];
     }
 
     const T &data(size_t i) const {
-        if (size_ <= i) {
-            throw std::range_error("Bad index passed to data() of IndexedChunk storage");
-        }
-
         return get_chunk(i / ChunkSize)[i % ChunkSize];
-    }
-
-    T *expand_one() {
-        int placement_i = increment_size() - 1;
-        return &data(placement_i);
-    }
-
-    void extract_one() {
-        data(size() - 1).~T();
-        decrement_size();
     }
 
 // ============================================================================ capacity
@@ -253,6 +236,16 @@ public:
     }
 
 // ============================================================================ modifirers
+
+    T *expand_one() {
+        int placement_i = increment_size() - 1;
+        return &data(placement_i);
+    }
+
+    void extract_one() {
+        data(size() - 1).~T();
+        decrement_size();
+    }
 
     void clear() {
         for (size_t i = 0; i < data_.size(); ++i) {

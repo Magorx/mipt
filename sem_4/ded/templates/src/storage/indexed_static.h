@@ -12,6 +12,7 @@ class IndexedStaticT {
 public:
     constexpr static bool is_dynamic = false;
     constexpr static bool can_give_data_ptr = true;
+    constexpr static bool can_modify_size = false;
 
     IndexedStaticT(const T &elem={})
     {
@@ -67,18 +68,10 @@ public:
     }
 
     T &data(size_t i) {
-        if (Size <= i) {
-            throw std::range_error("Bad index passed to data() of IndexedDynamic storage");
-        }
-
         return data_[i];
     }
 
     const T &data(size_t i) const {
-        if (Size <= i) {
-            throw std::range_error("Bad index passed to data() of IndexedDynamic storage");
-        }
-
         return data_[i];
     }
 
