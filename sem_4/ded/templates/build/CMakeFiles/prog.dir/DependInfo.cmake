@@ -16,7 +16,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_pos.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/templates/build/CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o"
   "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/timer.cpp" "/home/kctf/Repositories/mipt/sem_4/ded/templates/build/CMakeFiles/prog.dir/src/utils/timer.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "GNU")
+set(CMAKE_CXX_COMPILER_ID "Clang")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH

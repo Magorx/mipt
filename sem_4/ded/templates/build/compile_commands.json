@@ -1,57 +1,57 @@
 [
 {
   "directory": "/home/kctf/Repositories/mipt/sem_4/ded/templates/build",
-  "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/timer.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/timer.cpp",
+  "command": "clang++-12   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/timer.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/timer.cpp",
   "file": "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/timer.cpp"
 },
 {
   "directory": "/home/kctf/Repositories/mipt/sem_4/ded/templates/build",
-  "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/logger.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/logger.cpp",
+  "command": "clang++-12   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/logger.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/logger.cpp",
   "file": "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/logger.cpp"
 },
 {
   "directory": "/home/kctf/Repositories/mipt/sem_4/ded/templates/build",
-  "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/tag.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/tag.cpp",
+  "command": "clang++-12   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/tag.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/tag.cpp",
   "file": "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/tag.cpp"
 },
 {
   "directory": "/home/kctf/Repositories/mipt/sem_4/ded/templates/build",
-  "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/rgba/rgba.cpp",
+  "command": "clang++-12   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/rgba/rgba.cpp",
   "file": "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/rgba/rgba.cpp"
 },
 {
   "directory": "/home/kctf/Repositories/mipt/sem_4/ded/templates/build",
-  "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line.cpp",
+  "command": "clang++-12   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line.cpp",
   "file": "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line.cpp"
 },
 {
   "directory": "/home/kctf/Repositories/mipt/sem_4/ded/templates/build",
-  "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_pos.cpp",
+  "command": "clang++-12   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_pos.cpp",
   "file": "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_pos.cpp"
 },
 {
   "directory": "/home/kctf/Repositories/mipt/sem_4/ded/templates/build",
-  "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/cursor.cpp",
+  "command": "clang++-12   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/cursor.cpp",
   "file": "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/cursor.cpp"
 },
 {
   "directory": "/home/kctf/Repositories/mipt/sem_4/ded/templates/build",
-  "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_history.cpp",
+  "command": "clang++-12   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_history.cpp",
   "file": "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_history.cpp"
 },
 {
   "directory": "/home/kctf/Repositories/mipt/sem_4/ded/templates/build",
-  "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/state_history/history.cpp",
+  "command": "clang++-12   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/state_history/history.cpp",
   "file": "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/state_history/history.cpp"
 },
 {
   "directory": "/home/kctf/Repositories/mipt/sem_4/ded/templates/build",
-  "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp",
+  "command": "clang++-12   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp",
   "file": "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp"
 },
 {
   "directory": "/home/kctf/Repositories/mipt/sem_4/ded/templates/build",
-  "command": "g++   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/main.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/main.cpp",
+  "command": "clang++-12   -I/home/kctf/Repositories/mipt/sem_4/ded/templates/src  -O1 -Wall -Wextra -Wno-multichar -Wno-unused-result  -g   -std=gnu++2a -o CMakeFiles/prog.dir/src/main.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/main.cpp",
   "file": "/home/kctf/Repositories/mipt/sem_4/ded/templates/src/main.cpp"
 }
 ]

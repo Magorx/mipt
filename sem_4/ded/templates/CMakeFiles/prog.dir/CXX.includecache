@@ -7,6 +7,8 @@
 #IncludeRegexTransform: 
 
 /home/kctf/Repositories/mipt/sem_4/ded/templates/src/array/array.h
+compare
+-
 storage/Indexed.h
 /home/kctf/Repositories/mipt/sem_4/ded/templates/src/array/storage/Indexed.h
 

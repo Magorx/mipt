@@ -60,145 +60,145 @@ include CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/timer.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/timer.cpp.o: src/utils/timer.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/prog.dir/src/utils/timer.cpp.o"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/timer.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/timer.cpp
+	clang++-12  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/timer.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/timer.cpp
 
 CMakeFiles/prog.dir/src/utils/timer.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/utils/timer.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/timer.cpp > CMakeFiles/prog.dir/src/utils/timer.cpp.i
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/timer.cpp > CMakeFiles/prog.dir/src/utils/timer.cpp.i
 
 CMakeFiles/prog.dir/src/utils/timer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/timer.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/timer.cpp -o CMakeFiles/prog.dir/src/utils/timer.cpp.s
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/timer.cpp -o CMakeFiles/prog.dir/src/utils/timer.cpp.s
 
 CMakeFiles/prog.dir/src/utils/logger.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/logger.cpp.o: src/utils/logger.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/prog.dir/src/utils/logger.cpp.o"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/logger.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/logger.cpp
+	clang++-12  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/logger.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/logger.cpp
 
 CMakeFiles/prog.dir/src/utils/logger.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/utils/logger.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/logger.cpp > CMakeFiles/prog.dir/src/utils/logger.cpp.i
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/logger.cpp > CMakeFiles/prog.dir/src/utils/logger.cpp.i
 
 CMakeFiles/prog.dir/src/utils/logger.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/logger.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/logger.cpp -o CMakeFiles/prog.dir/src/utils/logger.cpp.s
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/logger.cpp -o CMakeFiles/prog.dir/src/utils/logger.cpp.s
 
 CMakeFiles/prog.dir/src/utils/tag.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/tag.cpp.o: src/utils/tag.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/prog.dir/src/utils/tag.cpp.o"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/tag.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/tag.cpp
+	clang++-12  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/tag.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/tag.cpp
 
 CMakeFiles/prog.dir/src/utils/tag.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/utils/tag.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/tag.cpp > CMakeFiles/prog.dir/src/utils/tag.cpp.i
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/tag.cpp > CMakeFiles/prog.dir/src/utils/tag.cpp.i
 
 CMakeFiles/prog.dir/src/utils/tag.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/tag.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/tag.cpp -o CMakeFiles/prog.dir/src/utils/tag.cpp.s
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/tag.cpp -o CMakeFiles/prog.dir/src/utils/tag.cpp.s
 
 CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o: src/utils/rgba/rgba.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/rgba/rgba.cpp
+	clang++-12  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/rgba/rgba.cpp
 
 CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/rgba/rgba.cpp > CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.i
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/rgba/rgba.cpp > CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.i
 
 CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/rgba/rgba.cpp -o CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.s
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/rgba/rgba.cpp -o CMakeFiles/prog.dir/src/utils/rgba/rgba.cpp.s
 
 CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o: src/utils/text_line/line.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line.cpp
+	clang++-12  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/text_line/line.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line.cpp
 
 CMakeFiles/prog.dir/src/utils/text_line/line.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/utils/text_line/line.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line.cpp > CMakeFiles/prog.dir/src/utils/text_line/line.cpp.i
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line.cpp > CMakeFiles/prog.dir/src/utils/text_line/line.cpp.i
 
 CMakeFiles/prog.dir/src/utils/text_line/line.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/text_line/line.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line.cpp -o CMakeFiles/prog.dir/src/utils/text_line/line.cpp.s
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line.cpp -o CMakeFiles/prog.dir/src/utils/text_line/line.cpp.s
 
 CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o: src/utils/text_line/line_pos.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_pos.cpp
+	clang++-12  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_pos.cpp
 
 CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_pos.cpp > CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.i
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_pos.cpp > CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.i
 
 CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_pos.cpp -o CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.s
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_pos.cpp -o CMakeFiles/prog.dir/src/utils/text_line/line_pos.cpp.s
 
 CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o: src/utils/text_line/cursor.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/cursor.cpp
+	clang++-12  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/cursor.cpp
 
 CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/cursor.cpp > CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.i
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/cursor.cpp > CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.i
 
 CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/cursor.cpp -o CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.s
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/cursor.cpp -o CMakeFiles/prog.dir/src/utils/text_line/cursor.cpp.s
 
 CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o: src/utils/text_line/line_history.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_history.cpp
+	clang++-12  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_history.cpp
 
 CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_history.cpp > CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.i
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_history.cpp > CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.i
 
 CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_history.cpp -o CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.s
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/text_line/line_history.cpp -o CMakeFiles/prog.dir/src/utils/text_line/line_history.cpp.s
 
 CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o: src/utils/state_history/history.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/state_history/history.cpp
+	clang++-12  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/state_history/history.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/state_history/history.cpp
 
 CMakeFiles/prog.dir/src/utils/state_history/history.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/utils/state_history/history.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/state_history/history.cpp > CMakeFiles/prog.dir/src/utils/state_history/history.cpp.i
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/state_history/history.cpp > CMakeFiles/prog.dir/src/utils/state_history/history.cpp.i
 
 CMakeFiles/prog.dir/src/utils/state_history/history.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/state_history/history.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/state_history/history.cpp -o CMakeFiles/prog.dir/src/utils/state_history/history.cpp.s
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/state_history/history.cpp -o CMakeFiles/prog.dir/src/utils/state_history/history.cpp.s
 
 CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o: src/utils/micro_logger/func_logger.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp
+	clang++-12  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp
 
 CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp > CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.i
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp > CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.i
 
 CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp -o CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.s
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/utils/micro_logger/func_logger.cpp -o CMakeFiles/prog.dir/src/utils/micro_logger/func_logger.cpp.s
 
 CMakeFiles/prog.dir/src/main.cpp.o: CMakeFiles/prog.dir/flags.make
 CMakeFiles/prog.dir/src/main.cpp.o: src/main.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kctf/Repositories/mipt/sem_4/ded/templates/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/prog.dir/src/main.cpp.o"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/main.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/main.cpp
+	clang++-12  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prog.dir/src/main.cpp.o -c /home/kctf/Repositories/mipt/sem_4/ded/templates/src/main.cpp
 
 CMakeFiles/prog.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prog.dir/src/main.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/main.cpp > CMakeFiles/prog.dir/src/main.cpp.i
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kctf/Repositories/mipt/sem_4/ded/templates/src/main.cpp > CMakeFiles/prog.dir/src/main.cpp.i
 
 CMakeFiles/prog.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prog.dir/src/main.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/main.cpp -o CMakeFiles/prog.dir/src/main.cpp.s
+	clang++-12 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kctf/Repositories/mipt/sem_4/ded/templates/src/main.cpp -o CMakeFiles/prog.dir/src/main.cpp.s
 
 # Object files for target prog
 prog_OBJECTS = \
