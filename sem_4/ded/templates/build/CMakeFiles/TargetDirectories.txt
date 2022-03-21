@@ -1,4 +1,0 @@
-/home/kctf/Repositories/mipt/sem_4/ded/templates/build/CMakeFiles/rebuild_cache.dir
-/home/kctf/Repositories/mipt/sem_4/ded/templates/build/CMakeFiles/edit_cache.dir
-/home/kctf/Repositories/mipt/sem_4/ded/templates/build/CMakeFiles/run.dir
-/home/kctf/Repositories/mipt/sem_4/ded/templates/build/CMakeFiles/prog.dir
