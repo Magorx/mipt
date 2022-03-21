@@ -1,7 +1,7 @@
-# build
-# CMakeFiles
-# .vscode
-# CMakeCache.txt
-# Makefile
-# cmake_install.cmake
-# prog
+build
+CMakeFiles
+.vscode
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+prog
