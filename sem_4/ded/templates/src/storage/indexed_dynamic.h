@@ -77,6 +77,17 @@ public:
         }
     }
 
+    IndexedDynamic(std::initializer_list<T> list) :
+        data_((T*) calloc(list.size(), sizeof(T))),
+        capacity_(list.size()),
+        size_(list.size())
+    {
+        size_t i = 0;
+        for (auto it = list.begin(); it != list.end(); ++it, ++i) {
+            new(&data_[i]) T(std::move(*it));
+        }
+    }
+
     IndexedDynamic(const IndexedDynamic &other) :
         data_((T*) calloc(other.capacity_, sizeof(T))),
         capacity_(other.capacity_),

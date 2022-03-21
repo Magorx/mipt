@@ -21,6 +21,21 @@ public:
         }
     }
 
+    IndexedStaticT(std::initializer_list<T> list) {
+        if (list.size() > size()) {
+            throw std::range_error("initializer_list of size " + std::to_string(list.size()) + "is too long to be transfered to StaticStorage of size " + std::to_string(size()));
+        }
+
+        size_t i = 0;
+        for (auto it = list.begin(); it != list.end(); ++it, ++i) {
+            new(&data_[i]) T(std::move(*it));
+        }
+
+        for (size_t i = list.size(); i < size(); ++i) {
+            new(&data_[i]) T{};
+        }
+    }
+
     ~IndexedStaticT() {
         for (size_t i = 0; i < Size; ++i) {
             data_[i].~T();

@@ -139,6 +139,16 @@ public:
         fill_elem_(elem)
     {}
 
+    IndexedChunkedT(std::initializer_list<T> list) :
+        data_(),
+        capacity_(0),
+        size_(0)
+    {
+        for (auto it = list.begin(); it != list.end(); ++it) {
+            new(expand_one()) T(std::move(*it));
+        }
+    }
+
     IndexedChunkedT(const IndexedChunkedT &other) :
         data_(other.data_),
         capacity_(other.capacity_),

@@ -11,13 +11,33 @@
 
 
 template <typename T>
+struct BoxND {
+    T value_;
+
+    BoxND(const T &value) : value_(value) {}
+
+    ~BoxND() {
+    }
+
+    operator T() {
+        return value_;
+    }
+
+    friend std::ostream& operator<< (std::ostream& stream, const BoxND &box) {
+        stream << "BoxND[" << box.value_ << ']';
+        return stream;
+    }
+};
+
+template <typename T>
 struct Box {
     T value_;
+
+    Box() : value_() {}
 
     Box(const T &value) : value_(value) {}
 
     ~Box() {
-        print((*this), "destroyed");
     }
 
     operator T() {
@@ -64,30 +84,39 @@ int main() {
 
 // ============================================================================ Array Chunk
 
-    kctf::Vector<int> arr_vec;
-    arr_vec.resize(3, 1);
+    kctf::Vector<int> arr_vec = {1, 2, 3};
+    arr_vec.resize(5, 1);
     arr_vec.push_back(11);
     print("arr_vec | size is", arr_vec.size(), " capacity is", arr_vec.capacity());
 
-    kctf::ChunkVector<int, 2> arr_chunk(2, -2);
+    kctf::ChunkVector<int, 2> arr_chunk = {-1, -2, -3};
     arr_chunk.push_back(2);
     arr_chunk.reserve(10);
     arr_chunk.resize(7, 2);
     // print("arr_chunk | size is", arr_chunk.size(), " capacity is", arr_chunk.capacity());
 
-    kctf::Array<int, 10> arr_stat;
-    arr_stat.fill(3);
+    kctf::Array<Box<int>, 10> arr_stat = {1, 2, 3, 4, 5};
+    // arr_stat.fill(3);
 
-    print("arr_vec size:", arr_vec.size());
+    printf("arr_vec |  size: %zu | capacity: %zu\n", arr_vec.size(), arr_vec.capacity());
     for (size_t i = 0; i < arr_vec.size(); ++i) {
         print<' ', ' '>(arr_vec[i]);
     }
     print();
 
-    kctf::Vector<int> arr_cpy;
-    print(arr_cpy.data(), "!!!!!!!!!");
-    std::swap(arr_cpy, arr_vec);
+    printf("arr_chunk |  size: %zu | capacity: %zu\n", arr_chunk.size(), arr_chunk.capacity());
+    for (size_t i = 0; i < arr_chunk.size(); ++i) {
+        print<' ', ' '>(arr_chunk[i]);
+    }
+    print();
 
+    printf("arr_stat |  size: %zu | capacity: %zu\n", arr_stat.size(), arr_stat.capacity());
+    for (size_t i = 0; i < arr_stat.size(); ++i) {
+        print<' ', ' '>(arr_stat[i]);
+    }
+    print();
+
+    kctf::Vector<int> arr_cpy;
     print("arr_cpy size:", arr_cpy.size());
     for (size_t i = 0; i < arr_cpy.size(); ++i) {
         print<' ', ' '>(arr_cpy[i]);

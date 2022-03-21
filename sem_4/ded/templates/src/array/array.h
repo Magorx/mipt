@@ -27,6 +27,9 @@ public:
     ArrayT(size_t length, const T &elem={}) : storage_(length, elem) {
     }
 
+    ArrayT(std::initializer_list<T> list) : storage_(list) {
+    }
+
     ArrayT(const ArrayT &other) :
     storage_(other.storage_) {
     }
