@@ -53,50 +53,31 @@ struct Box {
 int main() {
     logger.set_verb_level(Logger::Level::info);
 
-    // Observed<Box<int>>::set_one_line_log([](const Observed<Box<int>> &obj) {
-    //     return "[" + std::to_string(obj.get_data().a) + ", " + std::to_string(obj.get_data().b) + "]";
-    // });
-    // MicroLogger<Box<int>> microlog;
+// ============================================================================ Arrays
 
-// ============================================================================ Array Dynamic
+    kctf::Vector<int> arr_vec = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-//     for (size_t i = 0; i < arr.size(); ++i) {
-//         print<' ', ' '>(arr[i]);
-//     }
-//     print();
-
-// ============================================================================ Array Static
-
-//     kctf::Array<bool, kctf::storage::IndexedStatic<10>::type> arr;
-    
-//     for (size_t i = 0; i < arr.size(); ++i) {
-//         arr[i] = i % 3;
-//     }
-
-//     // for (size_t i = 0; i < 10; ++i) { |
-//     //     arr.push_back(true);          | <-- Compilation error - can't extend StaticStorage
-//     // }                                 |
-
-//     for (size_t i = 0; i < arr.size(); ++i) {
-//         print<' ', ' '>(arr[i]);
-//     }
-//     print();
-
-// ============================================================================ Array Chunk
-
-    kctf::Vector<int> arr_vec = {1, 2, 3};
-    arr_vec.resize(5, 1);
-    arr_vec.push_back(11);
-    print("arr_vec | size is", arr_vec.size(), " capacity is", arr_vec.capacity());
-
-    kctf::ChunkVector<int, 2> arr_chunk = {-1, -2, -3};
+    kctf::ChunkVector<int, 2> arr_chunk(100, 7);
     arr_chunk.push_back(2);
     arr_chunk.reserve(10);
     arr_chunk.resize(7, 2);
-    // print("arr_chunk | size is", arr_chunk.size(), " capacity is", arr_chunk.capacity());
 
     kctf::Array<Box<int>, 10> arr_stat = {1, 2, 3, 4, 5};
-    // arr_stat.fill(3);
+
+    kctf::Vector<bool> arr_bool(5);
+    arr_bool.resize(20, 0);
+
+    // ============ something
+    
+    arr_vec.filter([](int x){ return x % 2; });
+
+    // ============ output
+
+    printf("arr_bool |  size: %zu | capacity: %zu\n", arr_bool.size(), arr_bool.capacity());
+    for (size_t i = 0; i < arr_bool.size(); ++i) {
+        print<' ', ' '>(arr_bool[i]);
+    }
+    print();
 
     printf("arr_vec |  size: %zu | capacity: %zu\n", arr_vec.size(), arr_vec.capacity());
     for (size_t i = 0; i < arr_vec.size(); ++i) {
@@ -122,8 +103,6 @@ int main() {
         print<' ', ' '>(arr_cpy[i]);
     }
     print();
-
-    print(arr_cpy.data());
 
 // ============================================================================ Vector
 

@@ -50,11 +50,11 @@ public:
 
 // ============================================================================ element access
 
-    T &operator[](size_t i) {
+    inline T &operator[](size_t i) {
         return storage_.data(i);
     }
 
-    const T &operator[](size_t i) const {
+    inline const T &operator[](size_t i) const {
         return storage_.data(i);
     }
 
@@ -63,7 +63,7 @@ public:
             throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of ArrayT (size = " + std::to_string(size()) + ")");
         }
 
-        return storage_.data(i);
+        return (*this)[i];
     }
 
     const T &at(size_t i) const {
@@ -71,55 +71,55 @@ public:
             throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of ArrayT (size = " + std::to_string(size()) + ")");
         }
 
-        return storage_.data(i);
+        return (*this)[i];
     }
 
-    T &front() {
+    inline T &front() {
         return (*this)[0];
     }
 
-    const T &front() const {
+    inline const T &front() const {
         return (*this)[0];
     }
 
-    T &back() {
+    inline T &back() {
         return (*this)[size() - 1];
     }
 
-    const T &back() const {
+    inline const T &back() const {
         return (*this)[size() - 1];
     }
 
     T &at_front() {
         if (empty()) throw std::range_error("can't take front() from ArrayT of size 0");
 
-        return (*this)[0];
+        return front();
     }
 
     const T &at_front() const {
         if (empty()) throw std::range_error("can't take front() from ArrayT of size 0");
 
-        return (*this)[0];
+        return front();
     }
 
     T &at_back() {
         if (empty()) throw std::range_error("can't take back() from ArrayT of size 0");
 
-        return (*this)[size() - 1];
+        return back();
     }
 
     const T &at_back() const {
         if (empty()) throw std::range_error("can't take back() from ArrayT of size 0");
 
-        return (*this)[size() - 1];
+        return back();
     }
 
-    T *data() {
+    inline T *data() {
         static_assert(IndexedStorageT<T>::can_give_data_ptr);
         return storage_.data_ptr();
     }
 
-    const T *data() const {
+    inline const T *data() const {
         static_assert(IndexedStorageT<T>::can_give_data_ptr);
         return storage_.data_ptr();
     }
@@ -182,10 +182,33 @@ public:
         storage_.resize(new_size, fill_elem);
     }
 
+    void swap(ArrayT<T, IndexedStorageT> &other) {
+        std::swap(storage_, other.storage_);
+    }
+
+// ============================================================================ addons
+
     void fill(const T &elem) {
         for (size_t i = 0; i < size(); ++i) {
             storage_.data(i) = elem;
         }
+    }
+
+    template <typename P>
+    void filter(const P &predicate) {
+        size_t write_idx = 0;
+        size_t read_idx = 0;
+        
+        while (read_idx < size()) {
+            if (predicate((*this)[read_idx])) {
+                (*this)[write_idx] = std::move((*this)[read_idx]);
+                ++write_idx;
+            }
+
+            ++read_idx;
+        }
+
+        resize(write_idx);
     }
 };
 
@@ -228,6 +251,11 @@ class ArrayT<bool, IndexedStorageT> : private ArrayT<uint8_t, IndexedStorageT> {
     size_t bools_cnt; 
 
     using BaseArray = ArrayT<uint8_t, IndexedStorageT>;
+
+    static size_t get_byte_size(size_t elem_size) {
+        return elem_size / 8 + (elem_size % 8 != 0);
+    }
+
 public:
     BoolProxy operator[](size_t i) {
         return BoolProxy(BaseArray::storage_.data(i / 8), i % 8);
@@ -239,9 +267,81 @@ public:
     {}
 
     ArrayT(size_t length, const bool elem={}) :
-        ArrayT<uint8_t, IndexedStorageT>(length / 8 + 1 * (!!(length % 8 != 0)), elem),
+        ArrayT<uint8_t, IndexedStorageT>(get_byte_size(length), elem),
         bools_cnt(length)
     {}
+
+// ============================================================================ element access
+
+    BoolProxy at(size_t i) {
+        if (i >= size()) {
+            throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of ArrayT (size = " + std::to_string(size()) + ")");
+        }
+
+        return (*this)[i];
+    }
+
+    const BoolProxy at(size_t i) const {
+        if (i >= size()) {
+            throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of ArrayT (size = " + std::to_string(size()) + ")");
+        }
+
+        return (*this)[i];
+    }
+
+    inline BoolProxy front() {
+        return (*this)[0];
+    }
+
+    inline const BoolProxy front() const {
+        return (*this)[0];
+    }
+
+    inline BoolProxy back() {
+        return (*this)[size() - 1];
+    }
+
+    inline const BoolProxy back() const {
+        return (*this)[size() - 1];
+    }
+
+    BoolProxy at_front() {
+        if (empty()) throw std::range_error("can't take front() from ArrayT of size 0");
+
+        return front();
+    }
+
+    const BoolProxy at_front() const {
+        if (empty()) throw std::range_error("can't take front() from ArrayT of size 0");
+
+        return back();
+    }
+
+    const BoolProxy at_back() const {
+        if (empty()) throw std::range_error("can't take back() from ArrayT of size 0");
+
+        return back();
+    }
+
+// ============================================================================ capacity
+
+    constexpr inline size_t size() const {
+        return bools_cnt;
+    }
+
+    constexpr inline bool empty() const {
+        return !!bools_cnt;
+    }
+
+    void reserve(size_t capacity) {
+        BaseArray::storage_.reserve(get_byte_size(capacity));
+    }
+
+    size_t capacity() const {
+        return BaseArray::storage_.capacity() * 8;
+    }
+
+// ============================================================================ modifiers
 
     void push_back(bool elem) {
         if (bools_cnt % 8 == 0) {
@@ -265,18 +365,27 @@ public:
         }
     }
 
-    constexpr inline size_t size() const {
-        return bools_cnt;
-    }
-
-    constexpr inline bool empty() const {
-        return !!bools_cnt;
-    }
-
     void clear() {
-        size_t cur_size = size();
-        for (size_t i = 0; i < cur_size; ++i) {
-            (*this)[i].~T();
+        BaseArray::clear();
+        bools_cnt = 0;
+    }
+
+    void resize(size_t new_size, const bool fill_elem={}) {
+        static_assert(IndexedStorageT<bool>::can_modify_size);
+
+        if (BaseArray::storage_.size()) {
+            uint8_t fillmask_last = ((uint8_t) - (int) fill_elem) << (bools_cnt % 8);
+            BaseArray::storage_.data(BaseArray::storage_.size() - 1) |= fillmask_last;
+        }
+
+        BaseArray::storage_.resize(get_byte_size(new_size), fill_elem ? (uint8_t) -1 : 0);
+        bools_cnt = new_size;
+    }
+
+    void fill(const bool &elem) {
+        uint8_t fill_elem = elem ? (uint8_t) -1 : 0;
+        for (size_t i = 0; i < BaseArray::storage_.size(); ++i) {
+            BaseArray::storage_.data(i) = fill_elem;
         }
     }
 };
