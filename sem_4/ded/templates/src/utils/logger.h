@@ -134,8 +134,6 @@ namespace kctf {
     extern Logger logger;
 }
 
-using namespace kctf;
-
 class LogLevel {
     Logger &logger;
     int prev_log_level;
@@ -145,3 +143,5 @@ public:
     LogLevel(Logger &logger, int log_level = -1, int verb_level = -1);
     ~LogLevel();
 };
+
+using kctf::logger;

@@ -15,7 +15,7 @@ class IndexedDynamic {
     size_t size_;
 
     void set_capacity(size_t new_capacity) {
-        T *new_data = (T*) calloc(new_capacity, sizeof(T));
+        T *new_data = (T*) new char[new_capacity * sizeof(T)];
 
         if (!new_data) {
             throw std::overflow_error("Can't allocate growed buffer for IndexedDynamic storage");
@@ -27,7 +27,7 @@ class IndexedDynamic {
             data_[i].~T();
         }
 
-        free(data_);
+        delete[] data_;
 
         data_ = new_data;
         capacity_ = new_capacity;
@@ -66,7 +66,7 @@ public:
     {}
 
     IndexedDynamic(size_t length, const T &elem={}) :
-        data_((T*) calloc(length, sizeof(T))),
+        data_((T*) new char[length * sizeof(T)]),
         capacity_(length),
         size_(length)
     {
@@ -78,7 +78,7 @@ public:
     }
 
     IndexedDynamic(std::initializer_list<T> list) :
-        data_((T*) calloc(list.size(), sizeof(T))),
+        data_((T*) new char[list.size() * sizeof(T)]),
         capacity_(list.size()),
         size_(list.size())
     {
@@ -89,7 +89,7 @@ public:
     }
 
     IndexedDynamic(const IndexedDynamic &other) :
-        data_((T*) calloc(other.capacity_, sizeof(T))),
+        data_((T*) new char[other.capacity_ * sizeof(T)]),
         capacity_(other.capacity_),
         size_(other.size_)
     {
@@ -195,7 +195,7 @@ public:
             data_[i].~T();
         }
 
-        free(data_);
+        delete[] data_;
         data_ = nullptr;
 
         capacity_ = 0;

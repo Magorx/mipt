@@ -25,7 +25,7 @@ class IndexedChunkedT {
     std::optional<T> fill_elem_;
 
     T *allocate_chunk(size_t from, size_t to) {
-        T *chunk = (T*) calloc(ChunkSize, sizeof(T));
+        T *chunk = (T*) new char[ChunkSize * sizeof(T)];
         
         if (!fill_elem_.has_value()) {
             return chunk;
@@ -41,7 +41,7 @@ class IndexedChunkedT {
     T *copy_chunk(T *chunk, size_t to_copy) {
         if (!chunk) return nullptr;
 
-        T *new_chunk = (T*) calloc(ChunkSize, sizeof(T));
+        T *new_chunk = (T*) new char[ChunkSize * sizeof(T)];
 
         for (size_t i = 0; i < to_copy; ++i) {
             new(new_chunk + i) T(chunk[i]);
@@ -60,7 +60,7 @@ class IndexedChunkedT {
             data_.data(chunk_i)[idx].~T();
         }
 
-        free(data_.data(chunk_i));
+        delete[] data_.data(chunk_i);
     }
 
     void grow_capacity(size_t capacity) {
