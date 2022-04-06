@@ -29,7 +29,7 @@ public:
     }
 
     void deallocate(T* ptr, size_t /*n*/) noexcept {
-        delete[] ptr;
+        delete[] (char*) ptr;
     }
 
     bool operator==(const Simple<T> &) noexcept {

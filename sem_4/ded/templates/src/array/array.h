@@ -8,6 +8,142 @@
 namespace kctf {
 
 
+template <typename Array, typename T>
+class Iterator {
+    Array *array_;
+    size_t index_;
+
+public:
+
+    static constexpr bool is_const = std::is_same_v<T, const typename Array::value_type>;
+
+    using value_type      = typename Array::value_type;
+    using difference_type = typename Array::difference_type;
+    
+    using pointer   = std::conditional_t<is_const, typename Array::const_pointer,   typename Array::pointer>;
+    using reference = std::conditional_t<is_const, typename Array::const_reference, typename Array::reference>;
+
+    using iterator_category = std::random_access_iterator_tag;
+
+    Iterator() : array_(nullptr), index_(0) {}
+
+    Iterator(Array &array, size_t index)
+        : array_(&array),
+          index_(index) {
+    }
+
+    Iterator &operator++() {
+        ++index_;
+        
+        assert(index_ <= array_->size());
+        return *this;
+    }
+
+    Iterator operator++(int) {
+        Iterator<Array, T> ret{array_, index_};
+        ++index_;
+
+        assert(index_ <= array_->size());
+        return ret;
+    }
+
+    Iterator &operator--() {
+        --index_;
+
+        assert(index_ <= array_->size());
+        return *this;
+    }
+
+    Iterator operator--(int) {
+        Iterator<Array, T> ret{array_, index_};
+        --index_;
+
+        assert(index_ <= array_->size());
+        return ret;
+    }
+
+    difference_type operator-(const Iterator &other) const {
+        assert(array_ == other.array_);
+
+        return index_ - other.index_;
+    }
+
+    Iterator operator+(difference_type diff) {
+        Iterator ret{*array_, index_ + diff};
+
+        assert(ret.index_ <= array_->size());
+        return ret;
+    }
+
+    Iterator &operator+=(difference_type diff) {
+        index_ += diff;
+
+        assert(index_ <= array_->size());
+        return *this;
+    }
+
+    Iterator operator-(difference_type diff) {
+        Iterator ret{*array_, index_ - diff};
+
+        assert(ret.index_ <= array_->size());
+        return ret;
+    }
+
+    Iterator &operator-=(difference_type diff) {
+        index_ -= diff;
+
+        assert(index_ <= array_->size());
+        return *this;
+    }
+
+    T &operator[](difference_type diff) {
+        return (*array_)[index_ + diff];
+    }
+    
+    T &operator[](difference_type diff) const {
+        return (*array_)[index_ + diff];
+    }
+
+    bool operator!=(const Iterator &other) const {
+        assert(array_ == other.array_);
+        return index_ != other.index_;
+    }
+    
+    bool operator==(const Iterator &other) const {
+        assert(array_ == other.array_);
+        return index_ == other.index_;
+    }
+
+    bool operator<(const Iterator &other) const {
+        assert(array_ == other.array_);
+        return index_ < other.index_;
+    }
+
+    bool operator>(const Iterator &other) const {
+        assert(array_ == other.array_);
+        return index_ > other.index_;
+    }
+
+    bool operator<=(const Iterator &other) const {
+        assert(array_ == other.array_);
+        return index_ < other.index_;
+    }
+
+    bool operator>=(const Iterator &other) const {
+        assert(array_ == other.array_);
+        return index_ > other.index_;
+    }
+
+    T &operator*() {
+        return (*array_)[index_];
+    }
+
+    T *operator->() {
+        return &(*array_)[index_];
+    }
+};
+
+
 template <
           typename T,
           template <typename U> typename IndexedStorageT
@@ -16,12 +152,24 @@ class ArrayT {
 protected:
     IndexedStorageT<T> storage_;
 
+    using ArrayType = ArrayT<T, IndexedStorageT>;
+    using IndexedStorageType = IndexedStorageT<T>;
+
     // template <typename PushBackT>
     // constexpr void validate_data_type(PushBackT &&) {
     //     static_assert(std::is_same_v<std::remove_cvref_t<PushBackT>, T>);
     // }
     
 public:
+
+    using value_type = T;
+    using difference_type = ptrdiff_t;
+    using size_type = size_t;
+    using reference = T&;
+    using const_reference = const T&;
+    using pointer = T*;
+    using const_pointer = const T*;
+
     ArrayT() : storage_() {
     }
 
@@ -157,6 +305,46 @@ public:
     void shrink_to_fit() {
         storage_.shrink_to_fit();
     }
+
+// ============================================================================ iterators
+
+    auto begin() {
+        if constexpr (IndexedStorageType::provides_iterators) {
+            return storage_.begin();
+        } else {
+            return Iterator<ArrayT, T>(*this, 0);
+        }
+    }
+
+    auto end() {
+        if constexpr (IndexedStorageType::provides_iterators) {
+            return storage_.end();
+        } else {
+            return Iterator<ArrayT, T>(*this, size());
+        }
+    }
+
+    auto begin() const {
+        if constexpr (IndexedStorageType::provides_iterators) {
+            return storage_.begin();
+        } else {
+            return Iterator<ArrayT, T>(*this, 0);
+        }
+    }
+
+    auto end() const {
+        if constexpr (IndexedStorageType::provides_iterators) {
+            return storage_.end();
+        } else {
+            return Iterator<ArrayT, T>(*this, size());
+        }
+    }
+
+    // using iterator = decltype(std::declval<ArrayType>().begin());
+    // using const_iterator = decltype(std::declval<const ArrayType>().begin());
+
+    // using iterator = std::conditional_t<IndexedStorageType::provides_iterators, decltype(storage_.begin()), Iterator<ArrayType, T>>;
+    // using const iterator = std::conditional_t<IndexedStorageType::provides_iterators, const decltype(storage_.begin()), Iterator<const ArrayType, const T>>;
 
 // ============================================================================ modifiers
 

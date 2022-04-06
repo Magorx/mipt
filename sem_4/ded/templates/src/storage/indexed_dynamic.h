@@ -63,6 +63,7 @@ public:
     constexpr static bool is_dynamic = true;
     constexpr static bool can_give_data_ptr = true;
     constexpr static bool can_modify_size = true;
+    constexpr static bool provides_iterators = true;
 
     IndexedDynamicT() :
         data_(nullptr),
@@ -189,6 +190,25 @@ public:
     void shrink_to_fit() {
         set_capacity(size());
     }
+
+// ============================================================================ iterators
+
+    T *begin() {
+        return data_;
+    }
+
+    T *end() {
+        return data_ + size();
+    }
+
+    T *begin() const {
+        return data_;
+    }
+
+    T *end() const {
+        return data_ + size();
+    }
+
 // ============================================================================ modifirers
 
     T *expand_one() {

@@ -123,6 +123,7 @@ public:
     constexpr static bool is_dynamic = true;
     constexpr static bool can_give_data_ptr = false;
     constexpr static bool can_modify_size = true;
+    constexpr static bool provides_iterators = false;
 
     IndexedChunkedT() :
         data_(),

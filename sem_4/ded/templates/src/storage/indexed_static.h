@@ -13,6 +13,7 @@ public:
     constexpr static bool is_dynamic = false;
     constexpr static bool can_give_data_ptr = true;
     constexpr static bool can_modify_size = false;
+    constexpr static bool provides_iterators = true;
 
     IndexedStaticT()
     {
@@ -105,6 +106,24 @@ public:
 
     inline size_t capacity() const {
         return Size;
+    }
+
+// ============================================================================ iterators
+
+    T *begin() {
+        return data_;
+    }
+
+    T *end() {
+        return data_ + size();
+    }
+
+    T *begin() const {
+        return data_;
+    }
+
+    T *end() const {
+        return data_ + size();
     }
 };
 

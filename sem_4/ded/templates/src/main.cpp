@@ -2,6 +2,7 @@
 #include <cstdio>
 
 #include <iostream>
+#include <algorithm>
 
 #include "utils/Utils.h"
 #include "array/array.h"
@@ -37,6 +38,8 @@ struct Box {
 
     Box(const T &value) : value_(value) {}
 
+    // Box(const Box &other) = delete;
+
     ~Box() {
     }
 
@@ -55,21 +58,45 @@ int main() {
 
 // ============================================================================ Arrays
 
-    kctf::Vector<int> arr_vec {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    kctf::Vector<int> arr {8, 1, 4, 2, 3, 5, 6, 9, 7};
 
-    kctf::ChunkVector<int, 2> arr_chunk(100, 7);
-    arr_chunk.push_back(2);
-    arr_chunk.reserve(10);
-    arr_chunk.resize(7, 2);
+    for (const auto &elem : arr) {
+        print<' ', ' '>(elem);
+    }
+    print();
 
-    kctf::Array<Box<int>, 10> arr_stat {1, 2, 3, 4, 5};
+    print("Finding", 3);
+    auto it = std::find(arr.begin(), arr.end(), 3);
+    print("Found:", it - arr.begin());
 
-    kctf::Vector<bool> arr_bool(5);
-    arr_bool.resize(20, 0);
+    print("Sorting...");
+    std::sort(arr.begin(), arr.end());
+    
+
+    for (const auto &elem : arr) {
+        print<' ', ' '>(elem);
+    }
+    print();
+
+    // kctf::ChunkVector<int, 2> arr_chunk(100, 7);
+    // arr_chunk.push_back(2);
+    // arr_chunk.reserve(10);
+    // arr_chunk.resize(7, 2);
+
+    // kctf::Array<Box<int>, 10> arr_stat {1, 2, 3, 4, 5};
+
+    // kctf::Vector<bool> arr_bool(5);
+    // arr_bool.resize(20, 0);
 
     // ============ something
     
-    arr_vec.filter([](int x){ return x % 2; });
+    print("Filtering...");
+    arr.filter([](int x){ return x % 2; });
+
+    for (auto x : arr) {
+        print<' ', ' '>(x);
+    }
+    print();
 
     // ============ output
 
@@ -79,11 +106,11 @@ int main() {
     // }
     // print();
 
-    printf("arr_vec |  size: %zu | capacity: %zu\n", arr_vec.size(), arr_vec.capacity());
-    for (size_t i = 0; i < arr_vec.size(); ++i) {
-        print<' ', ' '>(arr_vec[i]);
-    }
-    print();
+    // printf("arr_vec |  size: %zu | capacity: %zu\n", arr_vec.size(), arr_vec.capacity());
+    // for (size_t i = 0; i < arr_vec.size(); ++i) {
+    //     print<' ', ' '>(arr_vec[i]);
+    // }
+    // print();
 
     // printf("arr_chunk |  size: %zu | capacity: %zu\n", arr_chunk.size(), arr_chunk.capacity());
     // for (size_t i = 0; i < arr_chunk.size(); ++i) {
