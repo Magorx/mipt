@@ -1,13 +1,18 @@
 #pragma once
 
 
+#include "allocator/Allocator.h"
+
+
 namespace kctf::storage
 {
 
 
-template <typename T>
-class IndexedDynamic {
+template <typename T, template <typename U>  typename Allocator = allocator::Simple>
+class IndexedDynamicT {
     constexpr static size_t MIN_CAPACITY = 4;
+
+    Allocator<T> allocator_;
 
     T *data_;
 
@@ -15,7 +20,7 @@ class IndexedDynamic {
     size_t size_;
 
     void set_capacity(size_t new_capacity) {
-        T *new_data = (T*) new char[new_capacity * sizeof(T)];
+        T *new_data = allocator_.allocate(new_capacity);
 
         if (!new_data) {
             throw std::overflow_error("Can't allocate growed buffer for IndexedDynamic storage");
@@ -27,7 +32,7 @@ class IndexedDynamic {
             data_[i].~T();
         }
 
-        delete[] data_;
+        allocator_.deallocate(data_, capacity_);
 
         data_ = new_data;
         capacity_ = new_capacity;
@@ -59,14 +64,14 @@ public:
     constexpr static bool can_give_data_ptr = true;
     constexpr static bool can_modify_size = true;
 
-    IndexedDynamic() :
+    IndexedDynamicT() :
         data_(nullptr),
         capacity_(0),
         size_(0)
     {}
 
-    IndexedDynamic(size_t length, const T &elem={}) :
-        data_((T*) new char[length * sizeof(T)]),
+    explicit IndexedDynamicT(size_t length, const T &elem={}) :
+        data_(allocator_.allocate(length)),
         capacity_(length),
         size_(length)
     {
@@ -77,8 +82,8 @@ public:
         }
     }
 
-    IndexedDynamic(std::initializer_list<T> list) :
-        data_((T*) new char[list.size() * sizeof(T)]),
+    explicit IndexedDynamicT(std::initializer_list<T> list) :
+        data_(allocator_.allocate(list.size())),
         capacity_(list.size()),
         size_(list.size())
     {
@@ -88,8 +93,8 @@ public:
         }
     }
 
-    IndexedDynamic(const IndexedDynamic &other) :
-        data_((T*) new char[other.capacity_ * sizeof(T)]),
+    IndexedDynamicT(const IndexedDynamicT &other) :
+        data_(allocator_.allocate(other.capacity_)),
         capacity_(other.capacity_),
         size_(other.size_)
     {
@@ -98,7 +103,9 @@ public:
         }
     }
 
-    IndexedDynamic &operator=(const IndexedDynamic &other) {
+    IndexedDynamicT &operator=(const IndexedDynamicT &other) {
+        if (&other == this) return *this;
+
         clear();
 
         data_ = (T*) calloc(other.capacity_, sizeof(T));
@@ -114,15 +121,19 @@ public:
         return *this;
     }
 
-    IndexedDynamic(IndexedDynamic &&other) :
+    IndexedDynamicT(IndexedDynamicT &&other) :
         data_(std::move(other.data_)),
         capacity_(std::move(other.capacity_)),
         size_(std::move(other.size_))
     {
+        if (&other == this) return *this;
+
         other.clear();
     }
 
-    IndexedDynamic &operator=(IndexedDynamic &&other) {
+    IndexedDynamicT &operator=(IndexedDynamicT &&other) {
+        if (&other == this) return *this;
+
         clear();
 
         data_     = std::move(other.data_);
@@ -136,7 +147,7 @@ public:
         return *this;
     }
 
-    ~IndexedDynamic() {
+    ~IndexedDynamicT() {
         clear();
     }
 
@@ -195,7 +206,7 @@ public:
             data_[i].~T();
         }
 
-        delete[] data_;
+        allocator_.deallocate(data_, capacity_);
         data_ = nullptr;
 
         capacity_ = 0;
@@ -211,6 +222,13 @@ public:
             *expand_one() = fill_elem;
         }
     }
+};
+
+
+template <template <typename U>  typename Allocator = allocator::Simple>
+struct IndexedDynamic {
+    template <typename T>
+    using type = IndexedDynamicT<T, Allocator>;
 };
 
 

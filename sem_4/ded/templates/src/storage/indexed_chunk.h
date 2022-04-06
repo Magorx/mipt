@@ -11,12 +11,13 @@ namespace kctf::storage
 {
 
 
-template <typename T, int ChunkSize>
+template <typename T, int ChunkSize, template <typename U>  typename Allocator = allocator::Simple>
 class IndexedChunkedT {
     constexpr static size_t MIN_CAPACITY = 4;
-    // constexpr static size_t ChunkSize = 2; // exp2(log2(4096 / sizeof(T)) + 1);
+    
+    Allocator<T> allocator_;
 
-    IndexedDynamic<T*> data_;
+    IndexedDynamicT<T*, Allocator> data_;
 
     size_t capacity_;
     size_t size_;
@@ -25,7 +26,7 @@ class IndexedChunkedT {
     std::optional<T> fill_elem_;
 
     T *allocate_chunk(size_t from, size_t to) {
-        T *chunk = (T*) new char[ChunkSize * sizeof(T)];
+        T *chunk = allocator_.allocate(ChunkSize); // (T*) new char[ChunkSize * sizeof(T)];
         
         if (!fill_elem_.has_value()) {
             return chunk;
@@ -41,7 +42,7 @@ class IndexedChunkedT {
     T *copy_chunk(T *chunk, size_t to_copy) {
         if (!chunk) return nullptr;
 
-        T *new_chunk = (T*) new char[ChunkSize * sizeof(T)];
+        T *new_chunk = allocator_.allocate(ChunkSize); // (T*) new char[ChunkSize * sizeof(T)];
 
         for (size_t i = 0; i < to_copy; ++i) {
             new(new_chunk + i) T(chunk[i]);
@@ -60,7 +61,7 @@ class IndexedChunkedT {
             data_.data(chunk_i)[idx].~T();
         }
 
-        delete[] data_.data(chunk_i);
+        allocator_.deallocate(data_.data(chunk_i), ChunkSize); // delete[] data_.data(chunk_i);
     }
 
     void grow_capacity(size_t capacity) {
@@ -131,7 +132,7 @@ public:
         fill_elem_()
     {}
 
-    IndexedChunkedT(size_t length, const T &elem={}) :
+    explicit IndexedChunkedT(size_t length, const T &elem={}) :
         data_(length / ChunkSize + 1 * (!!((length % ChunkSize) != 0)), nullptr),
         capacity_(data_.size() * ChunkSize),
         size_(length),
@@ -139,7 +140,7 @@ public:
         fill_elem_(elem)
     {}
 
-    IndexedChunkedT(std::initializer_list<T> list) :
+    explicit IndexedChunkedT(std::initializer_list<T> list) :
         data_(),
         capacity_(0),
         size_(0)
@@ -165,6 +166,8 @@ public:
     }
 
     IndexedChunkedT &operator=(const IndexedChunkedT &other) {
+        if (&other == this) return *this;
+
         clear();
 
         data_ = other.data_;
@@ -194,6 +197,8 @@ public:
     }
 
     IndexedChunkedT &operator=(IndexedChunkedT &&other) {
+        if (&other == this) return *this;
+
         clear();
 
         data_ = std::move(other.data_);
@@ -283,10 +288,10 @@ public:
 };
 
 
-template <int ChunkSize>
+template <int ChunkSize, template <typename U>  typename Allocator = allocator::Simple>
 struct IndexedChunked {
     template <typename T>
-    using type = IndexedChunkedT<T, ChunkSize>;
+    using type = IndexedChunkedT<T, ChunkSize, Allocator>;
 };
 
 

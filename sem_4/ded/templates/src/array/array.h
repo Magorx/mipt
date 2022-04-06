@@ -2,6 +2,7 @@
 
 
 #include "storage/Indexed.h"
+#include "allocator/Allocator.h"
 
 
 namespace kctf {
@@ -24,41 +25,52 @@ public:
     ArrayT() : storage_() {
     }
 
-    ArrayT(size_t length, const T &elem={}) : storage_(length, elem) {
+    explicit ArrayT(size_t length, const T &elem={}) : storage_(length, elem) {
     }
 
-    ArrayT(std::initializer_list<T> list) : storage_(list) {
+    explicit ArrayT(std::initializer_list<T> list) : storage_(list) {
     }
 
-    ArrayT(const ArrayT &other) :
-    storage_(other.storage_) {
+    // TODO .copy(...);
+    // explicit ArrayT(const ArrayT &other) :
+    // storage_(other.storage_) {
+    // }
+
+    // ArrayT &operator=(const ArrayT &other) {
+    //     storage_ = other.storage_;
+    //     return *this;
+    // }
+
+    ArrayT(ArrayT &&other_move) :
+    storage_(std::move(other_move.storage_)) {
     }
 
-    ArrayT &operator=(const ArrayT &other) {
-        storage_ = other.storage_;
-        return *this;
-    }
+    ArrayT &operator=(ArrayT &&other_move) {
+        if (&other_move == this) return *this;
 
-    ArrayT(ArrayT &&other) :
-    storage_(std::move(other.storage_)) {
-    }
-
-    ArrayT &operator=(ArrayT &&other) {
-        storage_ = std::move(other.storage_);
+        storage_ = std::move(other_move.storage_);
         return *this;
     }
 
 // ============================================================================ element access
 
-    inline T &operator[](size_t i) {
+    [[nodiscard]] inline T &operator[](size_t i) {
+        if (i >= size()) {
+            throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of ArrayT (size = " + std::to_string(size()) + ")");
+        }
+
         return storage_.data(i);
     }
 
-    inline const T &operator[](size_t i) const {
+    [[nodiscard]] inline const T &operator[](size_t i) const {
+        if (i >= size()) {
+            throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of ArrayT (size = " + std::to_string(size()) + ")");
+        }
+
         return storage_.data(i);
     }
 
-    T &at(size_t i) {
+    [[nodiscard]] T &at(size_t i) {
         if (i >= size()) {
             throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of ArrayT (size = " + std::to_string(size()) + ")");
         }
@@ -66,7 +78,7 @@ public:
         return (*this)[i];
     }
 
-    const T &at(size_t i) const {
+    [[nodiscard]] const T &at(size_t i) const {
         if (i >= size()) {
             throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of ArrayT (size = " + std::to_string(size()) + ")");
         }
@@ -74,63 +86,63 @@ public:
         return (*this)[i];
     }
 
-    inline T &front() {
+    [[nodiscard]] inline T &front() {
         return (*this)[0];
     }
 
-    inline const T &front() const {
+    [[nodiscard]] inline const T &front() const {
         return (*this)[0];
     }
 
-    inline T &back() {
+    [[nodiscard]] inline T &back() {
         return (*this)[size() - 1];
     }
 
-    inline const T &back() const {
+    [[nodiscard]] inline const T &back() const {
         return (*this)[size() - 1];
     }
 
-    T &at_front() {
+    [[nodiscard]] T &at_front() {
         if (empty()) throw std::range_error("can't take front() from ArrayT of size 0");
 
         return front();
     }
 
-    const T &at_front() const {
+    [[nodiscard]] const T &at_front() const {
         if (empty()) throw std::range_error("can't take front() from ArrayT of size 0");
 
         return front();
     }
 
-    T &at_back() {
+    [[nodiscard]] T &at_back() {
         if (empty()) throw std::range_error("can't take back() from ArrayT of size 0");
 
         return back();
     }
 
-    const T &at_back() const {
+    [[nodiscard]] const T &at_back() const {
         if (empty()) throw std::range_error("can't take back() from ArrayT of size 0");
 
         return back();
     }
 
-    inline T *data() {
+    [[nodiscard]] inline T *data() {
         static_assert(IndexedStorageT<T>::can_give_data_ptr);
         return storage_.data_ptr();
     }
 
-    inline const T *data() const {
+    [[nodiscard]] inline const T *data() const {
         static_assert(IndexedStorageT<T>::can_give_data_ptr);
         return storage_.data_ptr();
     }
 
 // ============================================================================ capacity
 
-    constexpr inline size_t size() const {
+    [[nodiscard]] constexpr inline size_t size() const {
         return storage_.size();
     }
 
-    constexpr inline bool empty() const {
+    [[nodiscard]] constexpr inline bool empty() const {
         return !!storage_.size();
     }
 
@@ -138,7 +150,7 @@ public:
         storage_.reserve(capacity);
     }
 
-    size_t capacity() const {
+    [[nodiscard]] size_t capacity() const {
         return storage_.capacity();
     }
 
@@ -148,12 +160,12 @@ public:
 
 // ============================================================================ modifiers
 
-    template <typename Q>
-    void push_back(Q &&elem) {
+    template <typename ElemT>
+    void push_back(ElemT &&elem) {
         static_assert(IndexedStorageT<T>::can_modify_size);
 
         T *placement = storage_.expand_one();
-        new(placement) T(std::forward<Q>(elem));
+        new(placement) T(std::forward<ElemT>(elem));
     }
 
     template <typename ... Ts>
@@ -391,13 +403,13 @@ public:
 };
 
 
-template <typename T>
-using Vector = ArrayT<T, storage::IndexedDynamic>;
+template <typename T, template <typename U> typename Allocator=kctf::allocator::Simple>
+using Vector = ArrayT<T, storage::IndexedDynamic<Allocator>::template type>;
 
 template <typename T, int Size>
 using Array = ArrayT<T, storage::IndexedStatic<Size>::template type>;
 
-template <typename T, int ChunkSize>
-using ChunkVector = ArrayT<T, storage::IndexedChunked<ChunkSize>::template type>;
+template <typename T, int ChunkSize, template <typename U> typename Allocator=kctf::allocator::Simple>
+using ChunkVector = ArrayT<T, storage::IndexedChunked<ChunkSize, Allocator>::template type>;
 
 } // namespace kctf

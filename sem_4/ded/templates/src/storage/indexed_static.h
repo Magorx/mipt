@@ -14,14 +14,21 @@ public:
     constexpr static bool can_give_data_ptr = true;
     constexpr static bool can_modify_size = false;
 
-    IndexedStaticT(const T &elem={})
+    IndexedStaticT()
+    {
+        for (size_t i = 0; i < Size; ++i) {
+            new(&data_[i]) T();
+        }
+    }
+
+    explicit IndexedStaticT(const T &elem)
     {
         for (size_t i = 0; i < Size; ++i) {
             new(&data_[i]) T(elem);
         }
     }
 
-    IndexedStaticT(std::initializer_list<T> list) {
+    explicit IndexedStaticT(std::initializer_list<T> list) {
         if (list.size() > size()) {
             throw std::range_error("initializer_list of size " + std::to_string(list.size()) + "is too long to be transfered to StaticStorage of size " + std::to_string(size()));
         }
