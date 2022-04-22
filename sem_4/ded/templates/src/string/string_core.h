@@ -8,15 +8,42 @@ namespace kctf
 {
 
 
+// template <typename T>
+// struct SharedDataView {
+//     T data_;
+//     size_t viewers_ = 0;
+
+//     SharedData(T &data) : data_(&data), viewers_(1) {}
+
+//     ~SharedData() {
+//         --viewers_;
+//         if (!viewers_) {
+            
+//         }
+//     }
+// };
+
+
 template <typename CharT, template <typename U>  typename Allocator = allocator::Simple>
 class StringCore {
 private:
-    constexpr static size_t CharSize = sizeof(CharT);
+    constexpr static size_t CHAR_SIZE = sizeof(CharT);
     constexpr static size_t MIN_CAPACITY = 4;
+    constexpr static size_t SMALL_CAPACITY = sizeof(CharT*);
 
     Allocator<CharT> allocator_;
 
-    CharT *data_;
+    union {
+        CharT *data_;
+        CharT small_data_[SMALL_CAPACITY];
+    };
+
+    // enum DataState {
+    //     owner,
+    //     small,
+    //     shared
+    // };
+    // DataState state;
 
     size_t capacity_;
     size_t size_;
@@ -29,8 +56,12 @@ private:
         }
 
         if (data_) {
-            memcpy(new_data, data_, capacity_ * CharSize);
-            allocator_.deallocate(data_, capacity_);
+            size_t to_copy = std::max(capacity_, new_capacity);
+            memcpy(new_data, is_small() ? small_data_ : data_, to_copy * CHAR_SIZE);
+
+            if (!is_small()) {
+                allocator_.deallocate(data_, capacity_);
+            }
         }
 
         data_ = new_data;
@@ -39,11 +70,11 @@ private:
 
     void grow_capacity(float coef=2) {
         if (!capacity_) {
-            capacity_ = MIN_CAPACITY;
+            capacity_ = SMALL_CAPACITY;
+        } else {
+            size_t new_capacity = capacity_ * coef;
+            set_capacity(new_capacity);
         }
-
-        size_t new_capacity = capacity_ * coef;
-        set_capacity(new_capacity);
     }
 
     int increment_size() {
@@ -58,6 +89,28 @@ private:
         return --size_;
     }
 
+    inline bool is_small() const {
+        return capacity_ <= SMALL_CAPACITY;
+    }
+
+    void alloc_capacity_data() {
+        data_ = allocator_.allocate(capacity_);
+        if (!data_) throw std::bad_alloc();
+    }
+
+    void dealloc_capacity_data() {
+        if (is_small()) return;
+
+        allocator_.deallocate(data_, capacity_);
+        data_ = nullptr;
+    }
+
+    void copy_content_from(const StringCore &other) {
+        for (size_t i = 0; i < size_; ++i) {
+            data_at(i) = other.data_at(i);
+        }
+    }
+
 protected:
     StringCore() :
         data_(nullptr),
@@ -66,36 +119,44 @@ protected:
     {}
 
     explicit StringCore(size_t length, const CharT &elem={}) :
-        data_(allocator_.allocate(length)),
+        data_(nullptr),
         capacity_(length),
         size_(length)
     {
-        if (!data_) throw std::bad_alloc();
+        if (!is_small()) {
+            alloc_capacity_data();
+        }
 
         for (size_t i = 0; i < size_; ++i) {
-            new(&data_[i]) CharT(elem);
+            data_at(i) = (CharT) elem;
         }
     }
 
     explicit StringCore(std::initializer_list<CharT> list) :
-        data_(allocator_.allocate(list.size())),
+        data_(nullptr),
         capacity_(list.size()),
         size_(list.size())
     {
+        if (!is_small()) {
+            alloc_capacity_data();
+        }
+
         size_t i = 0;
         for (auto it = list.begin(); it != list.end(); ++it, ++i) {
-            new(&data_[i]) CharT(std::move(*it));
+            data_at(i) = *it;
         }
     }
 
     StringCore(const StringCore &other) :
-        data_(allocator_.allocate(other.capacity_)),
+        data_(nullptr),
         capacity_(other.capacity_),
         size_(other.size_)
     {
-        for (size_t i = 0; i < size_; ++i) {
-            new(data_ + i) CharT(other.data_at(i));
+        if (!is_small()) {
+            alloc_capacity_data();
         }
+
+        copy_content_from(other);
     }
 
     StringCore &operator=(const StringCore &other) {
@@ -103,25 +164,30 @@ protected:
 
         clear();
 
-        data_ = (CharT*) calloc(other.capacity_, sizeof(CharT));
-        if (!data_) throw std::bad_alloc();
-
         capacity_ = other.capacity_;
         size_ = other.size_;
 
-        for (size_t i = 0; i < size_; ++i) {
-            new(data_ + i) CharT(other.data_at(i));
+        if (!is_small()) {
+            alloc_capacity_data();
         }
+
+        copy_content_from(other);
 
         return *this;
     }
 
     StringCore(StringCore &&other) :
-        data_(std::move(other.data_)),
-        capacity_(std::move(other.capacity_)),
-        size_(std::move(other.size_))
+        data_(nullptr),
+        capacity_(other.capacity_),
+        size_(other.size_)
     {
-        if (&other == this) return *this;
+        if (&other == this) return;
+
+        if (!is_small()) {
+            data_ = std::move(other.data_); //todo
+        } else {
+            copy_content_from(other);
+        }
 
         other.clear();
     }
@@ -131,9 +197,14 @@ protected:
 
         clear();
 
-        data_     = std::move(other.data_);
-        capacity_ = std::move(other.capacity_);
-        size_     = std::move(other.size_);
+        capacity_ = other.capacity_;
+        size_     = other.size_;
+
+        if (!is_small()) {
+            data_ = std::move(other.data_); //todo
+        } else {
+            copy_content_from(other);
+        }
 
         other.data_ = nullptr;
         other.capacity_ = 0;
@@ -147,19 +218,37 @@ protected:
     }
 
     CharT *data_ptr() {
-        return data_;
+        if (is_small()) {
+            return (CharT*) &small_data_;
+        } else {
+            return data_;
+        }
     }
 
     const CharT *data_ptr() const {
-        return data_;
+        if (is_small()) {
+            return (const CharT*) &small_data_;
+        } else {
+            return data_;
+        }
     }
 
     CharT &data_at(size_t i) {
-        return data_[i];
+        if (is_small()) {
+            return small_data_[i];
+        } else {
+            printf("bbig\n");
+            return data_[i];
+        }
     }
 
     const CharT &data_at(size_t i) const {
-        return data_[i];
+        if (is_small()) {
+            return small_data_[i];
+        } else {
+            printf("bbig\n");
+            return data_[i];
+        }
     }
 
 // ============================================================================ capacity
@@ -173,11 +262,11 @@ protected:
     }
 
     inline bool full() const {
-        return size_ == capacity_;
+        return !capacity_ || size_ >= capacity_ - 1;
     }
 
     void reserve(size_t capacity) {
-        if (capacity_ >= capacity) return;
+        if (capacity_ >= capacity || capacity < SMALL_CAPACITY) return;
         set_capacity(capacity);
     }
 
@@ -216,12 +305,7 @@ protected:
     }
 
     void clear() {
-        for (size_t i = 0; i < size(); ++i) {
-            data_[i].~CharT();
-        }
-
-        allocator_.deallocate(data_, capacity_);
-        data_ = nullptr;
+        dealloc_capacity_data();
 
         capacity_ = 0;
         size_ = 0;

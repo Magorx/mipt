@@ -11,6 +11,9 @@ class StringT : public StringCore<CharT, Allocator> {
     using Core = StringCore<CharT, Allocator>;
 
 public:
+    using iterator = CharT*;
+    using const_iterator = const CharT*;
+
     StringT() {}
     
     explicit StringT(size_t length, const CharT &elem={})
@@ -38,22 +41,42 @@ public:
     }
 
 // ============================================================================ from CharT *
-
     StringT(const CharT *str, size_t capacity)
-        : Core(capacity) {
-        memcpy(data(), str, capacity);
+        : Core() {
+        for (size_t i = 0; i < capacity; ++i) {
+            append(str[i]);
+        }
     }
 
     StringT(const CharT *str)
         : StringT(str, strlen(str)) {}
+    
+    StringT(const std::string str)
+        : StringT(str.c_str(), str.size())) {}
+
+// ============================================================================ to
+
+    explicit operator std::string() {
+        return {data(), size()};
+    }
 
 // ============================================================================ expansion
+    inline void append(const CharT c) {
+        *Core::expand_one() = c;
+    }
+
     void append(const CharT *str, size_t len) {
         reserve(size() + len);
 
         for (size_t i = 0; i < len; ++i) {
             *Core::expand_one() = str[i];
         }
+    }
+
+    StringT &operator+=(CharT c) {
+        append(c);
+
+        return *this;
     }
 
     StringT &operator+=(const StringT &str) {
@@ -80,9 +103,33 @@ public:
         return copy;
     }
 
+    StringT &&operator+(CharT c) && {
+        *this += c;
+        return std::move(*this);
+    }
+
+    StringT operator+(CharT c) const & {
+        StringT copy = *this;
+        copy += c;
+        return copy;
+    }
+
+    friend StringT operator+(const CharT *str, const StringT &obj) {
+        StringT copy = str;
+        copy += obj;
+        return copy;
+    }
+
+    friend StringT operator+(CharT c, const StringT &obj) {
+        StringT copy;
+        copy += c;
+        copy += obj;
+        return copy;
+    }
+
 // ============================================================================ element access
 
-    [[nodiscard]] inline CharT &operator[](size_t i) {
+    [[nodiscard]] inline CharT &operator()(size_t i) {
         if (i >= size()) {
             throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of StringT (size = " + std::to_string(size()) + ")");
         }
@@ -91,6 +138,7 @@ public:
     }
 
     [[nodiscard]] inline const CharT &operator[](size_t i) const {
+        printf("const\n");
         if (i >= size()) {
             throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of StringT (size = " + std::to_string(size()) + ")");
         }
@@ -163,19 +211,35 @@ public:
 // ============================================================================ iterators
 
     auto begin() {
-        return data();
+        return Core::data_ptr();
     }
     
     auto begin() const {
-        return data();
+        return Core::data_ptr();
     }
 
     auto end() {
-        return data() + size();
+        return Core::data_ptr() + size();
     }
 
     auto end() const {
-        return data() + size();
+        return Core::data_ptr() + size();
+    }
+
+    auto rbegin() {
+        return std::make_reverse_iterator(begin());
+    }
+    
+    auto rbegin() const {
+        return std::make_reverse_iterator(begin());
+    }
+
+    auto rend() {
+        return std::make_reverse_iterator(end());
+    }
+
+    auto rend() const {
+        return std::make_reverse_iterator(end());
     }
 
 // ============================================================================ modifiers
@@ -218,12 +282,6 @@ public:
         }
 
         resize(write_idx);
-    }
-
-    friend StringT operator+(const CharT *str, const StringT &obj) {
-        StringT copy = str;
-        copy += obj;
-        return copy;
     }
 };
 

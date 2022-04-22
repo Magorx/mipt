@@ -20,14 +20,18 @@ int main() {
 
 // ============================================================================ String
 
-    String str = "aboba";
-    str += "aaa" + str + "ccc" + "!!!";
+    String str("aboba", 5);
+    String s2 = str + '!';
 
-    for (auto c : str) {
+    for (auto c : s2) {
         print<' ', ' '>(c);
     }
     print();
 
+    for (size_t i = 0; i <  s2.size(); ++i) {
+        print<' ', ' '>(s2[i]);
+    }
+    print();
     
 
     return 0;
