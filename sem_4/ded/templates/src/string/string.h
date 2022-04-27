@@ -138,7 +138,6 @@ public:
     }
 
     [[nodiscard]] inline const CharT &operator[](size_t i) const {
-        printf("const\n");
         if (i >= size()) {
             throw std::range_error("Bad index (" + std::to_string(i) + ") passed to operator[] of StringT (size = " + std::to_string(size()) + ")");
         }

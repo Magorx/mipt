@@ -20,16 +20,17 @@ int main() {
 
 // ============================================================================ String
 
-    String str("aboba", 5);
-    String s2 = str + '!';
+    String str = "Some nice long string.";
 
-    for (auto c : s2) {
-        print<' ', ' '>(c);
-    }
-    print();
+    str.become_view();
 
-    for (size_t i = 0; i <  s2.size(); ++i) {
-        print<' ', ' '>(s2[i]);
+    // for (auto c : s2) {
+    //     print<' ', ' '>(c);
+    // }
+    // print();
+
+    for (size_t i = 0; i <  str.size(); ++i) {
+        print<' ', ' '>(str[i]);
     }
     print();
     
