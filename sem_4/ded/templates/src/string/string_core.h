@@ -38,7 +38,24 @@ public:
         ptr_->view();
     }
 
+    SharedDataPtr &operator=(SharedDataPtr &other) {
+        ptr_ = other.ptr_;
+        ptr_->view();
+        return *this;
+    }
+
+    SharedDataPtr(SharedDataPtr &&other) : ptr_(other.ptr_) {
+        other.ptr_ = nullptr;
+    }
+
+    SharedDataPtr &operator=(SharedDataPtr &&other) {
+        std::swap(ptr_, other.ptr_);
+        return *this;
+    }
+
     ~SharedDataPtr() {
+        if (!ptr_) return;
+
         if (ptr_->unview()) {
             delete ptr_;
         }
@@ -52,15 +69,22 @@ public:
         ptr_->unview();
     }
 
-    DataT &&grab() {
-        if (ptr_->unview()) {
-            auto data = std::move(ptr_->data_);
-            delete ptr_;
-            return std::move(ptr_->data_);
-        } else {
-            auto copy = ptr_->data_;
-            return std::move(copy);
-        }
+    DataT &grab() {
+        ptr_->unview();
+        return ptr_->data_;
+
+        // if (ptr_->unview()) {
+        //     auto data = std::move(ptr_->data_);
+        //     delete ptr_;
+        //     return std::move(ptr_->data_);
+        // } else {
+        //     auto copy = ptr_->data_;
+        //     return std::move(copy);
+        // }
+    }
+
+    bool is_last() {
+        return ptr_->viewers_ == 1;
     }
 
     DataT operator*() const {
@@ -69,6 +93,10 @@ public:
 
     DataT* operator->() const {
         return &ptr_->data_;
+    }
+
+    SharedData<DataT> *get_ptr() {
+        return ptr_;
     }
 };
 
@@ -111,6 +139,10 @@ private:
         if (data_) {
             size_t to_copy = std::min(capacity_, new_capacity);
             memcpy(new_data, is_small() ? small_data_ : data_, to_copy * CHAR_SIZE);
+
+            for (size_t i = to_copy; i < new_capacity; ++i) {
+                new_data[i] = '\0';
+            }
 
             if (!is_small()) {
                 allocator_.deallocate(data_, capacity_);
@@ -174,11 +206,28 @@ private:
     void copy_content_from(const StringCore &other) {
         if (!is_small() && other.state_ == DataState::view) {
             state_ = other.state_;
-            view_data_ = other.view_data_;
+            view_data_ = const_cast<SharedDataPtr<StringCore>&>(other.view_data_);
         } else {
             for (size_t i = 0; i < size_; ++i) {
                 data_at(i) = other.data_at(i);
             }
+        }
+    }
+
+    void copy_from(const SharedDataPtr<StringCore> &view_data) {
+        capacity_ = view_data->capacity_;
+        size_ = view_data->capacity_;
+        allocator_ = view_data->allocator_;
+
+        if (!can_be_small()) {
+            alloc_capacity_data();
+            state_ = DataState::owner;
+        } else {
+            state_ = DataState::small;
+        }
+
+        for (size_t i = 0; i < size_; ++i) {
+            data_at(i) = view_data->data_at(i);
         }
     }
 
@@ -191,9 +240,42 @@ private:
         }
     }
 
-    
+    void become_view() {
+        if (is_owner()) {
+            auto shared_data = new SharedData<StringCore>(std::move(*this));
+            new(&view_data_) SharedDataPtr<StringCore>(shared_data);
+            
+            view_to(view_data_, false);
+        }
+    }
 
-public:
+    void view_to(SharedDataPtr<StringCore> view_data, bool to_copy_ptr=true) {
+        state_ = DataState::view;
+        
+        if (to_copy_ptr) {
+            view_data_ = view_data;
+        }
+
+        size_ = view_data_->size();
+        capacity_ = view_data_->capacity();
+    }
+
+    void grab_if_view() {
+        if (!is_view()) {
+            return;
+        }
+
+        SharedDataPtr<StringCore> view_data = std::move(view_data_);
+        view_data_.~SharedDataPtr<StringCore>();
+
+        if (view_data.is_last()) {
+            (*this) = std::move(view_data.grab());
+        }
+
+        copy_from(view_data);
+    }
+
+protected:
     StringCore() :
         data_(nullptr),
         state_(DataState::small),
@@ -234,6 +316,23 @@ public:
         }
     }
 
+    StringCore(StringCore &other) :
+        data_(nullptr),
+        state_(other.state_),
+        capacity_(other.capacity_),
+        size_(other.size_)
+    {
+        if (!can_be_small()) {
+            other.become_view();
+            view_to(other.view_data_);
+            return;
+        } else {
+            state_ = DataState::small;
+        }
+
+        copy_content_from(other);
+    }
+
     StringCore(const StringCore &other) :
         data_(nullptr),
         state_(other.state_),
@@ -267,21 +366,6 @@ public:
         copy_content_from(other);
 
         return *this;
-    }
-
-    void become_view() {
-        auto shared_data = new SharedData<StringCore>(std::move(*this));
-        new(&view_data_) SharedDataPtr<StringCore>(shared_data);
-
-        view_to(view_data_);
-        state_ = DataState::view;
-    }
-
-    void view_to(SharedDataPtr<StringCore> view_data) {
-        view_data_ = view_data;
-
-        size_ = view_data_->size();
-        capacity_ = view_data_->capacity();
     }
 
     StringCore(StringCore &&other) :
@@ -345,19 +429,16 @@ public:
     }
 
     CharT &data_at(size_t i) {
+        grab_if_view();
+
         if (is_small()) {
             return small_data_[i];
         } else {
-            if (is_view()) {
-                (*this) = view_data_.grab();
-            }
-
             return data_[i];
         }
     }
 
     const CharT &data_at(size_t i) const {
-        printf("here\n");
         if (is_small()) {
             return small_data_[i];
         } else if (is_view()) {

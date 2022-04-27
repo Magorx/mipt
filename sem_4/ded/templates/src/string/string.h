@@ -22,6 +22,9 @@ public:
     explicit StringT(std::initializer_list<CharT> list)
         : Core(list) {}
 
+    StringT(StringT &other)
+        : Core(other) {}
+
     StringT(const StringT &other)
         : Core(other) {}
     
