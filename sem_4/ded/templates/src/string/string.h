@@ -54,8 +54,12 @@ public:
     StringT(const CharT *str)
         : StringT(str, strlen(str)) {}
     
-    StringT(const std::string str)
+    StringT(const std::string &str)
         : StringT(str.c_str(), str.size()) {}
+    
+    template<typename StringViewLike>
+    StringT(const StringViewLike &strlike)
+        : StringT(strlike.data(), strlike.size()) {}
 
 // ============================================================================ to
 
@@ -72,8 +76,13 @@ public:
         reserve(size() + len);
 
         for (size_t i = 0; i < len; ++i) {
-            *Core::expand_one() = str[i];
+            auto z = Core::expand_one();
+            *z = str[i];
         }
+    }
+
+    void append(const StringT &str) {
+        append(str.data(), str.size());
     }
 
     StringT &operator+=(CharT c) {
@@ -83,8 +92,7 @@ public:
     }
 
     StringT &operator+=(const StringT &str) {
-        auto data = str.data();
-        append(data, strlen(data));
+        append(str);
 
         return *this;
     }
@@ -128,6 +136,11 @@ public:
         copy += c;
         copy += obj;
         return copy;
+    }
+
+    friend std::ostream& operator<< (std::ostream& stream, const StringT &string) {
+        stream.write(string.data(), string.size());
+        return stream;
     }
 
 // ============================================================================ element access
@@ -206,8 +219,8 @@ public:
         return Core::capacity();
     }
 
-    void shrink_to_fit() {
-        Core::shrink_to_fit();
+    void shrink_to_fit(bool enforced=false) {
+        Core::shrink_to_fit(enforced);
     }
 
 // ============================================================================ iterators
@@ -245,8 +258,10 @@ public:
     }
 
 // ============================================================================ modifiers
-    void pop_back() {
-        Core::extract_one();
+    void pop_back(size_t cnt) {
+        while (cnt-- > 0) {
+            Core::extract_one();
+        }
     }
 
     void clear() {

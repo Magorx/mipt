@@ -15,40 +15,48 @@
 using kctf::String;
 
 
+// void print(const kctf::String &str) {
+//     for (size_t i = 0; i < str.size(); ++i) {
+//         putchar(str[i]);
+//     }
+//     putchar('\n');
+// }
+
+kctf::String &lengthen(kctf::String &str, size_t cnt) {
+    char c = 'a';
+    for (size_t i = 0; i < cnt; ++i) {
+        str += c;
+        ++c;
+        if (c > 'z') {
+            c = 'a';
+        }
+    }
+
+    return str;
+}
+
 int main() {
     logger.set_verb_level(Logger::Level::info);
 
 // ============================================================================ String
 
-    String str = "Some nice long string.";
-    String s(str);
-    String s1(str);
-    String s2(str);
-    String s3(str);
+    // String str = "smol";    print(str);
+    // String s1 = str;
 
-    printf("===\n");
-    s2(1) = '@';
-    s2(2) = '!';
- 
-    // for (auto c : s2) {
-    //     print<' ', ' '>(c);
-    // }
-    // print();
-    printf("[%c]\n", s2[1]);
+    // lengthen(str, 2);       print(str);
+    // String s2 = str;
 
-    // int n;
-    // scanf("%d", &n);
+    // lengthen(str, 4);       print(str);
+    // String s3 = str;
 
-    for (size_t i = 0; i <  s2.size(); ++i) {
-        print<' ', ' '>(s2[i]);
-    }
-    print();
+    // str += "!!!";
+    // lengthen(str, 40);
+    // print(str, ']');
 
-    // for (size_t i = 0; i <  str.size(); ++i) {
-    //     print<' ', ' '>(str[i]);
-    // }
-    // print();
-    
+    // print(s1);
+    // print(s2);
+    // print(s3);
+
 
     return 0;
 }

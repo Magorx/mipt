@@ -130,6 +130,8 @@ private:
     size_t size_;
 
     void set_capacity(size_t new_capacity) {
+        grab_if_view();
+
         CharT *new_data = allocator_.allocate(new_capacity);
 
         if (!new_data) {
@@ -155,6 +157,8 @@ private:
     }
 
     void grow_capacity(float coef=2) {
+        grab_if_view();
+
         if (!capacity_) {
             capacity_ = SMALL_CAPACITY;
         } else {
@@ -216,7 +220,7 @@ private:
 
     void copy_from(const SharedDataPtr<StringCore> &view_data) {
         capacity_ = view_data->capacity_;
-        size_ = view_data->capacity_;
+        size_ = view_data->size_;
         allocator_ = view_data->allocator_;
 
         if (!can_be_small()) {
@@ -412,9 +416,17 @@ protected:
         clear();
     }
 
+    const StringCore &c() const {
+        return *this;
+    }
+
     CharT *data_ptr() {
+        grab_if_view();
+
         if (is_small()) {
             return (CharT*) &small_data_;
+        } else if (is_view()) {
+            return view_data_->data_ptr();
         } else {
             return data_;
         }
@@ -423,6 +435,8 @@ protected:
     const CharT *data_ptr() const {
         if (is_small()) {
             return (const CharT*) &small_data_;
+        } else if (is_view()) {
+            return view_data_->data_ptr();
         } else {
             return data_;
         }
@@ -463,21 +477,51 @@ protected:
     }
 
     void reserve(size_t capacity) {
+        grab_if_view();
+
         if (capacity_ >= capacity || capacity < SMALL_CAPACITY) return;
         set_capacity(capacity);
     }
 
-    void shrink_to_fit() {
+    bool shrink_to_small() {
+        if (size() >= SMALL_CAPACITY - 1) {
+            return false;
+        }
+
+        CharT tmp_data[SMALL_CAPACITY] = {};
+        for (size_t i = 0; i < SMALL_CAPACITY - 1; ++i) {
+            tmp_data[i] = c().data_at(i);
+        }
+
+        if (is_owner()) {
+            dealloc_capacity_data();
+        }
+        state_ = DataState::small;
+
+        memcpy(small_data_, tmp_data, SMALL_CAPACITY);
+        return true;
+    }
+
+    void shrink_to_fit(bool enforced=false) {
+        if (shrink_to_small() || (is_view() && !enforced)) {
+            return;
+        }
+        grab_if_view();
+
         set_capacity(size());
     }
 
 // ============================================================================ iterators
 
-    CharT *begin() {
+    CharT *begin()  {
+        grab_if_view();
+
         return data_;
     }
 
     CharT *end() {
+        grab_if_view();
+
         return data_ + size();
     }
 
@@ -492,13 +536,17 @@ protected:
 // ============================================================================ modifirers
 
     inline CharT *expand_one() {
+        grab_if_view();
+
         int placement_i = increment_size() - 1;
         return &data_at(placement_i);
     }
 
     inline void extract_one() {
-        data_at(size() - 1).~CharT();
+        grab_if_view();
+
         decrement_size();
+        data_at(size()) = '\0';
     }
 
     void clear() {
@@ -508,6 +556,7 @@ protected:
             view_data_.~SharedDataPtr<StringCore>();
         }
 
+        state_ = DataState::small;
         capacity_ = 0;
         size_ = 0;
     }
@@ -523,6 +572,8 @@ protected:
     }
 
     void swap(StringCore<CharT, Allocator> &other) {
+        grab_if_view();
+
         std::swap(allocator_, other.allocator_);
         std::swap(data_, other.data_);
         std::swap(data_, other.data_);
