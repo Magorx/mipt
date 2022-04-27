@@ -52,7 +52,7 @@ public:
         : StringT(str, strlen(str)) {}
     
     StringT(const std::string str)
-        : StringT(str.c_str(), str.size())) {}
+        : StringT(str.c_str(), str.size()) {}
 
 // ============================================================================ to
 
