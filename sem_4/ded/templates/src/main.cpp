@@ -14,14 +14,6 @@
 
 using kctf::String;
 
-
-// void print(const kctf::String &str) {
-//     for (size_t i = 0; i < str.size(); ++i) {
-//         putchar(str[i]);
-//     }
-//     putchar('\n');
-// }
-
 kctf::String &lengthen(kctf::String &str, size_t cnt) {
     char c = 'a';
     for (size_t i = 0; i < cnt; ++i) {
@@ -37,6 +29,14 @@ kctf::String &lengthen(kctf::String &str, size_t cnt) {
 
 int main() {
     logger.set_verb_level(Logger::Level::info);
+
+    String to_look_at = "Some long string\n";
+
+    constexpr size_t LOOKS_CNT = 10000;
+    String others[LOOKS_CNT];
+    for (size_t i = 0; i < LOOKS_CNT; ++i) {
+        others[i] = to_look_at;
+    }
 
 // ============================================================================ String
 

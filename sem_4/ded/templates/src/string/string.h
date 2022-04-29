@@ -28,6 +28,12 @@ public:
     StringT(const StringT &other)
         : Core(other) {}
     
+    StringT &operator=(StringT &other) {
+        Core::operator=(other);
+
+        return *this;
+    }
+    
     StringT &operator=(const StringT &other) {
         Core::operator=(other);
 

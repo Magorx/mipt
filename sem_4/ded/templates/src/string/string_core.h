@@ -352,6 +352,28 @@ protected:
         copy_content_from(other);
     }
 
+    StringCore &operator=(StringCore &other) {
+        if (&other == this) return *this;
+
+        clear();
+
+        capacity_ = other.capacity_;
+        state_ = other.state_;
+        size_ = other.size_;
+
+        if (!can_be_small()) {
+            other.become_view();
+            view_to(other.view_data_);
+            return *this;
+        } else {
+            state_ = DataState::small;
+        }
+
+        copy_content_from(other);
+
+        return *this;
+    }
+
     StringCore &operator=(const StringCore &other) {
         if (&other == this) return *this;
 
