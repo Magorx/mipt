@@ -10,53 +10,48 @@
 
 #include "print.h"
 
-#include "string/string.h"
+#include "function/function.h"
 
-using kctf::String;
 
-kctf::String &lengthen(kctf::String &str, size_t cnt) {
-    char c = 'a';
-    for (size_t i = 0; i < cnt; ++i) {
-        str += c;
-        ++c;
-        if (c > 'z') {
-            c = 'a';
-        }
-    }
-
-    return str;
+int func(char c) {
+    printf("Func  called with [%c]\n", c);
+    return c * 10;
 }
+
+struct Callable {
+    int x;
+
+    int operator()(char c) {
+        printf("Class called with [%c]\n", c);
+        return x;
+    }
+};
+
+
+using kctf::Function;
+
 
 int main() {
     logger.set_verb_level(Logger::Level::info);
 
-    String to_look_at = "Some long string\n";
+    Callable obj {42};
 
-    constexpr size_t LOOKS_CNT = 10000;
-    String others[LOOKS_CNT];
-    for (size_t i = 0; i < LOOKS_CNT; ++i) {
-        others[i] = to_look_at;
-    }
+    Function f1 = func;
+    Function f2 = obj;
 
-// ============================================================================ String
+    Function f3 = [](char c) { printf("Lambd called with [%c]\n", c); return -1; };
+    Function f4 = [&obj](char c) { printf("Lambd called with [%c] and obj += 1\n", c); obj.x += 1; return -1; };
 
-    // String str = "smol";    print(str);
-    // String s1 = str;
+    print(f1('a'));
+    print(f2('b'));
+    print(f3('c'));
 
-    // lengthen(str, 2);       print(str);
-    // String s2 = str;
-
-    // lengthen(str, 4);       print(str);
-    // String s3 = str;
-
-    // str += "!!!";
-    // lengthen(str, 40);
-    // print(str, ']');
-
-    // print(s1);
-    // print(s2);
-    // print(s3);
-
+    print(f4('d'));
+    print(f4('d'));
+    print(f4('d'));
+    print("Cur obj:", obj.x);
+    
+    print(f2('b'));
 
     return 0;
 }

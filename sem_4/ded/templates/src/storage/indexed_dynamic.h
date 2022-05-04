@@ -127,7 +127,7 @@ public:
         capacity_(std::move(other.capacity_)),
         size_(std::move(other.size_))
     {
-        if (&other == this) return *this;
+        if (&other == this) return;
 
         other.clear();
     }
