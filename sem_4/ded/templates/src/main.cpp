@@ -5,7 +5,6 @@
 #include <algorithm>
 
 #include "utils/Utils.h"
-#include "array/array.h"
 #include "vec/vec.h"
 
 #include "print.h"
@@ -14,7 +13,7 @@
 
 
 int func(char c) {
-    printf("Func  called with [%c]\n", c);
+    printf("Fnkc called with [%c]\n", c);
     return c * 10;
 }
 
@@ -22,7 +21,7 @@ struct Callable {
     int x;
 
     int operator()(char c) {
-        printf("Class called with [%c]\n", c);
+        printf("Clss called with [%c]\n", c);
         return x;
     }
 };
@@ -36,22 +35,37 @@ int main() {
 
     Callable obj {42};
 
-    Function f1 = func;
-    Function f2 = obj;
+    std::vector<Function<int (char)>> arr(7);
+    for (size_t i = 0; i < arr.size(); ++i) {
+        if (i % 2) {
+            arr[i] = func;
+        } else {
+            arr[i] = obj;
+        }
+    }
 
-    Function f3 = [](char c) { printf("Lambd called with [%c]\n", c); return -1; };
-    Function f4 = [&obj](char c) { printf("Lambd called with [%c] and obj += 1\n", c); obj.x += 1; return -1; };
+    for (auto &f : arr) {
+        f('A');
+    }
 
-    print(f1('a'));
-    print(f2('b'));
-    print(f3('c'));
-
-    print(f4('d'));
-    print(f4('d'));
-    print(f4('d'));
-    print("Cur obj:", obj.x);
     
-    print(f2('b'));
+
+    // Function f1 = func;
+    // Function f2 = obj;
+
+    // Function f3 = [](char c) { printf("Lmbd called with [%c]\n", c); return -1; };
+    // Function f4 = [&obj](char c) { printf("Lmbd called with [%c] and obj += 1\n", c); obj.x += 1; return -1; };
+
+    // print(f1('a'));
+    // print(f2('b'));
+    // print(f3('c'));
+
+    // print(f4('d'));
+    // print(f4('d'));
+    // print(f4('d'));
+    // print("Cur obj:", obj.x);
+    
+    // print(f2('b'));
 
     return 0;
 }

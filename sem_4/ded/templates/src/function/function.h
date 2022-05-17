@@ -21,7 +21,9 @@ class Function<ReturnT (ArgsTs...)> {
     }
 
     Function copy() const {
-        return Function(*callable_);
+        Function ret;
+        ret.callable_ = (decltype(ret.callable_)) callable_->copy(); // we do not know how to copy current callable_
+        return ret;
     }
 
 public:
@@ -34,11 +36,11 @@ public:
     {}
 
     ~Function() {
-        delete callable_;
+        clear();
     }
 
     Function(const Function &other) : callable_(nullptr) {
-        *this = other.copy();
+        *this = std::move(other.copy());
     }
 
     Function(const Function &&other) : callable_(nullptr) {
@@ -73,7 +75,7 @@ public:
     }
 
     bool operator==(const Function &/*other*/) {
-        return !(*this); 
+        return !(*this);
     }
 
     ReturnT operator()(ArgsTs... args) const {
@@ -104,7 +106,6 @@ public:
 // ============================================================================
 
     void swap(Function<ReturnT (ArgsTs...)> &other) {
-        printf("!!!\n");
         std::swap(callable_, other.callable_);
     }
 

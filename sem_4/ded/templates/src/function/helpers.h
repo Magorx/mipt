@@ -14,13 +14,18 @@ namespace _impl {
 
         virtual ReturnT operator()(ArgsTs...) = 0;
         virtual const std::type_info &target_type() = 0;
+
+        virtual void *copy() = 0;
     };
 
     template <typename FuncT, typename ReturnT, typename ... ArgsTs>
     class Callable : public CallableBase<ReturnT, ArgsTs...> {
         FuncT functor_;
     public:
-        Callable(FuncT functor) : functor_(functor) {
+        Callable(FuncT functor) : functor_(functor) {}
+
+        virtual void *copy() override {
+            return new Callable(functor_);
         }
 
         virtual ReturnT operator()(ArgsTs... args) override {
@@ -32,8 +37,10 @@ namespace _impl {
         }
     };
 
+    
 
-// ============================================================================ Explicit eduction help
+
+// ============================================================================ Explicit deduction help
 
 
     template <typename F>
