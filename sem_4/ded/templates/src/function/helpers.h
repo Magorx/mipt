@@ -14,6 +14,7 @@ namespace _impl {
 
         virtual ReturnT operator()(ArgsTs...) = 0;
         virtual const std::type_info &target_type() = 0;
+        virtual void *target() const = 0;
 
         virtual void *copy() = 0;
     };
@@ -29,11 +30,15 @@ namespace _impl {
         }
 
         virtual ReturnT operator()(ArgsTs... args) override {
-            return functor_(std::forward<ArgsTs>(args)...);
+            return std::invoke(functor_, std::forward<ArgsTs>(args)...);
         }
 
         virtual const std::type_info &target_type() override {
             return typeid(FuncT);
+        }
+
+        virtual void *target() const override {
+            return (void*) &functor_;
         }
     };
 
@@ -63,7 +68,6 @@ namespace _impl {
     HelperGuideline_(const & noexcept)
 
     #undef HelperGuideline_
-
 }
 
 }

@@ -95,9 +95,9 @@ public:
     }
 
     template <typename MaybeTargetT>
-    FunctorT *target() {
+    MaybeTargetT *target() {
         if (typeid(MaybeTargetT) == target_type()) {
-            return callable_;
+            return (MaybeTargetT*) callable_->target();
         } else {
             return nullptr;
         }

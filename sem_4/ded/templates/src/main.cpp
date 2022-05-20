@@ -24,6 +24,10 @@ struct Callable {
         printf("Clss called with [%c]\n", c);
         return x;
     }
+
+    int method(char c) {
+        return c + 7;
+    }
 };
 
 
@@ -48,7 +52,8 @@ int main() {
         f('A');
     }
 
-    
+    kctf::Function<int (Callable*, char)> method(&Callable::method);
+    method(&obj, 'A');
 
     // Function f1 = func;
     // Function f2 = obj;
